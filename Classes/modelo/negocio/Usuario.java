@@ -5,13 +5,15 @@
  */
 package modelo.negocio;
 
+import java.io.Serializable;
+
 /**
  *
  * @author usuario
  */
-public class Usuario {
+public class Usuario implements Serializable {
     
-    private int codigo;
+    private int idUsuario;
     private String login;
     private String senha;
     private int tipo;
@@ -19,15 +21,14 @@ public class Usuario {
     public Usuario(){
     }
 
-    public Usuario(int codigo, String login, String senha, int tipo) {
-        this.codigo = codigo;
+    public Usuario(String login, String senha, int tipo) {
         this.login = login;
         this.senha = senha;
         this.tipo = tipo;
     }
 
-    public int getCodigo() {
-        return codigo;
+    public int getIdUsuario() {
+        return idUsuario;
     }
 
     public void setLogin(String login) {

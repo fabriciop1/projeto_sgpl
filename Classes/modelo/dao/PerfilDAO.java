@@ -14,19 +14,20 @@ import modelo.negocio.Perfil;
  *
  * @author usuario
  */
-public class PerfilDAO {
+public class PerfilDAO implements InterfaceDAO<Perfil>{
  
     Connection connection; 
     
     public PerfilDAO(){
         this.connection = DBConexao.openConnection();
     }
-            
-    public boolean cadastrar(Perfil novoPerfil){
+    
+    @Override
+    public void cadastrar(Perfil novoPerfil){
         
         String sql = "INSERT INTO perfil " + 
-                "(nome, cidade, tamPropriedade, areaPecLeite, prodLeiteDiario, precoLeite, empPermanentes, numFamiliares, usuario) " +
-                "VALUES (?,?,?,?,?,?,?,?,?)";
+                "(nome, cidade, tamPropriedade, areaPecLeite, prodLeiteDiario, precoLeite, empPermanentes, numFamiliares) " +
+                "VALUES (?,?,?,?,?,?,?,?)";
         
         try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
             statement.setString(1, novoPerfil.getNome());
@@ -35,29 +36,35 @@ public class PerfilDAO {
             statement.setFloat(4, novoPerfil.getAreaPecLeite());
             statement.setFloat(5, novoPerfil.getProdLeiteDiario());
             statement.setFloat(6, novoPerfil.getPrecoLeite());
-            statement.setInt(7, novoPerfil.getEmpregadosPerm());
+            statement.setInt(7, novoPerfil.getEmpPermanentes());
             statement.setInt(8, novoPerfil.getNumFamiliares());
-            statement.setObject(9, novoPerfil.getUsuario());
+            //statement.setInt(9, novoPerfil.getUsuario().getIdUsuario());
        
             statement.execute();
             statement.close();
-            this.connection.close();
-            return true;
         } catch(SQLException e){
-            System.out.println("Falha ao adicionar novo perfil.");
-            return false;
+            System.out.println("Falha ao adicionar novo perfil. " +  e.getMessage());
+        } finally {
+            try {
+                this.connection.close();
+            } catch (SQLException ex) {
+                System.out.println("Falha ao encerrar conexão com banco de dados." + ex.getMessage());
+            }
         }
-    }
-    
-    public boolean remover(){
-        return true;
     } 
     
+    @Override
     public boolean atualizar(){
         return true;
     }
     
-    public Perfil buscar(){
-        return null;
+    @Override
+    public Perfil buscar(String data) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean remover() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -14,13 +14,13 @@ import modelo.dao.*;
  */
 public class Main {
        public static void main(String[] args) {
-           Usuario user = new Usuario(1, "123", "123", 1);
            
-           UsuarioDAO dao = new UsuarioDAO();
+           //UsuarioDAO dao = new UsuarioDAO();
+          // Usuario user = new Usuario("12", "12", 1);
+          Perfil perfil = new Perfil("Adriana", "Garanhuns", (float)2.3, (float)4.5, (float)6.7, (float)8.9, 20, 3);
            
-           //Perfil perfil = new Perfil("Adriana", );
+           PerfilDAO dao = new PerfilDAO();
            
-           dao.cadastrar(user);
-           
+           dao.cadastrar(perfil);
        }
 }

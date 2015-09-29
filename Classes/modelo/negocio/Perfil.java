@@ -5,40 +5,43 @@
  */
 package modelo.negocio;
 
+import java.io.Serializable;
+
 /**
  *
  * @author usuario
  */
-public class Perfil {
+public class Perfil implements Serializable {
     
-    private Usuario usuario;
+    private int idPerfil;
     private String nome;
     private String cidade;
     private float tamPropriedade;
     private float areaPecLeite;
     private float prodLeiteDiario;
     private float precoLeite;
-    private int empregadosPerm;
+    private int empPermanentes;
     private int numFamiliares;
+  //private Usuario usuario;
 
     public Perfil() {
     }
 
-    public Perfil(Usuario usuario, String nome, String cidade, float tamPropriedade, float areaPecLeite, float prodLeiteDiario, float precoLeite, int empregadosPerm, int numFamiliares) {
-        this.usuario = usuario;
+    public Perfil(String nome, String cidade, float tamPropriedade, float areaPecLeite, float prodLeiteDiario, float precoLeite, int empPermanentes, int numFamiliares /*Usuario usuario*/) {
+     // this.usuario = usuario;
         this.nome = nome;
         this.cidade = cidade;
         this.tamPropriedade = tamPropriedade;
         this.areaPecLeite = areaPecLeite;
         this.prodLeiteDiario = prodLeiteDiario;
         this.precoLeite = precoLeite;
-        this.empregadosPerm = empregadosPerm;
+        this.empPermanentes = empPermanentes;
         this.numFamiliares = numFamiliares;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
+    //public void setUsuario(Usuario usuario) {
+    //    this.usuario = usuario;
+    //}
 
     public void setNome(String nome) {
         this.nome = nome;
@@ -64,17 +67,21 @@ public class Perfil {
         this.precoLeite = precoLeite;
     }
 
-    public void setEmpregadosPerm(int empregadosPerm) {
-        this.empregadosPerm = empregadosPerm;
+    public void setEmpPermanentes(int empPermanentes) {
+        this.empPermanentes = empPermanentes;
     }
 
     public void setNumFamiliares(int numFamiliares) {
         this.numFamiliares = numFamiliares;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public int getIdPerfil() {
+        return idPerfil;
     }
+
+  //  public Usuario getUsuario() {
+  //      return usuario;
+  //  }
 
     public String getNome() {
         return nome;
@@ -100,14 +107,11 @@ public class Perfil {
         return precoLeite;
     }
 
-    public int getEmpregadosPerm() {
-        return empregadosPerm;
+    public int getEmpPermanentes() {
+        return empPermanentes;
     }
 
     public int getNumFamiliares() {
         return numFamiliares;
     }
-    
-    
-    
 }
