@@ -7,7 +7,12 @@ package modelo.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import modelo.negocio.Perfil;
 
 /**
@@ -44,13 +49,7 @@ public class PerfilDAO implements InterfaceDAO<Perfil>{
             statement.close();
         } catch(SQLException e){
             System.out.println("Falha ao adicionar novo perfil. " +  e.getMessage());
-        } finally {
-            try {
-                this.connection.close();
-            } catch (SQLException ex) {
-                System.out.println("Falha ao encerrar conexão com banco de dados." + ex.getMessage());
-            }
-        }
+        } 
     } 
     
     @Override
@@ -64,7 +63,64 @@ public class PerfilDAO implements InterfaceDAO<Perfil>{
     }
 
     @Override
-    public boolean remover() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean remover(){
+        //Lembrar de modificar a InterfaceDAO pra o método abaixo depois vvvvvvvvvvvvv        
+        return false;
+    }
+    
+    public boolean remover(int idPerfil) {
+        
+        String sql = "DELETE FROM perfil WHERE idPerfil=?";
+        
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, "" + idPerfil);
+            statement.executeUpdate();
+            statement.close();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(PerfilDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+        
+        return true;
+    }
+    
+    public ArrayList<Perfil> recuperarTodos(){
+        
+        String sql = "SELECT * FROM perfil";
+        ArrayList<Perfil> perfis = new ArrayList<>();
+        
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(sql);
+            
+            //Perfil perfil = new Perfil(666, "Adriana", "Garanhuns", 2.3f, 4.5f, 6.7f, 8.9f, 20, 3);
+            
+            while(result.next()){
+                
+                Perfil p = new Perfil(
+                        result.getInt(1), //idPerfil
+                        result.getString(2), //Nome
+                        result.getString(3), //Cidade
+                        result.getFloat(4), //Tam da Propriedade
+                        result.getFloat(5), //Area Pec de Leite
+                        result.getFloat(6), // Prod Diaria de Leite
+                        result.getFloat(7), //Preço do Leite
+                        result.getInt(8), //Num de Empregados Permanentes
+                        result.getInt(9)); //Num de Familiares
+                
+                perfis.add(p);
+            }
+            
+            statement.close();
+            result.close();
+            
+        } catch (SQLException ex) {
+            
+            Logger.getLogger(PerfilDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return perfis;
     }
 }

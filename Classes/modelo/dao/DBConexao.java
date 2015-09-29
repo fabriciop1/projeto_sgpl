@@ -27,10 +27,11 @@ public class DBConexao {
             Class.forName(driverName);
             
             String serverName = "localhost";
+            String portNumber = "9090";
             String database = "projeto_pesquisa";
-            String url = "jdbc:mysql://" + serverName + "/" + database;
+            String url = "jdbc:mysql://" + serverName + ":" + portNumber + "/" + database;
             String username = "root";
-            String password = "root";
+            String password = "";
             
             connection = (Connection) DriverManager.getConnection(url, username, password);
             

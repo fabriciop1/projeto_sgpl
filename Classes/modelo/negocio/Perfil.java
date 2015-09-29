@@ -27,9 +27,10 @@ public class Perfil implements Serializable {
     public Perfil() {
     }
 
-    public Perfil(String nome, String cidade, float tamPropriedade, float areaPecLeite, float prodLeiteDiario, float precoLeite, int empPermanentes, int numFamiliares /*Usuario usuario*/) {
+    public Perfil(int idPerfil, String nome, String cidade, float tamPropriedade, float areaPecLeite, float prodLeiteDiario, float precoLeite, int empPermanentes, int numFamiliares /*Usuario usuario*/) {
      // this.usuario = usuario;
         this.nome = nome;
+        this.idPerfil = idPerfil;
         this.cidade = cidade;
         this.tamPropriedade = tamPropriedade;
         this.areaPecLeite = areaPecLeite;
