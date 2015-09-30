@@ -22,11 +22,13 @@ public class PerfilDAO implements InterfaceDAO<Perfil>{
     Connection connection; 
     
     public PerfilDAO(){
-        this.connection = DBConexao.openConnection();
+       
     }
     
     @Override
     public boolean cadastrar(Perfil novoPerfil){
+        
+        this.connection = DBConexao.openConnection();
         
         String sql = "INSERT INTO perfil " + 
                 "(nome, cidade, tamPropriedade, areaPecLeite, prodLeiteDiario, precoLeite, empPermanentes, numFamiliares) " +
@@ -49,11 +51,7 @@ public class PerfilDAO implements InterfaceDAO<Perfil>{
             System.out.println("Falha ao adicionar novo perfil. " +  e.getMessage());
             return false;
         } finally {
-            try {
-                this.connection.close();
-            } catch (SQLException ex) {
-                System.out.println("Falha ao encerrar conexão com banco de dados.");
-            }
+            DBConexao.closeConnection(this.connection);
         }
         return true;
     } 
@@ -64,12 +62,13 @@ public class PerfilDAO implements InterfaceDAO<Perfil>{
     }
     
     @Override
-    public Perfil buscar(String data) {
+    public Perfil buscar(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     @Override
     public boolean remover(int idPerfil) {
+        this.connection = DBConexao.openConnection();
         
         String sql = "DELETE FROM perfil WHERE idPerfil=?";
         
@@ -82,16 +81,14 @@ public class PerfilDAO implements InterfaceDAO<Perfil>{
             System.out.println("Falha ao remover perfil." + ex.getMessage());
             return false;
         } finally {
-            try {
-                this.connection.close();
-            } catch (SQLException ex) {
-                System.out.println("Falha ao encerrar conexão com banco de dados." + ex.getMessage());
-            }
+            DBConexao.closeConnection(this.connection);
         }
         return true;
     }
     
-    public ArrayList<Perfil> recuperarTodos() throws SQLException{
+    @Override
+    public ArrayList<Perfil> recuperarTodos() {
+        this.connection = DBConexao.openConnection();
         
         String sql = "SELECT * FROM perfil";
         ArrayList<Perfil> perfis = new ArrayList<>();
@@ -119,7 +116,7 @@ public class PerfilDAO implements InterfaceDAO<Perfil>{
         } catch (SQLException ex) {
             System.out.println("Falha ao recuperar todos os perfis." + ex.getMessage());
         } finally {
-            this.connection.close();
+            DBConexao.closeConnection(this.connection);
         }
         
         return perfis;

@@ -5,6 +5,7 @@
  */
 
 package modelo.negocio;
+import java.util.ArrayList;
 import modelo.negocio.*;
 import modelo.dao.*;
 
@@ -14,13 +15,16 @@ import modelo.dao.*;
  */
 public class Main {
        public static void main(String[] args) {
-           
+           ArrayList<Perfil> perfis = new ArrayList<>();
            //UsuarioDAO dao = new UsuarioDAO();
           // Usuario user = new Usuario("12", "12", 1);
           Perfil perfil = new Perfil("Adriana", "Garanhuns", (float)2.3, (float)4.5, (float)6.7, (float)8.9, 20, 3);
            
            PerfilDAO dao = new PerfilDAO();
            
-           dao.cadastrar(perfil);
+           //dao.cadastrar(perfil);
+           
+           perfis = dao.recuperarTodos();
+           System.out.println(perfis.get(0).getIdPerfil());
        }
 }

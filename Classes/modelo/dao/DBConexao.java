@@ -9,6 +9,7 @@ import com.mysql.jdbc.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+
 /**
  *
  * @author Fabricio
@@ -48,6 +49,14 @@ public class DBConexao {
         } catch (SQLException ex) {
             System.out.println("Problema durante conexão com banco de dados. " + ex.getMessage());
             return null;
+        }
+    }
+    public static void closeConnection(java.sql.Connection connection) {
+        try {
+            connection.close();
+            System.out.println("Conexão com banco de dados encerrada.");
+        } catch (SQLException ex) {
+            System.out.println("Falha ao encerrar conexão com banco de dados." + ex.getMessage());
         }
     }
 }

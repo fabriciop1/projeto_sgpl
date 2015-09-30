@@ -5,6 +5,8 @@
  */
 package modelo.dao;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Fabricio
@@ -14,6 +16,7 @@ public interface InterfaceDAO<T> {
     public boolean cadastrar(T data);
     public boolean remover(int id);
     public boolean atualizar();
-    public T buscar(String data);
+    public T buscar(int id);
+    public ArrayList<T> recuperarTodos();
     
 }

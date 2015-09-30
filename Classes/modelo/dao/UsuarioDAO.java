@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import modelo.negocio.Usuario;
 
 /**
@@ -23,7 +24,7 @@ public class UsuarioDAO implements InterfaceDAO<Usuario> {
     }
 
     @Override
-    public void cadastrar(Usuario novoUsuario) {
+    public boolean cadastrar(Usuario novoUsuario) {
         String sql = "INSERT INTO usuario " + 
                 "(login, senha, tipo) " +
                 "VALUES (?,?,?)";
@@ -38,7 +39,7 @@ public class UsuarioDAO implements InterfaceDAO<Usuario> {
             
         } catch(SQLException e){
             System.out.println("Falha ao adicionar novo usuario. " + e.getMessage());
-            
+            return false;
         } finally {
             try {
                 this.connection.close();
@@ -46,9 +47,9 @@ public class UsuarioDAO implements InterfaceDAO<Usuario> {
                 System.out.println("Conexão não encerrada corretamente. " + ex.getMessage());
             }
         }
+        return true;
     }
 
-   @Override
     public Usuario buscar(String login) {
         Usuario usuario = new Usuario();
         String sql = "SELECT * FROM usuario WHERE login = ?";
@@ -85,6 +86,16 @@ public class UsuarioDAO implements InterfaceDAO<Usuario> {
 
     @Override
     public boolean remover(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Usuario buscar(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ArrayList<Usuario> recuperarTodos() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
