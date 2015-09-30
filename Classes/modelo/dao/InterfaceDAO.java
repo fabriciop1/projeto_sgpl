@@ -11,8 +11,8 @@ package modelo.dao;
  */
 public interface InterfaceDAO<T> {
     
-    public void cadastrar(T data);
-    public boolean remover();
+    public boolean cadastrar(T data);
+    public boolean remover(int id);
     public boolean atualizar();
     public T buscar(String data);
     

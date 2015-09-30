@@ -79,12 +79,12 @@ public class UsuarioDAO implements InterfaceDAO<Usuario> {
     }
 
     @Override
-    public boolean remover() {
+    public boolean atualizar() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean atualizar() {
+    public boolean remover(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

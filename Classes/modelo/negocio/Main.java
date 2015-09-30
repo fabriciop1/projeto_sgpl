@@ -5,7 +5,6 @@
  */
 
 package modelo.negocio;
-import java.util.ArrayList;
 import modelo.negocio.*;
 import modelo.dao.*;
 
@@ -18,19 +17,10 @@ public class Main {
            
            //UsuarioDAO dao = new UsuarioDAO();
           // Usuario user = new Usuario("12", "12", 1);
-          Perfil perfil = new Perfil(666, "Adriana", "Garanhuns", 2.3f, 4.5f, 6.7f, 8.9f, 20, 300);
+          Perfil perfil = new Perfil("Adriana", "Garanhuns", (float)2.3, (float)4.5, (float)6.7, (float)8.9, 20, 3);
            
            PerfilDAO dao = new PerfilDAO();
            
            dao.cadastrar(perfil);
-           
-           dao.remover(4);
-           
-           ArrayList<Perfil> perfis = dao.recuperarTodos();
-           
-           System.out.println("____________________________________________________________\n");           
-           for(Perfil p : perfis){
-               System.out.println(p.getNome());
-           }
        }
 }

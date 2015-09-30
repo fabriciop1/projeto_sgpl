@@ -27,11 +27,11 @@ public class DBConexao {
             Class.forName(driverName);
             
             String serverName = "localhost";
-            String portNumber = "9090";
+            String portNumber = "3306";
             String database = "projeto_pesquisa";
             String url = "jdbc:mysql://" + serverName + ":" + portNumber + "/" + database;
             String username = "root";
-            String password = "";
+            String password = "root";
             
             connection = (Connection) DriverManager.getConnection(url, username, password);
             
@@ -47,19 +47,7 @@ public class DBConexao {
             return null;
         } catch (SQLException ex) {
             System.out.println("Problema durante conexão com banco de dados. " + ex.getMessage());
-            closeConnection();
             return null;
-        }
-    }
-    
-    public static void closeConnection()
-    {
-        try {
-            System.out.println("\nEncerrando conexão com banco de dados...\n");
-            openConnection().close();
-            System.out.println("Conexão encerrada com sucesso.");
-        } catch(SQLException e) {
-            System.out.println("Falha ao encerrar conexão. " + e.getMessage());
         }
     }
 }
