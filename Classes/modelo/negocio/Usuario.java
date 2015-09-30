@@ -16,15 +16,13 @@ public class Usuario implements Serializable {
     private int idUsuario;
     private String login;
     private String senha;
-    private int tipo;
     
     public Usuario(){
     }
 
-    public Usuario(String login, String senha, int tipo) {
+    public Usuario(String login, String senha) {
         this.login = login;
         this.senha = senha;
-        this.tipo = tipo;
     }
 
     public int getIdUsuario() {
@@ -39,8 +37,8 @@ public class Usuario implements Serializable {
         this.senha = senha;
     }
 
-    public void setTipo(int tipo) {
-        this.tipo = tipo;
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
     
     public String getLogin() {
@@ -49,10 +47,6 @@ public class Usuario implements Serializable {
 
     public String getSenha() {
         return senha;
-    }
-    
-    public int getTipo() {
-        return tipo;
     }
     
 }

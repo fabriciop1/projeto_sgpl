@@ -15,8 +15,8 @@ public interface InterfaceDAO<T> {
     
     public boolean cadastrar(T data);
     public boolean remover(int id);
-    public boolean atualizar();
-    public T buscar(int id);
+    public boolean atualizar(T data);
+    public ArrayList<T> buscar(String data);
     public ArrayList<T> recuperarTodos();
     
 }

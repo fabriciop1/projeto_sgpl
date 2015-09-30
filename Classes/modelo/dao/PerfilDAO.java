@@ -57,12 +57,16 @@ public class PerfilDAO implements InterfaceDAO<Perfil>{
     } 
     
     @Override
-    public boolean atualizar(){
+    public boolean atualizar(Perfil perfil){
         return true;
     }
     
     @Override
-    public Perfil buscar(int id) {
+    public ArrayList<Perfil> buscar(String nome) {
+        return null;
+    }
+    
+    public Perfil buscarPorId(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

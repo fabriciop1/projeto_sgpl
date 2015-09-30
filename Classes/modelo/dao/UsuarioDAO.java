@@ -20,11 +20,12 @@ public class UsuarioDAO implements InterfaceDAO<Usuario> {
     Connection connection; 
     
     public UsuarioDAO(){
-        this.connection = DBConexao.openConnection();
+  
     }
 
     @Override
     public boolean cadastrar(Usuario novoUsuario) {
+        this.connection = DBConexao.openConnection();
         String sql = "INSERT INTO usuario " + 
                 "(login, senha, tipo) " +
                 "VALUES (?,?,?)";
@@ -32,7 +33,6 @@ public class UsuarioDAO implements InterfaceDAO<Usuario> {
         try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
             statement.setString(1, novoUsuario.getLogin());
             statement.setString(2, novoUsuario.getSenha());
-            statement.setInt(3, novoUsuario.getTipo());
        
             statement.execute();
             statement.close();
@@ -41,16 +41,15 @@ public class UsuarioDAO implements InterfaceDAO<Usuario> {
             System.out.println("Falha ao adicionar novo usuario. " + e.getMessage());
             return false;
         } finally {
-            try {
-                this.connection.close();
-            } catch (SQLException ex) {
-                System.out.println("Conexão não encerrada corretamente. " + ex.getMessage());
-            }
+            DBConexao.closeConnection(this.connection);
         }
         return true;
     }
 
-    public Usuario buscar(String login) {
+    @Override
+    public ArrayList<Usuario> buscar(String login) {
+        this.connection = DBConexao.openConnection();
+        ArrayList<Usuario> usuarios = new ArrayList<>();
         Usuario usuario = new Usuario();
         String sql = "SELECT * FROM usuario WHERE login = ?";
         
@@ -62,25 +61,31 @@ public class UsuarioDAO implements InterfaceDAO<Usuario> {
             if(rs.next()) {
                 usuario.setLogin(rs.getString("login"));
                 usuario.setSenha(rs.getString("senha"));
-                usuario.setTipo(rs.getInt("tipo"));
             }
                 
             statement.close();
-            return usuario; 
+            usuarios.add(usuario);
+            return usuarios; 
         } catch(SQLException e) {
             System.out.println("Falha ao buscar usuário. " + e.getMessage());
             return null;
         } finally {
-            try {
-                this.connection.close();
-            } catch (SQLException ex) {
-                System.out.println("Conexão com o banco de dados não ancerrada corretamente. " + ex.getMessage());
-            }
+            DBConexao.closeConnection(this.connection);
         }
     }
 
     @Override
-    public boolean atualizar() {
+    public boolean atualizar(Usuario usuario) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public boolean removerPorLogin(String login)
+    {
+        return true;
+    }
+
+    @Override
+    public ArrayList<Usuario> recuperarTodos() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -88,15 +93,9 @@ public class UsuarioDAO implements InterfaceDAO<Usuario> {
     public boolean remover(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-    @Override
-    public Usuario buscar(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public ArrayList<Usuario> recuperarTodos() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+    public Usuario buscarPorId(int id) {
+        return null;
     }
 
 }
