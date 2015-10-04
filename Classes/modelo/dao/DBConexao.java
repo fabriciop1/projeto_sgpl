@@ -28,11 +28,11 @@ public class DBConexao {
             Class.forName(driverName);
             
             String serverName = "localhost";
-            String portNumber = "3306";
+            String portNumber = "9090"; //Mudar pra 3306 depois aew   :)
             String database = "projeto_pesquisa";
             String url = "jdbc:mysql://" + serverName + ":" + portNumber + "/" + database;
             String username = "root";
-            String password = "root";
+            String password = ""; //Mete um 'root' aqui depois vlw
             
             connection = (Connection) DriverManager.getConnection(url, username, password);
             

@@ -26,12 +26,13 @@ public class UsuarioDAO {
     public boolean cadastrar(Usuario novoUsuario) {
         this.connection = DBConexao.openConnection();
         String sql = "INSERT INTO usuario " + 
-                "(login, senha, tipo) " +
+                "(idUsuario, login, senha) " +
                 "VALUES (?,?,?)";
         
         try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
-            statement.setString(1, novoUsuario.getLogin());
-            statement.setString(2, novoUsuario.getSenha());
+            statement.setInt(1, 999); // Fixed: A primeira coluna é o ID na tabela.
+            statement.setString(2, novoUsuario.getLogin());
+            statement.setString(3, novoUsuario.getSenha());
        
             statement.execute();
             statement.close();
