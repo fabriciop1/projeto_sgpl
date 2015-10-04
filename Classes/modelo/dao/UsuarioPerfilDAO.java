@@ -39,6 +39,7 @@ public class UsuarioPerfilDAO {
                 statement.setInt(3, idUsuario);
                 
                 statement.execute();
+                statement.close();
             }
             
         } catch (SQLException ex) {
@@ -57,22 +58,20 @@ public class UsuarioPerfilDAO {
         ArrayList<Perfil> perfis = new ArrayList<>();
         
         try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, idUsuario);
-            
-            ResultSet result = statement.executeQuery();
-            PerfilDAO perfilDao = new PerfilDAO();
-            
-            while(result.next()){
-                
-                int idPerfil = result.getInt("idPerfilFK");
-                
-                Perfil perfil = perfilDao.buscarPorId(idPerfil);
-                
-                perfis.add(perfil);
+            ResultSet result;
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setInt(1, idUsuario);
+                result = statement.executeQuery();
+                PerfilDAO perfilDao = new PerfilDAO();
+                while(result.next()){
+                    
+                    int idPerfil = result.getInt("idPerfilFK");
+                    
+                    Perfil perfil = perfilDao.buscarPorId(idPerfil);
+                    
+                    perfis.add(perfil);
+                }
             }
-            
-            statement.close();
             result.close();
             
         } catch (SQLException ex) {
@@ -82,6 +81,68 @@ public class UsuarioPerfilDAO {
         return perfis;
     }
     
+    public void remover(int idUsuario, int idPerfil){
+        
+        connection = DBConexao.openConnection();
+        
+        String sql = "DELETE FROM usuario_perfil WHERE idPerfilFK = ? AND idUsuarioFK = ?";
+        
+        try {
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setInt(1, idPerfil);
+                statement.setInt(2, idUsuario);
+                
+                statement.executeUpdate();
+                statement.close();
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(UsuarioPerfilDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        DBConexao.closeConnection(connection);
+    }
     
+    public void removerPerfil(int idPerfil){
+        
+        connection = DBConexao.openConnection();
+        
+        String sql = "DELETE FROM usuario_perfil WHERE idPerfilFK = ?";
+        
+        try {
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setInt(1, idPerfil);
+                
+                statement.executeUpdate();
+                statement.close();
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(UsuarioPerfilDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        DBConexao.closeConnection(connection);
+    }
     
+    public void removerUsuario(int idUsuario){
+        
+        connection = DBConexao.openConnection();
+
+        String sql = "DELETE FROM usuario_perfil WHERE idUsuarioFK = ?";
+        
+        try {
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setInt(1, idUsuario);
+                
+                statement.executeUpdate();
+                statement.close();
+
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(UsuarioPerfilDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        DBConexao.closeConnection(connection);
+    }
 }
