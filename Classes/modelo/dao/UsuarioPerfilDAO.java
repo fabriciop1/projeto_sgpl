@@ -10,8 +10,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import modelo.negocio.Perfil;
 
 /**
@@ -28,13 +26,13 @@ public class UsuarioPerfilDAO {
     
     public void cadastrar(int idUsuario, int idPerfil) {
         
-        connection = DBConexao.openConnection();
+        this.connection = DBConexao.openConnection();
         
-        String sql = "INSERT INTO usuario_perfil(idUsuarioPerfil, idPerfilFK, idUsuarioFK) VALUES (?, ?, ?) ";
+        String sql = "INSERT INTO usuario_perfil(idPerfilFK, idUsuarioFK) VALUES (?, ?) ";
         
         try {
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setInt(1, 0);
+            try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
+                // ID cadastrado automaticamente pelo banco de dados
                 statement.setInt(2, idPerfil);
                 statement.setInt(3, idUsuario);
                 
@@ -43,39 +41,41 @@ public class UsuarioPerfilDAO {
             }
             
         } catch (SQLException ex) {
-            Logger.getLogger(UsuarioPerfilDAO.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Falha ao cadastrar na tabela usuario_perfil. " + ex.getMessage());
+        } finally {
+            DBConexao.closeConnection(this.connection);
         }
-        
-        DBConexao.closeConnection(connection);
     }
     
     public ArrayList<Perfil> buscarPerfisPorUsuario(int idUsuario) {
         
-        connection = DBConexao.openConnection();
+        this.connection = DBConexao.openConnection();
         
         String sql = "SELECT * FROM usuario_perfil WHERE idUsuarioFK = ?"; 
         
         ArrayList<Perfil> perfis = new ArrayList<>();
-        
-        try {
-            ResultSet result;
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setInt(1, idUsuario);
-                result = statement.executeQuery();
-                PerfilDAO perfilDao = new PerfilDAO();
-                while(result.next()){
-                    
-                    int idPerfil = result.getInt("idPerfilFK");
-                    
-                    Perfil perfil = perfilDao.buscarPorId(idPerfil);
-                    
-                    perfis.add(perfil);
-                }
+   
+        ResultSet result;
+        try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
+            statement.setInt(1, idUsuario);
+            result = statement.executeQuery();
+            PerfilDAO perfilDao = new PerfilDAO();
+            while(result.next()){
+                   
+                int idPerfil = result.getInt("idPerfilFK");
+                   
+                Perfil perfil = perfilDao.buscarPorId(idPerfil);
+                   
+                perfis.add(perfil);
             }
             result.close();
+            statement.close();
             
         } catch (SQLException ex) {
-            Logger.getLogger(UsuarioPerfilDAO.class.getName()).log(Level.SEVERE, null, ex);
+           System.out.println("Falha ao buscar perfis por usuario." + ex.getMessage());
+           return null;
+        } finally {
+            DBConexao.closeConnection(this.connection);
         }
         
         return perfis;
@@ -83,12 +83,12 @@ public class UsuarioPerfilDAO {
     
     public void remover(int idUsuario, int idPerfil){
         
-        connection = DBConexao.openConnection();
+        this.connection = DBConexao.openConnection();
         
         String sql = "DELETE FROM usuario_perfil WHERE idPerfilFK = ? AND idUsuarioFK = ?";
         
         try {
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
                 statement.setInt(1, idPerfil);
                 statement.setInt(2, idUsuario);
                 
@@ -97,20 +97,20 @@ public class UsuarioPerfilDAO {
             }
             
         } catch (SQLException ex) {
-            Logger.getLogger(UsuarioPerfilDAO.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Falha ao remover em tabela usuario_perfil." + ex.getMessage());
+        } finally {
+            DBConexao.closeConnection(this.connection);
         }
-        
-        DBConexao.closeConnection(connection);
     }
     
     public void removerPerfil(int idPerfil){
         
-        connection = DBConexao.openConnection();
+        this.connection = DBConexao.openConnection();
         
         String sql = "DELETE FROM usuario_perfil WHERE idPerfilFK = ?";
         
         try {
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
                 statement.setInt(1, idPerfil);
                 
                 statement.executeUpdate();
@@ -118,31 +118,28 @@ public class UsuarioPerfilDAO {
             }
             
         } catch (SQLException ex) {
-            Logger.getLogger(UsuarioPerfilDAO.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Falha ao remover Perfil através do id do usuário. " + ex.getMessage());
+        } finally {
+            DBConexao.closeConnection(this.connection);
         }
-        
-        DBConexao.closeConnection(connection);
     }
     
     public void removerUsuario(int idUsuario){
         
-        connection = DBConexao.openConnection();
+        this.connection = DBConexao.openConnection();
 
         String sql = "DELETE FROM usuario_perfil WHERE idUsuarioFK = ?";
         
-        try {
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setInt(1, idUsuario);
+        try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
+            statement.setInt(1, idUsuario);
                 
-                statement.executeUpdate();
-                statement.close();
-
-            }
+            statement.executeUpdate();
+            statement.close();
             
         } catch (SQLException ex) {
-            Logger.getLogger(UsuarioPerfilDAO.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Falha ao remover Usuario por id." + ex.getMessage());
+        } finally {
+            DBConexao.closeConnection(this.connection);
         }
-        
-        DBConexao.closeConnection(connection);
     }
 }

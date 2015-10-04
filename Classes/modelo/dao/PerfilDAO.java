@@ -81,7 +81,7 @@ public class PerfilDAO {
         return true;
     }
     
-    public ArrayList<Perfil> buscar(String nome) {
+    public ArrayList<Perfil> buscarPorNome(String nome) {
         this.connection = DBConexao.openConnection();
         
         String sql = "SELECT * FROM perfil WHERE nome = ?";
@@ -151,25 +151,6 @@ public class PerfilDAO {
         return perfil;
     }
     
-    public boolean remover(int idPerfil) {
-        this.connection = DBConexao.openConnection();
-        
-        String sql = "DELETE FROM perfil WHERE idPerfil=?";
-        
-        try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
-            statement.setInt(1, idPerfil);
-            statement.executeUpdate();
-            
-            statement.close();
-        } catch (SQLException ex) {
-            System.out.println("Falha ao remover perfil." + ex.getMessage());
-            return false;
-        } finally {
-            DBConexao.closeConnection(this.connection);
-        }
-        return true;
-    }
-    
     public ArrayList<Perfil> buscarTodos() {
         this.connection = DBConexao.openConnection();
         
@@ -203,5 +184,24 @@ public class PerfilDAO {
         }
         
         return perfis;
+    }
+    
+     public boolean remover(int idPerfil) {
+        this.connection = DBConexao.openConnection();
+        
+        String sql = "DELETE FROM perfil WHERE idPerfil=?";
+        
+        try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
+            statement.setInt(1, idPerfil);
+            statement.executeUpdate();
+            
+            statement.close();
+        } catch (SQLException ex) {
+            System.out.println("Falha ao remover perfil." + ex.getMessage());
+            return false;
+        } finally {
+            DBConexao.closeConnection(this.connection);
+        }
+        return true;
     }
 }

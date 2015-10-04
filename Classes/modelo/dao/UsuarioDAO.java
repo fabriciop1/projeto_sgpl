@@ -10,8 +10,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import modelo.negocio.Usuario;
 
 /**
@@ -30,11 +28,11 @@ public class UsuarioDAO {
         this.connection = DBConexao.openConnection();
         
         String sql = "INSERT INTO usuario " + 
-                "(idUsuario, login, senha) " +
-                "VALUES (?,?,?)";
+                "(login, senha) " +
+                "VALUES (?,?)";
         
         try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
-            statement.setInt(1, 0); // Substituido por outro ID quando for cadastrado no BD
+            // ID cadastrado pelo próprio banco
             statement.setString(2, novoUsuario.getLogin());
             statement.setString(3, novoUsuario.getSenha());
        
@@ -50,11 +48,10 @@ public class UsuarioDAO {
         return true;
     }
 
-    public Usuario buscar(String login) {
+    public Usuario buscarPorLogin(String login) {
         
         this.connection = DBConexao.openConnection();
         
-        ArrayList<Usuario> usuarios = new ArrayList<>();
         Usuario usuario = new Usuario();
         String sql = "SELECT * FROM usuario WHERE login = ?";
         
@@ -71,53 +68,30 @@ public class UsuarioDAO {
                 
             statement.close();
             
-            return usuario; 
-            
         } catch(SQLException e) {
             System.out.println("Falha ao buscar usuário. " + e.getMessage());
             return null;
         } finally {
             DBConexao.closeConnection(this.connection);
         }
+        return usuario;
     }
 
     public boolean atualizar(Usuario usuario) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    public void removerPorLogin(String login)
-    {
-        connection = DBConexao.openConnection();
-        
-        String sql = "DELETE FROM usuario WHERE login = ?";
-        
-        try {
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setString(1, login);
-                
-                statement.executeUpdate();
-                statement.close();
-            }
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(UsuarioPerfilDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        DBConexao.closeConnection(connection);
-    }
 
-    public ArrayList<Usuario> recuperarTodos() {
+    public ArrayList<Usuario> buscarTodos() {
         
-        connection = DBConexao.openConnection();
+        this.connection = DBConexao.openConnection();
         
         String sql = "SELECT * FROM usuario";
         ArrayList<Usuario> usuarios = new ArrayList<>();
         
         try {
-            try (PreparedStatement statement = connection.prepareStatement(sql); 
+            try (PreparedStatement statement = this.connection.prepareStatement(sql); 
                  ResultSet result = statement.executeQuery()) {
-                
-                
+               
                 while(result.next()){
                     
                     Usuario u = new Usuario();
@@ -133,35 +107,16 @@ public class UsuarioDAO {
             }
             
         } catch (SQLException ex) {
-            Logger.getLogger(UsuarioPerfilDAO.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Falha ao recuperar todos os usuários. " + ex.getMessage());
+            return null;
+        } finally {
+            DBConexao.closeConnection(this.connection);
         }
-        
-        DBConexao.closeConnection(connection);
         
         return usuarios;
     }
-
-    public void remover(int id) {
-        connection = DBConexao.openConnection();
-        
-        String sql = "DELETE FROM usuario WHERE idUsuario = ?";
-        
-        try {
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setInt(1, id);
-                
-                statement.executeUpdate();
-                statement.close();
-            }
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(UsuarioPerfilDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        DBConexao.closeConnection(connection);
-    }
     
-    public Usuario buscarPorId(int id) {
+    public Usuario buscarPorId(int id) {                    
         
         this.connection = DBConexao.openConnection();
         
@@ -181,12 +136,52 @@ public class UsuarioDAO {
             statement.close();
             rs.close();
             
-            return usuario;
-            
         } catch (SQLException e) {
             System.out.println("Falha ao buscar Usuário por ID. " + e.getMessage());
+            return null;
         }
-        return null;
+        return usuario;
+    }
+    
+    public void remover(int id) {
+        this.connection = DBConexao.openConnection();
+        
+        String sql = "DELETE FROM usuario WHERE idUsuario = ?";
+        
+        try {
+            try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
+                statement.setInt(1, id);
+                
+                statement.executeUpdate();
+                statement.close();
+            }
+            
+        } catch (SQLException ex) {
+            System.out.println("Falha ao remover usuário por id. " + ex.getMessage());
+        } finally {
+            DBConexao.closeConnection(this.connection);
+        }
+    }
+    
+    public void removerPorLogin(String login)
+    {
+        this.connection = DBConexao.openConnection();
+        
+        String sql = "DELETE FROM usuario WHERE login = ?";
+        
+        try {
+            try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
+                statement.setString(1, login);
+                
+                statement.executeUpdate();
+                statement.close();
+            }
+            
+        } catch (SQLException ex) {
+            System.out.println("Falha ao remover Usuario por login. " + ex.getMessage());
+        } finally {
+            DBConexao.closeConnection(this.connection);
+        }
     }
     
 }
