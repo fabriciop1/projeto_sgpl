@@ -22,13 +22,11 @@ public class Perfil implements Serializable {
     private float precoLeite;
     private int empPermanentes;
     private int numFamiliares;
-  //private Usuario usuario;
 
     public Perfil() {
     }
 
-    public Perfil(String nome, String cidade, float tamPropriedade, float areaPecLeite, float prodLeiteDiario, float precoLeite, int empPermanentes, int numFamiliares /*Usuario usuario*/) {
-     // this.usuario = usuario;
+    public Perfil(String nome, String cidade, float tamPropriedade, float areaPecLeite, float prodLeiteDiario, float precoLeite, int empPermanentes, int numFamiliares) {
         this.nome = nome;
         this.cidade = cidade;
         this.tamPropriedade = tamPropriedade;
@@ -38,10 +36,6 @@ public class Perfil implements Serializable {
         this.empPermanentes = empPermanentes;
         this.numFamiliares = numFamiliares;
     }
-
-    //public void setUsuario(Usuario usuario) {
-    //    this.usuario = usuario;
-    //}
 
     public void setIdPerfil(int idPerfil) {
         this.idPerfil = idPerfil;
@@ -82,10 +76,6 @@ public class Perfil implements Serializable {
     public int getIdPerfil() {
         return idPerfil;
     }
-
-  //  public Usuario getUsuario() {
-  //      return usuario;
-  //  }
 
     public String getNome() {
         return nome;

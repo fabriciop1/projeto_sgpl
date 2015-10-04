@@ -10,12 +10,8 @@ package controle;
  * @author usuario
  */
 import java.io.Serializable;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -34,7 +30,7 @@ public class ControlePerfil implements Serializable {
     public ControlePerfil() {
         perfis = new ArrayList<>();
         perfilDao = new PerfilDAO();
-        perfis = perfilDao.recuperarTodos();
+        perfis = perfilDao.buscarTodos();
     }
      
     public List<Perfil> getPerfis() {

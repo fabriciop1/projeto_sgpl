@@ -6,7 +6,6 @@
 
 package modelo.negocio;
 import java.util.ArrayList;
-import modelo.negocio.*;
 import modelo.dao.*;
 
 /**
@@ -22,9 +21,20 @@ public class Main {
            
            PerfilDAO dao = new PerfilDAO();
            
-           dao.cadastrar(perfil);
+          dao.cadastrar(perfil);
            
-           perfis = dao.recuperarTodos();
-           System.out.println(perfis.get(0).getIdPerfil());
+          // perfis = dao.buscarTodos();
+          // System.out.println(perfis.get(0).getIdPerfil());
+           
+           perfil.setCidade("Capoeiras");
+           dao.atualizar(perfil);
+           
+           System.out.println(perfil.getCidade());
+           
+          // dao.remover(7);
+           
+           perfis = dao.buscar("Adriana Veloso da Silva");
+           System.out.println(perfis.get(0).getNome());
+          
        }
 }

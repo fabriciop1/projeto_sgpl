@@ -16,14 +16,13 @@ import modelo.negocio.Usuario;
  *
  * @author usuario
  */
-public class UsuarioDAO implements InterfaceDAO<Usuario> {
+public class UsuarioDAO {
     Connection connection; 
     
     public UsuarioDAO(){
   
     }
 
-    @Override
     public boolean cadastrar(Usuario novoUsuario) {
         this.connection = DBConexao.openConnection();
         String sql = "INSERT INTO usuario " + 
@@ -46,8 +45,7 @@ public class UsuarioDAO implements InterfaceDAO<Usuario> {
         return true;
     }
 
-    @Override
-    public ArrayList<Usuario> buscar(String login) {
+    public Usuario buscar(String login) {
         this.connection = DBConexao.openConnection();
         ArrayList<Usuario> usuarios = new ArrayList<>();
         Usuario usuario = new Usuario();
@@ -64,8 +62,7 @@ public class UsuarioDAO implements InterfaceDAO<Usuario> {
             }
                 
             statement.close();
-            usuarios.add(usuario);
-            return usuarios; 
+            return usuario; 
         } catch(SQLException e) {
             System.out.println("Falha ao buscar usuário. " + e.getMessage());
             return null;
@@ -74,7 +71,6 @@ public class UsuarioDAO implements InterfaceDAO<Usuario> {
         }
     }
 
-    @Override
     public boolean atualizar(Usuario usuario) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -84,18 +80,30 @@ public class UsuarioDAO implements InterfaceDAO<Usuario> {
         return true;
     }
 
-    @Override
     public ArrayList<Usuario> recuperarTodos() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
     public boolean remover(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     public Usuario buscarPorId(int id) {
-        return null;
+     /*   this.connection = DBConexao.openConnection();
+        Usuario usuario = new Usuario();
+        
+        String sql = "SELECT * FROM usuario WHERE idUsuario = ?";
+        
+        try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
+            statement.setInt(1, id);
+            
+            ResultSet rs = statement.executeQuery();
+            
+            return usuario;
+        } catch (SQLException e) {
+            System.out.println("Falha ao buscar Usuário por ID. " + e.getMessage());
+        }
+       */ return null;
     }
-
+    
 }
