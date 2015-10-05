@@ -11,17 +11,17 @@
         <h:form>
             
             <p:panel id="panelLogin" header="Login" style="position: fixed" >
-                <p:growl id="growl" showDetail="true" sticky="true" life="2000"/>  
+                <p:growl id="growl" showDetail="true" sticky="false" life="2000" redisplay="false"/>  
                 
                 <h:panelGrid columns="2">
 
                     <h:outputText value="Usuário: " />
-                    <p:inputText id="inputUsuario" value="#{controleUsuario.login}" />
+                    <p:inputText id="inputUsuario" value="#{controleLogin.usuario.login}" />
 
                     <h:outputText value="Senha: "   />
-                    <p:password id="inputSenha" value="#{controleUsuario.senha}" />
+                    <p:password id="inputSenha" value="#{controleLogin.usuario.senha}" />
 
-                    <p:commandButton value="Entrar" id="botaoEntrar" action="#{controleUsuario.entrar()}"
+                    <p:commandButton value="Entrar" id="botaoEntrar" action="#{controleLogin.fazerLogin()}"
                                      ajax="false" />
                 </h:panelGrid>
             </p:panel>

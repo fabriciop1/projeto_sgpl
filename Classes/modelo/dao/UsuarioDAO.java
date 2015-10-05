@@ -27,14 +27,14 @@ public class UsuarioDAO {
         
         this.connection = DBConexao.openConnection();
         
-        String sql = "INSERT INTO usuario " + 
+        String sql = "INSERT INTO usuario" + 
                 "(login, senha) " +
                 "VALUES (?,?)";
         
         try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
             // ID cadastrado pelo próprio banco
-            statement.setString(2, novoUsuario.getLogin());
-            statement.setString(3, novoUsuario.getSenha());
+            statement.setString(1, novoUsuario.getLogin());
+            statement.setString(2, novoUsuario.getSenha());
        
             statement.execute();
             statement.close();
@@ -52,7 +52,7 @@ public class UsuarioDAO {
         
         this.connection = DBConexao.openConnection();
         
-        Usuario usuario = new Usuario();
+        Usuario usuario = null;
         String sql = "SELECT * FROM usuario WHERE login = ?";
         
         try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
@@ -61,6 +61,8 @@ public class UsuarioDAO {
             ResultSet rs = statement.executeQuery();
             
             if(rs.next()) {
+                usuario = new Usuario();
+                
                 usuario.setIdUsuario(rs.getInt("idUsuario"));
                 usuario.setLogin(rs.getString("login"));
                 usuario.setSenha(rs.getString("senha"));

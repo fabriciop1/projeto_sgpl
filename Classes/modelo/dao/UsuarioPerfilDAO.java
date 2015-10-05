@@ -33,8 +33,8 @@ public class UsuarioPerfilDAO {
         try {
             try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
                 // ID cadastrado automaticamente pelo banco de dados
-                statement.setInt(2, idPerfil);
-                statement.setInt(3, idUsuario);
+                statement.setInt(1, idPerfil);
+                statement.setInt(2, idUsuario);
                 
                 statement.execute();
                 statement.close();

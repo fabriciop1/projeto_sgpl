@@ -51,4 +51,5 @@ public class ControlePerfil implements Serializable {
     public void setPerfilDao(PerfilDAO perfilDao) {
         this.perfilDao = perfilDao;
     }
+    
 }
