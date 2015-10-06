@@ -15,45 +15,46 @@
 
         <h:body>
 
-                <p:growl id="growl" showDetail="true" sticky="true" life="2000"/>  
+            <p:growl id="growl" showDetail="true" sticky="true" life="2000"/>  
 
-                <p:dataTable var="perfil" value="#{controlePerfil.perfis}">
-                    <p:column headerText="Id">
-                        <h:outputText value="#{perfil.idPerfil}" />
-                    </p:column>
+            <p:dataTable var="perfil" value="#{controlePerfil.perfis}"
+                         emptyMessage="Você não possui acesso à nenhum perfil.">
+                <p:column headerText="Id">
+                    <h:outputText value="#{perfil.idPerfil}" />
+                </p:column>
 
-                    <p:column headerText="Nome">
-                        <h:outputText value="#{perfil.nome}" />
-                    </p:column>
+                <p:column headerText="Nome">
+                    <h:outputText value="#{perfil.nome}" />
+                </p:column>
 
-                    <p:column headerText="Cidade">
-                        <h:outputText value="#{perfil.cidade}" />
-                    </p:column>
+                <p:column headerText="Cidade">
+                    <h:outputText value="#{perfil.cidade}" />
+                </p:column>
 
-                    <p:column headerText="Tamanho Propriedade">
-                        <h:outputText value="#{perfil.tamPropriedade}" />
-                    </p:column>
-                    
-                    <p:column headerText="Área Pecuária Leiteira">
-                        <h:outputText value="#{perfil.areaPecLeite}" />
-                    </p:column>
-                    
-                    <p:column headerText="Produção Leite Diário">
-                        <h:outputText value="#{perfil.prodLeiteDiario}" />
-                    </p:column>
-                    
-                    <p:column headerText="Preço do Leite">
-                        <h:outputText value="#{perfil.precoLeite}" />
-                    </p:column>
-                    
-                    <p:column headerText="Empregados Permanentes">
-                        <h:outputText value="#{perfil.empPermanentes}" />
-                    </p:column>
-                    
-                    <p:column headerText="Número de Familiares">
-                        <h:outputText value="#{perfil.numFamiliares}" />
-                    </p:column>
-                </p:dataTable>
+                <p:column headerText="Tamanho Propriedade">
+                    <h:outputText value="#{perfil.tamPropriedade}" />
+                </p:column>
+
+                <p:column headerText="Área Pecuária Leiteira">
+                    <h:outputText value="#{perfil.areaPecLeite}" />
+                </p:column>
+
+                <p:column headerText="Produção Leite Diário">
+                    <h:outputText value="#{perfil.prodLeiteDiario}" />
+                </p:column>
+
+                <p:column headerText="Preço do Leite">
+                    <h:outputText value="#{perfil.precoLeite}" />
+                </p:column>
+
+                <p:column headerText="Empregados Permanentes">
+                    <h:outputText value="#{perfil.empPermanentes}" />
+                </p:column>
+
+                <p:column headerText="Número de Familiares">
+                    <h:outputText value="#{perfil.numFamiliares}" />
+                </p:column>
+            </p:dataTable>
 
             
 

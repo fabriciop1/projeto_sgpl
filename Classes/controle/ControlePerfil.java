@@ -10,30 +10,39 @@ package controle;
  * @author Alexandre
  */
 import java.io.Serializable;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
-import modelo.dao.PerfilDAO;
+import javax.faces.bean.SessionScoped;
+import modelo.dao.UsuarioPerfilDAO;
 import modelo.negocio.Perfil;
+import modelo.negocio.Usuario;
  
 @ManagedBean(name="controlePerfil")
-@ViewScoped
+@SessionScoped
 public class ControlePerfil implements Serializable {
      
     public List<Perfil> perfis;
-     
-    @ManagedProperty("#{perfilDAO}")
-    private PerfilDAO perfilDao;
+    public Usuario usuario;
+    
+    @ManagedProperty("#{usuarioPerfilDAO}")
+    private UsuarioPerfilDAO usuarioPerfilDao;
  
     public ControlePerfil() {
+        
+        usuario = new Usuario();
+        usuarioPerfilDao = new UsuarioPerfilDAO();
+        
+        usuario = (Usuario) ControleLogin.getInstance().getSession().getAttribute("usuario");
+        
+        //ControleLogin controleLogin = ControleLogin.getInstance();
+        //usuario = controleLogin.getUsuario();
+        //System.out.println(usuario.getLogin());
+        
         perfis = new ArrayList<>();
-        perfilDao = new PerfilDAO();
+        perfis = usuarioPerfilDao.buscarPerfisPorUsuario(usuario.getIdUsuario());
+        
     }
      
     public List<Perfil> getPerfis() {
@@ -44,12 +53,14 @@ public class ControlePerfil implements Serializable {
         this.perfis = perfis;
     }
 
-    public PerfilDAO getPerfilDao() {
-        return perfilDao;
+    public UsuarioPerfilDAO getUsuarioPerfilDao() {
+        return usuarioPerfilDao;
     }
-        
-    public void setPerfilDao(PerfilDAO perfilDao) {
-        this.perfilDao = perfilDao;
+
+    public void setUsuarioPerfilDao(UsuarioPerfilDAO usuarioPerfilDao) {
+        this.usuarioPerfilDao = usuarioPerfilDao;
     }
+    
+    
     
 }

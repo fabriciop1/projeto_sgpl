@@ -6,12 +6,12 @@
 package controle;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 import modelo.dao.UsuarioDAO;
 import modelo.negocio.Usuario;
 
@@ -29,13 +29,16 @@ public class ControleLogin {
     private static ControleLogin self = new ControleLogin();
     
     public static ControleLogin getInstance(){ 
+        
         return self;
+        
     }
     
     public ControleLogin() {
         
         logado = false;
         usuario = new Usuario();
+        
     }    
     
     public Usuario getUsuario() {
@@ -55,33 +58,38 @@ public class ControleLogin {
     }
     
     public void fazerLogin(){
-        
-        UsuarioDAO dao = new UsuarioDAO();
-        Usuario atual = dao.buscarPorLogin(usuario.getLogin());
-        
-        if(atual != null){
-            
-            if(usuario.getSenha().equals(atual.getSenha())){
-                logado = true;
-                usuario = atual;
                 
-                try { 
-                    
-                    FacesContext.getCurrentInstance().getExternalContext().redirect("VisualizarPerfil.xhtml");
-                    
-                } catch (IOException ex) {
+        if(logado == false){
+            UsuarioDAO dao = new UsuarioDAO();
+            Usuario atual = new Usuario();
+            atual = dao.buscarPorLogin(usuario.getLogin());
+
+            if(atual != null){
+
+                if(usuario.getSenha().equals(atual.getSenha())){
+                    logado = true;
+                    usuario = atual;
+
+                    try { 
+
+                        getSession().setAttribute("usuario", usuario);
+
+                        FacesContext.getCurrentInstance().getExternalContext().redirect("VisualizarPerfil.xhtml");
+
+                    } catch (IOException ex) {
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+                                "Erro", "Ocorreu um erro ao mudar de pagina."));  
+                    }
+                }
+                else {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-                            "Erro", "Ocorreu um erro ao mudar de pagina."));  
+                                "Erro", "A senha está incorreta. Tente novamente."));  
                 }
             }
             else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-                            "Erro", "A senha está incorreta. Tente novamente."));  
+                                "Erro", "Usuario não encontrado."));  
             }
-        }
-        else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-                            "Erro", "Usuario não encontrado."));  
         }
     }
     
@@ -89,4 +97,8 @@ public class ControleLogin {
         logado = false;
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();  
     }
+    
+    public HttpSession getSession() {  
+        return (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);  
+    }  
 }
