@@ -15,12 +15,13 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import modelo.dao.UsuarioPerfilDAO;
 import modelo.negocio.Perfil;
 import modelo.negocio.Usuario;
  
 @ManagedBean(name="controlePerfil")
-@SessionScoped
+@ViewScoped
 public class ControlePerfil implements Serializable {
      
     public List<Perfil> perfis;
@@ -31,6 +32,8 @@ public class ControlePerfil implements Serializable {
  
     public ControlePerfil() {
         
+        perfis = new ArrayList<>();
+        
         usuario = new Usuario();
         usuarioPerfilDao = new UsuarioPerfilDAO();
         
@@ -38,10 +41,10 @@ public class ControlePerfil implements Serializable {
         
         //ControleLogin controleLogin = ControleLogin.getInstance();
         //usuario = controleLogin.getUsuario();
-        //System.out.println(usuario.getLogin());
+        System.out.println(usuario.getLogin());
         
-        perfis = new ArrayList<>();
         perfis = usuarioPerfilDao.buscarPerfisPorUsuario(usuario.getIdUsuario());
+        System.out.println(perfis.get(0).getNome());
         
     }
      

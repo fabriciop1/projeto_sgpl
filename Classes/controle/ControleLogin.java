@@ -58,22 +58,21 @@ public class ControleLogin {
     }
     
     public void fazerLogin(){
-                
-        if(logado == false){
+            
+            getSession().setAttribute("usuario", null);
+        
             UsuarioDAO dao = new UsuarioDAO();
-            Usuario atual = new Usuario();
-            atual = dao.buscarPorLogin(usuario.getLogin());
-
+            Usuario atual = dao.buscarPorLogin(usuario.getLogin());
+            
             if(atual != null){
 
                 if(usuario.getSenha().equals(atual.getSenha())){
-                    logado = true;
+                    setLogado(true);
                     usuario = atual;
-
+                                        
                     try { 
 
                         getSession().setAttribute("usuario", usuario);
-
                         FacesContext.getCurrentInstance().getExternalContext().redirect("VisualizarPerfil.xhtml");
 
                     } catch (IOException ex) {
@@ -90,11 +89,12 @@ public class ControleLogin {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
                                 "Erro", "Usuario não encontrado."));  
             }
-        }
+        
     }
     
     public void fazerLogout(){
-        logado = false;
+        getSession().removeAttribute("usuario");
+        setLogado(false);
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();  
     }
     
