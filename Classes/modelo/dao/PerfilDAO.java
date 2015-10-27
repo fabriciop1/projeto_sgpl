@@ -36,10 +36,10 @@ public class PerfilDAO {
         try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
             statement.setString(1, novoPerfil.getNome());
             statement.setString(2, novoPerfil.getCidade());
-            statement.setFloat(3, novoPerfil.getTamPropriedade());
-            statement.setFloat(4, novoPerfil.getAreaPecLeite());
-            statement.setFloat(5, novoPerfil.getProdLeiteDiario());
-            statement.setFloat(6, novoPerfil.getPrecoLeite());
+            statement.setDouble(3, novoPerfil.getTamPropriedade());
+            statement.setDouble(4, novoPerfil.getAreaPecLeite());
+            statement.setDouble(5, novoPerfil.getProdLeiteDiario());
+            statement.setDouble(6, novoPerfil.getPrecoLeite());
             statement.setInt(7, novoPerfil.getEmpPermanentes());
             statement.setInt(8, novoPerfil.getNumFamiliares());
        
@@ -63,10 +63,10 @@ public class PerfilDAO {
         try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
             statement.setString(1, perfil.getNome());
             statement.setString(2, perfil.getCidade());
-            statement.setFloat(3, perfil.getTamPropriedade());
-            statement.setFloat(4, perfil.getAreaPecLeite());
-            statement.setFloat(5, perfil.getProdLeiteDiario());
-            statement.setFloat(6, perfil.getPrecoLeite());
+            statement.setDouble(3, perfil.getTamPropriedade());
+            statement.setDouble(4, perfil.getAreaPecLeite());
+            statement.setDouble(5, perfil.getProdLeiteDiario());
+            statement.setDouble(6, perfil.getPrecoLeite());
             statement.setInt(7, perfil.getEmpPermanentes());
             statement.setInt(8, perfil.getNumFamiliares());
             statement.setInt(9, perfil.getIdPerfil());
@@ -99,10 +99,10 @@ public class PerfilDAO {
                 p.setIdPerfil(result.getInt(1)); //idPerfil
                 p.setNome(result.getString(2)); //Nome
                 p.setCidade(result.getString(3)); //Cidade
-                p.setTamPropriedade(result.getFloat(4)); //Tam da Propriedade
-                p.setAreaPecLeite(result.getFloat(5)); //Area Pec de Leite
-                p.setProdLeiteDiario(result.getFloat(6)); // Prod Diaria de Leite
-                p.setPrecoLeite(result.getFloat(7)); //Preço do Leite
+                p.setTamPropriedade(result.getDouble(4)); //Tam da Propriedade
+                p.setAreaPecLeite(result.getDouble(5)); //Area Pec de Leite
+                p.setProdLeiteDiario(result.getDouble(6)); // Prod Diaria de Leite
+                p.setPrecoLeite(result.getDouble(7)); //Preço do Leite
                 p.setEmpPermanentes(result.getInt(8)); //Num de Empregados Permanentes
                 p.setNumFamiliares(result.getInt(9)); // Num Familiares
                     
@@ -134,10 +134,10 @@ public class PerfilDAO {
                 perfil.setIdPerfil(1);
                 perfil.setNome(rs.getString(2));
                 perfil.setCidade(rs.getString(3));
-                perfil.setTamPropriedade(rs.getInt(4));
-                perfil.setAreaPecLeite(rs.getFloat(5)); //Area Pec de Leite
-                perfil.setProdLeiteDiario(rs.getFloat(6)); // Prod Diaria de Leite
-                perfil.setPrecoLeite(rs.getFloat(7)); //Preço do Leite
+                perfil.setTamPropriedade(rs.getDouble(4));
+                perfil.setAreaPecLeite(rs.getDouble(5)); //Area Pec de Leite
+                perfil.setProdLeiteDiario(rs.getDouble(6)); // Prod Diaria de Leite
+                perfil.setPrecoLeite(rs.getDouble(7)); //Preço do Leite
                 perfil.setEmpPermanentes(rs.getInt(8)); //Num de Empregados Permanentes
                 perfil.setNumFamiliares(rs.getInt(9)); // Num Familiares
             }
@@ -166,10 +166,10 @@ public class PerfilDAO {
                 p.setIdPerfil(result.getInt(1)); //idPerfil
                 p.setNome(result.getString(2)); //Nome
                 p.setCidade(result.getString(3)); //Cidade
-                p.setTamPropriedade(result.getFloat(4)); //Tam da Propriedade
-                p.setAreaPecLeite(result.getFloat(5)); //Area Pec de Leite
-                p.setProdLeiteDiario(result.getFloat(6)); // Prod Diaria de Leite
-                p.setPrecoLeite(result.getFloat(7)); //Preço do Leite
+                p.setTamPropriedade(result.getDouble(4)); //Tam da Propriedade
+                p.setAreaPecLeite(result.getDouble(5)); //Area Pec de Leite
+                p.setProdLeiteDiario(result.getDouble(6)); // Prod Diaria de Leite
+                p.setPrecoLeite(result.getDouble(7)); //Preço do Leite
                 p.setEmpPermanentes(result.getInt(8)); //Num de Empregados Permanentes
                 p.setNumFamiliares(result.getInt(9)); // Num Familiares
                     
