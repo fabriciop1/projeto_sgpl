@@ -16,17 +16,17 @@ public class Perfil implements Serializable {
     private int idPerfil;
     private String nome;
     private String cidade;
-    private float tamPropriedade;
-    private float areaPecLeite;
-    private float prodLeiteDiario;
-    private float precoLeite;
+    private double tamPropriedade;
+    private double areaPecLeite;
+    private double prodLeiteDiario;
+    private double precoLeite;
     private int empPermanentes;
     private int numFamiliares;
 
     public Perfil() {
     }
 
-    public Perfil(String nome, String cidade, float tamPropriedade, float areaPecLeite, float prodLeiteDiario, float precoLeite, int empPermanentes, int numFamiliares) {
+    public Perfil(String nome, String cidade, double tamPropriedade, double areaPecLeite, double prodLeiteDiario, double precoLeite, int empPermanentes, int numFamiliares) {
         this.nome = nome;
         this.cidade = cidade;
         this.tamPropriedade = tamPropriedade;
@@ -49,19 +49,19 @@ public class Perfil implements Serializable {
         this.cidade = cidade;
     }
 
-    public void setTamPropriedade(float tamPropriedade) {
+    public void setTamPropriedade(double tamPropriedade) {
         this.tamPropriedade = tamPropriedade;
     }
 
-    public void setAreaPecLeite(float areaPecLeite) {
+    public void setAreaPecLeite(double areaPecLeite) {
         this.areaPecLeite = areaPecLeite;
     }
 
-    public void setProdLeiteDiario(float prodLeiteDiario) {
+    public void setProdLeiteDiario(double prodLeiteDiario) {
         this.prodLeiteDiario = prodLeiteDiario;
     }
 
-    public void setPrecoLeite(float precoLeite) {
+    public void setPrecoLeite(double precoLeite) {
         this.precoLeite = precoLeite;
     }
 
@@ -85,19 +85,19 @@ public class Perfil implements Serializable {
         return cidade;
     }
 
-    public float getTamPropriedade() {
+    public double getTamPropriedade() {
         return tamPropriedade;
     }
 
-    public float getAreaPecLeite() {
+    public double getAreaPecLeite() {
         return areaPecLeite;
     }
 
-    public float getProdLeiteDiario() {
+    public double getProdLeiteDiario() {
         return prodLeiteDiario;
     }
 
-    public float getPrecoLeite() {
+    public double getPrecoLeite() {
         return precoLeite;
     }
 

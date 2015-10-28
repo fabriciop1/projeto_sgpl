@@ -6,41 +6,70 @@
 package controle;
 
 import java.io.IOException;
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
+import javax.swing.JOptionPane;
 import modelo.dao.UsuarioDAO;
 import modelo.negocio.Usuario;
 
 /**
  *
- * @author Jefferson Sales
+ * @author Alexandre Jorge
  */
-@ManagedBean(name="controleLogin")
-@SessionScoped
 public class ControleLogin {
     
     private Usuario usuario;
-    private boolean logado;
-
-    private static ControleLogin self = new ControleLogin();
+    private UsuarioDAO usuarioDAO;
     
-    public static ControleLogin getInstance(){ 
-        
-        return self;
-        
+    private ControleLogin() {}
+    
+    private static class UsuarioLogadoHolder { 
+        private final static ControleLogin instance = new ControleLogin();
+    }
+
+    public static ControleLogin getInstance() {
+            return UsuarioLogadoHolder.instance;
     }
     
-    public ControleLogin() {
+    public boolean fazerLogin(String login, char[] senha){
         
-        logado = false;
-        usuario = new Usuario();
+        Usuario atual = new Usuario();
         
-    }    
+        usuarioDAO = new UsuarioDAO();
+        atual = usuarioDAO.buscarPorLogin(login);
+        
+        if(atual != null){
+            
+            if(verificaSenha(atual.getSenha(), senha)){
+                getInstance().setUsuario(atual);
+                return true;
+            } else {
+                JOptionPane.showMessageDialog(null, "Senha incorreta", null, JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Usuário incorreto", null, JOptionPane.ERROR_MESSAGE);
+        }
+        return false;
+    }
     
+    public boolean verificaSenha(String senhaStr, char[] senhaChar){
+        
+        char[] temp = senhaStr.toCharArray();
+        
+        if(senhaStr.length() == senhaChar.length){
+            for(int i = 0; i < senhaChar.length; i++){
+                if(temp[i] != senhaChar[i]){
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+    
+    public boolean fazerLogout(){
+        getInstance().setUsuario(null);
+        return true;
+    }
+
     public Usuario getUsuario() {
         return usuario;
     }
@@ -49,56 +78,16 @@ public class ControleLogin {
         this.usuario = usuario;
     }
 
-    public boolean isLogado() {
-        return logado;
+    public UsuarioDAO getUsuarioDAO() {
+        return usuarioDAO;
     }
 
-    public void setLogado(boolean logado) {
-        this.logado = logado;
-    }
-    
-    public void fazerLogin(){
-            
-            getSession().setAttribute("usuario", null);
-        
-            UsuarioDAO dao = new UsuarioDAO();
-            Usuario atual = dao.buscarPorLogin(usuario.getLogin());
-            
-            if(atual != null){
-
-                if(usuario.getSenha().equals(atual.getSenha())){
-                    setLogado(true);
-                    usuario = atual;
-                                        
-                    try { 
-
-                        getSession().setAttribute("usuario", usuario);
-                        FacesContext.getCurrentInstance().getExternalContext().redirect("VisualizarPerfil.xhtml");
-
-                    } catch (IOException ex) {
-                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-                                "Erro", "Ocorreu um erro ao mudar de pagina."));  
-                    }
-                }
-                else {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-                                "Erro", "A senha está incorreta. Tente novamente."));  
-                }
-            }
-            else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-                                "Erro", "Usuario não encontrado."));  
-            }
-        
+    public void setUsuarioDAO(UsuarioDAO usuarioDAO) {
+        this.usuarioDAO = usuarioDAO;
     }
     
-    public void fazerLogout(){
-        getSession().removeAttribute("usuario");
-        setLogado(false);
-        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();  
-    }
     
-    public HttpSession getSession() {  
-        return (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);  
-    }  
+    
+    
+    
 }
