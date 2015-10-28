@@ -6,6 +6,7 @@
 package visao;
 
 import controle.ControleLogin;
+import controle.ControlePerfil;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.ArrayList;
@@ -208,7 +209,10 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         atual.setEmpPermanentes((int) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 7));
         atual.setNumFamiliares((int) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 8));
         
-        JOptionPane.showMessageDialog(null, atual.getNome());
+        ControlePerfil.getInstance().setPerfilSelecionado(atual);
+        
+        new MenuPrincipal().setVisible(true);
+        this.setVisible(false);
         
     }//GEN-LAST:event_btnAcessarActionPerformed
 

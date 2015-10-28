@@ -23,8 +23,14 @@ public class ControlePerfil implements Serializable {
     
     private UsuarioPerfilDAO usuarioPerfilDao;
  
-    public ControlePerfil() {
+    public ControlePerfil() {}
+    
+    private static class PerfilSelecionadoHolder { 
+        private final static ControlePerfil instance = new ControlePerfil();
+    }
 
+    public static ControlePerfil getInstance() {
+            return PerfilSelecionadoHolder.instance;
     }
     
     public List<Perfil> getPerfis() {
