@@ -32,7 +32,7 @@ public class DBConexao {
             String database = "projeto_pesquisa";
             String url = "jdbc:mysql://" + serverName + ":" + portNumber + "/" + database;
             String username = "root";
-            String password = "foreign"; 
+            String password = "1234"; 
             
             connection = (Connection) DriverManager.getConnection(url, username, password);
             

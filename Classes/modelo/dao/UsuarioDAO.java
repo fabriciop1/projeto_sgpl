@@ -17,7 +17,8 @@ import modelo.negocio.Usuario;
  * @author usuario
  */
 public class UsuarioDAO {
-    Connection connection; 
+    
+    private Connection connection; 
     
     public UsuarioDAO(){
   

@@ -18,7 +18,7 @@ import modelo.negocio.Perfil;
  */
 public class UsuarioPerfilDAO {
     
-    Connection connection; 
+    private Connection connection; 
     
     public UsuarioPerfilDAO() {
         
