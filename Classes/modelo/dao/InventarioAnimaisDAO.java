@@ -9,9 +9,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import modelo.negocio.InventarioAnimais;
-import modelo.negocio.InventarioTerras;
 
 /**
  *
@@ -22,29 +22,45 @@ public class InventarioAnimaisDAO {
      private Connection connection;
     
     public void cadastrar(InventarioAnimais inventario) throws SQLException{
-        this.connection = DBConexao.openConnection();
-        
-        String sql = "INSERT INTO inventario_animais" + 
-                "(idInventarioAnimais, categoria, inicio, nascimento, morte, venda,"
-                + "compra, final, valorCabeca) " +
-                "VALUES (?,?,?,?,?,?,?,?,?)";
-        
-        PreparedStatement st = this.connection.prepareStatement(sql);
-            // ID cadastrado pelo próprio banco
-        st.setInt(1, inventario.getId()); //Tanto faz o valor. Sera modificado pelo banco de dados depois.
-        st.setString(2, inventario.getCategoria());
-        st.setInt(3, inventario.getValorInicio());
-        st.setInt(4, inventario.getNascimento());
-        st.setInt(5, inventario.getMorte());
-        st.setInt(6, inventario.getVenda());
-        st.setInt(7, inventario.getCompra());
-        st.setInt(8, inventario.getValorFinal());
-        st.setDouble(9, inventario.getValorPorCabeca());
-       
-        st.execute();
-        st.close();
-           
-        DBConexao.closeConnection(this.connection);
+        try {
+            this.connection = DBConexao.openConnection();
+            
+            String sql = "INSERT INTO inventario_animais "  
+                    + "(categoria, inicio, nascimento, morte, venda, compra, final, valorCabeca, "
+                    + "vidaUtilReprodutores, vidaUtilAnimaisServico, tipoAnimal, idPerfilFK) "
+                    + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+            
+            PreparedStatement st = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            st.setString(1, inventario.getCategoria());
+            st.setInt(2, inventario.getValorInicio());
+            st.setInt(3, inventario.getNascimento());
+            st.setInt(4, inventario.getMorte());
+            st.setInt(5, inventario.getVenda());
+            st.setInt(6, inventario.getCompra());
+            st.setInt(7, inventario.getValorFinal());
+            st.setDouble(8, inventario.getValorCabeca());
+            st.setInt(9, inventario.getVidaUtilReprodutores());
+            st.setInt(10, inventario.getVidaUtilAnimaisServico());
+            st.setInt(11, inventario.getTipoAnimal());
+            st.setInt(12, inventario.getPerfil().getIdPerfil());
+            
+            st.executeUpdate();
+            
+            ResultSet keys = st.getGeneratedKeys();
+            
+            if (keys.next()) {
+                inventario.setId(keys.getInt(1));
+            }
+            
+            keys.close();
+            
+            st.close();
+            
+            DBConexao.closeConnection(this.connection);
+            
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
     
     public void remover(int id) throws SQLException{
@@ -62,8 +78,38 @@ public class InventarioAnimaisDAO {
         DBConexao.closeConnection(this.connection);        
     }
     
-    public void alterar(InventarioTerras inventario){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void atualizar(InventarioAnimais inventario){
+        
+        try{
+            connection = DBConexao.openConnection();
+            
+            String sql = "UPDATE inventario_animais SET categoria=?, inicio=?, nascimento=?, morte=?, venda=?, compra=?, final=?, valorCabeca=?,"
+                    + " vidaUtilReprodutores=?, vidaUtilAnimaisServico=?, tipoAnimal=?"
+                    + " WHERE idInventarioTerras=?";
+            
+            PreparedStatement st = connection.prepareStatement(sql);
+            
+            st.setString(1, inventario.getCategoria());
+            st.setInt(2, inventario.getValorInicio());
+            st.setInt(3, inventario.getNascimento());
+            st.setInt(4, inventario.getMorte());
+            st.setInt(5, inventario.getVenda());
+            st.setInt(6, inventario.getCompra());
+            st.setInt(7, inventario.getValorFinal());
+            st.setDouble(8, inventario.getValorCabeca());
+            st.setInt(9, inventario.getVidaUtilReprodutores());
+            st.setInt(10, inventario.getVidaUtilAnimaisServico());
+            st.setInt(11, inventario.getTipoAnimal());
+            st.setInt(12, inventario.getId());
+            
+            st.executeUpdate();
+            st.close();
+            
+            DBConexao.closeConnection(connection);
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
 
     }
     
@@ -76,6 +122,7 @@ public class InventarioAnimaisDAO {
         connection = DBConexao.openConnection();
         
         PreparedStatement statement = connection.prepareStatement(sql);
+        
         statement.setInt(1, id);
         
         ResultSet res = statement.executeQuery();
@@ -91,7 +138,10 @@ public class InventarioAnimaisDAO {
             inventario.setVenda(res.getInt("venda"));
             inventario.setCompra(res.getInt("compra"));
             inventario.setValorFinal(res.getInt("final"));
-            inventario.setValorPorCabeca(res.getDouble("valorCabeca"));
+            inventario.setValorCabeca(res.getDouble("valorCabeca"));
+            inventario.setVidaUtilReprodutores(res.getInt("vidaUtilReprodutores"));
+            inventario.setVidaUtilAnimaisServico(res.getInt("vidaUtilAnimaisServico"));
+            inventario.setPerfil((new PerfilDAO()).recuperar(res.getInt("idPerfilFK")));
         }
         
         res.close();
@@ -123,7 +173,10 @@ public class InventarioAnimaisDAO {
             inventario.setVenda(res.getInt("venda"));
             inventario.setCompra(res.getInt("compra"));
             inventario.setValorFinal(res.getInt("final"));
-            inventario.setValorPorCabeca(res.getDouble("valorCabeca"));
+            inventario.setValorCabeca(res.getDouble("valorCabeca"));
+            inventario.setVidaUtilReprodutores(res.getInt("vidaUtilReprodutores"));
+            inventario.setVidaUtilAnimaisServico(res.getInt("vidaUtilAnimaisServico"));
+            inventario.setPerfil((new PerfilDAO()).recuperar(res.getInt("idPerfilFK")));
             
             inventarios.add(inventario);
         }

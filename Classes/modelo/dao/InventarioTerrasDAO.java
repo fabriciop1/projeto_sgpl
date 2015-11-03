@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import modelo.negocio.InventarioTerras;
 
@@ -21,30 +22,44 @@ public class InventarioTerrasDAO {
     private Connection connection;
     
     public void cadastrar(InventarioTerras inventario) throws SQLException{
-        this.connection = DBConexao.openConnection();
-        
-        String sql = "INSERT INTO inventario_terras" + 
-                "(idInventarioTerras, especificacao, areaArrendadaInicio, areaPropriaInicio, areaArrendadaFinal, areaPropriaFinal,"
-                + "valorTerraNuaPropria, valorHectare, vidaUtil) " +
-                "VALUES (?,?,?,?,?,?,?,?,?)";
-        
-        PreparedStatement statement = this.connection.prepareStatement(sql);
-            // ID cadastrado pelo próprio banco
-        statement.setInt(1, inventario.getId()); //Tanto faz o valor. Sera modificado pelo banco de dados depois.
-        statement.setString(2, inventario.getEspecificacao());
-        statement.setDouble(3, inventario.getAreaArrendadaInicio());
-        statement.setDouble(4, inventario.getAreaPropriaInicio());
-        statement.setDouble(5, inventario.getAreaArrendadaFinal());
-        statement.setDouble(6, inventario.getAreaPropriaFinal());
-        statement.setDouble(7, inventario.getValorTerraNuaPropria());
-        statement.setDouble(8, inventario.getValorHectare());
-        statement.setInt(9, inventario.getVidaUtil());
-       
-        statement.execute();
-        statement.close();
-           
-        DBConexao.closeConnection(this.connection);
-    }
+        try {
+            this.connection = DBConexao.openConnection();
+            
+            String sql = "INSERT INTO inventario_terras "
+                    + "(especificacao, areaArrendadaInicio, areaPropriaInicio, areaArrendadaFinal, areaPropriaFinal, "
+                    + "valorTerraNuaPropria, vidaUtil, custoFormacaoHectares, idPerfilFK) "
+                    + "VALUES (?,?,?,?,?,?,?,?,?)";
+            
+            PreparedStatement statement = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            
+            statement.setString(1, inventario.getEspecificacao());
+            statement.setDouble(2, inventario.getAreaArrendadaInicio());
+            statement.setDouble(3, inventario.getAreaPropriaInicio());
+            statement.setDouble(4, inventario.getAreaArrendadaFinal());
+            statement.setDouble(5, inventario.getAreaPropriaFinal());
+            statement.setDouble(6, inventario.getValorTerraNuaPropria());
+            statement.setInt(7, inventario.getVidaUtil());
+            statement.setDouble(8, inventario.getCustoFormacaoHectare());
+            statement.setInt(9, inventario.getPerfil().getIdPerfil());
+            
+            statement.executeUpdate();
+            
+            ResultSet keys = statement.getGeneratedKeys();
+            
+            if (keys.next()) {
+                inventario.setId(keys.getInt(1));
+            }
+            
+            keys.close();
+            
+            statement.close();
+            
+            DBConexao.closeConnection(this.connection);
+            
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+   }
     
     public void remover(int id) throws SQLException{
         
@@ -60,10 +75,37 @@ public class InventarioTerrasDAO {
             
         DBConexao.closeConnection(this.connection);        
     }
-    
-    public void alterar(InventarioTerras inventario){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-
+   
+    public void atualizar(InventarioTerras inventario){
+        
+        try{
+            connection = DBConexao.openConnection();
+            
+            String sql = "UPDATE inventario_terras SET especificacao=?, areaArrendadaInicio=?, areaPropriaInicio=?, "
+                    + "areaArrendadaFinal=?, areaPropriaFinal=?, valorTerraNuaPropria=?, vidaUtil=?, custoFormacaoHectare=?"
+                    + " WHERE idInventarioTerras=?";
+            
+            PreparedStatement st = connection.prepareStatement(sql);
+            
+            st.setString(1, inventario.getEspecificacao());
+            st.setDouble(2, inventario.getAreaArrendadaInicio());
+            st.setDouble(3, inventario.getAreaPropriaInicio());
+            st.setDouble(4, inventario.getAreaArrendadaFinal());
+            st.setDouble(5, inventario.getAreaPropriaFinal());
+            st.setDouble(6, inventario.getValorTerraNuaPropria());
+            st.setInt(7, inventario.getVidaUtil());
+            st.setDouble(8, inventario.getCustoFormacaoHectare());
+            st.setInt(9, inventario.getId()); 
+            
+            st.executeUpdate();
+            st.close();
+            
+            DBConexao.closeConnection(connection);
+        }
+        
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
     }
     
     public InventarioTerras recuperar(int id) throws SQLException{
@@ -89,8 +131,9 @@ public class InventarioTerrasDAO {
             inventario.setAreaArrendadaFinal(result.getDouble("areaArrendadaFinal"));
             inventario.setAreaPropriaFinal(result.getDouble("areaPropriaFinal"));
             inventario.setValorTerraNuaPropria(result.getDouble("valorTerraNuaPropria"));
-            inventario.setValorHectare(result.getDouble("valorHectare"));
             inventario.setVidaUtil(result.getInt("vidaUtil"));
+            inventario.setCustoFormacaoHectare(result.getDouble("custoFormacaoHectare"));
+            inventario.setPerfil((new PerfilDAO()).recuperar(result.getInt("idPerfilFK")));
         }
         
         result.close();
@@ -121,8 +164,8 @@ public class InventarioTerrasDAO {
             inventario.setAreaArrendadaFinal(result.getDouble("areaArrendadaFinal"));
             inventario.setAreaPropriaFinal(result.getDouble("areaPropriaFinal"));
             inventario.setValorTerraNuaPropria(result.getDouble("valorTerraNuaPropria"));
-            inventario.setValorHectare(result.getDouble("valorHectare"));
             inventario.setVidaUtil(result.getInt("vidaUtil"));
+            inventario.setPerfil((new PerfilDAO()).recuperar(result.getInt("idPerfilFK")));
             
             inventarios.add(inventario);
         }
@@ -134,5 +177,4 @@ public class InventarioTerrasDAO {
     
         return inventarios;
     }
-    
 }

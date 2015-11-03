@@ -5,8 +5,6 @@
  */
 package modelo.negocio;
 
-import java.sql.Date;
-
 /**
  *
  * @author Jefferson Sales
@@ -14,25 +12,24 @@ import java.sql.Date;
 public class InventarioAnimais {
     
     private int id;
-    
     private String categoria;
-    
     private int valorInicio;
-    
     private int nascimento;
     private int morte;
     private int venda;
     private int compra;
-    
     private int valorFinal;
-    
-    private double valorPorCabeca;
+    private double valorCabeca;
+    private int vidaUtilReprodutores;
+    private int vidaUtilAnimaisServico;
+    private int tipoAnimal; // 1 - Produção ; 2 - Em Serviço
+    private Perfil perfil;
 
     public InventarioAnimais() {
     }
-
-    public InventarioAnimais(int id, String categoria, int valorInicio, int nascimento, int morte, int venda, int compra, int valorFinal, double valorPorCabeca) {
-        this.id = id;
+        
+    public InventarioAnimais(String categoria, int valorInicio, int nascimento, int morte, int venda, int compra, int valorFinal, 
+            double valorCabeca, int vidaUtilReprodutores, int vidaUtilAnimaisServico, int tipoAnimal, Perfil perfil) {
         this.categoria = categoria;
         this.valorInicio = valorInicio;
         this.nascimento = nascimento;
@@ -40,7 +37,11 @@ public class InventarioAnimais {
         this.venda = venda;
         this.compra = compra;
         this.valorFinal = valorFinal;
-        this.valorPorCabeca = valorPorCabeca;
+        this.valorCabeca = valorCabeca;
+        this.vidaUtilReprodutores = vidaUtilReprodutores;
+        this.vidaUtilAnimaisServico = vidaUtilAnimaisServico;
+        this.tipoAnimal = tipoAnimal;
+        this.perfil = perfil;
     }
 
     public int getId() {
@@ -107,13 +108,46 @@ public class InventarioAnimais {
         this.valorFinal = valorFinal;
     }
 
-    public double getValorPorCabeca() {
-        return valorPorCabeca;
+    public double getValorCabeca() {
+        return valorCabeca;
     }
 
-    public void setValorPorCabeca(double valorPorCabeca) {
-        this.valorPorCabeca = valorPorCabeca;
+    public void setValorCabeca(double valorCabeca) {
+        this.valorCabeca = valorCabeca;
     }
 
+    public int getVidaUtilReprodutores() {
+        return vidaUtilReprodutores;
+    }
+
+    public void setVidaUtilReprodutores(int vidaUtilReprodutores) {
+        this.vidaUtilReprodutores = vidaUtilReprodutores;
+    }
+
+    public int getVidaUtilAnimaisServico() {
+        return vidaUtilAnimaisServico;
+    }
+
+    public void setVidaUtilAnimaisServico(int vidaUtilAnimaisServico) {
+        this.vidaUtilAnimaisServico = vidaUtilAnimaisServico;
+    }
+
+    public int getTipoAnimal() {
+        return tipoAnimal;
+    }
+
+    public void setTipoAnimal(int tipoAnimal) {
+        this.tipoAnimal = tipoAnimal;
+    }
+
+    public Perfil getPerfil() {
+        return perfil;
+    }
+
+    public void setPerfil(Perfil perfil) {
+        this.perfil = perfil;
+    }
+
+    
     
 }

@@ -22,10 +22,11 @@ public class Perfil implements Serializable {
     private double precoLeite;
     private int empPermanentes;
     private int numFamiliares;
-
+    
     public Perfil() {
+        
     }
-
+   
     public Perfil(String nome, String cidade, double tamPropriedade, double areaPecLeite, double prodLeiteDiario, double precoLeite, int empPermanentes, int numFamiliares) {
         this.nome = nome;
         this.cidade = cidade;
@@ -37,75 +38,76 @@ public class Perfil implements Serializable {
         this.numFamiliares = numFamiliares;
     }
 
-    public void setIdPerfil(int idPerfil) {
-        this.idPerfil = idPerfil;
-    }
-    
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
-    }
-
-    public void setTamPropriedade(double tamPropriedade) {
-        this.tamPropriedade = tamPropriedade;
-    }
-
-    public void setAreaPecLeite(double areaPecLeite) {
-        this.areaPecLeite = areaPecLeite;
-    }
-
-    public void setProdLeiteDiario(double prodLeiteDiario) {
-        this.prodLeiteDiario = prodLeiteDiario;
-    }
-
-    public void setPrecoLeite(double precoLeite) {
-        this.precoLeite = precoLeite;
-    }
-
-    public void setEmpPermanentes(int empPermanentes) {
-        this.empPermanentes = empPermanentes;
-    }
-
-    public void setNumFamiliares(int numFamiliares) {
-        this.numFamiliares = numFamiliares;
-    }
-
     public int getIdPerfil() {
         return idPerfil;
+    }
+
+    public void setIdPerfil(int idPerfil) {
+        this.idPerfil = idPerfil;
     }
 
     public String getNome() {
         return nome;
     }
 
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
     public String getCidade() {
         return cidade;
+    }
+
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
     }
 
     public double getTamPropriedade() {
         return tamPropriedade;
     }
 
+    public void setTamPropriedade(double tamPropriedade) {
+        this.tamPropriedade = tamPropriedade;
+    }
+
     public double getAreaPecLeite() {
         return areaPecLeite;
+    }
+
+    public void setAreaPecLeite(double areaPecLeite) {
+        this.areaPecLeite = areaPecLeite;
     }
 
     public double getProdLeiteDiario() {
         return prodLeiteDiario;
     }
 
+    public void setProdLeiteDiario(double prodLeiteDiario) {
+        this.prodLeiteDiario = prodLeiteDiario;
+    }
+
     public double getPrecoLeite() {
         return precoLeite;
+    }
+
+    public void setPrecoLeite(double precoLeite) {
+        this.precoLeite = precoLeite;
     }
 
     public int getEmpPermanentes() {
         return empPermanentes;
     }
 
+    public void setEmpPermanentes(int empPermanentes) {
+        this.empPermanentes = empPermanentes;
+    }
+
     public int getNumFamiliares() {
         return numFamiliares;
     }
+
+    public void setNumFamiliares(int numFamiliares) {
+        this.numFamiliares = numFamiliares;
+    }
+
 }

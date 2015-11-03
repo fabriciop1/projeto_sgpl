@@ -64,7 +64,7 @@ public class UsuarioPerfilDAO {
                    
                 int idPerfil = result.getInt("idPerfilFK");
                    
-                Perfil perfil = perfilDao.buscarPorId(idPerfil);
+                Perfil perfil = perfilDao.recuperar(idPerfil);
                    
                 perfis.add(perfil);
             }

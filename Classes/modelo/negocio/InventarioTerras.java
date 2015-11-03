@@ -5,43 +5,39 @@
  */
 package modelo.negocio;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Jefferson Sales
  */
-public class InventarioTerras {
+public class InventarioTerras implements Serializable {
     
-    private int id;
-    
+    private int id;   
     private String especificacao;
-    
     private double areaArrendadaInicio;
     private double areaPropriaInicio;
-    
     private double areaArrendadaFinal;
     private double areaPropriaFinal;
-    
     private double valorTerraNuaPropria;
-    
-    private double valorHectare;
-    
     private int vidaUtil;
+    private double custoFormacaoHectare;
+    private Perfil perfil;
     
     public InventarioTerras() {
     }
 
-    public InventarioTerras(int id, String especificacao, double areaArrendadaInicio, double areaPropriaInicio, double areaArrendadaFinal, 
-            double areaPropriaFinal, double valorTerraNuaPropria, double custoMedioFormacao, double valorHectare, int vidaUtil) {
-        this.id = id;
+    public InventarioTerras(String especificacao, double areaArrendadaInicio, double areaPropriaInicio, double areaArrendadaFinal, 
+            double areaPropriaFinal, double valorTerraNuaPropria, int vidaUtil, double custoFormacaoHectare, Perfil perfil) {
         this.especificacao = especificacao;
         this.areaArrendadaInicio = areaArrendadaInicio;
         this.areaPropriaInicio = areaPropriaInicio;
         this.areaArrendadaFinal = areaArrendadaFinal;
         this.areaPropriaFinal = areaPropriaFinal;
         this.valorTerraNuaPropria = valorTerraNuaPropria;
-        //this.custoMedioFormacao = custoMedioFormacao;
-        this.valorHectare = valorHectare;
         this.vidaUtil = vidaUtil;
+        this.custoFormacaoHectare = custoFormacaoHectare;
+        this.perfil = perfil;
     }
 
     public int getId() {
@@ -100,14 +96,6 @@ public class InventarioTerras {
         this.valorTerraNuaPropria = valorTerraNuaPropria;
     }
 
-    public double getValorHectare() {
-        return valorHectare;
-    }
-
-    public void setValorHectare(double valorHectare) {
-        this.valorHectare = valorHectare;
-    }
-
     public int getVidaUtil() {
         return vidaUtil;
     }
@@ -115,6 +103,20 @@ public class InventarioTerras {
     public void setVidaUtil(int vidaUtil) {
         this.vidaUtil = vidaUtil;
     }
-    
-    
+
+    public double getCustoFormacaoHectare() {
+        return custoFormacaoHectare;
+    }
+
+    public void setCustoFormacaoHectare(double custoFormacaoHectare) {
+        this.custoFormacaoHectare = custoFormacaoHectare;
+    }
+
+    public Perfil getPerfil() {
+        return perfil;
+    }
+
+    public void setPerfil(Perfil perfil) {
+        this.perfil = perfil;
+    } 
 }

@@ -18,6 +18,7 @@ public class Usuario implements Serializable {
     private String senha;
     
     public Usuario(){
+        this.idUsuario = -1;
     }
 
     public Usuario(String login, String senha) {

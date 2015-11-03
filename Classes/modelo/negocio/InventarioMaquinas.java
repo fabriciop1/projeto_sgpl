@@ -11,28 +11,24 @@ package modelo.negocio;
  */
 public class InventarioMaquinas {
     
-    private int id;
-    
+    private int id;    
     private String especificacao;
-    
     private String unidade;
-    
-    private int quantidade;
-    
+    private double quantidade;
     private double valorUnitario;
-    
     private int vidaUtil;
-
+    private Perfil perfil;
+    
     public InventarioMaquinas() {
     }
 
-    public InventarioMaquinas(int id, String especificacao, String unidade, int quantidade, double valorUnitario, int vidaUtil) {
-        this.id = id;
+    public InventarioMaquinas(String especificacao, String unidade, int quantidade, double valorUnitario, int vidaUtil, Perfil perfil) {
         this.especificacao = especificacao;
         this.unidade = unidade;
         this.quantidade = quantidade;
         this.valorUnitario = valorUnitario;
         this.vidaUtil = vidaUtil;
+        this.perfil = perfil;
     }
 
     public int getId() {
@@ -59,11 +55,11 @@ public class InventarioMaquinas {
         this.unidade = unidade;
     }
 
-    public int getQuantidade() {
+    public double getQuantidade() {
         return quantidade;
     }
 
-    public void setQuantidade(int quantidade) {
+    public void setQuantidade(double quantidade) {
         this.quantidade = quantidade;
     }
 
@@ -82,4 +78,13 @@ public class InventarioMaquinas {
     public void setVidaUtil(int vidaUtil) {
         this.vidaUtil = vidaUtil;
     }
+
+    public Perfil getPerfil() {
+        return perfil;
+    }
+
+    public void setPerfil(Perfil perfil) {
+        this.perfil = perfil;
+    }
+
 }

@@ -13,54 +13,61 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import modelo.negocio.Perfil;
 
-/**
- *
- * @author usuario
- */
+
 public class PerfilDAO {
  
     private Connection connection; 
     
     public PerfilDAO(){
-       
     }
     
-    public boolean cadastrar(Perfil novoPerfil){
+    public void cadastrar(Perfil perfil, boolean cadastrarInventarios)  throws SQLException {
         
         this.connection = DBConexao.openConnection();
         
         String sql = "INSERT INTO perfil " + 
-                "(nome, cidade, tamPropriedade, areaPecLeite, prodLeiteDiario, precoLeite, empPermanentes, numFamiliares) " +
-                "VALUES (?,?,?,?,?,?,?,?)";
+                "(idPerfil, nome, cidade, tamPropriedade, areaPecLeite, prodLeiteDiario, precoLeite, empPermanentes, numFamiliares) " +
+                "VALUES (?,?,?,?,?,?,?,?,?, ?,?,?,?)";
         
-        try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
-            statement.setString(1, novoPerfil.getNome());
-            statement.setString(2, novoPerfil.getCidade());
-            statement.setDouble(3, novoPerfil.getTamPropriedade());
-            statement.setDouble(4, novoPerfil.getAreaPecLeite());
-            statement.setDouble(5, novoPerfil.getProdLeiteDiario());
-            statement.setDouble(6, novoPerfil.getPrecoLeite());
-            statement.setInt(7, novoPerfil.getEmpPermanentes());
-            statement.setInt(8, novoPerfil.getNumFamiliares());
-       
-            statement.execute();
+        try (PreparedStatement statement = this.connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)) {
+            
+            statement.setInt(1, 0);
+            statement.setString(2, perfil.getNome());
+            statement.setString(3, perfil.getCidade());
+            statement.setDouble(4, perfil.getTamPropriedade());
+            statement.setDouble(5, perfil.getAreaPecLeite());
+            statement.setDouble(6, perfil.getProdLeiteDiario());
+            statement.setDouble(7, perfil.getPrecoLeite());
+            statement.setInt(8, perfil.getEmpPermanentes());
+            statement.setInt(9, perfil.getNumFamiliares());
+            
+            statement.executeUpdate();
+            
+            ResultSet keys = statement.getGeneratedKeys();
+            
+            if(keys.next()){
+                perfil.setIdPerfil(keys.getInt(1));
+            }
+            
+            keys.close();
             statement.close();
-        } catch(SQLException e){
+            
+        } catch(Exception e){
             System.out.println("Falha ao adicionar novo perfil. " +  e.getMessage());
-            return false;
         } finally {
             DBConexao.closeConnection(this.connection);
         }
-        return true;
     } 
     
-    public boolean atualizar(Perfil perfil){
+    public void atualizar(Perfil perfil) throws SQLException {
+        
         this.connection = DBConexao.openConnection();
         
         String sql = "UPDATE perfil SET nome=?, cidade=?, tamPropriedade=?, areaPecLeite=?, prodLeiteDiario=?, precoLeite=?, "
                 + "empPermanentes=?, numFamiliares=? WHERE idPerfil=?";
         
         try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
+            
             statement.setString(1, perfil.getNome());
             statement.setString(2, perfil.getCidade());
             statement.setDouble(3, perfil.getTamPropriedade());
@@ -69,19 +76,18 @@ public class PerfilDAO {
             statement.setDouble(6, perfil.getPrecoLeite());
             statement.setInt(7, perfil.getEmpPermanentes());
             statement.setInt(8, perfil.getNumFamiliares());
+            
             statement.setInt(9, perfil.getIdPerfil());
             
             statement.close();
-        } catch(SQLException ex) {
+        } catch(Exception ex) {
             System.out.println("Falha ao atualizar Perfil. " + ex.getMessage());
-            return false;
         } finally {
             DBConexao.closeConnection(this.connection);
         }
-        return true;
     }
     
-    public ArrayList<Perfil> buscarPorNome(String nome) {
+    public ArrayList<Perfil> buscarPorNome(String nome)  throws SQLException {
         this.connection = DBConexao.openConnection();
         
         String sql = "SELECT * FROM perfil WHERE nome = ?";
@@ -110,7 +116,7 @@ public class PerfilDAO {
             }
             result.close();
            
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             System.out.println("Falha ao recuperar perfis por nome." + ex.getMessage());
             return null;
         } finally {
@@ -119,10 +125,10 @@ public class PerfilDAO {
         return perfis;
     }
     
-    public Perfil buscarPorId(int id) {
+    public Perfil recuperar(int id) throws SQLException {
         this.connection = DBConexao.openConnection();
         ResultSet rs;
-        Perfil perfil = new Perfil();
+        Perfil perfil = null;
         
         String sql = "SELECT * FROM perfil WHERE idPerfil = ?";
         
@@ -131,6 +137,8 @@ public class PerfilDAO {
             
             rs = statement.executeQuery();
             if(rs.next()) {
+                perfil = new Perfil();
+                
                 perfil.setIdPerfil(1);
                 perfil.setNome(rs.getString(2));
                 perfil.setCidade(rs.getString(3));
@@ -140,18 +148,19 @@ public class PerfilDAO {
                 perfil.setPrecoLeite(rs.getDouble(7)); //Preço do Leite
                 perfil.setEmpPermanentes(rs.getInt(8)); //Num de Empregados Permanentes
                 perfil.setNumFamiliares(rs.getInt(9)); // Num Familiares
-            }
+                
+               }
             statement.close();
-        } catch(SQLException ex) {
+        } catch(Exception ex) {
             System.out.println("Falha ao buscar Perfil por ID." + ex.getMessage());
-            return null;
         } finally {
             DBConexao.closeConnection(this.connection);
         }
         return perfil;
     }
     
-    public ArrayList<Perfil> buscarTodos() {
+
+    public ArrayList<Perfil> buscarTodos() throws SQLException  {
         this.connection = DBConexao.openConnection();
         
         String sql = "SELECT * FROM perfil";
@@ -186,7 +195,7 @@ public class PerfilDAO {
         return perfis;
     }
     
-     public boolean remover(int idPerfil) {
+     public boolean remover(int idPerfil) throws SQLException {
         this.connection = DBConexao.openConnection();
         
         String sql = "DELETE FROM perfil WHERE idPerfil=?";
