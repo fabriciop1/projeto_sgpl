@@ -8,7 +8,9 @@ package visao;
 import controle.ControlePerfil;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
+import modelo.dao.InventarioAnimaisDAO;
 import modelo.dao.InventarioTerrasDAO;
+import modelo.negocio.InventarioAnimais;
 import modelo.negocio.InventarioTerras;
 import modelo.negocio.Perfil;
 
@@ -28,27 +30,61 @@ public class VisualizarInventario extends javax.swing.JFrame {
         this.setResizable(false);
         
         ArrayList<InventarioTerras> terras = new ArrayList<>();
+        ArrayList<InventarioAnimais> animais = new ArrayList<>();
         InventarioTerrasDAO itdao = new InventarioTerrasDAO();
+        InventarioAnimaisDAO iadao = new InventarioAnimaisDAO();
         Perfil perfilAtual = ControlePerfil.getInstance().getPerfilSelecionado();
         
         try{
             terras = itdao.recuperarTodos();
+            animais = iadao.recuperarTodos();
         }catch(Exception e){
             
         }
         
-        DefaultTableModel model = (DefaultTableModel) tabelaInveTerras.getModel();
-        model.setNumRows(0);
+        DefaultTableModel modelTerras = (DefaultTableModel) tabelaInveTerras.getModel();
+        modelTerras.setNumRows(0);
         
         for(int i = 0; i < terras.size(); i++){
             
-            model.addRow(new Object[]{
+            modelTerras.addRow(new Object[]{
                 terras.get(i).getEspecificacao(),
                 terras.get(i).getAreaArrendadaInicio(),
                 terras.get(i).getAreaPropriaInicio(),
                 terras.get(i).getAreaArrendadaFinal(),
                 terras.get(i).getAreaPropriaFinal(),
                 terras.get(i).getValorTerraNuaPropria(),
+            });
+            
+        }
+        
+        DefaultTableModel modelForrageiras = (DefaultTableModel) tabelaInveForrageiras.getModel();
+        modelForrageiras.setNumRows(0);
+        
+        for(int i = 0; i < terras.size(); i++){
+            
+            double ha = (terras.get(i).getAreaPropriaInicio() + terras.get(i).getAreaPropriaFinal())/2;
+            double total = terras.get(i).getCustoFormacaoHectare() * ha;
+            modelForrageiras.addRow(new Object[]{
+                terras.get(i).getEspecificacao(),
+                terras.get(i).getCustoFormacaoHectare(),
+                ha,
+                total,
+                terras.get(i).getVidaUtil(),
+                total/terras.get(i).getVidaUtil(),
+                
+            });
+            
+        }
+        
+        DefaultTableModel modelAnimaisProd = (DefaultTableModel) tabelaInveAnimaisProd.getModel();
+        modelAnimaisProd.setNumRows(0);
+        
+        for(int i = 0; i < animais.size(); i++){
+  
+            modelAnimaisProd.addRow(new Object[]{
+                animais.get(i).getCategoria(),
+                
             });
             
         }
@@ -62,15 +98,76 @@ public class VisualizarInventario extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tabelaInveTerras = new javax.swing.JTable();
-        jTabbedPane2 = new javax.swing.JTabbedPane();
-        jTabbedPane3 = new javax.swing.JTabbedPane();
-        jTabbedPane4 = new javax.swing.JTabbedPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tabelaInveForrageiras = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        total1 = new javax.swing.JLabel();
+        total2 = new javax.swing.JLabel();
+        total4 = new javax.swing.JLabel();
+        total3 = new javax.swing.JLabel();
+        total7 = new javax.swing.JLabel();
+        total6 = new javax.swing.JLabel();
+        total8 = new javax.swing.JLabel();
+        total5 = new javax.swing.JLabel();
+        total9 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        total10 = new javax.swing.JLabel();
+        total11 = new javax.swing.JLabel();
+        total12 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tabelaInveAnimaisServ = new javax.swing.JTable();
+        jLabel5 = new javax.swing.JLabel();
+        total13 = new javax.swing.JLabel();
+        total14 = new javax.swing.JLabel();
+        total15 = new javax.swing.JLabel();
+        total16 = new javax.swing.JLabel();
+        total17 = new javax.swing.JLabel();
+        total18 = new javax.swing.JLabel();
+        total19 = new javax.swing.JLabel();
+        total20 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tabelaInveAnimaisProd = new javax.swing.JTable();
+        jLabel6 = new javax.swing.JLabel();
+        total21 = new javax.swing.JLabel();
+        total22 = new javax.swing.JLabel();
+        total23 = new javax.swing.JLabel();
+        total24 = new javax.swing.JLabel();
+        total25 = new javax.swing.JLabel();
+        total26 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        total27 = new javax.swing.JLabel();
+        total28 = new javax.swing.JLabel();
+        total29 = new javax.swing.JLabel();
+        total30 = new javax.swing.JLabel();
+        total31 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        total32 = new javax.swing.JLabel();
+        total33 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        total34 = new javax.swing.JLabel();
+        total35 = new javax.swing.JLabel();
+        total36 = new javax.swing.JLabel();
+        total37 = new javax.swing.JLabel();
+        total38 = new javax.swing.JLabel();
+        total39 = new javax.swing.JLabel();
         btnVoltar = new javax.swing.JButton();
         textoEntrada = new javax.swing.JLabel();
 
@@ -81,6 +178,12 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
         tabelaInveTerras.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
@@ -98,10 +201,11 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
+        tabelaInveTerras.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(tabelaInveTerras);
         if (tabelaInveTerras.getColumnModel().getColumnCount() > 0) {
             tabelaInveTerras.getColumnModel().getColumn(0).setResizable(false);
-            tabelaInveTerras.getColumnModel().getColumn(0).setPreferredWidth(100);
+            tabelaInveTerras.getColumnModel().getColumn(0).setPreferredWidth(165);
             tabelaInveTerras.getColumnModel().getColumn(1).setResizable(false);
             tabelaInveTerras.getColumnModel().getColumn(2).setResizable(false);
             tabelaInveTerras.getColumnModel().getColumn(3).setResizable(false);
@@ -109,23 +213,618 @@ public class VisualizarInventario extends javax.swing.JFrame {
             tabelaInveTerras.getColumnModel().getColumn(5).setResizable(false);
         }
 
+        tabelaInveForrageiras.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
+            },
+            new String [] {
+                "Forrageiras não Anuiais", "R$/Ha", "Ha", "R$/total", "Vida Útil Anos", "Depreciação R$/Ano"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tabelaInveForrageiras.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(tabelaInveForrageiras);
+        if (tabelaInveForrageiras.getColumnModel().getColumnCount() > 0) {
+            tabelaInveForrageiras.getColumnModel().getColumn(0).setResizable(false);
+            tabelaInveForrageiras.getColumnModel().getColumn(0).setPreferredWidth(165);
+            tabelaInveForrageiras.getColumnModel().getColumn(1).setResizable(false);
+            tabelaInveForrageiras.getColumnModel().getColumn(2).setResizable(false);
+            tabelaInveForrageiras.getColumnModel().getColumn(3).setResizable(false);
+            tabelaInveForrageiras.getColumnModel().getColumn(4).setResizable(false);
+            tabelaInveForrageiras.getColumnModel().getColumn(5).setResizable(false);
+        }
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel1.setText("TOTAL PARA PECUÁRIA");
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel2.setText("ÁREA TOTAL UTILIZADA PARA PECUÁRIA");
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel3.setText("VALOR DA TERRA NUA PRÓPRIA");
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel4.setText("VALOR DA TERRA NUA PRÓPRIA MÉDIO");
+
+        total1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total1.setText("<total1>");
+
+        total2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total2.setText("<total2>");
+
+        total4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total4.setText("<total4>");
+
+        total3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total3.setText("<total3>");
+
+        total7.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total7.setText("<total7>");
+
+        total6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total6.setText("<total6>");
+
+        total8.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total8.setText("<total8>");
+
+        total5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total5.setText("<total5>");
+
+        total9.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total9.setText("<total9>");
+
+        jLabel14.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel14.setText("TOTAL");
+
+        total10.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total10.setText("<total10>");
+
+        total11.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total11.setText("<total11>");
+
+        total12.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total12.setText("<total12>");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 995, Short.MAX_VALUE)
+            .addComponent(jScrollPane1)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(total5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(total1, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(total2, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(total7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(total6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(total3, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(total4, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(total8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(total9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(167, 167, 167))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(151, 151, 151)
+                .addComponent(total10, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(total11, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(total12, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 102, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(total1)
+                    .addComponent(total2)
+                    .addComponent(total3)
+                    .addComponent(total4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(total5)
+                    .addComponent(total6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(total7)
+                    .addComponent(total8))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(total9))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel14)
+                    .addComponent(total10)
+                    .addComponent(total11)
+                    .addComponent(total12))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Terras", jPanel1);
-        jTabbedPane1.addTab("Animais", jTabbedPane2);
-        jTabbedPane1.addTab("Benfeitorias", jTabbedPane3);
-        jTabbedPane1.addTab("Máquinas", jTabbedPane4);
+
+        tabelaInveAnimaisServ.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "", "", "", "", "", "", "", ""
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Double.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tabelaInveAnimaisServ.getTableHeader().setReorderingAllowed(false);
+        jScrollPane3.setViewportView(tabelaInveAnimaisServ);
+        if (tabelaInveAnimaisServ.getColumnModel().getColumnCount() > 0) {
+            tabelaInveAnimaisServ.getColumnModel().getColumn(0).setResizable(false);
+            tabelaInveAnimaisServ.getColumnModel().getColumn(0).setPreferredWidth(200);
+            tabelaInveAnimaisServ.getColumnModel().getColumn(1).setResizable(false);
+            tabelaInveAnimaisServ.getColumnModel().getColumn(1).setPreferredWidth(50);
+            tabelaInveAnimaisServ.getColumnModel().getColumn(2).setResizable(false);
+            tabelaInveAnimaisServ.getColumnModel().getColumn(2).setPreferredWidth(50);
+            tabelaInveAnimaisServ.getColumnModel().getColumn(2).setHeaderValue("");
+            tabelaInveAnimaisServ.getColumnModel().getColumn(3).setResizable(false);
+            tabelaInveAnimaisServ.getColumnModel().getColumn(3).setPreferredWidth(50);
+            tabelaInveAnimaisServ.getColumnModel().getColumn(3).setHeaderValue("");
+            tabelaInveAnimaisServ.getColumnModel().getColumn(4).setResizable(false);
+            tabelaInveAnimaisServ.getColumnModel().getColumn(4).setPreferredWidth(50);
+            tabelaInveAnimaisServ.getColumnModel().getColumn(4).setHeaderValue("");
+            tabelaInveAnimaisServ.getColumnModel().getColumn(5).setResizable(false);
+            tabelaInveAnimaisServ.getColumnModel().getColumn(5).setPreferredWidth(50);
+            tabelaInveAnimaisServ.getColumnModel().getColumn(5).setHeaderValue("");
+            tabelaInveAnimaisServ.getColumnModel().getColumn(6).setResizable(false);
+            tabelaInveAnimaisServ.getColumnModel().getColumn(6).setPreferredWidth(50);
+            tabelaInveAnimaisServ.getColumnModel().getColumn(6).setHeaderValue("");
+            tabelaInveAnimaisServ.getColumnModel().getColumn(7).setResizable(false);
+            tabelaInveAnimaisServ.getColumnModel().getColumn(7).setHeaderValue("");
+        }
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setText("TOTAL DE ANIMAIS DE PRODUÇÃO");
+
+        total13.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total13.setText("<total13>");
+
+        total14.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total14.setText("<total14>");
+
+        total15.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total15.setText("<total15>");
+
+        total16.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total16.setText("<total16>");
+
+        total17.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total17.setText("<total17>");
+
+        total18.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total18.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total18.setText("<total18>");
+
+        total19.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total19.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total19.setText("<total19>");
+
+        total20.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total20.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total20.setText("<total20>");
+
+        tabelaInveAnimaisProd.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Categoria", "Início", "Nasci/to", "Morte", "Venda", "Compra", "Final", "Valor (R$/Cab)", "Valor Inicial", "Valor Final"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tabelaInveAnimaisProd.getTableHeader().setReorderingAllowed(false);
+        jScrollPane4.setViewportView(tabelaInveAnimaisProd);
+        if (tabelaInveAnimaisProd.getColumnModel().getColumnCount() > 0) {
+            tabelaInveAnimaisProd.getColumnModel().getColumn(0).setResizable(false);
+            tabelaInveAnimaisProd.getColumnModel().getColumn(0).setPreferredWidth(200);
+            tabelaInveAnimaisProd.getColumnModel().getColumn(1).setResizable(false);
+            tabelaInveAnimaisProd.getColumnModel().getColumn(1).setPreferredWidth(50);
+            tabelaInveAnimaisProd.getColumnModel().getColumn(2).setResizable(false);
+            tabelaInveAnimaisProd.getColumnModel().getColumn(2).setPreferredWidth(50);
+            tabelaInveAnimaisProd.getColumnModel().getColumn(2).setHeaderValue("");
+            tabelaInveAnimaisProd.getColumnModel().getColumn(3).setResizable(false);
+            tabelaInveAnimaisProd.getColumnModel().getColumn(3).setPreferredWidth(50);
+            tabelaInveAnimaisProd.getColumnModel().getColumn(3).setHeaderValue("");
+            tabelaInveAnimaisProd.getColumnModel().getColumn(4).setResizable(false);
+            tabelaInveAnimaisProd.getColumnModel().getColumn(4).setPreferredWidth(50);
+            tabelaInveAnimaisProd.getColumnModel().getColumn(4).setHeaderValue("");
+            tabelaInveAnimaisProd.getColumnModel().getColumn(5).setResizable(false);
+            tabelaInveAnimaisProd.getColumnModel().getColumn(5).setPreferredWidth(50);
+            tabelaInveAnimaisProd.getColumnModel().getColumn(5).setHeaderValue("");
+            tabelaInveAnimaisProd.getColumnModel().getColumn(6).setResizable(false);
+            tabelaInveAnimaisProd.getColumnModel().getColumn(6).setPreferredWidth(50);
+            tabelaInveAnimaisProd.getColumnModel().getColumn(6).setHeaderValue("");
+            tabelaInveAnimaisProd.getColumnModel().getColumn(7).setResizable(false);
+            tabelaInveAnimaisProd.getColumnModel().getColumn(7).setHeaderValue("");
+            tabelaInveAnimaisProd.getColumnModel().getColumn(8).setResizable(false);
+            tabelaInveAnimaisProd.getColumnModel().getColumn(8).setHeaderValue("Valor Inicial");
+            tabelaInveAnimaisProd.getColumnModel().getColumn(9).setResizable(false);
+            tabelaInveAnimaisProd.getColumnModel().getColumn(9).setHeaderValue("Valor Final");
+        }
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel6.setText("TOTAL DE ANIMAIS DE SERVIÇO");
+
+        total21.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total21.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total21.setText("<total21>");
+
+        total22.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total22.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total22.setText("<total22>");
+
+        total23.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total23.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total23.setText("<total23>");
+
+        total24.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total24.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total24.setText("<total24>");
+
+        total25.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total25.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total25.setText("<total25>");
+
+        total26.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total26.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total26.setText("<total26>");
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel7.setText("TOTAL DE ANIMAIS");
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel8.setText("TOTAL (Calculado)");
+
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel9.setText("VALOR MÉDIO DO REBANHO DE PRODUÇÃO");
+
+        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel10.setText("Valor gasto com compra de Animais");
+
+        total27.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total27.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total27.setText("<total27>");
+
+        total28.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total28.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total28.setText("<total28>");
+
+        total29.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total29.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total29.setText("<total29>");
+
+        total30.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total30.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total30.setText("<total30>");
+
+        total31.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total31.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total31.setText("<total31>");
+
+        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel11.setText("VARIAÇÃO DE INVENTÁRIO ANIMAL");
+
+        total32.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total32.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total32.setText("<total32>");
+
+        total33.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total33.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total33.setText("<total33>");
+
+        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel12.setText("Dados Adicionais");
+
+        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel13.setText("Capital Investido em Reprodutores");
+
+        jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel15.setText("Vida Útil dos Reprodutores (anos)");
+
+        jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel16.setText("Depreciação dos Reprodutores - R$/ano");
+
+        jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel17.setText("Capital Investido em Animais de Serviços");
+
+        jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel18.setText("Vida Útil dos Animais de Serviços (anos)");
+
+        jLabel19.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel19.setText("Depreciação dos Animais de Serviços - R$/ano");
+
+        total34.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total34.setText("<total34>");
+
+        total35.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total35.setText("<total35>");
+
+        total36.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total36.setText("<total36>");
+
+        total37.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total37.setText("<total37>");
+
+        total38.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total38.setText("<total38>");
+
+        total39.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total39.setText("<total39>");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane4)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(total13, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(total14, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(total15, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(total16, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(total17, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(total18, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 109, Short.MAX_VALUE)
+                .addComponent(total19, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(total20, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 791, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                    .addContainerGap()
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(total21, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE)
+                                        .addComponent(total28, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(total22, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(total32, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(total34, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(total35, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(total36, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                    .addComponent(total23, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(total24, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(total25, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(total29, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(total26, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(total30, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
+                                        .addComponent(total27, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(total33, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                    .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(total37, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                    .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(total38, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                    .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(total39, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(total31, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(total13)
+                    .addComponent(total20)
+                    .addComponent(total19)
+                    .addComponent(total14)
+                    .addComponent(total15)
+                    .addComponent(total16)
+                    .addComponent(total17)
+                    .addComponent(total18))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(total21)
+                    .addComponent(total22)
+                    .addComponent(total23)
+                    .addComponent(total24)
+                    .addComponent(total25)
+                    .addComponent(total26)
+                    .addComponent(total27))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(total28)
+                    .addComponent(total29))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(total30))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(total31))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(total32)
+                    .addComponent(jLabel11)
+                    .addComponent(total33))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel13)
+                    .addComponent(jLabel17)
+                    .addComponent(total34)
+                    .addComponent(total37))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel15)
+                    .addComponent(jLabel18)
+                    .addComponent(total35)
+                    .addComponent(total38))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel16)
+                    .addComponent(jLabel19)
+                    .addComponent(total36)
+                    .addComponent(total39))
+                .addGap(0, 31, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Animais", jPanel2);
 
         btnVoltar.setText("Voltar");
         btnVoltar.addActionListener(new java.awt.event.ActionListener() {
@@ -209,13 +908,75 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnVoltar;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTabbedPane jTabbedPane2;
-    private javax.swing.JTabbedPane jTabbedPane3;
-    private javax.swing.JTabbedPane jTabbedPane4;
+    private javax.swing.JTable tabelaInveAnimaisProd;
+    private javax.swing.JTable tabelaInveAnimaisServ;
+    private javax.swing.JTable tabelaInveForrageiras;
     private javax.swing.JTable tabelaInveTerras;
     private javax.swing.JLabel textoEntrada;
+    private javax.swing.JLabel total1;
+    private javax.swing.JLabel total10;
+    private javax.swing.JLabel total11;
+    private javax.swing.JLabel total12;
+    private javax.swing.JLabel total13;
+    private javax.swing.JLabel total14;
+    private javax.swing.JLabel total15;
+    private javax.swing.JLabel total16;
+    private javax.swing.JLabel total17;
+    private javax.swing.JLabel total18;
+    private javax.swing.JLabel total19;
+    private javax.swing.JLabel total2;
+    private javax.swing.JLabel total20;
+    private javax.swing.JLabel total21;
+    private javax.swing.JLabel total22;
+    private javax.swing.JLabel total23;
+    private javax.swing.JLabel total24;
+    private javax.swing.JLabel total25;
+    private javax.swing.JLabel total26;
+    private javax.swing.JLabel total27;
+    private javax.swing.JLabel total28;
+    private javax.swing.JLabel total29;
+    private javax.swing.JLabel total3;
+    private javax.swing.JLabel total30;
+    private javax.swing.JLabel total31;
+    private javax.swing.JLabel total32;
+    private javax.swing.JLabel total33;
+    private javax.swing.JLabel total34;
+    private javax.swing.JLabel total35;
+    private javax.swing.JLabel total36;
+    private javax.swing.JLabel total37;
+    private javax.swing.JLabel total38;
+    private javax.swing.JLabel total39;
+    private javax.swing.JLabel total4;
+    private javax.swing.JLabel total5;
+    private javax.swing.JLabel total6;
+    private javax.swing.JLabel total7;
+    private javax.swing.JLabel total8;
+    private javax.swing.JLabel total9;
     // End of variables declaration//GEN-END:variables
 }
