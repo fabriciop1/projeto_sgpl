@@ -151,6 +151,48 @@ public class InventarioAnimaisDAO {
         return inventario;
     }
     
+    public ArrayList<InventarioAnimais> recuperarPorPerfil(int idPerfil) throws SQLException{
+        
+        String sql = "SELECT * FROM inventario_animais WHERE idPerfilFK=?";
+        
+        ArrayList<InventarioAnimais> inventarios = new ArrayList<>();
+        
+        connection = DBConexao.openConnection();
+        
+        PreparedStatement statement = connection.prepareStatement(sql);
+        
+        statement.setInt(1, idPerfil);
+        
+        ResultSet res = statement.executeQuery();
+        
+        while(res.next()){
+            
+            InventarioAnimais inventario = new InventarioAnimais();
+            
+            inventario.setId(res.getInt("idInventarioAnimais"));
+            inventario.setCategoria(res.getString("categoria"));
+            inventario.setValorInicio(res.getInt("inicio"));
+            inventario.setNascimento(res.getInt("nascimento"));
+            inventario.setMorte(res.getInt("morte"));
+            inventario.setVenda(res.getInt("venda"));
+            inventario.setCompra(res.getInt("compra"));
+            inventario.setValorFinal(res.getInt("final"));
+            inventario.setValorCabeca(res.getDouble("valorCabeca"));
+            inventario.setVidaUtilReprodutores(res.getInt("vidaUtilReprodutores"));
+            inventario.setVidaUtilAnimaisServico(res.getInt("vidaUtilAnimaisServico"));
+            inventario.setPerfil((new PerfilDAO()).recuperar(res.getInt("idPerfilFK")));
+            
+            inventarios.add(inventario);
+        }
+        
+        res.close();
+        statement.close();
+        
+        DBConexao.closeConnection(connection);
+    
+        return inventarios;
+    }
+    
     public ArrayList<InventarioAnimais> recuperarTodos() throws SQLException{
         
         String sql = "SELECT * FROM inventario_animais";

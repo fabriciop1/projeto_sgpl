@@ -98,7 +98,7 @@ public class InventarioBenfeitoriasDAO {
         
         DBConexao.closeConnection(connection);
     }
-
+    
     public InventarioBenfeitorias recuperar(int id) throws SQLException{
         
         String sql = "SELECT * FROM inventario_benfeitorias WHERE idInventarioBenfeitorias=?";
@@ -131,7 +131,44 @@ public class InventarioBenfeitoriasDAO {
         return inventario;
         
     }
-
+    
+    public ArrayList<InventarioBenfeitorias> recuperarPorPerfil(int idPerfil) throws SQLException{
+        
+        String sql = "SELECT * FROM inventario_benfeitorias WHERE idPerfilFK=?";
+        
+        ArrayList<InventarioBenfeitorias> inventarios = new ArrayList<>();
+        
+        connection = DBConexao.openConnection();
+        PreparedStatement statement = connection.prepareStatement(sql);
+        
+        statement.setInt(1, idPerfil);
+        
+        ResultSet result = statement.executeQuery();
+        
+        while(result.next()){
+            
+            InventarioBenfeitorias inventario = new InventarioBenfeitorias();
+            
+            inventario.setId(result.getInt("idInventarioBenfeitorias"));
+            inventario.setEspecificacao(result.getString("especificacao"));
+            inventario.setUnidade(result.getString("unidade"));
+            inventario.setQuantidade(result.getDouble("quantidade"));
+            inventario.setValorUnitario(result.getDouble("valorUnitario"));
+            inventario.setVidaUtil(result.getInt("vidaUtil"));
+            inventario.setPerfil((new PerfilDAO()).recuperar(result.getInt("idPerfilFK")));
+            
+            inventarios.add(inventario);
+        }
+        
+        result.close();
+        statement.close();
+        
+        DBConexao.closeConnection(connection);
+    
+        return inventarios;
+        
+    }
+    
     public ArrayList<InventarioBenfeitorias> recuperarTodos() throws SQLException{
         
         String sql = "SELECT * FROM inventario_benfeitorias";

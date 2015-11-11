@@ -40,7 +40,7 @@ public class InventarioMaquinasDAO {
             statement.setDouble(3, inventario.getQuantidade());
             statement.setDouble(4, inventario.getValorUnitario());
             statement.setInt(5, inventario.getVidaUtil());
-            statement.setDouble(6, inventario.getPerfil().getIdPerfil());
+            statement.setInt(6, inventario.getPerfil().getIdPerfil());
             
             statement.executeUpdate();
             
@@ -131,6 +131,43 @@ public class InventarioMaquinasDAO {
         
     }
 
+    public ArrayList<InventarioMaquinas> recuperarPorPerfil(int idPerfil) throws SQLException{
+        
+        String sql = "SELECT * FROM inventario_maquinas WHERE idPerfilFK=?";
+        
+        ArrayList<InventarioMaquinas> inventarios = new ArrayList<>();
+        
+        connection = DBConexao.openConnection();
+        PreparedStatement statement = connection.prepareStatement(sql);
+        
+        statement.setInt(1, idPerfil);
+        
+        ResultSet result = statement.executeQuery();
+        
+        while(result.next()){
+            
+            InventarioMaquinas inventario = new InventarioMaquinas();
+            
+            inventario.setId(result.getInt("idInventarioMaquinas"));
+            inventario.setEspecificacao(result.getString("especificacao"));
+            inventario.setUnidade(result.getString("unidade"));
+            inventario.setQuantidade(result.getDouble("quantidade"));
+            inventario.setValorUnitario(result.getDouble("valorUnitario"));
+            inventario.setVidaUtil(result.getInt("vidaUtil"));
+            inventario.setPerfil((new PerfilDAO()).recuperar(result.getInt("idPerfilFK")));
+            
+            inventarios.add(inventario);
+        }
+        
+        result.close();
+        statement.close();
+        
+        DBConexao.closeConnection(connection);
+    
+        return inventarios;
+        
+    }
+    
     public ArrayList<InventarioMaquinas> recuperarTodos() throws SQLException{
         
         String sql = "SELECT * FROM inventario_maquinas";

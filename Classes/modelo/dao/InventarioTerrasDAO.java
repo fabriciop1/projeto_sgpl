@@ -143,6 +143,44 @@ public class InventarioTerrasDAO {
         return inventario;
     }
     
+    public ArrayList<InventarioTerras> recuperarPorPerfil(int idPerfil) throws SQLException{
+        
+        String sql = "SELECT * FROM inventario_terras WHERE idPerfilFK=?";
+        
+        ArrayList<InventarioTerras> inventarios = new ArrayList<>();
+        
+        connection = DBConexao.openConnection();
+        PreparedStatement statement = connection.prepareStatement(sql);
+        
+        statement.setInt(1, idPerfil);
+        
+        ResultSet result = statement.executeQuery();
+        
+        while(result.next()){
+            
+            InventarioTerras inventario = new InventarioTerras();
+            
+            inventario.setId(result.getInt("idInventarioTerras"));
+            inventario.setEspecificacao(result.getString("especificacao"));
+            inventario.setAreaArrendadaInicio(result.getDouble("areaArrendadaInicio"));
+            inventario.setAreaPropriaInicio(result.getDouble("areaPropriaInicio"));
+            inventario.setAreaArrendadaFinal(result.getDouble("areaArrendadaFinal"));
+            inventario.setAreaPropriaFinal(result.getDouble("areaPropriaFinal"));
+            inventario.setValorTerraNuaPropria(result.getDouble("valorTerraNuaPropria"));
+            inventario.setVidaUtil(result.getInt("vidaUtil"));
+            inventario.setPerfil((new PerfilDAO()).recuperar(result.getInt("idPerfilFK")));
+            
+            inventarios.add(inventario);
+        }
+        
+        result.close();
+        statement.close();
+        
+        DBConexao.closeConnection(connection);
+    
+        return inventarios;
+    }
+    
     public ArrayList<InventarioTerras> recuperarTodos() throws SQLException{
         
         String sql = "SELECT * FROM inventario_terras";

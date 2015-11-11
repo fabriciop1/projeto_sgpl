@@ -50,10 +50,10 @@ public class VisualizarInventario extends javax.swing.JFrame {
         Perfil perfilAtual = ControlePerfil.getInstance().getPerfilSelecionado();
         
         try{
-            terras = itdao.recuperarTodos();
-            animais = iadao.recuperarTodos();
-            benfeitorias = ibdao.recuperarTodos();
-            maquinas = imdao.recuperarTodos();
+            terras = itdao.recuperarPorPerfil(perfilAtual.getIdPerfil());
+            animais = iadao.recuperarPorPerfil(perfilAtual.getIdPerfil());
+            benfeitorias = ibdao.recuperarPorPerfil(perfilAtual.getIdPerfil());
+            maquinas = imdao.recuperarPorPerfil(perfilAtual.getIdPerfil());
         }catch(Exception e){
             
         }
@@ -180,7 +180,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
-        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
@@ -1530,10 +1529,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
         jPanel5.add(total60, gridBagConstraints);
 
         atividadeLeite.setText("<ativ>");
-
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, total49, org.jdesktop.beansbinding.ObjectProperty.create(), atividadeLeite, org.jdesktop.beansbinding.BeanProperty.create("minimumSize"));
-        bindingGroup.addBinding(binding);
-
         atividadeLeite.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 atividadeLeiteActionPerformed(evt);
@@ -1621,8 +1616,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE))
         );
-
-        bindingGroup.bind();
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -1816,6 +1809,5 @@ public class VisualizarInventario extends javax.swing.JFrame {
     private javax.swing.JLabel total7;
     private javax.swing.JLabel total8;
     private javax.swing.JLabel total9;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }

@@ -1906,9 +1906,6 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="&lt;ativ&gt;"/>
               </Properties>
-              <BindingProperties>
-                <BindingProperty name="minimumSize" source="total49" target="atividadeLeite" targetPath="minimumSize" updateStrategy="0" immediately="false"/>
-              </BindingProperties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="atividadeLeiteActionPerformed"/>
               </Events>
