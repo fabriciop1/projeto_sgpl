@@ -9,8 +9,14 @@ import controle.ControlePerfil;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 import modelo.dao.InventarioAnimaisDAO;
+import modelo.dao.InventarioBenfeitoriasDAO;
+import modelo.dao.InventarioMaquinasDAO;
+import modelo.dao.InventarioResumoDAO;
 import modelo.dao.InventarioTerrasDAO;
 import modelo.negocio.InventarioAnimais;
+import modelo.negocio.InventarioBenfeitorias;
+import modelo.negocio.InventarioMaquinas;
+import modelo.negocio.InventarioResumo;
 import modelo.negocio.InventarioTerras;
 import modelo.negocio.Perfil;
 
@@ -31,13 +37,23 @@ public class VisualizarInventario extends javax.swing.JFrame {
         
         ArrayList<InventarioTerras> terras = new ArrayList<>();
         ArrayList<InventarioAnimais> animais = new ArrayList<>();
+        ArrayList<InventarioBenfeitorias> benfeitorias = new ArrayList<>();
+        ArrayList<InventarioMaquinas> maquinas = new ArrayList<>();
+        InventarioResumo resumo = new InventarioResumo();
+        
         InventarioTerrasDAO itdao = new InventarioTerrasDAO();
         InventarioAnimaisDAO iadao = new InventarioAnimaisDAO();
+        InventarioBenfeitoriasDAO ibdao = new InventarioBenfeitoriasDAO();
+        InventarioMaquinasDAO imdao = new InventarioMaquinasDAO();
+        //InventarioResumoDAO irdao = new InventarioResumoDAO();
+        
         Perfil perfilAtual = ControlePerfil.getInstance().getPerfilSelecionado();
         
         try{
             terras = itdao.recuperarTodos();
             animais = iadao.recuperarTodos();
+            benfeitorias = ibdao.recuperarTodos();
+            maquinas = imdao.recuperarTodos();
         }catch(Exception e){
             
         }
@@ -80,13 +96,78 @@ public class VisualizarInventario extends javax.swing.JFrame {
         DefaultTableModel modelAnimaisProd = (DefaultTableModel) tabelaInveAnimaisProd.getModel();
         modelAnimaisProd.setNumRows(0);
         
+        DefaultTableModel modelAnimaisServ = (DefaultTableModel) tabelaInveAnimaisServ.getModel();
+        modelAnimaisServ.setNumRows(0);
+        
         for(int i = 0; i < animais.size(); i++){
   
-            modelAnimaisProd.addRow(new Object[]{
-                animais.get(i).getCategoria(),
+            if(animais.get(i).getTipoAnimal() == 1){
                 
-            });
+                modelAnimaisProd.addRow(new Object[]{
+                    animais.get(i).getCategoria(),
+                    animais.get(i).getValorInicio(),
+                    animais.get(i).getNascimento(),
+                    animais.get(i).getMorte(),
+                    animais.get(i).getVenda(),
+                    animais.get(i).getCompra(),
+                    animais.get(i).getValorFinal(),
+                    animais.get(i).getValorCabeca(),
+                    animais.get(i).getValorInicio() * animais.get(i).getValorCabeca(),
+                    animais.get(i).getValorFinal() * animais.get(i).getValorCabeca(),
+                    
+                });
+                
+            } else if (animais.get(i).getTipoAnimal() == 2) {
             
+                modelAnimaisProd.addRow(new Object[]{
+                    animais.get(i).getCategoria(),
+                    animais.get(i).getValorInicio(),
+                    animais.get(i).getNascimento(),
+                    animais.get(i).getMorte(),
+                    animais.get(i).getVenda(),
+                    animais.get(i).getCompra(),
+                    animais.get(i).getValorFinal(),
+                    animais.get(i).getValorCabeca(),
+
+                });
+            }
+            
+        }
+        
+        DefaultTableModel modelBenfeitorias = (DefaultTableModel) tabelaBenfeitorias.getModel();
+        modelBenfeitorias.setNumRows(0);
+        
+        for(int i = 0; i < benfeitorias.size(); i++){
+            
+            double total = benfeitorias.get(i).getQuantidade() * benfeitorias.get(i).getValorUnitario();
+            
+            modelBenfeitorias.addRow(new Object[] {
+                benfeitorias.get(i).getEspecificacao(),
+                benfeitorias.get(i).getUnidade(),
+                benfeitorias.get(i).getQuantidade(),
+                benfeitorias.get(i).getValorUnitario(),
+                total,
+                benfeitorias.get(i).getVidaUtil(),
+                total / benfeitorias.get(i).getVidaUtil(),
+            });
+        }
+        
+        DefaultTableModel modelMaquinas = (DefaultTableModel) tabelaMaquinas.getModel();
+        modelMaquinas.setNumRows(0);
+        
+        for(int i = 0; i < maquinas.size(); i++){
+                
+            double total = maquinas.get(i).getQuantidade() * maquinas.get(i).getValorUnitario();
+            
+            modelMaquinas.addRow(new Object[] {
+                maquinas.get(i).getEspecificacao(),
+                maquinas.get(i).getUnidade(),
+                maquinas.get(i).getQuantidade(),
+                maquinas.get(i).getValorUnitario(),
+                total,
+                maquinas.get(i).getVidaUtil(),
+                total / maquinas.get(i).getVidaUtil(),
+            });
         }
     }
 
@@ -98,6 +179,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
@@ -168,6 +251,68 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total37 = new javax.swing.JLabel();
         total38 = new javax.swing.JLabel();
         total39 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        tabelaBenfeitorias = new javax.swing.JTable();
+        jLabel20 = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
+        total40 = new javax.swing.JLabel();
+        total41 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        tabelaMaquinas = new javax.swing.JTable();
+        jLabel23 = new javax.swing.JLabel();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        total42 = new javax.swing.JLabel();
+        total43 = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel26 = new javax.swing.JLabel();
+        jLabel27 = new javax.swing.JLabel();
+        jLabel28 = new javax.swing.JLabel();
+        jLabel29 = new javax.swing.JLabel();
+        jLabel30 = new javax.swing.JLabel();
+        jLabel31 = new javax.swing.JLabel();
+        jLabel32 = new javax.swing.JLabel();
+        jLabel33 = new javax.swing.JLabel();
+        jLabel34 = new javax.swing.JLabel();
+        jLabel35 = new javax.swing.JLabel();
+        jLabel36 = new javax.swing.JLabel();
+        jLabel37 = new javax.swing.JLabel();
+        jLabel38 = new javax.swing.JLabel();
+        jLabel39 = new javax.swing.JLabel();
+        jLabel40 = new javax.swing.JLabel();
+        jLabel41 = new javax.swing.JLabel();
+        jLabel42 = new javax.swing.JLabel();
+        jLabel43 = new javax.swing.JLabel();
+        jLabel44 = new javax.swing.JLabel();
+        jLabel45 = new javax.swing.JLabel();
+        jLabel46 = new javax.swing.JLabel();
+        jLabel47 = new javax.swing.JLabel();
+        jLabel48 = new javax.swing.JLabel();
+        total44 = new javax.swing.JLabel();
+        total45 = new javax.swing.JLabel();
+        total46 = new javax.swing.JLabel();
+        total47 = new javax.swing.JLabel();
+        total48 = new javax.swing.JLabel();
+        total49 = new javax.swing.JLabel();
+        total50 = new javax.swing.JLabel();
+        total51 = new javax.swing.JLabel();
+        total52 = new javax.swing.JLabel();
+        total53 = new javax.swing.JLabel();
+        total54 = new javax.swing.JLabel();
+        total55 = new javax.swing.JLabel();
+        total56 = new javax.swing.JLabel();
+        total57 = new javax.swing.JLabel();
+        total58 = new javax.swing.JLabel();
+        total59 = new javax.swing.JLabel();
+        total60 = new javax.swing.JLabel();
+        atividadeLeite = new javax.swing.JTextField();
+        custoOportunidade = new javax.swing.JTextField();
+        salarioMinimo = new javax.swing.JTextField();
+        jLabel49 = new javax.swing.JLabel();
+        jLabel50 = new javax.swing.JLabel();
         btnVoltar = new javax.swing.JButton();
         textoEntrada = new javax.swing.JLabel();
 
@@ -530,25 +675,17 @@ public class VisualizarInventario extends javax.swing.JFrame {
             tabelaInveAnimaisProd.getColumnModel().getColumn(1).setPreferredWidth(50);
             tabelaInveAnimaisProd.getColumnModel().getColumn(2).setResizable(false);
             tabelaInveAnimaisProd.getColumnModel().getColumn(2).setPreferredWidth(50);
-            tabelaInveAnimaisProd.getColumnModel().getColumn(2).setHeaderValue("");
             tabelaInveAnimaisProd.getColumnModel().getColumn(3).setResizable(false);
             tabelaInveAnimaisProd.getColumnModel().getColumn(3).setPreferredWidth(50);
-            tabelaInveAnimaisProd.getColumnModel().getColumn(3).setHeaderValue("");
             tabelaInveAnimaisProd.getColumnModel().getColumn(4).setResizable(false);
             tabelaInveAnimaisProd.getColumnModel().getColumn(4).setPreferredWidth(50);
-            tabelaInveAnimaisProd.getColumnModel().getColumn(4).setHeaderValue("");
             tabelaInveAnimaisProd.getColumnModel().getColumn(5).setResizable(false);
             tabelaInveAnimaisProd.getColumnModel().getColumn(5).setPreferredWidth(50);
-            tabelaInveAnimaisProd.getColumnModel().getColumn(5).setHeaderValue("");
             tabelaInveAnimaisProd.getColumnModel().getColumn(6).setResizable(false);
             tabelaInveAnimaisProd.getColumnModel().getColumn(6).setPreferredWidth(50);
-            tabelaInveAnimaisProd.getColumnModel().getColumn(6).setHeaderValue("");
             tabelaInveAnimaisProd.getColumnModel().getColumn(7).setResizable(false);
-            tabelaInveAnimaisProd.getColumnModel().getColumn(7).setHeaderValue("");
             tabelaInveAnimaisProd.getColumnModel().getColumn(8).setResizable(false);
-            tabelaInveAnimaisProd.getColumnModel().getColumn(8).setHeaderValue("Valor Inicial");
             tabelaInveAnimaisProd.getColumnModel().getColumn(9).setResizable(false);
-            tabelaInveAnimaisProd.getColumnModel().getColumn(9).setHeaderValue("Valor Final");
         }
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -826,6 +963,631 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Animais", jPanel2);
 
+        tabelaBenfeitorias.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Especificação", "Unidade", "Quantidade", "Valor Unitário (R$)", "Valor Total (R$)", "Vida Útil (anos)", "R$/ano"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Double.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tabelaBenfeitorias.getTableHeader().setReorderingAllowed(false);
+        jScrollPane5.setViewportView(tabelaBenfeitorias);
+        if (tabelaBenfeitorias.getColumnModel().getColumnCount() > 0) {
+            tabelaBenfeitorias.getColumnModel().getColumn(0).setResizable(false);
+            tabelaBenfeitorias.getColumnModel().getColumn(0).setPreferredWidth(200);
+            tabelaBenfeitorias.getColumnModel().getColumn(1).setResizable(false);
+            tabelaBenfeitorias.getColumnModel().getColumn(2).setResizable(false);
+            tabelaBenfeitorias.getColumnModel().getColumn(3).setResizable(false);
+            tabelaBenfeitorias.getColumnModel().getColumn(4).setResizable(false);
+            tabelaBenfeitorias.getColumnModel().getColumn(5).setResizable(false);
+            tabelaBenfeitorias.getColumnModel().getColumn(6).setResizable(false);
+        }
+
+        jLabel20.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel20.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel20.setText("DEPRECIAÇÃO");
+
+        jLabel21.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel21.setText("VALOR DO PREÇO DE NOVO");
+
+        jLabel22.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel22.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel22.setText("TOTAL");
+
+        total40.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total40.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total40.setText("<total40>");
+
+        total41.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total41.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total41.setText("<total41>");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane5)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(125, 125, 125)
+                .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(249, 249, 249)
+                .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(124, 124, 124)
+                .addComponent(total40, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 124, Short.MAX_VALUE)
+                .addComponent(total41, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel20)
+                    .addComponent(jLabel21))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 471, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel22)
+                    .addComponent(total40)
+                    .addComponent(total41))
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("Benfeitorias", jPanel3);
+
+        tabelaMaquinas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Especificação", "Unidade", "Quantidade", "Valor Unitário (R$)", "Valor Total (R$)", "Vida Útil (anos)", "R$/ano"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Double.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tabelaMaquinas.getTableHeader().setReorderingAllowed(false);
+        jScrollPane7.setViewportView(tabelaMaquinas);
+        if (tabelaMaquinas.getColumnModel().getColumnCount() > 0) {
+            tabelaMaquinas.getColumnModel().getColumn(0).setResizable(false);
+            tabelaMaquinas.getColumnModel().getColumn(0).setPreferredWidth(200);
+            tabelaMaquinas.getColumnModel().getColumn(1).setResizable(false);
+            tabelaMaquinas.getColumnModel().getColumn(2).setResizable(false);
+            tabelaMaquinas.getColumnModel().getColumn(3).setResizable(false);
+            tabelaMaquinas.getColumnModel().getColumn(4).setResizable(false);
+            tabelaMaquinas.getColumnModel().getColumn(5).setResizable(false);
+            tabelaMaquinas.getColumnModel().getColumn(6).setResizable(false);
+        }
+
+        jLabel23.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel23.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel23.setText("VALOR DO PREÇO DE NOVO");
+
+        jLabel24.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel24.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel24.setText("DEPRECIAÇÃO");
+
+        jLabel25.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel25.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel25.setText("TOTAL");
+
+        total42.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total42.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total42.setText("<total42>");
+
+        total43.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total43.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total43.setText("<total43>");
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 995, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(125, 125, 125)
+                        .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(125, 125, 125)
+                        .addComponent(total42, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(123, 123, 123)
+                        .addComponent(total43, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel24)
+                    .addComponent(jLabel23))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel25)
+                    .addComponent(total42)
+                    .addComponent(total43))
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("Máquinas", jPanel4);
+
+        jPanel5.setLayout(new java.awt.GridBagLayout());
+
+        jLabel26.setText("RESUMO DA DEPRECIAÇÃO");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel5.add(jLabel26, gridBagConstraints);
+
+        jLabel27.setText("Forrageiras não anuais");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        jPanel5.add(jLabel27, gridBagConstraints);
+
+        jLabel28.setText("Animais de trabalho");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        jPanel5.add(jLabel28, gridBagConstraints);
+
+        jLabel29.setText("Reprodutores");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        jPanel5.add(jLabel29, gridBagConstraints);
+
+        jLabel30.setText("Benfeitorias utilizadas para pecuária de leite");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        jPanel5.add(jLabel30, gridBagConstraints);
+
+        jLabel31.setText("Máquinas utilizadas na pecuária de leite");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        jPanel5.add(jLabel31, gridBagConstraints);
+
+        jLabel32.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel32.setText("Total");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        jPanel5.add(jLabel32, gridBagConstraints);
+
+        jLabel33.setText("Leite/atividade leiteira");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        jPanel5.add(jLabel33, gridBagConstraints);
+
+        jLabel34.setText("Depreciação do leite");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        jPanel5.add(jLabel34, gridBagConstraints);
+
+        jLabel35.setText("RESUMO DO INVENTÁRIO");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel5.add(jLabel35, gridBagConstraints);
+
+        jLabel36.setText("Terras");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        jPanel5.add(jLabel36, gridBagConstraints);
+
+        jLabel37.setText("Forrageiras não anuais");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        jPanel5.add(jLabel37, gridBagConstraints);
+
+        jLabel38.setText("Animais");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        jPanel5.add(jLabel38, gridBagConstraints);
+
+        jLabel39.setText("Benfeitorias utilizadas na pecuária de leite");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        jPanel5.add(jLabel39, gridBagConstraints);
+
+        jLabel40.setText("Máquinas utilizadas na pecuária de leite");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        jPanel5.add(jLabel40, gridBagConstraints);
+
+        jLabel41.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel41.setText("Total");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        jPanel5.add(jLabel41, gridBagConstraints);
+
+        jLabel42.setText("Salário mínimo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        jPanel5.add(jLabel42, gridBagConstraints);
+
+        jLabel43.setText("   ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 9;
+        gridBagConstraints.insets = new java.awt.Insets(20, 20, 20, 20);
+        jPanel5.add(jLabel43, gridBagConstraints);
+
+        jLabel44.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel44.setText("Capital empatado leite");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        jPanel5.add(jLabel44, gridBagConstraints);
+
+        jLabel45.setText("Custo de oportunidade");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        jPanel5.add(jLabel45, gridBagConstraints);
+
+        jLabel46.setText("MÃO DE OBRA FAMILIAR");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel5.add(jLabel46, gridBagConstraints);
+
+        jLabel47.setText("Décimo terceiro");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        jPanel5.add(jLabel47, gridBagConstraints);
+
+        jLabel48.setText("Terço de férias");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        jPanel5.add(jLabel48, gridBagConstraints);
+
+        total44.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total44.setText("<total44>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        jPanel5.add(total44, gridBagConstraints);
+
+        total45.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total45.setText("<total45>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        jPanel5.add(total45, gridBagConstraints);
+
+        total46.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total46.setText("<total46>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        jPanel5.add(total46, gridBagConstraints);
+
+        total47.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total47.setText("<total47>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        jPanel5.add(total47, gridBagConstraints);
+
+        total48.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total48.setText("<total48>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        jPanel5.add(total48, gridBagConstraints);
+
+        total49.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total49.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total49.setText("<total49>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        jPanel5.add(total49, gridBagConstraints);
+
+        total50.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total50.setText("<total50>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        jPanel5.add(total50, gridBagConstraints);
+
+        total51.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total51.setText("<total51>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        jPanel5.add(total51, gridBagConstraints);
+
+        total52.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total52.setText("<total52>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        jPanel5.add(total52, gridBagConstraints);
+
+        total53.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total53.setText("<total53>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        jPanel5.add(total53, gridBagConstraints);
+
+        total54.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total54.setText("<total54>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        jPanel5.add(total54, gridBagConstraints);
+
+        total55.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total55.setText("<total55>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        jPanel5.add(total55, gridBagConstraints);
+
+        total56.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total56.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total56.setText("<total56>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        jPanel5.add(total56, gridBagConstraints);
+
+        total57.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total57.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total57.setText("<total57>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        jPanel5.add(total57, gridBagConstraints);
+
+        total58.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total58.setText("<total58>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        jPanel5.add(total58, gridBagConstraints);
+
+        total59.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total59.setText("<total59>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        jPanel5.add(total59, gridBagConstraints);
+
+        total60.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        total60.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        total60.setText("<total60>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        jPanel5.add(total60, gridBagConstraints);
+
+        atividadeLeite.setText("<ativ>");
+
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, total49, org.jdesktop.beansbinding.ObjectProperty.create(), atividadeLeite, org.jdesktop.beansbinding.BeanProperty.create("minimumSize"));
+        bindingGroup.addBinding(binding);
+
+        atividadeLeite.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                atividadeLeiteActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        jPanel5.add(atividadeLeite, gridBagConstraints);
+
+        custoOportunidade.setText("<custo>");
+        custoOportunidade.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                custoOportunidadeActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        jPanel5.add(custoOportunidade, gridBagConstraints);
+
+        salarioMinimo.setText("<salario>");
+        salarioMinimo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                salarioMinimoActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        jPanel5.add(salarioMinimo, gridBagConstraints);
+
+        jLabel49.setText("   ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 9;
+        gridBagConstraints.insets = new java.awt.Insets(20, 20, 20, 20);
+        jPanel5.add(jLabel49, gridBagConstraints);
+
+        jLabel50.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel50.setText("Custo total do salário mensal");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        jPanel5.add(jLabel50, gridBagConstraints);
+
+        jTabbedPane1.addTab("Resumo", jPanel5);
+
         btnVoltar.setText("Voltar");
         btnVoltar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -857,8 +1619,10 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     .addComponent(btnVoltar)
                     .addComponent(textoEntrada))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE))
         );
+
+        bindingGroup.bind();
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -870,6 +1634,18 @@ public class VisualizarInventario extends javax.swing.JFrame {
         this.dispose();
         
     }//GEN-LAST:event_btnVoltarActionPerformed
+
+    private void custoOportunidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_custoOportunidadeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_custoOportunidadeActionPerformed
+
+    private void salarioMinimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salarioMinimoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_salarioMinimoActionPerformed
+
+    private void atividadeLeiteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atividadeLeiteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_atividadeLeiteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -907,7 +1683,9 @@ public class VisualizarInventario extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField atividadeLeite;
     private javax.swing.JButton btnVoltar;
+    private javax.swing.JTextField custoOportunidade;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -920,24 +1698,63 @@ public class VisualizarInventario extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel37;
+    private javax.swing.JLabel jLabel38;
+    private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel40;
+    private javax.swing.JLabel jLabel41;
+    private javax.swing.JLabel jLabel42;
+    private javax.swing.JLabel jLabel43;
+    private javax.swing.JLabel jLabel44;
+    private javax.swing.JLabel jLabel45;
+    private javax.swing.JLabel jLabel46;
+    private javax.swing.JLabel jLabel47;
+    private javax.swing.JLabel jLabel48;
+    private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextField salarioMinimo;
+    private javax.swing.JTable tabelaBenfeitorias;
     private javax.swing.JTable tabelaInveAnimaisProd;
     private javax.swing.JTable tabelaInveAnimaisServ;
     private javax.swing.JTable tabelaInveForrageiras;
     private javax.swing.JTable tabelaInveTerras;
+    private javax.swing.JTable tabelaMaquinas;
     private javax.swing.JLabel textoEntrada;
     private javax.swing.JLabel total1;
     private javax.swing.JLabel total10;
@@ -973,10 +1790,32 @@ public class VisualizarInventario extends javax.swing.JFrame {
     private javax.swing.JLabel total38;
     private javax.swing.JLabel total39;
     private javax.swing.JLabel total4;
+    private javax.swing.JLabel total40;
+    private javax.swing.JLabel total41;
+    private javax.swing.JLabel total42;
+    private javax.swing.JLabel total43;
+    private javax.swing.JLabel total44;
+    private javax.swing.JLabel total45;
+    private javax.swing.JLabel total46;
+    private javax.swing.JLabel total47;
+    private javax.swing.JLabel total48;
+    private javax.swing.JLabel total49;
     private javax.swing.JLabel total5;
+    private javax.swing.JLabel total50;
+    private javax.swing.JLabel total51;
+    private javax.swing.JLabel total52;
+    private javax.swing.JLabel total53;
+    private javax.swing.JLabel total54;
+    private javax.swing.JLabel total55;
+    private javax.swing.JLabel total56;
+    private javax.swing.JLabel total57;
+    private javax.swing.JLabel total58;
+    private javax.swing.JLabel total59;
     private javax.swing.JLabel total6;
+    private javax.swing.JLabel total60;
     private javax.swing.JLabel total7;
     private javax.swing.JLabel total8;
     private javax.swing.JLabel total9;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }
