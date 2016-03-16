@@ -19,7 +19,6 @@ public class Perfil implements Serializable {
     private double tamPropriedade;
     private double areaPecLeite;
     private double prodLeiteDiario;
-    private double precoLeite;
     private int empPermanentes;
     private int numFamiliares;
     
@@ -27,13 +26,12 @@ public class Perfil implements Serializable {
         
     }
    
-    public Perfil(String nome, String cidade, double tamPropriedade, double areaPecLeite, double prodLeiteDiario, double precoLeite, int empPermanentes, int numFamiliares) {
+    public Perfil(String nome, String cidade, double tamPropriedade, double areaPecLeite, double prodLeiteDiario, int empPermanentes, int numFamiliares) {
         this.nome = nome;
         this.cidade = cidade;
         this.tamPropriedade = tamPropriedade;
         this.areaPecLeite = areaPecLeite;
         this.prodLeiteDiario = prodLeiteDiario;
-        this.precoLeite = precoLeite;
         this.empPermanentes = empPermanentes;
         this.numFamiliares = numFamiliares;
     }
@@ -84,14 +82,6 @@ public class Perfil implements Serializable {
 
     public void setProdLeiteDiario(double prodLeiteDiario) {
         this.prodLeiteDiario = prodLeiteDiario;
-    }
-
-    public double getPrecoLeite() {
-        return precoLeite;
-    }
-
-    public void setPrecoLeite(double precoLeite) {
-        this.precoLeite = precoLeite;
     }
 
     public int getEmpPermanentes() {

@@ -26,20 +26,18 @@ public class PerfilDAO {
         this.connection = DBConexao.openConnection();
         
         String sql = "INSERT INTO perfil " + 
-                "(idPerfil, nome, cidade, tamPropriedade, areaPecLeite, prodLeiteDiario, precoLeite, empPermanentes, numFamiliares) " +
-                "VALUES (?,?,?,?,?,?,?,?,?, ?,?,?,?)";
+                "(nome, cidade, tamPropriedade, areaPecLeite, prodLeiteDiario, empPermanentes, numFamiliares) " +
+                "VALUES (?,?,?,?,?,?,?,?)";
         
         try (PreparedStatement statement = this.connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)) {
             
-            statement.setInt(1, 0);
-            statement.setString(2, perfil.getNome());
-            statement.setString(3, perfil.getCidade());
-            statement.setDouble(4, perfil.getTamPropriedade());
-            statement.setDouble(5, perfil.getAreaPecLeite());
-            statement.setDouble(6, perfil.getProdLeiteDiario());
-            statement.setDouble(7, perfil.getPrecoLeite());
-            statement.setInt(8, perfil.getEmpPermanentes());
-            statement.setInt(9, perfil.getNumFamiliares());
+            statement.setString(1, perfil.getNome());
+            statement.setString(2, perfil.getCidade());
+            statement.setDouble(3, perfil.getTamPropriedade());
+            statement.setDouble(4, perfil.getAreaPecLeite());
+            statement.setDouble(5, perfil.getProdLeiteDiario());
+            statement.setInt(6, perfil.getEmpPermanentes());
+            statement.setInt(7, perfil.getNumFamiliares());
             
             statement.executeUpdate();
             
@@ -63,7 +61,7 @@ public class PerfilDAO {
         
         this.connection = DBConexao.openConnection();
         
-        String sql = "UPDATE perfil SET nome=?, cidade=?, tamPropriedade=?, areaPecLeite=?, prodLeiteDiario=?, precoLeite=?, "
+        String sql = "UPDATE perfil SET nome=?, cidade=?, tamPropriedade=?, areaPecLeite=?, prodLeiteDiario=?, "
                 + "empPermanentes=?, numFamiliares=? WHERE idPerfil=?";
         
         try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
@@ -73,11 +71,10 @@ public class PerfilDAO {
             statement.setDouble(3, perfil.getTamPropriedade());
             statement.setDouble(4, perfil.getAreaPecLeite());
             statement.setDouble(5, perfil.getProdLeiteDiario());
-            statement.setDouble(6, perfil.getPrecoLeite());
-            statement.setInt(7, perfil.getEmpPermanentes());
-            statement.setInt(8, perfil.getNumFamiliares());
+            statement.setInt(6, perfil.getEmpPermanentes());
+            statement.setInt(7, perfil.getNumFamiliares());
             
-            statement.setInt(9, perfil.getIdPerfil());
+            statement.setInt(8, perfil.getIdPerfil());
             
             statement.close();
         } catch(Exception ex) {
@@ -108,9 +105,8 @@ public class PerfilDAO {
                 p.setTamPropriedade(result.getDouble(4)); //Tam da Propriedade
                 p.setAreaPecLeite(result.getDouble(5)); //Area Pec de Leite
                 p.setProdLeiteDiario(result.getDouble(6)); // Prod Diaria de Leite
-                p.setPrecoLeite(result.getDouble(7)); //Preço do Leite
-                p.setEmpPermanentes(result.getInt(8)); //Num de Empregados Permanentes
-                p.setNumFamiliares(result.getInt(9)); // Num Familiares
+                p.setEmpPermanentes(result.getInt(7)); //Num de Empregados Permanentes
+                p.setNumFamiliares(result.getInt(8)); // Num Familiares
                     
                 perfis.add(p);
             }
@@ -145,9 +141,8 @@ public class PerfilDAO {
                 perfil.setTamPropriedade(rs.getDouble(4));
                 perfil.setAreaPecLeite(rs.getDouble(5)); //Area Pec de Leite
                 perfil.setProdLeiteDiario(rs.getDouble(6)); // Prod Diaria de Leite
-                perfil.setPrecoLeite(rs.getDouble(7)); //Preço do Leite
-                perfil.setEmpPermanentes(rs.getInt(8)); //Num de Empregados Permanentes
-                perfil.setNumFamiliares(rs.getInt(9)); // Num Familiares
+                perfil.setEmpPermanentes(rs.getInt(7)); //Num de Empregados Permanentes
+                perfil.setNumFamiliares(rs.getInt(8)); // Num Familiares
                 
                }
             statement.close();
@@ -159,7 +154,6 @@ public class PerfilDAO {
         return perfil;
     }
     
-
     public ArrayList<Perfil> buscarTodos() throws SQLException  {
         this.connection = DBConexao.openConnection();
         
@@ -178,9 +172,8 @@ public class PerfilDAO {
                 p.setTamPropriedade(result.getDouble(4)); //Tam da Propriedade
                 p.setAreaPecLeite(result.getDouble(5)); //Area Pec de Leite
                 p.setProdLeiteDiario(result.getDouble(6)); // Prod Diaria de Leite
-                p.setPrecoLeite(result.getDouble(7)); //Preço do Leite
-                p.setEmpPermanentes(result.getInt(8)); //Num de Empregados Permanentes
-                p.setNumFamiliares(result.getInt(9)); // Num Familiares
+                p.setEmpPermanentes(result.getInt(7)); //Num de Empregados Permanentes
+                p.setNumFamiliares(result.getInt(8)); // Num Familiares
                     
                 perfis.add(p);
             }
