@@ -7,8 +7,6 @@ package visao;
 
 import controle.ControleLogin;
 import controle.ControlePerfil;
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -203,9 +201,8 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         atual.setTamPropriedade((double) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 3));
         atual.setAreaPecLeite((double) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 4));
         atual.setProdLeiteDiario((double) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 5));
-        atual.setPrecoLeite((double) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 6));
-        atual.setEmpPermanentes((int) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 7));
-        atual.setNumFamiliares((int) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 8));
+        atual.setEmpPermanentes((int) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 6));
+        atual.setNumFamiliares((int) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 7));
         
         ControlePerfil.getInstance().setPerfilSelecionado(atual);
         

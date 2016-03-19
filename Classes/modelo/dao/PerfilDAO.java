@@ -135,7 +135,7 @@ public class PerfilDAO {
             if(rs.next()) {
                 perfil = new Perfil();
                 
-                perfil.setIdPerfil(1);
+                perfil.setIdPerfil(rs.getInt(1));
                 perfil.setNome(rs.getString(2));
                 perfil.setCidade(rs.getString(3));
                 perfil.setTamPropriedade(rs.getDouble(4));

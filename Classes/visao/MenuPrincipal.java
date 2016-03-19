@@ -99,7 +99,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
 
         btnPerfil.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnPerfil.setText("Perfil");
+        btnPerfil.setText("Visualizar Perfil(s)");
         btnPerfil.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPerfilActionPerformed(evt);
@@ -282,7 +282,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAnalisesActionPerformed
 
     private void btnPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerfilActionPerformed
-        // TODO add your handling code here:
+        new VisualizarPerfil().setVisible(true);
+        this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_btnPerfilActionPerformed
 
     private void btnDadosTecnMensaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDadosTecnMensaisActionPerformed

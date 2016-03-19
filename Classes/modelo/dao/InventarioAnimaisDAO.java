@@ -142,6 +142,7 @@ public class InventarioAnimaisDAO {
             inventario.setVidaUtilReprodutores(res.getInt("vidaUtilReprodutores"));
             inventario.setVidaUtilAnimaisServico(res.getInt("vidaUtilAnimaisServico"));
             inventario.setPerfil((new PerfilDAO()).recuperar(res.getInt("idPerfilFK")));
+            inventario.setTipoAnimal(res.getInt("tipoAnimal"));
         }
         
         res.close();
@@ -181,6 +182,7 @@ public class InventarioAnimaisDAO {
             inventario.setVidaUtilReprodutores(res.getInt("vidaUtilReprodutores"));
             inventario.setVidaUtilAnimaisServico(res.getInt("vidaUtilAnimaisServico"));
             inventario.setPerfil((new PerfilDAO()).recuperar(res.getInt("idPerfilFK")));
+            inventario.setTipoAnimal(res.getInt("tipoAnimal"));
             
             inventarios.add(inventario);
         }
@@ -219,6 +221,7 @@ public class InventarioAnimaisDAO {
             inventario.setVidaUtilReprodutores(res.getInt("vidaUtilReprodutores"));
             inventario.setVidaUtilAnimaisServico(res.getInt("vidaUtilAnimaisServico"));
             inventario.setPerfil((new PerfilDAO()).recuperar(res.getInt("idPerfilFK")));
+            inventario.setTipoAnimal(res.getInt("tipoAnimal"));
             
             inventarios.add(inventario);
         }

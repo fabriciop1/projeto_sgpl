@@ -63,9 +63,10 @@ public class UsuarioPerfilDAO {
             while(result.next()){
                    
                 int idPerfil = result.getInt("idPerfilFK");
+                
                    
                 Perfil perfil = perfilDao.recuperar(idPerfil);
-                   
+               
                 perfis.add(perfil);
             }
             result.close();

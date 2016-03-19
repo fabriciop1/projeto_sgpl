@@ -49,19 +49,25 @@ public class VisualizarInventario extends javax.swing.JFrame {
         
         Perfil perfilAtual = ControlePerfil.getInstance().getPerfilSelecionado();
         
+        System.out.println(perfilAtual.getNome());
+        
         try{
             terras = itdao.recuperarPorPerfil(perfilAtual.getIdPerfil());
+            
             animais = iadao.recuperarPorPerfil(perfilAtual.getIdPerfil());
             benfeitorias = ibdao.recuperarPorPerfil(perfilAtual.getIdPerfil());
             maquinas = imdao.recuperarPorPerfil(perfilAtual.getIdPerfil());
         }catch(Exception e){
             
         }
-        
+     
         DefaultTableModel modelTerras = (DefaultTableModel) tabelaInveTerras.getModel();
         modelTerras.setNumRows(0);
-        
+          
         for(int i = 0; i < terras.size(); i++){
+
+            System.out.println("Entrou");
+            System.out.println(terras.get(i).getEspecificacao());
             
             modelTerras.addRow(new Object[]{
                 terras.get(i).getEspecificacao(),
@@ -99,10 +105,15 @@ public class VisualizarInventario extends javax.swing.JFrame {
         DefaultTableModel modelAnimaisServ = (DefaultTableModel) tabelaInveAnimaisServ.getModel();
         modelAnimaisServ.setNumRows(0);
         
+        
+        
         for(int i = 0; i < animais.size(); i++){
-  
-            if(animais.get(i).getTipoAnimal() == 1){
                 
+            
+             System.out.println("Nome de animal: " + animais.get(0).getTipoAnimal());
+             
+            if(animais.get(i).getTipoAnimal() == 1){ //Producao
+                System.out.println("Nome de animal: " + animais.get(0).getCategoria());
                 modelAnimaisProd.addRow(new Object[]{
                     animais.get(i).getCategoria(),
                     animais.get(i).getValorInicio(),
@@ -117,9 +128,9 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     
                 });
                 
-            } else if (animais.get(i).getTipoAnimal() == 2) {
+            } else if (animais.get(i).getTipoAnimal() == 2) { //servico
             
-                modelAnimaisProd.addRow(new Object[]{
+                modelAnimaisServ.addRow(new Object[]{
                     animais.get(i).getCategoria(),
                     animais.get(i).getValorInicio(),
                     animais.get(i).getNascimento(),
