@@ -19,6 +19,7 @@ import modelo.negocio.InventarioMaquinas;
 import modelo.negocio.InventarioResumo;
 import modelo.negocio.InventarioTerras;
 import modelo.negocio.Perfil;
+import util.Calc;
 
 /**
  *
@@ -39,6 +40,30 @@ public class VisualizarInventario extends javax.swing.JFrame {
         ArrayList<InventarioAnimais> animais = new ArrayList<>();
         ArrayList<InventarioBenfeitorias> benfeitorias = new ArrayList<>();
         ArrayList<InventarioMaquinas> maquinas = new ArrayList<>();
+        
+        //Arrays para totais
+        ArrayList<Double> totalAreaArreInic = new ArrayList<>();
+        ArrayList<Double> totalAreaArreFina = new ArrayList<>();
+        ArrayList<Double> totalAreaPropInic = new ArrayList<>();
+        ArrayList<Double> totalAreaPropFina = new ArrayList<>();
+        ArrayList<Double> totalTerraNua     = new ArrayList<>();
+        ArrayList<Double> totalHa           = new ArrayList<>();
+        ArrayList<Double> totalValorHa      = new ArrayList<>();
+        ArrayList<Double> totalDepreciacao  = new ArrayList<>();
+        ArrayList<Double> totalValInicProd  = new ArrayList<>();
+        ArrayList<Double> totalValInicServ  = new ArrayList<>();
+        ArrayList<Double> totalNascProd     = new ArrayList<>();
+        ArrayList<Double> totalMorteProd    = new ArrayList<>();
+        ArrayList<Double> totalVendaProd    = new ArrayList<>();
+        ArrayList<Double> totalCompraProd   = new ArrayList<>();
+        ArrayList<Double> totalNascServ     = new ArrayList<>();
+        ArrayList<Double> totalMorteServ    = new ArrayList<>();
+        ArrayList<Double> totalVendaServ    = new ArrayList<>();
+        ArrayList<Double> totalCompraServ   = new ArrayList<>();
+        ArrayList<Double> totalValFinaProd  = new ArrayList<>();
+        ArrayList<Double> totalValFinaServ  = new ArrayList<>();
+        
+        
         InventarioResumo resumo = new InventarioResumo();
         
         InventarioTerrasDAO itdao = new InventarioTerrasDAO();
@@ -49,7 +74,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         
         Perfil perfilAtual = ControlePerfil.getInstance().getPerfilSelecionado();
         
-        System.out.println(perfilAtual.getNome());
+        
         
         try{
             terras = itdao.recuperarPorPerfil(perfilAtual.getIdPerfil());
@@ -65,9 +90,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
         modelTerras.setNumRows(0);
           
         for(int i = 0; i < terras.size(); i++){
-
-            System.out.println("Entrou");
-            System.out.println(terras.get(i).getEspecificacao());
             
             modelTerras.addRow(new Object[]{
                 terras.get(i).getEspecificacao(),
@@ -78,6 +100,12 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 terras.get(i).getValorTerraNuaPropria(),
             });
             
+            totalAreaArreInic.add(terras.get(i).getAreaArrendadaInicio());
+            totalAreaPropInic.add(terras.get(i).getAreaPropriaInicio());
+            totalAreaArreFina.add(terras.get(i).getAreaArrendadaFinal());
+            totalAreaPropFina.add(terras.get(i).getAreaPropriaFinal());
+            totalTerraNua.add(terras.get(i).getValorTerraNuaPropria());
+            
         }
         
         DefaultTableModel modelForrageiras = (DefaultTableModel) tabelaInveForrageiras.getModel();
@@ -86,18 +114,36 @@ public class VisualizarInventario extends javax.swing.JFrame {
         for(int i = 0; i < terras.size(); i++){
             
             double ha = (terras.get(i).getAreaPropriaInicio() + terras.get(i).getAreaPropriaFinal())/2;
-            double total = terras.get(i).getCustoFormacaoHectare() * ha;
+            double valorHa = terras.get(i).getCustoFormacaoHectare() * ha;
+            double depreciacao = valorHa/terras.get(i).getVidaUtil();
             modelForrageiras.addRow(new Object[]{
                 terras.get(i).getEspecificacao(),
                 terras.get(i).getCustoFormacaoHectare(),
                 ha,
-                total,
+                valorHa,
                 terras.get(i).getVidaUtil(),
-                total/terras.get(i).getVidaUtil(),
+                depreciacao,
                 
             });
             
+            totalHa.add(ha);
+            totalValorHa.add(valorHa);
+            totalDepreciacao.add(depreciacao);
+            
         }
+        
+        total1.setText("" + Calc.somarLista(totalAreaArreInic));
+        total2.setText("" + Calc.somarLista(totalAreaPropInic));
+        total3.setText("" + Calc.somarLista(totalAreaArreFina));
+        total4.setText("" + Calc.somarLista(totalAreaPropFina));
+        total5.setText("" + (Double.parseDouble(total1.getText()) + Double.parseDouble(total2.getText())));
+        total6.setText("" + (Double.parseDouble(total3.getText()) + Double.parseDouble(total4.getText())));
+        total7.setText("R$ " + Calc.somaPonderada(totalAreaPropInic, totalTerraNua));
+        total8.setText("R$ " + Calc.somaPonderada(totalAreaPropFina, totalTerraNua));
+        total9.setText("R$ " + Calc.mediaAritmetica(Double.parseDouble(total7.getText().substring(2)), Double.parseDouble(total8.getText().substring(2))));
+        total10.setText("" + Calc.somarLista(totalHa));
+        total11.setText("" + Calc.somarLista(totalValorHa));
+        total12.setText("" + Calc.somarLista(totalDepreciacao));
         
         DefaultTableModel modelAnimaisProd = (DefaultTableModel) tabelaInveAnimaisProd.getModel();
         modelAnimaisProd.setNumRows(0);
@@ -108,12 +154,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
         
         
         for(int i = 0; i < animais.size(); i++){
-                
-            
-             System.out.println("Nome de animal: " + animais.get(0).getTipoAnimal());
              
             if(animais.get(i).getTipoAnimal() == 1){ //Producao
-                System.out.println("Nome de animal: " + animais.get(0).getCategoria());
                 modelAnimaisProd.addRow(new Object[]{
                     animais.get(i).getCategoria(),
                     animais.get(i).getValorInicio(),
@@ -128,6 +170,13 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     
                 });
                 
+                totalValInicProd.add(animais.get(i).getValorInicio() * 1.0);  
+                totalNascProd.add(animais.get(i).getNascimento() * 1.0);
+                totalMorteProd.add(animais.get(i).getMorte() * 1.0); 
+                totalVendaProd.add(animais.get(i).getVenda() * 1.0); 
+                totalCompraProd.add(animais.get(i).getCompra() * 1.0);
+                totalValFinaProd.add(animais.get(i).getValorFinal() * 1.0);
+                
             } else if (animais.get(i).getTipoAnimal() == 2) { //servico
             
                 modelAnimaisServ.addRow(new Object[]{
@@ -141,9 +190,34 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     animais.get(i).getValorCabeca(),
 
                 });
+                
+                totalValInicServ.add(animais.get(i).getValorInicio() * 1.0);
+                totalNascServ.add(animais.get(i).getNascimento() * 1.0);  
+                totalMorteServ.add(animais.get(i).getMorte() * 1.0);
+                totalVendaServ.add(animais.get(i).getVenda() * 1.0); 
+                totalCompraServ.add(animais.get(i).getCompra() * 1.0);
+                totalValFinaServ.add(animais.get(i).getValorFinal() * 1.0);
             }
             
         }
+        
+        total13.setText("" + Calc.somarLista(totalValInicProd));
+        total14.setText("" + Calc.somarLista(totalNascProd));
+        total15.setText("" + Calc.somarLista(totalMorteProd));
+        total16.setText("" + Calc.somarLista(totalVendaProd));
+        total17.setText("" + Calc.somarLista(totalCompraProd));
+        total18.setText("" + Calc.somarLista(totalValFinaProd));
+        total21.setText("" + Calc.somarLista(totalValInicServ));
+        total22.setText("" + Calc.somarLista(totalNascServ));
+        total23.setText("" + Calc.somarLista(totalMorteServ));
+        total24.setText("" + Calc.somarLista(totalVendaServ));
+        total25.setText("" + Calc.somarLista(totalCompraServ));
+        total26.setText("" + Calc.somarLista(totalValFinaServ));
+        
+        total28.setText("" + (Double.parseDouble(total13.getText()) + Double.parseDouble(total21.getText())));
+        
+        
+        
         
         DefaultTableModel modelBenfeitorias = (DefaultTableModel) tabelaBenfeitorias.getModel();
         modelBenfeitorias.setNumRows(0);
@@ -550,7 +624,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     .addComponent(total10)
                     .addComponent(total11)
                     .addComponent(total12))
-                .addContainerGap(48, Short.MAX_VALUE))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Terras", jPanel1);

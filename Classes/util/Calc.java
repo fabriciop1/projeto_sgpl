@@ -16,6 +16,35 @@ public final class Calc {
     
     private Calc(){ }
     
+    public static double subtratirLista(List<Double> list) {
+        if(list == null) {
+            throw new NullPointerException("Calc.subtrairLista(L<Double>): A lista passada é vazia");
+        }
+        
+        else if(list.isEmpty())  {
+            return 0.0;
+        }
+        
+        double result = 0.0;
+        
+        for(Double d : list) {
+            result -= d;
+        }
+        
+        return result;
+    }
+    
+    public static double multiplicar(double a, double b) {
+        return a * b;
+    }
+    
+    public static double dividir(double a, double b) {
+        if (b != 0) {
+            return a / b;
+        }
+        throw new IllegalArgumentException("Inválida divisão por 0.");
+    }
+    
     public static double somarLista(List<Double> list){
         
         if(list == null){
