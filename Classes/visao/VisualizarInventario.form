@@ -157,7 +157,7 @@
                           <Component id="total11" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="total12" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="49" max="32767" attributes="0"/>
+                      <EmptySpace pref="48" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -173,18 +173,19 @@
                 <Component class="javax.swing.JTable" name="tabelaInveTerras">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                      <Table columnCount="6" rowCount="10">
-                        <Column editable="true" title="Especifica&#xe7;&#xe3;o" type="java.lang.String"/>
-                        <Column editable="true" title="&#xc1;rea Arrendada IN&#xcd;CIO" type="java.lang.Double"/>
-                        <Column editable="true" title="&#xc1;rea Pr&#xf3;pria IN&#xcd;CIO" type="java.lang.Double"/>
-                        <Column editable="true" title="&#xc1;rea Arrendada FINAL" type="java.lang.Double"/>
-                        <Column editable="true" title="&#xc1;rea Pr&#xf3;pria FINAL" type="java.lang.Double"/>
-                        <Column editable="true" title="Valor da terra Nua Pr&#xf3;pria" type="java.lang.Double"/>
+                      <Table columnCount="7" rowCount="10">
+                        <Column editable="false" title="Especifica&#xe7;&#xe3;o" type="java.lang.String"/>
+                        <Column editable="false" title="&#xc1;rea Arrendada IN&#xcd;CIO" type="java.lang.Double"/>
+                        <Column editable="false" title="&#xc1;rea Pr&#xf3;pria IN&#xcd;CIO" type="java.lang.Double"/>
+                        <Column editable="false" title="&#xc1;rea Arrendada FINAL" type="java.lang.Double"/>
+                        <Column editable="false" title="&#xc1;rea Pr&#xf3;pria FINAL" type="java.lang.Double"/>
+                        <Column editable="false" title="Valor da terra Nua Pr&#xf3;pria" type="java.lang.Double"/>
+                        <Column editable="false" title="Editar" type="java.lang.Object"/>
                       </Table>
                     </Property>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                       <TableColumnModel selectionModel="0">
-                        <Column maxWidth="-1" minWidth="-1" prefWidth="165" resizable="false">
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="180" resizable="false">
                           <Title/>
                           <Editor/>
                           <Renderer/>
@@ -210,6 +211,11 @@
                           <Renderer/>
                         </Column>
                         <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="50" resizable="false">
                           <Title/>
                           <Editor/>
                           <Renderer/>
@@ -964,7 +970,7 @@
                   <Font name="Tahoma" size="11" style="1"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
-                <Property name="text" type="java.lang.String" value="Valor gasto com compra de Animais"/>
+                <Property name="text" type="java.lang.String" value="VARIA&#xc7;&#xc3;O DE INVENT&#xc1;RIO ANIMAL"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="total27">
@@ -1018,7 +1024,7 @@
                   <Font name="Tahoma" size="11" style="1"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
-                <Property name="text" type="java.lang.String" value="VARIA&#xc7;&#xc3;O DE INVENT&#xc1;RIO ANIMAL"/>
+                <Property name="text" type="java.lang.String" value="Valor gasto com compra de Animais"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="total32">
@@ -1904,7 +1910,7 @@
             </Component>
             <Component class="javax.swing.JTextField" name="atividadeLeite">
               <Properties>
-                <Property name="text" type="java.lang.String" value="&lt;ativ&gt;"/>
+                <Property name="text" type="java.lang.String" value="0.0"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="atividadeLeiteActionPerformed"/>
@@ -1917,7 +1923,7 @@
             </Component>
             <Component class="javax.swing.JTextField" name="custoOportunidade">
               <Properties>
-                <Property name="text" type="java.lang.String" value="&lt;custo&gt;"/>
+                <Property name="text" type="java.lang.String" value="0.0"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="custoOportunidadeActionPerformed"/>
@@ -1930,7 +1936,7 @@
             </Component>
             <Component class="javax.swing.JTextField" name="salarioMinimo">
               <Properties>
-                <Property name="text" type="java.lang.String" value="&lt;salario&gt;"/>
+                <Property name="text" type="java.lang.String" value="0.0"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="salarioMinimoActionPerformed"/>

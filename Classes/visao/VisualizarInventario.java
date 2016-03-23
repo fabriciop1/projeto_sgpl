@@ -62,6 +62,13 @@ public class VisualizarInventario extends javax.swing.JFrame {
         ArrayList<Double> totalCompraServ   = new ArrayList<>();
         ArrayList<Double> totalValFinaProd  = new ArrayList<>();
         ArrayList<Double> totalValFinaServ  = new ArrayList<>();
+        ArrayList<Double> totalValorInicio  = new ArrayList<>();
+        ArrayList<Double> totalValorFinal   = new ArrayList<>();
+        ArrayList<Double> totalValorBenfeit = new ArrayList<>();
+        ArrayList<Double> totalValorMaquin  = new ArrayList<>();
+        ArrayList<Double> totalDeprecBenfeit  = new ArrayList<>();
+        ArrayList<Double> totalDeprecMaquin  = new ArrayList<>();
+        
         
         
         InventarioResumo resumo = new InventarioResumo();
@@ -154,8 +161,14 @@ public class VisualizarInventario extends javax.swing.JFrame {
         
         
         for(int i = 0; i < animais.size(); i++){
-             
+            
+            
+            
             if(animais.get(i).getTipoAnimal() == 1){ //Producao
+                
+                double valorInicio = animais.get(i).getValorInicio() * animais.get(i).getValorCabeca();
+                double valorFinal = animais.get(i).getValorFinal() * animais.get(i).getValorCabeca();
+                
                 modelAnimaisProd.addRow(new Object[]{
                     animais.get(i).getCategoria(),
                     animais.get(i).getValorInicio(),
@@ -165,8 +178,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     animais.get(i).getCompra(),
                     animais.get(i).getValorFinal(),
                     animais.get(i).getValorCabeca(),
-                    animais.get(i).getValorInicio() * animais.get(i).getValorCabeca(),
-                    animais.get(i).getValorFinal() * animais.get(i).getValorCabeca(),
+                    valorInicio,
+                    valorFinal,
                     
                 });
                 
@@ -176,6 +189,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 totalVendaProd.add(animais.get(i).getVenda() * 1.0); 
                 totalCompraProd.add(animais.get(i).getCompra() * 1.0);
                 totalValFinaProd.add(animais.get(i).getValorFinal() * 1.0);
+                totalValorInicio.add(valorInicio);
+                totalValorFinal.add(valorFinal);
                 
             } else if (animais.get(i).getTipoAnimal() == 2) { //servico
             
@@ -207,6 +222,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total16.setText("" + Calc.somarLista(totalVendaProd));
         total17.setText("" + Calc.somarLista(totalCompraProd));
         total18.setText("" + Calc.somarLista(totalValFinaProd));
+        total19.setText("" + Calc.somarLista(totalValorInicio));
+        total20.setText("" + Calc.somarLista(totalValorFinal));
         total21.setText("" + Calc.somarLista(totalValInicServ));
         total22.setText("" + Calc.somarLista(totalNascServ));
         total23.setText("" + Calc.somarLista(totalMorteServ));
@@ -217,6 +234,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total28.setText("" + (Double.parseDouble(total13.getText()) + Double.parseDouble(total21.getText())));
         
         
+        total31.setText("R$" + (Double.parseDouble(total19.getText()) + Double.parseDouble(total20.getText())));
+        
         
         
         DefaultTableModel modelBenfeitorias = (DefaultTableModel) tabelaBenfeitorias.getModel();
@@ -225,6 +244,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         for(int i = 0; i < benfeitorias.size(); i++){
             
             double total = benfeitorias.get(i).getQuantidade() * benfeitorias.get(i).getValorUnitario();
+            double depreciacao = total / benfeitorias.get(i).getVidaUtil();
             
             modelBenfeitorias.addRow(new Object[] {
                 benfeitorias.get(i).getEspecificacao(),
@@ -233,9 +253,15 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 benfeitorias.get(i).getValorUnitario(),
                 total,
                 benfeitorias.get(i).getVidaUtil(),
-                total / benfeitorias.get(i).getVidaUtil(),
+                depreciacao,
             });
+            
+            totalValorBenfeit.add(total);
+            totalDeprecBenfeit.add(depreciacao);
         }
+        
+        total40.setText("" + Calc.somarLista(totalValorBenfeit));
+        total41.setText("" + Calc.somarLista(totalDeprecBenfeit));
         
         DefaultTableModel modelMaquinas = (DefaultTableModel) tabelaMaquinas.getModel();
         modelMaquinas.setNumRows(0);
@@ -243,6 +269,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         for(int i = 0; i < maquinas.size(); i++){
                 
             double total = maquinas.get(i).getQuantidade() * maquinas.get(i).getValorUnitario();
+            double depreciacao = total / maquinas.get(i).getVidaUtil();
             
             modelMaquinas.addRow(new Object[] {
                 maquinas.get(i).getEspecificacao(),
@@ -251,9 +278,46 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 maquinas.get(i).getValorUnitario(),
                 total,
                 maquinas.get(i).getVidaUtil(),
-                total / maquinas.get(i).getVidaUtil(),
+                depreciacao,
             });
+            
+            totalValorMaquin.add(total);
+            totalDeprecMaquin.add(depreciacao);
         }
+        
+        total42.setText("" + Calc.somarLista(totalValorMaquin));
+        total43.setText("" + Calc.somarLista(totalDeprecMaquin));
+        
+        //Resumo
+        total44.setText(total12.getText());
+        total45.setText(total39.getText());
+        total46.setText(total36.getText());
+        total47.setText(total41.getText());
+        total48.setText(total43.getText());
+        total49.setText("" + (Double.parseDouble(total44.getText()) + 
+                              Double.parseDouble(total45.getText()) +
+                              Double.parseDouble(total46.getText()) +
+                              Double.parseDouble(total47.getText()) +
+                              Double.parseDouble(total48.getText())));
+        total50.setText("" + (Double.parseDouble(atividadeLeite.getText()) * Double.parseDouble(total49.getText())));
+        
+        total51.setText(total9.getText());
+        total52.setText(total12.getText());
+        total53.setText(total31.getText());
+        total54.setText(total40.getText());
+        total55.setText(total42.getText());
+        total56.setText("" + (Double.parseDouble(total51.getText()) + 
+                              Double.parseDouble(total52.getText()) +
+                              Double.parseDouble(total53.getText()) +
+                              Double.parseDouble(total54.getText()) +
+                              Double.parseDouble(total55.getText())));
+        total57.setText("" + (Double.parseDouble(atividadeLeite.getText()) * Double.parseDouble(total49.getText())));
+        
+        total58.setText("" + salarioMinimo.getText());
+        total59.setText("" + (Double.parseDouble(salarioMinimo.getText()) * 0.3));
+        total60.setText("" + ((Double.parseDouble(total58.getText()) * 12+ 
+                              Double.parseDouble(total59.getText()) +
+                              Double.parseDouble(total46.getText()))) / 12);
     }
 
     /**
@@ -407,39 +471,48 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
         tabelaInveTerras.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Especificação", "Área Arrendada INÍCIO", "Área Própria INÍCIO", "Área Arrendada FINAL", "Área Própria FINAL", "Valor da terra Nua Própria"
+                "Especificação", "Área Arrendada INÍCIO", "Área Própria INÍCIO", "Área Arrendada FINAL", "Área Própria FINAL", "Valor da terra Nua Própria", "Editar"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class
+                java.lang.String.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         tabelaInveTerras.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(tabelaInveTerras);
         if (tabelaInveTerras.getColumnModel().getColumnCount() > 0) {
             tabelaInveTerras.getColumnModel().getColumn(0).setResizable(false);
-            tabelaInveTerras.getColumnModel().getColumn(0).setPreferredWidth(165);
+            tabelaInveTerras.getColumnModel().getColumn(0).setPreferredWidth(180);
             tabelaInveTerras.getColumnModel().getColumn(1).setResizable(false);
             tabelaInveTerras.getColumnModel().getColumn(2).setResizable(false);
             tabelaInveTerras.getColumnModel().getColumn(3).setResizable(false);
             tabelaInveTerras.getColumnModel().getColumn(4).setResizable(false);
             tabelaInveTerras.getColumnModel().getColumn(5).setResizable(false);
+            tabelaInveTerras.getColumnModel().getColumn(6).setResizable(false);
+            tabelaInveTerras.getColumnModel().getColumn(6).setPreferredWidth(50);
         }
 
         tabelaInveForrageiras.setModel(new javax.swing.table.DefaultTableModel(
@@ -624,7 +697,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     .addComponent(total10)
                     .addComponent(total11)
                     .addComponent(total12))
-                .addContainerGap(49, Short.MAX_VALUE))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Terras", jPanel1);
@@ -814,7 +887,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel10.setText("Valor gasto com compra de Animais");
+        jLabel10.setText("VARIAÇÃO DE INVENTÁRIO ANIMAL");
 
         total27.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         total27.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -838,7 +911,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel11.setText("VARIAÇÃO DE INVENTÁRIO ANIMAL");
+        jLabel11.setText("Valor gasto com compra de Animais");
 
         total32.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         total32.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1613,7 +1686,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
         jPanel5.add(total60, gridBagConstraints);
 
-        atividadeLeite.setText("<ativ>");
+        atividadeLeite.setText("0.0");
         atividadeLeite.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 atividadeLeiteActionPerformed(evt);
@@ -1625,7 +1698,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
         jPanel5.add(atividadeLeite, gridBagConstraints);
 
-        custoOportunidade.setText("<custo>");
+        custoOportunidade.setText("0.0");
         custoOportunidade.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 custoOportunidadeActionPerformed(evt);
@@ -1637,7 +1710,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
         jPanel5.add(custoOportunidade, gridBagConstraints);
 
-        salarioMinimo.setText("<salario>");
+        salarioMinimo.setText("0.0");
         salarioMinimo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 salarioMinimoActionPerformed(evt);
