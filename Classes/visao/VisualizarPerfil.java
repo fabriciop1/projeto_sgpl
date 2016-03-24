@@ -35,6 +35,9 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         this.setResizable(false);
         
+        listaPerfis.setShowHorizontalLines(true);
+        listaPerfis.setShowVerticalLines(true);
+        
         usuarioPerfil = new UsuarioPerfilDAO();
         usuario = ControleLogin.getInstance().getUsuario();
         
