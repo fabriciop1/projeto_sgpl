@@ -5,6 +5,7 @@
  */
 package flex;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
@@ -26,12 +27,15 @@ public class GenericTableRowEditor extends javax.swing.JDialog implements Action
     private JTable sourceTable;
     private JButton editButton;
     private int selectedRow;
+    private final int columnCount;
     
     public GenericTableRowEditor(java.awt.Frame parent, JTable sourceTable, JButton editButton) {
         super(parent, true);
         
         this.sourceTable = sourceTable;
         this.editButton = editButton;
+        
+        this.columnCount = sourceTable.getColumnCount();
         
         initComponents();
         
@@ -41,48 +45,76 @@ public class GenericTableRowEditor extends javax.swing.JDialog implements Action
         editButton.addActionListener(this);
         
         this.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+        this.setMinimumSize(this.getSize());
         //this.pack();
     }
-   
+    
     private void composeEditTable(){
         
-        editTable.removeColumn(editTable.getColumn("Title 1"));
+        editTable.setAutoCreateColumnsFromModel(false);
         editTable.setCellEditor(sourceTable.getCellEditor());
-        //editTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-        //editTable.setLayout(new GridLayout());
         editTable.setCellSelectionEnabled(true);
-        editTable.setAutoCreateColumnsFromModel(true);
         editTable.setShowHorizontalLines(true);
         editTable.setShowVerticalLines(true);
         
-        Object[] columnArray = new Object[sourceTable.getColumnCount()];
-        int minDialogSize = 100;        
+        //boolean[] isColumnEditableArray = new boolean[columnCount];
+        Class[] columnTypeArray = new Class[columnCount];
+        String[] columnNameArray = new String[columnCount];
+        Object[][] dataMatrix = new Object[columnCount][0];  
         
-        for(int i=0; i<sourceTable.getColumnCount(); i++){
-            columnArray[i] = sourceTable.getColumnModel().getColumn(i).getIdentifier();
+        int minDialogSize = 80;        
+        
+        for(int i=0; i<columnCount; i++){
+            columnTypeArray[i] = sourceTable.getColumnClass(i);
+            columnNameArray[i] = sourceTable.getColumnName(i);
+            //isColumnEditableArray[i] = sourceTable.isCellEditable(selectedRow, i);
         }
         
-        editTable.setModel(new DefaultTableModel(columnArray, 0));
+        editTable.setModel(new DefaultTableModel(dataMatrix, columnNameArray){
+            
+            Class[] types = columnTypeArray;
+            
+            //boolean[] isColumnEditable = isColumnEditableArray;
+            
+            @Override
+            public Class getColumnClass(int columnIndex) {
+                return types[columnIndex];
+            }
+
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                //return isColumnEditable[columnIndex];
+                return true;
+            }
+        });
         
+        editTable.createDefaultColumnsFromModel();
         
-        for(int i=0; i<sourceTable.getColumnCount(); i++){
+        for(int i=0; i<columnCount; i++){
             
             editTable.getColumnModel().getColumn(i).setCellRenderer(
                     sourceTable.getCellRenderer(selectedRow, i));
             
             int sourceColumnWidth = sourceTable.getColumnModel().getColumn(i).getWidth();
             minDialogSize += sourceColumnWidth;
+            
             editTable.getColumnModel().getColumn(i).setMinWidth(sourceColumnWidth);
+            
+            System.out.println("" + (i+1) + ". Source: " + sourceTable.getColumnClass(i).getName());
+            System.out.println("" + (i+1) + ". Edit: " + editTable.getColumnClass(i).getName());
+
         }
+        
+        System.out.println("------------------------------------------------");
         
         this.setSize(minDialogSize, this.getHeight());
     }
     
     private void refillEditTable(){
         
-        Object[] dataArray = new Object[sourceTable.getColumnCount()];
+        Object[] dataArray = new Object[columnCount];
         
-        for(int i=0; i<dataArray.length; i++){
+        for(int i=0; i<columnCount; i++){
             dataArray[i] = sourceTable.getValueAt(selectedRow, i);
         }
         
@@ -98,24 +130,21 @@ public class GenericTableRowEditor extends javax.swing.JDialog implements Action
     
     private void updateSourceTable(){
         
-        for(int i=0; i<sourceTable.getColumnCount(); i++){
+        for(int i=0; i<columnCount; i++){
             
             Object value = editTable.getValueAt(0, i);
             
             if(value == null){
-                System.out.println("Warning: NULL value at R=0 C=" + i);
+                System.err.println("Warning: NULL value at R=0 C=" + i);
                 continue;
             }
             
-            Class valueType = sourceTable.getValueAt(selectedRow, i).getClass();
-            
-            sourceTable.setValueAt(value, selectedRow, i);   
+            sourceTable.setValueAt(value, selectedRow, i);
             
             ((DefaultTableModel)sourceTable.getModel()).fireTableCellUpdated(selectedRow, i);
         }
         
-        //((DefaultTableModel)sourceTable.getModel()).fireTableRowsUpdated(selectedRow, selectedRow);
-        ((DefaultTableModel)sourceTable.getModel()).fireTableDataChanged();
+        ((DefaultTableModel)sourceTable.getModel()).fireTableRowsUpdated(selectedRow, selectedRow);
     }
     
     private void hideEditor(){
@@ -167,7 +196,7 @@ public class GenericTableRowEditor extends javax.swing.JDialog implements Action
 
             },
             new String [] {
-                "Title 1"
+
             }
         ));
         editTable.setRowHeight(25);
@@ -204,20 +233,20 @@ public class GenericTableRowEditor extends javax.swing.JDialog implements Action
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(41, 41, 41)
+                .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(editLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE))
-                .addGap(36, 36, 36))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE))
+                .addGap(20, 20, 20))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(40, 40, 40)
+                .addGap(32, 32, 32)
                 .addComponent(editLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -225,7 +254,7 @@ public class GenericTableRowEditor extends javax.swing.JDialog implements Action
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -238,9 +267,9 @@ public class GenericTableRowEditor extends javax.swing.JDialog implements Action
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
                         
         updateSourceTable();
-        hideEditor();
-        
         clearEditTable();
+        
+        hideEditor();
     }//GEN-LAST:event_saveButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed

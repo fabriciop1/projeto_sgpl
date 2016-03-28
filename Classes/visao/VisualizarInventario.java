@@ -8,6 +8,7 @@ package visao;
 import controle.ControlePerfil;
 import flex.GenericTableRowEditor;
 import java.util.ArrayList;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import modelo.dao.InventarioAnimaisDAO;
 import modelo.dao.InventarioBenfeitoriasDAO;
@@ -27,34 +28,18 @@ import util.Calc;
  */
 public class VisualizarInventario extends javax.swing.JFrame {
 
-    private GenericTableRowEditor tabelaMaquinasGTRE;
-    private GenericTableRowEditor tabelaBenfeitoriasGTRE;
-    private GenericTableRowEditor tabelaTerrasGTRE;
-    private GenericTableRowEditor tabelaAnimaisGTRE;
     /**
      * Creates new form VisualizarInventario
      */
+    
+    private void gerarEdicaoDeTabela(JTable table){//, ActionListener listener){
+        
+        
+    }
+  
     public VisualizarInventario() {
         initComponents();
-             
-        tabelaBenfeitorias.setShowHorizontalLines(true);
-        tabelaBenfeitorias.setShowVerticalLines(true);
-    
-        tabelaInveAnimaisProd.setShowHorizontalLines(true);
-        tabelaInveAnimaisProd.setShowVerticalLines(true);
-    
-        tabelaInveAnimaisServ.setShowHorizontalLines(true);
-        tabelaInveAnimaisServ.setShowVerticalLines(true);
-    
-        tabelaInveForrageiras.setShowHorizontalLines(true);
-        tabelaInveForrageiras.setShowVerticalLines(true);
-    
-        tabelaInveTerras.setShowHorizontalLines(true);
-        tabelaInveTerras.setShowVerticalLines(true);
-    
-        tabelaMaquinas.setShowHorizontalLines(true);
-        tabelaMaquinas.setShowVerticalLines(true);
-   
+        
         setLocationRelativeTo(null);
         this.setResizable(false);
         
@@ -64,32 +49,26 @@ public class VisualizarInventario extends javax.swing.JFrame {
         ArrayList<InventarioMaquinas> maquinas = new ArrayList<>();
         
         //Arrays para totais
-        ArrayList<Double> totalAreaArreInic = new ArrayList<>();
-        ArrayList<Double> totalAreaArreFina = new ArrayList<>();
-        ArrayList<Double> totalAreaPropInic = new ArrayList<>();
-        ArrayList<Double> totalAreaPropFina = new ArrayList<>();
-        ArrayList<Double> totalTerraNua     = new ArrayList<>();
-        ArrayList<Double> totalHa           = new ArrayList<>();
-        ArrayList<Double> totalValorHa      = new ArrayList<>();
-        ArrayList<Double> totalDepreciacao  = new ArrayList<>();
-        ArrayList<Double> totalValInicProd  = new ArrayList<>();
-        ArrayList<Double> totalValInicServ  = new ArrayList<>();
-        ArrayList<Double> totalNascProd     = new ArrayList<>();
-        ArrayList<Double> totalMorteProd    = new ArrayList<>();
-        ArrayList<Double> totalVendaProd    = new ArrayList<>();
-        ArrayList<Double> totalCompraProd   = new ArrayList<>();
-        ArrayList<Double> totalNascServ     = new ArrayList<>();
-        ArrayList<Double> totalMorteServ    = new ArrayList<>();
-        ArrayList<Double> totalVendaServ    = new ArrayList<>();
-        ArrayList<Double> totalCompraServ   = new ArrayList<>();
-        ArrayList<Double> totalValFinaProd  = new ArrayList<>();
-        ArrayList<Double> totalValFinaServ  = new ArrayList<>();
-        ArrayList<Double> totalValorInicio  = new ArrayList<>();
-        ArrayList<Double> totalValorFinal   = new ArrayList<>();
-        ArrayList<Double> totalValorBenfeit = new ArrayList<>();
-        ArrayList<Double> totalValorMaquin  = new ArrayList<>();
-        ArrayList<Double> totalDeprecBenfeit  = new ArrayList<>();
-        ArrayList<Double> totalDeprecMaquin  = new ArrayList<>();
+        ArrayList<Double> totalAreaArreInic = new ArrayList<>(),
+         totalAreaArreFina = new ArrayList<>(),
+         totalAreaPropInic = new ArrayList<>(),
+         totalAreaPropFina = new ArrayList<>(),
+         totalTerraNua     = new ArrayList<>(),
+         totalHa           = new ArrayList<>(),
+         totalValorHa      = new ArrayList<>(),
+         totalDepreciacao  = new ArrayList<>(),
+         totalValInicProd  = new ArrayList<>(),
+         totalValInicServ  = new ArrayList<>(),
+         totalNascProd     = new ArrayList<>(),
+         totalMorteProd    = new ArrayList<>(),
+         totalVendaProd    = new ArrayList<>(),
+         totalCompraProd   = new ArrayList<>(),
+         totalNascServ     = new ArrayList<>(),
+         totalMorteServ    = new ArrayList<>(),
+         totalVendaServ    = new ArrayList<>(),
+         totalCompraServ   = new ArrayList<>(),
+         totalValFinaProd  = new ArrayList<>(),
+         totalValFinaServ  = new ArrayList<>();
         
         InventarioResumo resumo = new InventarioResumo();
         
@@ -100,11 +79,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
         //InventarioResumoDAO irdao = new InventarioResumoDAO();
         
         Perfil perfilAtual = ControlePerfil.getInstance().getPerfilSelecionado();
-            
-        tabelaMaquinasGTRE = new GenericTableRowEditor(this, tabelaMaquinas, editarInvMaquinasBT);
-        tabelaBenfeitoriasGTRE = new GenericTableRowEditor(this, tabelaBenfeitorias, editarInvBenfeitoriasBT);
-        tabelaTerrasGTRE = new GenericTableRowEditor(this, tabelaInveTerras, editarInvTerrasBT);
-        tabelaAnimaisGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisProd, editarInvAnimaisBT);
         
         try{
             terras = itdao.recuperarPorPerfil(perfilAtual.getIdPerfil());
@@ -113,7 +87,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             benfeitorias = ibdao.recuperarPorPerfil(perfilAtual.getIdPerfil());
             maquinas = imdao.recuperarPorPerfil(perfilAtual.getIdPerfil());
         }catch(Exception e){
-            System.out.println("Erro em Construtor Visualizar Inventário.");
+            
         }
      
         DefaultTableModel modelTerras = (DefaultTableModel) tabelaInveTerras.getModel();
@@ -159,6 +133,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             totalHa.add(ha);
             totalValorHa.add(valorHa);
             totalDepreciacao.add(depreciacao);
+            
         }
         
         total1.setText("" + Calc.somarLista(totalAreaArreInic));
@@ -180,13 +155,11 @@ public class VisualizarInventario extends javax.swing.JFrame {
         DefaultTableModel modelAnimaisServ = (DefaultTableModel) tabelaInveAnimaisServ.getModel();
         modelAnimaisServ.setNumRows(0);
         
+        
+        
         for(int i = 0; i < animais.size(); i++){
-
+             
             if(animais.get(i).getTipoAnimal() == 1){ //Producao
-                
-                double valorInicio = animais.get(i).getValorInicio() * animais.get(i).getValorCabeca();
-                double valorFinal = animais.get(i).getValorFinal() * animais.get(i).getValorCabeca();
-                
                 modelAnimaisProd.addRow(new Object[]{
                     animais.get(i).getCategoria(),
                     animais.get(i).getValorInicio(),
@@ -196,8 +169,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     animais.get(i).getCompra(),
                     animais.get(i).getValorFinal(),
                     animais.get(i).getValorCabeca(),
-                    valorInicio,
-                    valorFinal,
+                    animais.get(i).getValorInicio() * animais.get(i).getValorCabeca(),
+                    animais.get(i).getValorFinal() * animais.get(i).getValorCabeca(),
                     
                 });
                 
@@ -207,8 +180,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 totalVendaProd.add(animais.get(i).getVenda() * 1.0); 
                 totalCompraProd.add(animais.get(i).getCompra() * 1.0);
                 totalValFinaProd.add(animais.get(i).getValorFinal() * 1.0);
-                totalValorInicio.add(valorInicio);
-                totalValorFinal.add(valorFinal);
                 
             } else if (animais.get(i).getTipoAnimal() == 2) { //servico
             
@@ -240,8 +211,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total16.setText("" + Calc.somarLista(totalVendaProd));
         total17.setText("" + Calc.somarLista(totalCompraProd));
         total18.setText("" + Calc.somarLista(totalValFinaProd));
-        total19.setText("" + Calc.somarLista(totalValorInicio));
-        total20.setText("" + Calc.somarLista(totalValorFinal));
         total21.setText("" + Calc.somarLista(totalValInicServ));
         total22.setText("" + Calc.somarLista(totalNascServ));
         total23.setText("" + Calc.somarLista(totalMorteServ));
@@ -250,16 +219,16 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total26.setText("" + Calc.somarLista(totalValFinaServ));
         
         total28.setText("" + (Double.parseDouble(total13.getText()) + Double.parseDouble(total21.getText())));
-   
-        total31.setText("R$" + ((Double.parseDouble(total19.getText()) + Double.parseDouble(total20.getText()))/2));
-
+        
+        
+        
+        
         DefaultTableModel modelBenfeitorias = (DefaultTableModel) tabelaBenfeitorias.getModel();
         modelBenfeitorias.setNumRows(0);
         
         for(int i = 0; i < benfeitorias.size(); i++){
             
             double total = benfeitorias.get(i).getQuantidade() * benfeitorias.get(i).getValorUnitario();
-            double depreciacao = total / benfeitorias.get(i).getVidaUtil();
             
             modelBenfeitorias.addRow(new Object[] {
                 benfeitorias.get(i).getEspecificacao(),
@@ -268,15 +237,9 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 benfeitorias.get(i).getValorUnitario(),
                 total,
                 benfeitorias.get(i).getVidaUtil(),
-                depreciacao,
+                total / benfeitorias.get(i).getVidaUtil(),
             });
-            
-            totalValorBenfeit.add(total);
-            totalDeprecBenfeit.add(depreciacao);
         }
-        
-        total40.setText("" + Calc.somarLista(totalValorBenfeit));
-        total41.setText("" + Calc.somarLista(totalDeprecBenfeit));
         
         DefaultTableModel modelMaquinas = (DefaultTableModel) tabelaMaquinas.getModel();
         modelMaquinas.setNumRows(0);
@@ -284,7 +247,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
         for(int i = 0; i < maquinas.size(); i++){
                 
             double total = maquinas.get(i).getQuantidade() * maquinas.get(i).getValorUnitario();
-            double depreciacao = total / maquinas.get(i).getVidaUtil();
             
             modelMaquinas.addRow(new Object[] {
                 maquinas.get(i).getEspecificacao(),
@@ -293,46 +255,41 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 maquinas.get(i).getValorUnitario(),
                 total,
                 maquinas.get(i).getVidaUtil(),
-                depreciacao,
+                total / maquinas.get(i).getVidaUtil(),
             });
-            
-            totalValorMaquin.add(total);
-            totalDeprecMaquin.add(depreciacao);
         }
         
-        total42.setText("" + Calc.somarLista(totalValorMaquin));
-        total43.setText("" + Calc.somarLista(totalDeprecMaquin));
+        gerarEdicaoDeTabela(tabelaBenfeitorias);
+        gerarEdicaoDeTabela(tabelaInveAnimaisProd);
+        gerarEdicaoDeTabela(tabelaInveAnimaisServ);
+        gerarEdicaoDeTabela(tabelaInveForrageiras);
+        gerarEdicaoDeTabela(tabelaInveTerras);
+        gerarEdicaoDeTabela(tabelaMaquinas);
         
-        //Resumo
-        total44.setText(total12.getText());
-        total45.setText("0.0");/*total39.getText());*/
-        total46.setText("0.0");/*total36.getText());*/
-        total47.setText(total41.getText());
-        total48.setText(total43.getText());
-        total49.setText("R$ " + (Double.parseDouble(total44.getText()) + 
-                              Double.parseDouble(total45.getText()) +
-                              Double.parseDouble(total46.getText()) +
-                              Double.parseDouble(total47.getText()) +
-                              Double.parseDouble(total48.getText())));
-        total50.setText("R$ " + (Double.parseDouble(atividadeLeite.getText()) * Double.parseDouble(total49.getText().substring(2))));
-        
-        total51.setText(total9.getText().substring(2));
-        total52.setText(total12.getText());
-        total53.setText(total31.getText().substring(2));
-        total54.setText(total40.getText());
-        total55.setText(total42.getText());
-        total56.setText("R$ " + (Double.parseDouble(total51.getText().substring(2)) + 
-                              Double.parseDouble(total52.getText()) +
-                              Double.parseDouble(total53.getText().substring(2)) +
-                              Double.parseDouble(total54.getText()) +
-                              Double.parseDouble(total55.getText())));
-        total57.setText("R$ " + (Double.parseDouble(atividadeLeite.getText()) * Double.parseDouble(total49.getText().substring(2))));
-        
-        total58.setText("" + salarioMinimo.getText());
-        total59.setText("" + (Double.parseDouble(salarioMinimo.getText()) * 0.3));
-        total60.setText("R$ " + ((Double.parseDouble(total58.getText()) * 12+ 
-                              Double.parseDouble(total59.getText()) +
-                              Double.parseDouble(total46.getText()))) / 12);
+    tabelaBenfeitorias.setShowHorizontalLines(true);
+    tabelaBenfeitorias.setShowVerticalLines(true);
+    
+    tabelaInveAnimaisProd.setShowHorizontalLines(true);
+    tabelaInveAnimaisProd.setShowVerticalLines(true);
+    
+    tabelaInveAnimaisServ.setShowHorizontalLines(true);
+    tabelaInveAnimaisServ.setShowVerticalLines(true);
+    
+    tabelaInveForrageiras.setShowHorizontalLines(true);
+    tabelaInveForrageiras.setShowVerticalLines(true);
+    
+    tabelaInveTerras.setShowHorizontalLines(true);
+    tabelaInveTerras.setShowVerticalLines(true);
+    
+    tabelaMaquinas.setShowHorizontalLines(true);
+    tabelaMaquinas.setShowVerticalLines(true);
+    
+    
+    tabelaMaquinasGTRE = new GenericTableRowEditor(this, tabelaMaquinas, editarInvMaquinasBT);
+    tabelaBenfeitoriasGTRE = new GenericTableRowEditor(this, tabelaBenfeitorias, editarInvBenfeitoriasBT);
+    tabelaTerrasGTRE = new GenericTableRowEditor(this, tabelaInveTerras, editarInvTerrasBT);
+    tabelaAnimaisGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisProd, editarInvAnimaisBT);
+    
     }
 
     /**
@@ -508,23 +465,16 @@ public class VisualizarInventario extends javax.swing.JFrame {
             Class[] types = new Class [] {
                 java.lang.String.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class
             };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
-            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
             }
         });
         tabelaInveTerras.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(tabelaInveTerras);
         if (tabelaInveTerras.getColumnModel().getColumnCount() > 0) {
             tabelaInveTerras.getColumnModel().getColumn(0).setResizable(false);
-            tabelaInveTerras.getColumnModel().getColumn(0).setPreferredWidth(180);
+            tabelaInveTerras.getColumnModel().getColumn(0).setPreferredWidth(165);
             tabelaInveTerras.getColumnModel().getColumn(1).setResizable(false);
             tabelaInveTerras.getColumnModel().getColumn(2).setResizable(false);
             tabelaInveTerras.getColumnModel().getColumn(3).setResizable(false);
@@ -640,18 +590,13 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total12.setText("<total12>");
 
-        editarInvTerrasBT.setText("Editar Informações");
-        editarInvTerrasBT.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editarInvTerrasBTActionPerformed(evt);
-            }
-        });
+        editarInvTerrasBT.setText("Editar");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 995, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 981, Short.MAX_VALUE)
             .addComponent(jScrollPane1)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -674,11 +619,13 @@ public class VisualizarInventario extends javax.swing.JFrame {
                             .addComponent(total6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(total3, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(total4, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(total8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addComponent(total9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(155, 155, 155))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(editarInvTerrasBT, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(151, 151, 151)
@@ -687,10 +634,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 .addComponent(total11, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(total12, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(editarInvTerrasBT)
-                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -704,15 +647,18 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     .addComponent(total3)
                     .addComponent(total4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(total5)
-                    .addComponent(total6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(total7)
-                    .addComponent(total8))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(total5)
+                            .addComponent(total6))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(total7)
+                            .addComponent(total8)))
+                    .addComponent(editarInvTerrasBT, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -725,9 +671,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     .addComponent(total10)
                     .addComponent(total11)
                     .addComponent(total12))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(editarInvTerrasBT, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(77, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Terras", jPanel1);
@@ -917,7 +861,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel10.setText("VARIAÇÃO DE INVENTÁRIO ANIMAL");
+        jLabel10.setText("Valor gasto com compra de Animais");
 
         total27.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         total27.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -941,7 +885,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel11.setText("Valor gasto com compra de Animais");
+        jLabel11.setText("VARIAÇÃO DE INVENTÁRIO ANIMAL");
 
         total32.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         total32.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -991,125 +935,126 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total39.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total39.setText("<total39>");
 
-        editarInvAnimaisBT.setText("Editar Informações");
-        editarInvAnimaisBT.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editarInvAnimaisBTActionPerformed(evt);
-            }
-        });
+        editarInvAnimaisBT.setText("Editar");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane4)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(total13, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(total14, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(total15, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(total16, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(total17, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(total18, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 109, Short.MAX_VALUE)
-                .addComponent(total19, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(total20, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 791, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                                    .addContainerGap()
-                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(jPanel2Layout.createSequentialGroup()
-                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(total21, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE)
-                                        .addComponent(total28, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(total22, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(total32, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(total34, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(total35, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(total36, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(jPanel2Layout.createSequentialGroup()
-                                    .addComponent(total23, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(total24, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(total25, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(total29, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(total26, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(total30, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
-                                        .addComponent(total27, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                .addGroup(jPanel2Layout.createSequentialGroup()
-                                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(total33, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel2Layout.createSequentialGroup()
-                                    .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(total37, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGroup(jPanel2Layout.createSequentialGroup()
-                                    .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(total38, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGroup(jPanel2Layout.createSequentialGroup()
-                                    .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(total39, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(total21, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE)
+                                    .addComponent(total28, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(total22, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(total32, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(total34, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(total35, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(total36, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(total23, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(total24, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(total25, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(total29, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(total26, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(total30, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
+                                    .addComponent(total27, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(total33, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(total37, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(total38, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(total39, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(total31, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 791, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(total13, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(total14, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(total15, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(total16, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(total17, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(total18, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(total31, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(editarInvAnimaisBT)
-                        .addContainerGap())))
+                        .addComponent(total19, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(total20, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(38, 38, 38)
+                        .addComponent(editarInvAnimaisBT, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(total13)
-                    .addComponent(total20)
-                    .addComponent(total19)
-                    .addComponent(total14)
-                    .addComponent(total15)
-                    .addComponent(total16)
-                    .addComponent(total17)
-                    .addComponent(total18))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(total13)
+                            .addComponent(total20)
+                            .addComponent(total19)
+                            .addComponent(total14)
+                            .addComponent(total15)
+                            .addComponent(total16)
+                            .addComponent(total17)
+                            .addComponent(total18))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(editarInvAnimaisBT)
+                        .addGap(43, 43, 43)))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(total21)
@@ -1132,39 +1077,33 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(total31))
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel10)
-                            .addComponent(total32)
-                            .addComponent(jLabel11)
-                            .addComponent(total33))
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel12)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel13)
-                            .addComponent(jLabel17)
-                            .addComponent(total34)
-                            .addComponent(total37))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel15)
-                            .addComponent(jLabel18)
-                            .addComponent(total35)
-                            .addComponent(total38))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel16)
-                            .addComponent(jLabel19)
-                            .addComponent(total36)
-                            .addComponent(total39))
-                        .addContainerGap(43, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(editarInvAnimaisBT, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(total32)
+                    .addComponent(jLabel11)
+                    .addComponent(total33))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel13)
+                    .addComponent(jLabel17)
+                    .addComponent(total34)
+                    .addComponent(total37))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel15)
+                    .addComponent(jLabel18)
+                    .addComponent(total35)
+                    .addComponent(total38))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel16)
+                    .addComponent(jLabel19)
+                    .addComponent(total36)
+                    .addComponent(total39))
+                .addGap(0, 55, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Animais", jPanel2);
@@ -1250,7 +1189,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total41.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total41.setText("<total41>");
 
-        editarInvBenfeitoriasBT.setText("Editar Informações");
+        editarInvBenfeitoriasBT.setText("Editar");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -1260,37 +1199,34 @@ public class VisualizarInventario extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(115, 115, 115)
+                .addGap(125, 125, 125)
                 .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(192, Short.MAX_VALUE)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(188, 188, 188)
-                        .addComponent(total40, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(111, 111, 111)
-                        .addComponent(total41, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(editarInvBenfeitoriasBT, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(56, 56, 56)
+                .addComponent(editarInvBenfeitoriasBT, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(78, 78, 78)
+                .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(124, 124, 124)
+                .addComponent(total40, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 104, Short.MAX_VALUE)
+                .addComponent(total41, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGap(8, 8, 8)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel20))
+                    .addComponent(jLabel20)
+                    .addComponent(jLabel21))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 446, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 485, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(total41)
+                    .addComponent(jLabel22)
                     .addComponent(total40)
-                    .addComponent(jLabel22))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(editarInvBenfeitoriasBT, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(17, 17, 17))
+                    .addComponent(total41)
+                    .addComponent(editarInvBenfeitoriasBT))
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab("Benfeitorias", jPanel3);
@@ -1376,60 +1312,53 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total43.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total43.setText("<total43>");
 
-        editarInvMaquinasBT.setText("Editar Informações");
+        editarInvMaquinasBT.setText("Editar");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(0, 507, Short.MAX_VALUE)
-                .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(120, 120, 120)
-                .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addComponent(jScrollPane7)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(164, 164, 164)
-                .addComponent(total42, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(147, 147, 147)
-                        .addComponent(total43, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 995, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(editarInvMaquinasBT)
-                        .addContainerGap())))
+                        .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(125, 125, 125)
+                        .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addGap(70, 70, 70)
+                .addComponent(editarInvMaquinasBT, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(125, 125, 125)
+                .addComponent(total42, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(123, 123, 123)
+                .addComponent(total43, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel24)
-                    .addComponent(jLabel23, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(jLabel23))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 446, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(total43)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(editarInvMaquinasBT, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(total42)
-                            .addComponent(jLabel25))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 483, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel25)
+                    .addComponent(total42)
+                    .addComponent(total43)
+                    .addComponent(editarInvMaquinasBT))
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab("Máquinas", jPanel4);
 
         jPanel5.setLayout(new java.awt.GridBagLayout());
 
-        jLabel26.setText("RESUMO DA DEPRECIAÇÃO (em reais)");
+        jLabel26.setText("RESUMO DA DEPRECIAÇÃO");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -1486,7 +1415,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(jLabel32, gridBagConstraints);
 
-        jLabel33.setText("Leite/atividade leiteira (%)");
+        jLabel33.setText("Leite/atividade leiteira");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
@@ -1502,7 +1431,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(jLabel34, gridBagConstraints);
 
-        jLabel35.setText("RESUMO DO INVENTÁRIO (em reais)");
+        jLabel35.setText("RESUMO DO INVENTÁRIO");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
@@ -1559,7 +1488,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(jLabel41, gridBagConstraints);
 
-        jLabel42.setText("Salário mínimo (R$)");
+        jLabel42.setText("Salário mínimo");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 1;
@@ -1584,7 +1513,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(jLabel44, gridBagConstraints);
 
-        jLabel45.setText("Custo de oportunidade (%)");
+        jLabel45.setText("Custo de oportunidade");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 7;
@@ -1600,7 +1529,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel5.add(jLabel46, gridBagConstraints);
 
-        jLabel47.setText("Décimo terceiro (R$) ");
+        jLabel47.setText("Décimo terceiro");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 2;
@@ -1608,7 +1537,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(jLabel47, gridBagConstraints);
 
-        jLabel48.setText("Terço de férias (R$)");
+        jLabel48.setText("Terço de férias");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 3;
@@ -1756,7 +1685,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
         jPanel5.add(total60, gridBagConstraints);
 
-        atividadeLeite.setText("0.0");
+        atividadeLeite.setText("<ativ>");
         atividadeLeite.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 atividadeLeiteActionPerformed(evt);
@@ -1768,7 +1697,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
         jPanel5.add(atividadeLeite, gridBagConstraints);
 
-        custoOportunidade.setText("0.0");
+        custoOportunidade.setText("<custo>");
         custoOportunidade.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 custoOportunidadeActionPerformed(evt);
@@ -1780,7 +1709,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
         jPanel5.add(custoOportunidade, gridBagConstraints);
 
-        salarioMinimo.setText(" 0.0");
+        salarioMinimo.setText("<salario>");
         salarioMinimo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 salarioMinimoActionPerformed(evt);
@@ -1826,28 +1755,33 @@ public class VisualizarInventario extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(textoEntrada)
-                .addGap(381, 381, 381))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 390, Short.MAX_VALUE)
+                        .addComponent(textoEntrada)
+                        .addGap(377, 377, 377))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnVoltar)
                     .addComponent(textoEntrada))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 573, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
         
         new MenuPrincipal().setVisible(true);
@@ -1868,14 +1802,12 @@ public class VisualizarInventario extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_atividadeLeiteActionPerformed
 
-    private void editarInvAnimaisBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarInvAnimaisBTActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_editarInvAnimaisBTActionPerformed
-
-    private void editarInvTerrasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarInvTerrasBTActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_editarInvTerrasBTActionPerformed
-
+    private GenericTableRowEditor tabelaMaquinasGTRE;
+    private GenericTableRowEditor tabelaBenfeitoriasGTRE;
+    private GenericTableRowEditor tabelaTerrasGTRE;
+    private GenericTableRowEditor tabelaAnimaisGTRE;
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -1909,11 +1841,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 new VisualizarInventario().setVisible(true);
             }
         });
-        
     }
-
     
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField atividadeLeite;
     private javax.swing.JButton btnVoltar;
