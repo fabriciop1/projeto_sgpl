@@ -8,6 +8,7 @@ package visao;
 import controle.ControlePerfil;
 import flex.GenericTableRowEditor;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.dao.InventarioAnimaisDAO;
 import modelo.dao.InventarioBenfeitoriasDAO;
@@ -161,178 +162,194 @@ public class VisualizarInventario extends javax.swing.JFrame {
             totalDepreciacao.add(depreciacao);
         }
         
-        total1.setText("" + Calc.somarLista(totalAreaArreInic));
-        total2.setText("" + Calc.somarLista(totalAreaPropInic));
-        total3.setText("" + Calc.somarLista(totalAreaArreFina));
-        total4.setText("" + Calc.somarLista(totalAreaPropFina));
-        total5.setText("" + (Double.parseDouble(total1.getText()) + Double.parseDouble(total2.getText())));
-        total6.setText("" + (Double.parseDouble(total3.getText()) + Double.parseDouble(total4.getText())));
-        total7.setText("R$ " + Calc.somaPonderada(totalAreaPropInic, totalTerraNua));
-        total8.setText("R$ " + Calc.somaPonderada(totalAreaPropFina, totalTerraNua));
-        total9.setText("R$ " + Calc.mediaAritmetica(Double.parseDouble(total7.getText().substring(2)), Double.parseDouble(total8.getText().substring(2))));
-        total10.setText("" + Calc.somarLista(totalHa));
-        total11.setText("" + Calc.somarLista(totalValorHa));
-        total12.setText("" + Calc.somarLista(totalDepreciacao));
+        try{
+            total1.setText("" + Calc.somarLista(totalAreaArreInic));
+            total2.setText("" + Calc.somarLista(totalAreaPropInic));
+            total3.setText("" + Calc.somarLista(totalAreaArreFina));
+            total4.setText("" + Calc.somarLista(totalAreaPropFina));
+            total5.setText("" + (Double.parseDouble(total1.getText()) + Double.parseDouble(total2.getText())));
+            total6.setText("" + (Double.parseDouble(total3.getText()) + Double.parseDouble(total4.getText())));
+            total7.setText("R$ " + Calc.somaPonderada(totalAreaPropInic, totalTerraNua));
+            total8.setText("R$ " + Calc.somaPonderada(totalAreaPropFina, totalTerraNua));
+            total9.setText("R$ " + Calc.mediaAritmetica(Double.parseDouble(total7.getText().substring(2)), Double.parseDouble(total8.getText().substring(2))));
+            total10.setText("" + Calc.somarLista(totalHa));
+            total11.setText("" + Calc.somarLista(totalValorHa));
+            total12.setText("" + Calc.somarLista(totalDepreciacao));
         
-        DefaultTableModel modelAnimaisProd = (DefaultTableModel) tabelaInveAnimaisProd.getModel();
-        modelAnimaisProd.setNumRows(0);
         
-        DefaultTableModel modelAnimaisServ = (DefaultTableModel) tabelaInveAnimaisServ.getModel();
-        modelAnimaisServ.setNumRows(0);
-        
-        for(int i = 0; i < animais.size(); i++){
+            DefaultTableModel modelAnimaisProd = (DefaultTableModel) tabelaInveAnimaisProd.getModel();
+            modelAnimaisProd.setNumRows(0);
 
-            if(animais.get(i).getTipoAnimal() == 1){ //Producao
-                
-                double valorInicio = animais.get(i).getValorInicio() * animais.get(i).getValorCabeca();
-                double valorFinal = animais.get(i).getValorFinal() * animais.get(i).getValorCabeca();
-                
-                modelAnimaisProd.addRow(new Object[]{
-                    animais.get(i).getCategoria(),
-                    animais.get(i).getValorInicio(),
-                    animais.get(i).getNascimento(),
-                    animais.get(i).getMorte(),
-                    animais.get(i).getVenda(),
-                    animais.get(i).getCompra(),
-                    animais.get(i).getValorFinal(),
-                    animais.get(i).getValorCabeca(),
-                    valorInicio,
-                    valorFinal,
-                    
-                });
-                
-                totalValInicProd.add(animais.get(i).getValorInicio() * 1.0);  
-                totalNascProd.add(animais.get(i).getNascimento() * 1.0);
-                totalMorteProd.add(animais.get(i).getMorte() * 1.0); 
-                totalVendaProd.add(animais.get(i).getVenda() * 1.0); 
-                totalCompraProd.add(animais.get(i).getCompra() * 1.0);
-                totalValFinaProd.add(animais.get(i).getValorFinal() * 1.0);
-                totalValorInicio.add(valorInicio);
-                totalValorFinal.add(valorFinal);
-                
-            } else if (animais.get(i).getTipoAnimal() == 2) { //servico
-            
-                modelAnimaisServ.addRow(new Object[]{
-                    animais.get(i).getCategoria(),
-                    animais.get(i).getValorInicio(),
-                    animais.get(i).getNascimento(),
-                    animais.get(i).getMorte(),
-                    animais.get(i).getVenda(),
-                    animais.get(i).getCompra(),
-                    animais.get(i).getValorFinal(),
-                    animais.get(i).getValorCabeca(),
+            DefaultTableModel modelAnimaisServ = (DefaultTableModel) tabelaInveAnimaisServ.getModel();
+            modelAnimaisServ.setNumRows(0);
 
-                });
-                
-                totalValInicServ.add(animais.get(i).getValorInicio() * 1.0);
-                totalNascServ.add(animais.get(i).getNascimento() * 1.0);  
-                totalMorteServ.add(animais.get(i).getMorte() * 1.0);
-                totalVendaServ.add(animais.get(i).getVenda() * 1.0); 
-                totalCompraServ.add(animais.get(i).getCompra() * 1.0);
-                totalValFinaServ.add(animais.get(i).getValorFinal() * 1.0);
+            for(int i = 0; i < animais.size(); i++){
+
+                if(animais.get(i).getTipoAnimal() == 1){ //Producao
+
+                    double valorInicio = animais.get(i).getValorInicio() * animais.get(i).getValorCabeca();
+                    double valorFinal = animais.get(i).getValorFinal() * animais.get(i).getValorCabeca();
+
+                    modelAnimaisProd.addRow(new Object[]{
+                        animais.get(i).getCategoria(),
+                        animais.get(i).getValorInicio(),
+                        animais.get(i).getNascimento(),
+                        animais.get(i).getMorte(),
+                        animais.get(i).getVenda(),
+                        animais.get(i).getCompra(),
+                        animais.get(i).getValorFinal(),
+                        animais.get(i).getValorCabeca(),
+                        valorInicio,
+                        valorFinal,
+
+                    });
+
+                    totalValInicProd.add(animais.get(i).getValorInicio() * 1.0);  
+                    totalNascProd.add(animais.get(i).getNascimento() * 1.0);
+                    totalMorteProd.add(animais.get(i).getMorte() * 1.0); 
+                    totalVendaProd.add(animais.get(i).getVenda() * 1.0); 
+                    totalCompraProd.add(animais.get(i).getCompra() * 1.0);
+                    totalValFinaProd.add(animais.get(i).getValorFinal() * 1.0);
+                    totalValorInicio.add(valorInicio);
+                    totalValorFinal.add(valorFinal);
+
+                } else if (animais.get(i).getTipoAnimal() == 2) { //servico
+
+                    modelAnimaisServ.addRow(new Object[]{
+                        animais.get(i).getCategoria(),
+                        animais.get(i).getValorInicio(),
+                        animais.get(i).getNascimento(),
+                        animais.get(i).getMorte(),
+                        animais.get(i).getVenda(),
+                        animais.get(i).getCompra(),
+                        animais.get(i).getValorFinal(),
+                        animais.get(i).getValorCabeca(),
+
+                    });
+
+                    totalValInicServ.add(animais.get(i).getValorInicio() * 1.0);
+                    totalNascServ.add(animais.get(i).getNascimento() * 1.0);  
+                    totalMorteServ.add(animais.get(i).getMorte() * 1.0);
+                    totalVendaServ.add(animais.get(i).getVenda() * 1.0); 
+                    totalCompraServ.add(animais.get(i).getCompra() * 1.0);
+                    totalValFinaServ.add(animais.get(i).getValorFinal() * 1.0);
+                }
+
             }
-            
-        }
-        
-        total13.setText("" + Calc.somarLista(totalValInicProd));
-        total14.setText("" + Calc.somarLista(totalNascProd));
-        total15.setText("" + Calc.somarLista(totalMorteProd));
-        total16.setText("" + Calc.somarLista(totalVendaProd));
-        total17.setText("" + Calc.somarLista(totalCompraProd));
-        total18.setText("" + Calc.somarLista(totalValFinaProd));
-        total19.setText("" + Calc.somarLista(totalValorInicio));
-        total20.setText("" + Calc.somarLista(totalValorFinal));
-        total21.setText("" + Calc.somarLista(totalValInicServ));
-        total22.setText("" + Calc.somarLista(totalNascServ));
-        total23.setText("" + Calc.somarLista(totalMorteServ));
-        total24.setText("" + Calc.somarLista(totalVendaServ));
-        total25.setText("" + Calc.somarLista(totalCompraServ));
-        total26.setText("" + Calc.somarLista(totalValFinaServ));
-        
-        total28.setText("" + (Double.parseDouble(total13.getText()) + Double.parseDouble(total21.getText())));
-   
-        total31.setText("R$" + ((Double.parseDouble(total19.getText()) + Double.parseDouble(total20.getText()))/2));
 
-        DefaultTableModel modelBenfeitorias = (DefaultTableModel) tabelaBenfeitorias.getModel();
-        modelBenfeitorias.setNumRows(0);
-        
-        for(int i = 0; i < benfeitorias.size(); i++){
+            total13.setText("" + Calc.somarLista(totalValInicProd));
+            total14.setText("" + Calc.somarLista(totalNascProd));
+            total15.setText("" + Calc.somarLista(totalMorteProd));
+            total16.setText("" + Calc.somarLista(totalVendaProd));
+            total17.setText("" + Calc.somarLista(totalCompraProd));
+            total18.setText("" + Calc.somarLista(totalValFinaProd));
             
-            double total = benfeitorias.get(i).getQuantidade() * benfeitorias.get(i).getValorUnitario();
-            double depreciacao = total / benfeitorias.get(i).getVidaUtil();
+            total27.setText("= " + (Double.parseDouble(total13.getText()) +
+                                    Double.parseDouble(total14.getText()) -
+                                    Double.parseDouble(total15.getText()) -
+                                    Double.parseDouble(total16.getText()) + 
+                                    Double.parseDouble(total17.getText()))); 
             
-            modelBenfeitorias.addRow(new Object[] {
-                benfeitorias.get(i).getEspecificacao(),
-                benfeitorias.get(i).getUnidade(),
-                benfeitorias.get(i).getQuantidade(),
-                benfeitorias.get(i).getValorUnitario(),
-                total,
-                benfeitorias.get(i).getVidaUtil(),
-                depreciacao,
-            });
+            total19.setText("" + Calc.somarLista(totalValorInicio));
+            total20.setText("" + Calc.somarLista(totalValorFinal));
+            total21.setText("" + Calc.somarLista(totalValInicServ));
+            total22.setText("" + Calc.somarLista(totalNascServ));
+            total23.setText("" + Calc.somarLista(totalMorteServ));
+            total24.setText("" + Calc.somarLista(totalVendaServ));
+            total25.setText("" + Calc.somarLista(totalCompraServ));
+            total26.setText("" + Calc.somarLista(totalValFinaServ));
+
+            total28.setText("" + (Double.parseDouble(total13.getText()) + Double.parseDouble(total21.getText())));
+            total29.setText("" + (Double.parseDouble(total26.getText()) + Double.parseDouble(total27.getText().substring(1))));
+
+            total31.setText("R$" + ((Double.parseDouble(total19.getText()) + Double.parseDouble(total20.getText()))/2));
             
-            totalValorBenfeit.add(total);
-            totalDeprecBenfeit.add(depreciacao);
+            total36.setText("" + Calc.dividir(Double.parseDouble(total34.getText()), Double.parseDouble(total35.getText())));
+            total39.setText("" + Calc.dividir(Double.parseDouble(total37.getText()), Double.parseDouble(total38.getText())));
+
+            DefaultTableModel modelBenfeitorias = (DefaultTableModel) tabelaBenfeitorias.getModel();
+            modelBenfeitorias.setNumRows(0);
+
+            for(int i = 0; i < benfeitorias.size(); i++){
+
+                double total = benfeitorias.get(i).getQuantidade() * benfeitorias.get(i).getValorUnitario();
+                double depreciacao = total / benfeitorias.get(i).getVidaUtil();
+
+                modelBenfeitorias.addRow(new Object[] {
+                    benfeitorias.get(i).getEspecificacao(),
+                    benfeitorias.get(i).getUnidade(),
+                    benfeitorias.get(i).getQuantidade(),
+                    benfeitorias.get(i).getValorUnitario(),
+                    total,
+                    benfeitorias.get(i).getVidaUtil(),
+                    depreciacao,
+                });
+
+                totalValorBenfeit.add(total);
+                totalDeprecBenfeit.add(depreciacao);
+            }
+
+            total40.setText("" + Calc.somarLista(totalValorBenfeit));
+            total41.setText("" + Calc.somarLista(totalDeprecBenfeit));
+
+            DefaultTableModel modelMaquinas = (DefaultTableModel) tabelaMaquinas.getModel();
+            modelMaquinas.setNumRows(0);
+
+            for(int i = 0; i < maquinas.size(); i++){
+
+                double total = maquinas.get(i).getQuantidade() * maquinas.get(i).getValorUnitario();
+                double depreciacao = total / maquinas.get(i).getVidaUtil();
+
+                modelMaquinas.addRow(new Object[] {
+                    maquinas.get(i).getEspecificacao(),
+                    maquinas.get(i).getUnidade(),
+                    maquinas.get(i).getQuantidade(),
+                    maquinas.get(i).getValorUnitario(),
+                    total,
+                    maquinas.get(i).getVidaUtil(),
+                    depreciacao,
+                });
+
+                totalValorMaquin.add(total);
+                totalDeprecMaquin.add(depreciacao);
+            }
+
+            total42.setText("" + Calc.somarLista(totalValorMaquin));
+            total43.setText("" + Calc.somarLista(totalDeprecMaquin));
+
+            //Resumo
+            total44.setText(total12.getText());
+            total45.setText("0.0");/*total39.getText());*/
+            total46.setText("0.0");/*total36.getText());*/
+            total47.setText(total41.getText());
+            total48.setText(total43.getText());
+            total49.setText("R$ " + (Double.parseDouble(total44.getText()) + 
+                                  Double.parseDouble(total45.getText()) +
+                                  Double.parseDouble(total46.getText()) +
+                                  Double.parseDouble(total47.getText()) +
+                                  Double.parseDouble(total48.getText())));
+            total50.setText("R$ " + (Double.parseDouble(atividadeLeite.getText()) * Double.parseDouble(total49.getText().substring(2))));
+
+            total51.setText(total9.getText().substring(2));
+            total52.setText(total12.getText());
+            total53.setText(total31.getText().substring(2));
+            total54.setText(total40.getText());
+            total55.setText(total42.getText());
+            total56.setText("R$ " + (Double.parseDouble(total51.getText().substring(2)) + 
+                                  Double.parseDouble(total52.getText()) +
+                                  Double.parseDouble(total53.getText().substring(2)) +
+                                  Double.parseDouble(total54.getText()) +
+                                  Double.parseDouble(total55.getText())));
+            total57.setText("R$ " + (Double.parseDouble(atividadeLeite.getText()) * Double.parseDouble(total49.getText().substring(2))));
+
+            total58.setText("" + salarioMinimo.getText());
+            total59.setText("" + (Double.parseDouble(salarioMinimo.getText()) * 0.3));
+            total60.setText("R$ " + ((Double.parseDouble(total58.getText()) * 12+ 
+                                  Double.parseDouble(total59.getText()) +
+                                  Double.parseDouble(total46.getText()))) / 12);
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(null, "O perfil não possui nenhum inventário cadastrado!");
         }
-        
-        total40.setText("" + Calc.somarLista(totalValorBenfeit));
-        total41.setText("" + Calc.somarLista(totalDeprecBenfeit));
-        
-        DefaultTableModel modelMaquinas = (DefaultTableModel) tabelaMaquinas.getModel();
-        modelMaquinas.setNumRows(0);
-        
-        for(int i = 0; i < maquinas.size(); i++){
-                
-            double total = maquinas.get(i).getQuantidade() * maquinas.get(i).getValorUnitario();
-            double depreciacao = total / maquinas.get(i).getVidaUtil();
-            
-            modelMaquinas.addRow(new Object[] {
-                maquinas.get(i).getEspecificacao(),
-                maquinas.get(i).getUnidade(),
-                maquinas.get(i).getQuantidade(),
-                maquinas.get(i).getValorUnitario(),
-                total,
-                maquinas.get(i).getVidaUtil(),
-                depreciacao,
-            });
-            
-            totalValorMaquin.add(total);
-            totalDeprecMaquin.add(depreciacao);
-        }
-        
-        total42.setText("" + Calc.somarLista(totalValorMaquin));
-        total43.setText("" + Calc.somarLista(totalDeprecMaquin));
-        
-        //Resumo
-        total44.setText(total12.getText());
-        total45.setText("0.0");/*total39.getText());*/
-        total46.setText("0.0");/*total36.getText());*/
-        total47.setText(total41.getText());
-        total48.setText(total43.getText());
-        total49.setText("R$ " + (Double.parseDouble(total44.getText()) + 
-                              Double.parseDouble(total45.getText()) +
-                              Double.parseDouble(total46.getText()) +
-                              Double.parseDouble(total47.getText()) +
-                              Double.parseDouble(total48.getText())));
-        total50.setText("R$ " + (Double.parseDouble(atividadeLeite.getText()) * Double.parseDouble(total49.getText().substring(2))));
-        
-        total51.setText(total9.getText().substring(2));
-        total52.setText(total12.getText());
-        total53.setText(total31.getText().substring(2));
-        total54.setText(total40.getText());
-        total55.setText(total42.getText());
-        total56.setText("R$ " + (Double.parseDouble(total51.getText().substring(2)) + 
-                              Double.parseDouble(total52.getText()) +
-                              Double.parseDouble(total53.getText().substring(2)) +
-                              Double.parseDouble(total54.getText()) +
-                              Double.parseDouble(total55.getText())));
-        total57.setText("R$ " + (Double.parseDouble(atividadeLeite.getText()) * Double.parseDouble(total49.getText().substring(2))));
-        
-        total58.setText("" + salarioMinimo.getText());
-        total59.setText("" + (Double.parseDouble(salarioMinimo.getText()) * 0.3));
-        total60.setText("R$ " + ((Double.parseDouble(total58.getText()) * 12+ 
-                              Double.parseDouble(total59.getText()) +
-                              Double.parseDouble(total46.getText()))) / 12);
     }
 
     /**
@@ -414,6 +431,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total38 = new javax.swing.JLabel();
         total39 = new javax.swing.JLabel();
         editarInvAnimaisBT = new javax.swing.JButton();
+        btnInserirValor = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         tabelaBenfeitorias = new javax.swing.JTable();
@@ -923,7 +941,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
         total29.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         total29.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        total29.setText("= <total29>");
+        total29.setText("<total29>");
 
         total31.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         total31.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -935,7 +953,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
         total32.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         total32.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        total32.setText("<total32>");
+        total32.setText("0.0");
 
         total33.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         total33.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -967,7 +985,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total34.setText("<total34>");
 
         total35.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        total35.setText("<total35>");
+        total35.setText("5");
 
         total36.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total36.setText("<total36>");
@@ -976,7 +994,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total37.setText("<total37>");
 
         total38.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        total38.setText("<total38>");
+        total38.setText("10");
 
         total39.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total39.setText("<total39>");
@@ -985,6 +1003,13 @@ public class VisualizarInventario extends javax.swing.JFrame {
         editarInvAnimaisBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editarInvAnimaisBTActionPerformed(evt);
+            }
+        });
+
+        btnInserirValor.setText("Inserir Valor");
+        btnInserirValor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInserirValorActionPerformed(evt);
             }
         });
 
@@ -1007,55 +1032,71 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 .addComponent(total17, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(total18, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(total27, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(total19, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(total20, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(total27, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(309, 309, 309))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 791, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(total31, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(total21, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                    .addGap(231, 231, 231)
+                                    .addComponent(total28, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(total22, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(total23, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(total24, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(total25, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(total21, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE)
-                                    .addComponent(total28, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(total22, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(total32, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(total29, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(total26, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE))))
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(total32, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnInserirValor)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(total33, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
+                            .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(total34, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(total35, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(total36, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(total36, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(total23, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(total24, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(total25, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(total26, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(total29, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(total33, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1067,12 +1108,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(total39, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(total31, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
+                                .addComponent(total39, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
                 .addComponent(editarInvAnimaisBT)
                 .addContainerGap())
         );
@@ -1090,8 +1127,9 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     .addComponent(total15)
                     .addComponent(total16)
                     .addComponent(total17)
-                    .addComponent(total18)
-                    .addComponent(total27))
+                    .addComponent(total18))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(total27)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1102,25 +1140,29 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     .addComponent(total23)
                     .addComponent(total24)
                     .addComponent(total25)
-                    .addComponent(total26)
-                    .addComponent(total29))
+                    .addComponent(total26))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(total29)
                     .addComponent(jLabel7)
                     .addComponent(total28))
-                .addGap(26, 26, 26)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(total31))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(total32)
+                    .addComponent(jLabel11)
+                    .addComponent(total33)
+                    .addComponent(btnInserirValor))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel10)
-                            .addComponent(total32)
-                            .addComponent(jLabel11)
-                            .addComponent(total33))
-                        .addGap(18, 18, 18)
+                        .addGap(54, 54, 54)
+                        .addComponent(editarInvAnimaisBT, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGap(25, 25, 25)
                         .addComponent(jLabel12)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1139,12 +1181,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
                             .addComponent(jLabel16)
                             .addComponent(jLabel19)
                             .addComponent(total36)
-                            .addComponent(total39))
-                        .addContainerGap(43, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(editarInvAnimaisBT, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                            .addComponent(total39))))
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab("Animais", jPanel2);
@@ -1856,6 +1894,10 @@ public class VisualizarInventario extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_editarInvTerrasBTActionPerformed
 
+    private void btnInserirValorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInserirValorActionPerformed
+        total32.setText(JOptionPane.showInputDialog("Valor Gasto com Compra de Animais: "));
+    }//GEN-LAST:event_btnInserirValorActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1896,6 +1938,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField atividadeLeite;
+    private javax.swing.JButton btnInserirValor;
     private javax.swing.JButton btnVoltar;
     private javax.swing.JTextField custoOportunidade;
     private javax.swing.JButton editarInvAnimaisBT;

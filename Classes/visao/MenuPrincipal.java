@@ -309,7 +309,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnIndicTecnAnuaisActionPerformed
 
     private void btnDadosEconMensaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDadosEconMensaisActionPerformed
-        // TODO add your handling code here:
+        new VisualizarDadosEconMensais().setVisible(true);
+        this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_btnDadosEconMensaisActionPerformed
 
     private void btnIndicEconAnuaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIndicEconAnuaisActionPerformed
