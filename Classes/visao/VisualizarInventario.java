@@ -102,10 +102,10 @@ public class VisualizarInventario extends javax.swing.JFrame {
         
         Perfil perfilAtual = ControlePerfil.getInstance().getPerfilSelecionado();
             
-        tabelaMaquinasGTRE = new GenericTableRowEditor(this, tabelaMaquinas, editarInvMaquinasBT);
-        tabelaBenfeitoriasGTRE = new GenericTableRowEditor(this, tabelaBenfeitorias, editarInvBenfeitoriasBT);
-        tabelaTerrasGTRE = new GenericTableRowEditor(this, tabelaInveTerras, editarInvTerrasBT);
-        tabelaAnimaisGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisProd, editarInvAnimaisBT);
+        tabelaMaquinasGTRE = new GenericTableRowEditor(this, tabelaMaquinas, editarInvMaquinasBT, false);
+        tabelaBenfeitoriasGTRE = new GenericTableRowEditor(this, tabelaBenfeitorias, editarInvBenfeitoriasBT, false);
+        tabelaTerrasGTRE = new GenericTableRowEditor(this, tabelaInveTerras, editarInvTerrasBT, false);
+        tabelaAnimaisGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisProd, editarInvAnimaisBT, false);
         
         try{
             terras = itdao.recuperarPorPerfil(perfilAtual.getIdPerfil());
@@ -162,7 +162,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             totalDepreciacao.add(depreciacao);
         }
         
-        try{
+        
             total1.setText("" + Calc.somarLista(totalAreaArreInic));
             total2.setText("" + Calc.somarLista(totalAreaPropInic));
             total3.setText("" + Calc.somarLista(totalAreaArreFina));
@@ -264,8 +264,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
             total31.setText("R$" + ((Double.parseDouble(total19.getText()) + Double.parseDouble(total20.getText()))/2));
             
-            total36.setText("" + Calc.dividir(Double.parseDouble(total34.getText()), Double.parseDouble(total35.getText())));
-            total39.setText("" + Calc.dividir(Double.parseDouble(total37.getText()), Double.parseDouble(total38.getText())));
+            //total36.setText("" + Calc.dividir(Double.parseDouble(total34.getText()), Double.parseDouble(total35.getText())));
+            //total39.setText("" + Calc.dividir(Double.parseDouble(total37.getText()), Double.parseDouble(total38.getText())));
 
             DefaultTableModel modelBenfeitorias = (DefaultTableModel) tabelaBenfeitorias.getModel();
             modelBenfeitorias.setNumRows(0);
@@ -347,9 +347,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             total60.setText("R$ " + ((Double.parseDouble(total58.getText()) * 12+ 
                                   Double.parseDouble(total59.getText()) +
                                   Double.parseDouble(total46.getText()))) / 12);
-        } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(null, "O perfil não possui nenhum inventário cadastrado!");
-        }
+        
     }
 
     /**

@@ -25,31 +25,21 @@ public class GenericTableRowEditor extends javax.swing.JDialog implements Action
      */
     
     private JTable sourceTable;
-    private JButton editButton;
+    private JButton actionButton;
     private int selectedRow;
     private final int columnCount;
+    private boolean forceCellEditing;
     
-    public GenericTableRowEditor(java.awt.Frame parent, JTable sourceTable, JButton editButton) {
+    public GenericTableRowEditor(java.awt.Frame parent, JTable sourceTable, JButton actionButton, boolean forceCellEditing) {
         super(parent, true);
         
         this.sourceTable = sourceTable;
-        this.editButton = editButton;
+        this.actionButton = actionButton;
+        this.forceCellEditing = forceCellEditing;
         
         this.columnCount = sourceTable.getColumnCount();
         
         initComponents();
-        
-        composeEditTable();
-        clearEditTable();
-        
-        editButton.addActionListener(this);
-        
-        this.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-        this.setMinimumSize(this.getSize());
-        //this.pack();
-    }
-    
-    private void composeEditTable(){
         
         editTable.setAutoCreateColumnsFromModel(false);
         editTable.setCellEditor(sourceTable.getCellEditor());
@@ -57,7 +47,20 @@ public class GenericTableRowEditor extends javax.swing.JDialog implements Action
         editTable.setShowHorizontalLines(true);
         editTable.setShowVerticalLines(true);
         
-        //boolean[] isColumnEditableArray = new boolean[columnCount];
+        this.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+        this.setMinimumSize(this.getSize());
+        this.setVisible(false);
+        
+        composeEditTable();
+        clearEditTable();
+        
+        actionButton.addActionListener(this);
+        //this.pack();
+    }
+    
+    protected void composeEditTable(){
+        
+        boolean[] columnEditableArray = new boolean[columnCount];
         Class[] columnTypeArray = new Class[columnCount];
         String[] columnNameArray = new String[columnCount];
         Object[][] dataMatrix = new Object[columnCount][0];  
@@ -67,14 +70,14 @@ public class GenericTableRowEditor extends javax.swing.JDialog implements Action
         for(int i=0; i<columnCount; i++){
             columnTypeArray[i] = sourceTable.getColumnClass(i);
             columnNameArray[i] = sourceTable.getColumnName(i);
-            //isColumnEditableArray[i] = sourceTable.isCellEditable(selectedRow, i);
+            columnEditableArray[i] = sourceTable.isCellEditable(selectedRow, i);
         }
         
         editTable.setModel(new DefaultTableModel(dataMatrix, columnNameArray){
             
             Class[] types = columnTypeArray;
             
-            //boolean[] isColumnEditable = isColumnEditableArray;
+            boolean[] isColumnEditable = columnEditableArray;
             
             @Override
             public Class getColumnClass(int columnIndex) {
@@ -83,8 +86,12 @@ public class GenericTableRowEditor extends javax.swing.JDialog implements Action
 
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                //return isColumnEditable[columnIndex];
-                return true;
+                
+                if(!forceCellEditing){
+                    return isColumnEditable[columnIndex];
+                } else {
+                    return true;
+                }
             }
         });
         
@@ -110,7 +117,7 @@ public class GenericTableRowEditor extends javax.swing.JDialog implements Action
         this.setSize(minDialogSize, this.getHeight());
     }
     
-    private void refillEditTable(){
+    protected void refillEditTable(){
         
         Object[] dataArray = new Object[columnCount];
         
@@ -118,17 +125,27 @@ public class GenericTableRowEditor extends javax.swing.JDialog implements Action
             dataArray[i] = sourceTable.getValueAt(selectedRow, i);
         }
         
-        ((DefaultTableModel)editTable.getModel()).addRow(dataArray);
+        addEditTableRow(dataArray);
     }
     
-    private void clearEditTable(){
+    protected void addEditTableRow(Object[] dataArray){
+        ((DefaultTableModel)editTable.getModel()).addRow(dataArray);
+        getEditTableModel().fireTableRowsInserted(editTable.getRowCount()-1, editTable.getRowCount()-1);
+    }
+    
+    protected void addSourceTableRow(Object[] dataArray){
+        getSourceTableModel().addRow(dataArray);
+        getSourceTableModel().fireTableRowsInserted(sourceTable.getRowCount()-1, sourceTable.getRowCount()-1);
+    }
+    
+    protected void clearEditTable(){
         
         while(editTable.getRowCount() > 0){
             ((DefaultTableModel)editTable.getModel()).removeRow(0); 
         }
     }
     
-    private void updateSourceTable(){
+    protected void updateSourceTable(){
         
         for(int i=0; i<columnCount; i++){
             
@@ -141,20 +158,20 @@ public class GenericTableRowEditor extends javax.swing.JDialog implements Action
             
             sourceTable.setValueAt(value, selectedRow, i);
             
-            ((DefaultTableModel)sourceTable.getModel()).fireTableCellUpdated(selectedRow, i);
+            getSourceTableModel().fireTableCellUpdated(selectedRow, i);
         }
         
-        ((DefaultTableModel)sourceTable.getModel()).fireTableRowsUpdated(selectedRow, selectedRow);
+        getSourceTableModel().fireTableRowsUpdated(selectedRow, selectedRow);
     }
     
-    private void hideEditor(){
+    protected void hideEditor(){
         this.setVisible(false);
     }
     
     @Override
     public void actionPerformed(ActionEvent e) {
         
-        if(e.getSource() == editButton){
+        if(e.getSource() == actionButton){
             
             if(sourceTable.getSelectedRowCount() > 0){
                 
@@ -278,6 +295,8 @@ public class GenericTableRowEditor extends javax.swing.JDialog implements Action
         clearEditTable();
     }//GEN-LAST:event_cancelButtonActionPerformed
 
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -327,4 +346,50 @@ public class GenericTableRowEditor extends javax.swing.JDialog implements Action
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton saveButton;
     // End of variables declaration//GEN-END:variables
+
+    protected JTable getSourceTable() {
+        return sourceTable;
+    }
+
+    protected DefaultTableModel getSourceTableModel(){
+        return (DefaultTableModel) sourceTable.getModel();
+    }
+    
+    protected JButton getActionButton() {
+        return actionButton;
+    }
+
+    public int getSelectedRow() {
+        return selectedRow;
+    }
+
+    public int getColumnCount() {
+        return columnCount;
+    }
+
+    protected javax.swing.JButton getCancelButton() {
+        return cancelButton;
+    }
+
+    protected javax.swing.JLabel getLabel() {
+        return editLabel;
+    }
+
+    protected javax.swing.JTable getEditTable() {
+        return editTable;
+    }
+
+    protected DefaultTableModel getEditTableModel(){
+        return (DefaultTableModel) editTable.getModel();
+    }
+    
+    protected javax.swing.JButton getSaveButton() {
+        return saveButton;
+    }
+
+    protected void setLabel(javax.swing.JLabel editLabel) {
+        this.editLabel = editLabel;
+    }
+
+    
 }
