@@ -23,13 +23,14 @@ public class InventarioAnimais {
     private int vidaUtilReprodutores;
     private int vidaUtilAnimaisServico;
     private int tipoAnimal; // 1 - Produção ; 2 - Em Serviço
+    private double valorGastoCompraAnimais;
     private Perfil perfil;
 
     public InventarioAnimais() {
     }
         
     public InventarioAnimais(String categoria, int valorInicio, int nascimento, int morte, int venda, int compra, int valorFinal, 
-            double valorCabeca, int vidaUtilReprodutores, int vidaUtilAnimaisServico, int tipoAnimal, Perfil perfil) {
+            double valorCabeca, int vidaUtilReprodutores, int vidaUtilAnimaisServico, int tipoAnimal, double valorGastoCompraAnimais, Perfil perfil) {
         this.categoria = categoria;
         this.valorInicio = valorInicio;
         this.nascimento = nascimento;
@@ -41,6 +42,7 @@ public class InventarioAnimais {
         this.vidaUtilReprodutores = vidaUtilReprodutores;
         this.vidaUtilAnimaisServico = vidaUtilAnimaisServico;
         this.tipoAnimal = tipoAnimal;
+        this.valorGastoCompraAnimais = valorGastoCompraAnimais;
         this.perfil = perfil;
     }
 
@@ -138,6 +140,14 @@ public class InventarioAnimais {
 
     public void setTipoAnimal(int tipoAnimal) {
         this.tipoAnimal = tipoAnimal;
+    }
+
+    public double getValorGastoCompraAnimais() {
+        return valorGastoCompraAnimais;
+    }
+
+    public void setValorGastoCompraAnimais(double valorGastoCompraAnimais) {
+        this.valorGastoCompraAnimais = valorGastoCompraAnimais;
     }
 
     public Perfil getPerfil() {

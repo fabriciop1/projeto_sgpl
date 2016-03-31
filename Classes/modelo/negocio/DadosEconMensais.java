@@ -12,7 +12,7 @@ package modelo.negocio;
 public class DadosEconMensais {
     
     private int id;
-    private String mes;
+    private int mes;
     private int ano;
     private String campo; // Nome do campo do tabela
     private int quantidade;
@@ -23,7 +23,7 @@ public class DadosEconMensais {
     public DadosEconMensais() {
     }
 
-    public DadosEconMensais(String mes, int ano, String campo, int quantidade, double valorUnitario, int tipoCampo, Perfil perfil) {
+    public DadosEconMensais(int mes, int ano, String campo, int quantidade, double valorUnitario, int tipoCampo, Perfil perfil) {
         this.mes = mes;
         this.ano = ano;
         this.campo = campo;
@@ -41,11 +41,11 @@ public class DadosEconMensais {
         this.id = id;
     }
 
-    public String getMes() {
+    public int getMes() {
         return mes;
     }
 
-    public void setMes(String mes) {
+    public void setMes(int mes) {
         this.mes = mes;
     }
 

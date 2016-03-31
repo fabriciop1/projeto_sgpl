@@ -26,7 +26,6 @@ public class GenericTableRowEditor extends javax.swing.JDialog implements Action
     
     private JTable sourceTable;
     private JButton actionButton;
-    private int selectedRow;
     private final int columnCount;
     private boolean forceCellEditing;
     
@@ -70,7 +69,7 @@ public class GenericTableRowEditor extends javax.swing.JDialog implements Action
         for(int i=0; i<columnCount; i++){
             columnTypeArray[i] = sourceTable.getColumnClass(i);
             columnNameArray[i] = sourceTable.getColumnName(i);
-            columnEditableArray[i] = sourceTable.isCellEditable(selectedRow, i);
+            columnEditableArray[i] = sourceTable.isCellEditable(sourceTable.getSelectedRow(), i);
         }
         
         editTable.setModel(new DefaultTableModel(dataMatrix, columnNameArray){
@@ -100,7 +99,7 @@ public class GenericTableRowEditor extends javax.swing.JDialog implements Action
         for(int i=0; i<columnCount; i++){
             
             editTable.getColumnModel().getColumn(i).setCellRenderer(
-                    sourceTable.getCellRenderer(selectedRow, i));
+                    sourceTable.getCellRenderer(sourceTable.getSelectedRow(), i));
             
             int sourceColumnWidth = sourceTable.getColumnModel().getColumn(i).getWidth();
             minDialogSize += sourceColumnWidth;
@@ -122,7 +121,7 @@ public class GenericTableRowEditor extends javax.swing.JDialog implements Action
         Object[] dataArray = new Object[columnCount];
         
         for(int i=0; i<columnCount; i++){
-            dataArray[i] = sourceTable.getValueAt(selectedRow, i);
+            dataArray[i] = sourceTable.getValueAt(sourceTable.getSelectedRow(), i);
         }
         
         addEditTableRow(dataArray);
@@ -156,12 +155,12 @@ public class GenericTableRowEditor extends javax.swing.JDialog implements Action
                 continue;
             }
             
-            sourceTable.setValueAt(value, selectedRow, i);
+            sourceTable.setValueAt(value, sourceTable.getSelectedRow(), i);
             
-            getSourceTableModel().fireTableCellUpdated(selectedRow, i);
+            getSourceTableModel().fireTableCellUpdated(sourceTable.getSelectedRow(), i);
         }
         
-        getSourceTableModel().fireTableRowsUpdated(selectedRow, selectedRow);
+        getSourceTableModel().fireTableRowsUpdated(sourceTable.getSelectedRow(), sourceTable.getSelectedRow());
     }
     
     protected void hideEditor(){
@@ -178,7 +177,6 @@ public class GenericTableRowEditor extends javax.swing.JDialog implements Action
                 clearEditTable();
                 refillEditTable();
             
-                this.selectedRow = sourceTable.getSelectedRow();
                 this.setVisible(true);
                 
             } else {
@@ -295,49 +293,6 @@ public class GenericTableRowEditor extends javax.swing.JDialog implements Action
         clearEditTable();
     }//GEN-LAST:event_cancelButtonActionPerformed
 
-    
-    
-    /**
-     * @param args the command line arguments
-     */
-//    public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(GenericTableRowEditor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(GenericTableRowEditor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(GenericTableRowEditor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(GenericTableRowEditor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//
-//        /* Create and display the dialog */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                GenericTableRowEditor dialog = new GenericTableRowEditor(new javax.swing.JFrame(), true);
-//                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-//                    @Override
-//                    public void windowClosing(java.awt.event.WindowEvent e) {
-//                        System.exit(0);
-//                    }
-//                });
-//                dialog.setVisible(true);
-//            }
-//        });
-//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
@@ -360,7 +315,7 @@ public class GenericTableRowEditor extends javax.swing.JDialog implements Action
     }
 
     public int getSelectedRow() {
-        return selectedRow;
+        return sourceTable.getSelectedRow();
     }
 
     public int getColumnCount() {

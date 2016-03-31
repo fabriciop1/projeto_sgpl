@@ -22,6 +22,8 @@ public class Login extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         
+        getRootPane().setDefaultButton(btnEntrar);
+        
     }
 
     /**

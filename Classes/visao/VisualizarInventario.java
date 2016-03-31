@@ -7,6 +7,7 @@ package visao;
 
 import controle.ControlePerfil;
 import flex.GenericTableRowEditor;
+import flex.GenericTableRowInserter;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -29,9 +30,12 @@ import util.Calc;
 public class VisualizarInventario extends javax.swing.JFrame {
 
     private GenericTableRowEditor tabelaMaquinasGTRE;
+    private GenericTableRowEditor tabelaInveForrageirasGTRE;
     private GenericTableRowEditor tabelaBenfeitoriasGTRE;
     private GenericTableRowEditor tabelaTerrasGTRE;
-    private GenericTableRowEditor tabelaAnimaisGTRE;
+    private GenericTableRowEditor tabelaAnimaisProdGTRE;
+    private GenericTableRowEditor tabelaAnimaisServGTRE;
+    
     /**
      * Creates new form VisualizarInventario
      */
@@ -58,6 +62,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
    
         setLocationRelativeTo(null);
         this.setResizable(false);
+        
         
         ArrayList<InventarioTerras> terras = new ArrayList<>();
         ArrayList<InventarioAnimais> animais = new ArrayList<>();
@@ -101,11 +106,16 @@ public class VisualizarInventario extends javax.swing.JFrame {
         //InventarioResumoDAO irdao = new InventarioResumoDAO();
         
         Perfil perfilAtual = ControlePerfil.getInstance().getPerfilSelecionado();
-            
-        tabelaMaquinasGTRE = new GenericTableRowEditor(this, tabelaMaquinas, editarInvMaquinasBT, false);
-        tabelaBenfeitoriasGTRE = new GenericTableRowEditor(this, tabelaBenfeitorias, editarInvBenfeitoriasBT, false);
-        tabelaTerrasGTRE = new GenericTableRowEditor(this, tabelaInveTerras, editarInvTerrasBT, false);
-        tabelaAnimaisGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisProd, editarInvAnimaisBT, false);
+        
+        tabelaTerrasGTRE = new GenericTableRowInserter(this, tabelaInveTerras, adicionarInvTerrasBT, false, true);
+        
+        tabelaInveForrageirasGTRE = new GenericTableRowEditor(this, tabelaInveForrageiras, editarInvTerrasBT, true);
+        tabelaMaquinasGTRE = new GenericTableRowEditor(this, tabelaMaquinas, editarInvMaquinasBT, true);
+        tabelaBenfeitoriasGTRE = new GenericTableRowEditor(this, tabelaBenfeitorias, editarInvBenfeitoriasBT, true);
+        tabelaTerrasGTRE = new GenericTableRowEditor(this, tabelaInveTerras, editarInvTerrasBT, true);
+        
+        tabelaAnimaisProdGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisProd, editarInvAnimaisBT, true);
+        tabelaAnimaisServGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisServ, editarInvAnimaisBT, true);
         
         try{
             terras = itdao.recuperarPorPerfil(perfilAtual.getIdPerfil());
@@ -119,6 +129,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
      
         DefaultTableModel modelTerras = (DefaultTableModel) tabelaInveTerras.getModel();
         modelTerras.setNumRows(0);
+       // tabelaInveTerras.setSelectionMode(modelTerras);
           
         for(int i = 0; i < terras.size(); i++){
             
@@ -289,8 +300,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 totalDeprecBenfeit.add(depreciacao);
             }
 
-            total40.setText("" + Calc.somarLista(totalValorBenfeit));
-            total41.setText("" + Calc.somarLista(totalDeprecBenfeit));
+            total40.setText(String.format("%.2f", Calc.somarLista(totalValorBenfeit)));
+            total41.setText(String.format("%.2f", Calc.somarLista(totalDeprecBenfeit)));
 
             DefaultTableModel modelMaquinas = (DefaultTableModel) tabelaMaquinas.getModel();
             modelMaquinas.setNumRows(0);
@@ -321,7 +332,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             total44.setText(total12.getText());
             total45.setText("0.0");/*total39.getText());*/
             total46.setText("0.0");/*total36.getText());*/
-            total47.setText(total41.getText());
+            total47.setText(String.format("%.2f", (Double.parseDouble(total41.getText()))));
             total48.setText(total43.getText());
             total49.setText(String.format("R$ %.2f", (Double.parseDouble(total44.getText()) + 
                                   Double.parseDouble(total45.getText()) +
@@ -384,6 +395,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total11 = new javax.swing.JLabel();
         total12 = new javax.swing.JLabel();
         editarInvTerrasBT = new javax.swing.JButton();
+        adicionarInvTerrasBT = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tabelaInveAnimaisServ = new javax.swing.JTable();
@@ -535,6 +547,11 @@ public class VisualizarInventario extends javax.swing.JFrame {
             }
         });
         tabelaInveTerras.getTableHeader().setReorderingAllowed(false);
+        tabelaInveTerras.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                tabelaInveTerrasFocusGained(evt);
+            }
+        });
         jScrollPane2.setViewportView(tabelaInveTerras);
         if (tabelaInveTerras.getColumnModel().getColumnCount() > 0) {
             tabelaInveTerras.getColumnModel().getColumn(0).setResizable(false);
@@ -579,6 +596,11 @@ public class VisualizarInventario extends javax.swing.JFrame {
             }
         });
         tabelaInveForrageiras.getTableHeader().setReorderingAllowed(false);
+        tabelaInveForrageiras.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                tabelaInveForrageirasFocusGained(evt);
+            }
+        });
         jScrollPane1.setViewportView(tabelaInveForrageiras);
         if (tabelaInveForrageiras.getColumnModel().getColumnCount() > 0) {
             tabelaInveForrageiras.getColumnModel().getColumn(0).setResizable(false);
@@ -661,6 +683,13 @@ public class VisualizarInventario extends javax.swing.JFrame {
             }
         });
 
+        adicionarInvTerrasBT.setText("Adicionar Informações");
+        adicionarInvTerrasBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                adicionarInvTerrasBTActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -688,12 +717,12 @@ public class VisualizarInventario extends javax.swing.JFrame {
                             .addComponent(total6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(total3, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                                 .addComponent(total4, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(total8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addComponent(total9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(155, 155, 155))
-            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(167, 167, 167))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(151, 151, 151)
                 .addComponent(total10, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -703,8 +732,10 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 .addComponent(total12, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(adicionarInvTerrasBT)
+                .addGap(37, 37, 37)
                 .addComponent(editarInvTerrasBT)
-                .addContainerGap())
+                .addGap(17, 17, 17))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -739,9 +770,11 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     .addComponent(total10)
                     .addComponent(total11)
                     .addComponent(total12))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(editarInvTerrasBT, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(editarInvTerrasBT, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(adicionarInvTerrasBT, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Terras", jPanel1);
@@ -774,6 +807,11 @@ public class VisualizarInventario extends javax.swing.JFrame {
             }
         });
         tabelaInveAnimaisServ.getTableHeader().setReorderingAllowed(false);
+        tabelaInveAnimaisServ.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                tabelaInveAnimaisServFocusGained(evt);
+            }
+        });
         jScrollPane3.setViewportView(tabelaInveAnimaisServ);
         if (tabelaInveAnimaisServ.getColumnModel().getColumnCount() > 0) {
             tabelaInveAnimaisServ.getColumnModel().getColumn(0).setResizable(false);
@@ -868,6 +906,11 @@ public class VisualizarInventario extends javax.swing.JFrame {
             }
         });
         tabelaInveAnimaisProd.getTableHeader().setReorderingAllowed(false);
+        tabelaInveAnimaisProd.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                tabelaInveAnimaisProdFocusGained(evt);
+            }
+        });
         jScrollPane4.setViewportView(tabelaInveAnimaisProd);
         if (tabelaInveAnimaisProd.getColumnModel().getColumnCount() > 0) {
             tabelaInveAnimaisProd.getColumnModel().getColumn(0).setResizable(false);
@@ -1233,6 +1276,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tabelaBenfeitorias.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tabelaBenfeitorias.getTableHeader().setReorderingAllowed(false);
         jScrollPane5.setViewportView(tabelaBenfeitorias);
         if (tabelaBenfeitorias.getColumnModel().getColumnCount() > 0) {
@@ -1393,6 +1437,11 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total43.setText("<total43>");
 
         editarInvMaquinasBT.setText("Editar Informações");
+        editarInvMaquinasBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editarInvMaquinasBTActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -1888,13 +1937,37 @@ public class VisualizarInventario extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_editarInvAnimaisBTActionPerformed
 
+    private void btnInserirValorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInserirValorActionPerformed
+        total32.setText(JOptionPane.showInputDialog("Valor Gasto com Compra de Animais: "));
+    }//GEN-LAST:event_btnInserirValorActionPerformed
+
     private void editarInvTerrasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarInvTerrasBTActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_editarInvTerrasBTActionPerformed
 
-    private void btnInserirValorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInserirValorActionPerformed
-        total32.setText(JOptionPane.showInputDialog("Valor Gasto com Compra de Animais: "));
-    }//GEN-LAST:event_btnInserirValorActionPerformed
+    private void adicionarInvTerrasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarInvTerrasBTActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_adicionarInvTerrasBTActionPerformed
+
+    private void editarInvMaquinasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarInvMaquinasBTActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_editarInvMaquinasBTActionPerformed
+
+    private void tabelaInveTerrasFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tabelaInveTerrasFocusGained
+        tabelaInveForrageiras.getSelectionModel().clearSelection();
+    }//GEN-LAST:event_tabelaInveTerrasFocusGained
+
+    private void tabelaInveForrageirasFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tabelaInveForrageirasFocusGained
+        tabelaInveTerras.getSelectionModel().clearSelection();
+    }//GEN-LAST:event_tabelaInveForrageirasFocusGained
+
+    private void tabelaInveAnimaisProdFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tabelaInveAnimaisProdFocusGained
+        tabelaInveAnimaisServ.getSelectionModel().clearSelection();
+    }//GEN-LAST:event_tabelaInveAnimaisProdFocusGained
+
+    private void tabelaInveAnimaisServFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tabelaInveAnimaisServFocusGained
+        tabelaInveAnimaisProd.getSelectionModel().clearSelection();
+    }//GEN-LAST:event_tabelaInveAnimaisServFocusGained
 
     /**
      * @param args the command line arguments
@@ -1935,6 +2008,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton adicionarInvTerrasBT;
     private javax.swing.JTextField atividadeLeite;
     private javax.swing.JButton btnInserirValor;
     private javax.swing.JButton btnVoltar;

@@ -26,8 +26,8 @@ public class InventarioAnimaisDAO {
             
             String sql = "INSERT INTO inventario_animais "  
                     + "(categoria, inicio, nascimento, morte, venda, compra, final, valorCabeca, "
-                    + "vidaUtilReprodutores, vidaUtilAnimaisServico, tipoAnimal, idPerfilFK) "
-                    + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+                    + "vidaUtilReprodutores, vidaUtilAnimaisServico, tipoAnimal, valorGastoCompraAnimais, idPerfilFK) "
+                    + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
             
             PreparedStatement st = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             st.setString(1, inventario.getCategoria());
@@ -41,7 +41,8 @@ public class InventarioAnimaisDAO {
             st.setInt(9, inventario.getVidaUtilReprodutores());
             st.setInt(10, inventario.getVidaUtilAnimaisServico());
             st.setInt(11, inventario.getTipoAnimal());
-            st.setInt(12, inventario.getPerfil().getIdPerfil());
+            st.setDouble(12, inventario.getValorGastoCompraAnimais());
+            st.setInt(13, inventario.getPerfil().getIdPerfil());
             
             st.executeUpdate();
             
@@ -80,7 +81,7 @@ public class InventarioAnimaisDAO {
             connection = DBConexao.openConnection();
             
             String sql = "UPDATE inventario_animais SET categoria=?, inicio=?, nascimento=?, morte=?, venda=?, compra=?, final=?, valorCabeca=?,"
-                    + " vidaUtilReprodutores=?, vidaUtilAnimaisServico=?, tipoAnimal=?"
+                    + " vidaUtilReprodutores=?, vidaUtilAnimaisServico=?, tipoAnimal=?, valorGastoCompraAnimais=?"
                     + " WHERE idInventarioTerras=?";
             
             PreparedStatement st = connection.prepareStatement(sql);
@@ -96,7 +97,8 @@ public class InventarioAnimaisDAO {
             st.setInt(9, inventario.getVidaUtilReprodutores());
             st.setInt(10, inventario.getVidaUtilAnimaisServico());
             st.setInt(11, inventario.getTipoAnimal());
-            st.setInt(12, inventario.getId());
+            st.setDouble(12, inventario.getValorGastoCompraAnimais());
+            st.setInt(13, inventario.getId());
             
             st.executeUpdate();
             st.close();
@@ -136,6 +138,7 @@ public class InventarioAnimaisDAO {
             inventario.setVidaUtilReprodutores(res.getInt("vidaUtilReprodutores"));
             inventario.setVidaUtilAnimaisServico(res.getInt("vidaUtilAnimaisServico"));
             inventario.setPerfil((new PerfilDAO()).recuperar(res.getInt("idPerfilFK")));
+            inventario.setValorGastoCompraAnimais(res.getDouble("valorGastoCompraAnimais"));
             inventario.setTipoAnimal(res.getInt("tipoAnimal"));
         }
         
@@ -176,6 +179,7 @@ public class InventarioAnimaisDAO {
             inventario.setVidaUtilReprodutores(res.getInt("vidaUtilReprodutores"));
             inventario.setVidaUtilAnimaisServico(res.getInt("vidaUtilAnimaisServico"));
             inventario.setPerfil((new PerfilDAO()).recuperar(res.getInt("idPerfilFK")));
+            inventario.setValorGastoCompraAnimais(res.getDouble("valorGastoCompraAnimais"));
             inventario.setTipoAnimal(res.getInt("tipoAnimal"));
             
             inventarios.add(inventario);
@@ -215,6 +219,7 @@ public class InventarioAnimaisDAO {
             inventario.setVidaUtilReprodutores(res.getInt("vidaUtilReprodutores"));
             inventario.setVidaUtilAnimaisServico(res.getInt("vidaUtilAnimaisServico"));
             inventario.setPerfil((new PerfilDAO()).recuperar(res.getInt("idPerfilFK")));
+            inventario.setValorGastoCompraAnimais(res.getDouble("valorGastoCompraAnimais"));
             inventario.setTipoAnimal(res.getInt("tipoAnimal"));
             
             inventarios.add(inventario);

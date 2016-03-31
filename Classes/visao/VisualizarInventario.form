@@ -98,7 +98,7 @@
                                   <Component id="total6" max="32767" attributes="0"/>
                                   <Group type="102" attributes="0">
                                       <Component id="total3" min="-2" pref="142" max="-2" attributes="0"/>
-                                      <EmptySpace pref="24" max="32767" attributes="0"/>
+                                      <EmptySpace pref="31" max="32767" attributes="0"/>
                                       <Component id="total4" min="-2" pref="141" max="-2" attributes="0"/>
                                   </Group>
                                   <Component id="total8" max="32767" attributes="0"/>
@@ -106,9 +106,9 @@
                           </Group>
                           <Component id="total9" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="155" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="167" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" alignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
                       <Component id="jLabel14" min="-2" pref="240" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="151" max="-2" attributes="0"/>
                       <Component id="total10" min="-2" pref="151" max="-2" attributes="0"/>
@@ -119,8 +119,10 @@
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <Component id="adicionarInvTerrasBT" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
                       <Component id="editarInvTerrasBT" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -128,7 +130,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jScrollPane2" min="-2" pref="183" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="total1" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -162,9 +164,12 @@
                           <Component id="total11" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="total12" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="editarInvTerrasBT" min="-2" pref="45" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="editarInvTerrasBT" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
+                          <Component id="adicionarInvTerrasBT" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="17" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -227,6 +232,9 @@
                       <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="tabelaInveTerrasFocusGained"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>
@@ -287,6 +295,9 @@
                       <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="tabelaInveForrageirasFocusGained"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>
@@ -445,6 +456,14 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editarInvTerrasBTActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="adicionarInvTerrasBT">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Adicionar Informa&#xe7;&#xf5;es"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="adicionarInvTerrasBTActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>
@@ -734,6 +753,9 @@
                       <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="tabelaInveAnimaisServFocusGained"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>
@@ -899,6 +921,9 @@
                       <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="tabelaInveAnimaisProdFocusGained"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>
@@ -1272,6 +1297,9 @@
                         </Column>
                       </TableColumnModel>
                     </Property>
+                    <Property name="selectionModel" type="javax.swing.ListSelectionModel" editor="org.netbeans.modules.form.editors2.JTableSelectionModelEditor">
+                      <JTableSelectionModel selectionMode="0"/>
+                    </Property>
                     <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
                       <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
                     </Property>
@@ -1515,6 +1543,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Editar Informa&#xe7;&#xf5;es"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editarInvMaquinasBTActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

@@ -29,7 +29,7 @@ public class DadosEconMensaisDAO {
                 + "VALUES (?,?,?,?,?,?,?)";
         
         PreparedStatement st = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        st.setString(1, dados.getMes());
+        st.setInt(1, dados.getMes());
         st.setInt(2, dados.getAno());
         st.setString(3, dados.getCampo());
         st.setInt(4, dados.getQuantidade());
@@ -72,7 +72,7 @@ public class DadosEconMensaisDAO {
                 + "WHERE idDEM=?";
         
         PreparedStatement st = connection.prepareStatement(sql);
-        st.setString(1, dados.getMes());
+        st.setInt(1, dados.getMes());
         st.setInt(2, dados.getAno());
         st.setString(3, dados.getCampo());
         st.setInt(4, dados.getQuantidade());
@@ -101,7 +101,7 @@ public class DadosEconMensaisDAO {
             dados = new DadosEconMensais();
             
             dados.setAno(res.getInt("ano"));
-            dados.setMes(res.getString("mes"));
+            dados.setMes(res.getInt("mes"));
             dados.setCampo(res.getString("campo"));
             dados.setId(res.getInt("idDEM"));
             dados.setQuantidade(res.getInt("quantidade"));
@@ -132,7 +132,7 @@ public class DadosEconMensaisDAO {
             dado.setAno(res.getInt("ano"));
             dado.setCampo(res.getString("campo"));
             dado.setId(res.getInt("idDEM"));
-            dado.setMes(res.getString("mes"));
+            dado.setMes(res.getInt("mes"));
             dado.setPerfil((new PerfilDAO()).recuperar(res.getInt("idPerfilFK")));
             dado.setQuantidade(res.getInt("quantidade"));
             dado.setTipoCampo(res.getInt("tipoCampo"));
@@ -166,7 +166,7 @@ public class DadosEconMensaisDAO {
             dado.setAno(res.getInt("ano"));
             dado.setCampo(res.getString("campo"));
             dado.setId(res.getInt("idDEM"));
-            dado.setMes(res.getString("mes"));
+            dado.setMes(res.getInt("mes"));
             dado.setPerfil((new PerfilDAO()).recuperar(res.getInt("idPerfilFK")));
             dado.setQuantidade(res.getInt("quantidade"));
             dado.setTipoCampo(res.getInt("tipoCampo"));

@@ -32,6 +32,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
     public VisualizarPerfil() {
         
         initComponents();
+        listaPerfis.getSelectionModel().clearSelection();
         setLocationRelativeTo(null);
         this.setResizable(false);
         
