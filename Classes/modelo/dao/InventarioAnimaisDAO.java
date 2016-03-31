@@ -22,7 +22,6 @@ public class InventarioAnimaisDAO {
      private Connection connection;
     
     public void cadastrar(InventarioAnimais inventario) throws SQLException{
-        try {
             this.connection = DBConexao.openConnection();
             
             String sql = "INSERT INTO inventario_animais "  
@@ -58,9 +57,7 @@ public class InventarioAnimaisDAO {
             
             DBConexao.closeConnection(this.connection);
             
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        
     }
     
     public void remover(int id) throws SQLException{
@@ -78,9 +75,8 @@ public class InventarioAnimaisDAO {
         DBConexao.closeConnection(this.connection);        
     }
     
-    public void atualizar(InventarioAnimais inventario){
-        
-        try{
+    public void atualizar(InventarioAnimais inventario) throws SQLException {
+     
             connection = DBConexao.openConnection();
             
             String sql = "UPDATE inventario_animais SET categoria=?, inicio=?, nascimento=?, morte=?, venda=?, compra=?, final=?, valorCabeca=?,"
@@ -106,10 +102,8 @@ public class InventarioAnimaisDAO {
             st.close();
             
             DBConexao.closeConnection(connection);
-        }
-        catch(Exception e){
-            System.out.println(e.getMessage());
-        }
+        
+        
 
     }
     

@@ -17,13 +17,13 @@ public class DadosEconMensais {
     private String campo; // Nome do campo do tabela
     private int quantidade;
     private double valorUnitario;
-    private String tipoCampo; // A qual tabela o campo pertence? 1 - Entradas /2 - Saidas /3 - Despesas com Volumoso /4 - Concentrado /5 - Mineralização /6 - Medicamentos /7 - Ordenha /8 - Inseminação Artificial /9 - Despesas de Investimentos /10 - Despesas de Empréstimos /11 - COE da atividade leiteira
+    private int tipoCampo; // A qual tabela o campo pertence? 1 - Entradas /2 - Saidas /3 - Despesas com Volumoso /4 - Concentrado /5 - Mineralização /6 - Medicamentos /7 - Ordenha /8 - Inseminação Artificial /9 - Despesas de Investimentos /10 - Despesas de Empréstimos /11 - COE da atividade leiteira
     private Perfil perfil;
     
     public DadosEconMensais() {
     }
 
-    public DadosEconMensais(String mes, int ano, String campo, int quantidade, double valorUnitario, String tipoCampo, Perfil perfil) {
+    public DadosEconMensais(String mes, int ano, String campo, int quantidade, double valorUnitario, int tipoCampo, Perfil perfil) {
         this.mes = mes;
         this.ano = ano;
         this.campo = campo;
@@ -81,11 +81,11 @@ public class DadosEconMensais {
         this.valorUnitario = valorUnitario;
     }
 
-    public String getTipoCampo() {
+    public int getTipoCampo() {
         return tipoCampo;
     }
 
-    public void setTipoCampo(String tipoCampo) {
+    public void setTipoCampo(int tipoCampo) {
         this.tipoCampo = tipoCampo;
     }
 
