@@ -169,9 +169,9 @@ public class VisualizarInventario extends javax.swing.JFrame {
             total4.setText("" + Calc.somarLista(totalAreaPropFina));
             total5.setText("" + (Double.parseDouble(total1.getText()) + Double.parseDouble(total2.getText())));
             total6.setText("" + (Double.parseDouble(total3.getText()) + Double.parseDouble(total4.getText())));
-            total7.setText("R$ " + Calc.somaPonderada(totalAreaPropInic, totalTerraNua));
-            total8.setText("R$ " + Calc.somaPonderada(totalAreaPropFina, totalTerraNua));
-            total9.setText("R$ " + Calc.mediaAritmetica(Double.parseDouble(total7.getText().substring(2)), Double.parseDouble(total8.getText().substring(2))));
+            total7.setText(String.format("R$ %.2f", Calc.somaPonderada(totalAreaPropInic, totalTerraNua)));
+            total8.setText(String.format("R$ %.2f", Calc.somaPonderada(totalAreaPropFina, totalTerraNua)));
+            total9.setText(String.format("R$ %.2f", Calc.mediaAritmetica(Double.parseDouble(total7.getText().substring(2)), Double.parseDouble(total8.getText().substring(2)))));
             total10.setText("" + Calc.somarLista(totalHa));
             total11.setText("" + Calc.somarLista(totalValorHa));
             total12.setText("" + Calc.somarLista(totalDepreciacao));
@@ -244,11 +244,11 @@ public class VisualizarInventario extends javax.swing.JFrame {
             total17.setText("" + Calc.somarLista(totalCompraProd));
             total18.setText("" + Calc.somarLista(totalValFinaProd));
             
-            total27.setText("= " + (Double.parseDouble(total13.getText()) +
-                                    Double.parseDouble(total14.getText()) -
-                                    Double.parseDouble(total15.getText()) -
-                                    Double.parseDouble(total16.getText()) + 
-                                    Double.parseDouble(total17.getText()))); 
+            total27.setText(String.format("= %.2f",(Double.parseDouble(total13.getText()) +
+                                                    Double.parseDouble(total14.getText()) -
+                                                    Double.parseDouble(total15.getText()) -
+                                                    Double.parseDouble(total16.getText()) + 
+                                                    Double.parseDouble(total17.getText())))); 
             
             total19.setText("" + Calc.somarLista(totalValorInicio));
             total20.setText("" + Calc.somarLista(totalValorFinal));
@@ -262,7 +262,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             total28.setText("" + (Double.parseDouble(total13.getText()) + Double.parseDouble(total21.getText())));
             total29.setText("" + (Double.parseDouble(total26.getText()) + Double.parseDouble(total27.getText().substring(1))));
 
-            total31.setText("R$" + ((Double.parseDouble(total19.getText()) + Double.parseDouble(total20.getText()))/2));
+            total31.setText(String.format("R$ %.2f", ((Double.parseDouble(total19.getText()) + Double.parseDouble(total20.getText()))/2)));
             
             //total36.setText("" + Calc.dividir(Double.parseDouble(total34.getText()), Double.parseDouble(total35.getText())));
             //total39.setText("" + Calc.dividir(Double.parseDouble(total37.getText()), Double.parseDouble(total38.getText())));
@@ -323,30 +323,30 @@ public class VisualizarInventario extends javax.swing.JFrame {
             total46.setText("0.0");/*total36.getText());*/
             total47.setText(total41.getText());
             total48.setText(total43.getText());
-            total49.setText("R$ " + (Double.parseDouble(total44.getText()) + 
+            total49.setText(String.format("R$ %.2f", (Double.parseDouble(total44.getText()) + 
                                   Double.parseDouble(total45.getText()) +
                                   Double.parseDouble(total46.getText()) +
                                   Double.parseDouble(total47.getText()) +
-                                  Double.parseDouble(total48.getText())));
-            total50.setText("R$ " + (Double.parseDouble(atividadeLeite.getText()) * Double.parseDouble(total49.getText().substring(2))));
+                                  Double.parseDouble(total48.getText()))));
+            total50.setText(String.format("R$ %.2f", (Double.parseDouble(atividadeLeite.getText()) * Double.parseDouble(total49.getText().substring(2)))));
 
             total51.setText(total9.getText().substring(2));
             total52.setText(total12.getText());
             total53.setText(total31.getText().substring(2));
             total54.setText(total40.getText());
             total55.setText(total42.getText());
-            total56.setText("R$ " + (Double.parseDouble(total51.getText().substring(2)) + 
+            total56.setText(String.format("R$ %.2f", (Double.parseDouble(total51.getText().substring(2)) + 
                                   Double.parseDouble(total52.getText()) +
                                   Double.parseDouble(total53.getText().substring(2)) +
                                   Double.parseDouble(total54.getText()) +
-                                  Double.parseDouble(total55.getText())));
-            total57.setText("R$ " + (Double.parseDouble(atividadeLeite.getText()) * Double.parseDouble(total49.getText().substring(2))));
+                                  Double.parseDouble(total55.getText()))));
+            total57.setText(String.format("R$ %.2f", (Double.parseDouble(atividadeLeite.getText()) * Double.parseDouble(total49.getText().substring(2)))));
 
-            total58.setText("" + salarioMinimo.getText());
-            total59.setText("" + (Double.parseDouble(salarioMinimo.getText()) * 0.3));
-            total60.setText("R$ " + ((Double.parseDouble(total58.getText()) * 12+ 
+            total58.setText(salarioMinimo.getText());
+            total59.setText(String.format("%.2f", (Double.parseDouble(salarioMinimo.getText()) * 0.3)));
+            total60.setText(String.format("R$ %.2f", ((Double.parseDouble(total58.getText()) * 12+ 
                                   Double.parseDouble(total59.getText()) +
-                                  Double.parseDouble(total46.getText()))) / 12);
+                                  Double.parseDouble(total46.getText()))) / 12));
         
     }
 

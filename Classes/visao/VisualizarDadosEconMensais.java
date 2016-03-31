@@ -6,6 +6,10 @@
 package visao;
 
 import controle.ControlePerfil;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+import modelo.dao.DadosEconMensaisDAO;
+import modelo.negocio.DadosEconMensais;
 import modelo.negocio.Perfil;
 
 /**
@@ -24,6 +28,33 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         this.setResizable(false);
         
         Perfil atual = ControlePerfil.getInstance().getPerfilSelecionado();
+        
+        DadosEconMensaisDAO demdao = new DadosEconMensaisDAO();
+        ArrayList<DadosEconMensais> dems = new ArrayList<>(); 
+        
+        tabelaEspecificacao.setShowHorizontalLines(true);
+        tabelaEspecificacao.setShowVerticalLines(true);
+    
+        tabelaDadosEconomicos.setShowHorizontalLines(true);
+        tabelaDadosEconomicos.setShowVerticalLines(true);
+        
+        try{
+            dems = demdao.recuperarPorPerfil(atual.getIdPerfil());
+        } catch(Exception e){
+            System.out.println("Erro em Construtor Visualizar Dados Economicos Mensais");
+        }
+        
+        DefaultTableModel modelEspecificacao = (DefaultTableModel) tabelaEspecificacao.getModel();
+        modelEspecificacao.setNumRows(0);
+        
+        for(int i = 0; i < dems.size(); i++){
+            modelEspecificacao.addRow(new Object[]{
+                dems.get(i).getCampo(),
+            });
+        }
+        
+        DefaultTableModel modelDadosEconomicos = (DefaultTableModel) tabelaDadosEconomicos.getModel();
+        modelDadosEconomicos.setNumRows(0);
     }
 
     /**
@@ -39,7 +70,11 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         textoEntrada = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabelaEspecificacao = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tabelaDadosEconomicos = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1000, 606));
@@ -55,28 +90,107 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         textoEntrada.setForeground(new java.awt.Color(51, 153, 255));
         textoEntrada.setText("DADOS ECONÔMICOS MENSAIS");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabelaEspecificacao.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null},
+                {null},
+                {null},
+                {null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Especificação"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tabelaEspecificacao.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(tabelaEspecificacao);
+        if (tabelaEspecificacao.getColumnModel().getColumnCount() > 0) {
+            tabelaEspecificacao.getColumnModel().getColumn(0).setResizable(false);
+        }
+
+        tabelaDadosEconomicos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Quantidade", "Valor Unitário", "Total"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(tabelaDadosEconomicos);
+        if (tabelaDadosEconomicos.getColumnModel().getColumnCount() > 0) {
+            tabelaDadosEconomicos.getColumnModel().getColumn(0).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(1).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(2).setResizable(false);
+        }
+
+        jButton1.setText("Novo Período");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Buscar por Período");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 740, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 585, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 579, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 562, Short.MAX_VALUE)
+                        .addGap(24, 24, 24))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -113,6 +227,10 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         this.dispose();
 
     }//GEN-LAST:event_btnVoltarActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -151,9 +269,13 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnVoltar;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable tabelaDadosEconomicos;
+    private javax.swing.JTable tabelaEspecificacao;
     private javax.swing.JLabel textoEntrada;
     // End of variables declaration//GEN-END:variables
 }
