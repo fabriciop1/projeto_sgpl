@@ -8,6 +8,7 @@ package flex;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javafx.scene.control.SelectionMode;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -40,6 +41,8 @@ public class GenericTableRowEditor extends javax.swing.JDialog implements Action
         
         initComponents();
         
+        
+        
         editTable.setAutoCreateColumnsFromModel(false);
         editTable.setCellEditor(sourceTable.getCellEditor());
         editTable.setCellSelectionEnabled(true);
@@ -62,7 +65,7 @@ public class GenericTableRowEditor extends javax.swing.JDialog implements Action
         boolean[] columnEditableArray = new boolean[columnCount];
         Class[] columnTypeArray = new Class[columnCount];
         String[] columnNameArray = new String[columnCount];
-        Object[][] dataMatrix = new Object[columnCount][0];  
+        Object[][] dataMatrix = new Object[columnCount][1];  
         
         int minDialogSize = 80;        
         
@@ -75,7 +78,6 @@ public class GenericTableRowEditor extends javax.swing.JDialog implements Action
         editTable.setModel(new DefaultTableModel(dataMatrix, columnNameArray){
             
             Class[] types = columnTypeArray;
-            
             boolean[] isColumnEditable = columnEditableArray;
             
             @Override
@@ -106,8 +108,8 @@ public class GenericTableRowEditor extends javax.swing.JDialog implements Action
             
             editTable.getColumnModel().getColumn(i).setMinWidth(sourceColumnWidth);
             
-            System.out.println("" + (i+1) + ". Source: " + sourceTable.getColumnClass(i).getName());
-            System.out.println("" + (i+1) + ". Edit: " + editTable.getColumnClass(i).getName());
+            //System.out.println("" + (i+1) + ". Source: " + sourceTable.getColumnClass(i).getName());
+            //System.out.println("" + (i+1) + ". Edit: " + editTable.getColumnClass(i).getName());
 
         }
         
