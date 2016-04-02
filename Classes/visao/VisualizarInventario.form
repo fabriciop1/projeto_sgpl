@@ -1356,6 +1356,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Editar Informa&#xe7;&#xf5;es"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editarInvBenfeitoriasBTActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

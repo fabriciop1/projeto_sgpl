@@ -6,8 +6,7 @@
 package visao;
 
 import controle.ControlePerfil;
-import flex.GenericTableRowEditor;
-import flex.GenericTableRowInserter;
+import flex.*;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -29,12 +28,15 @@ import util.Calc;
  */
 public class VisualizarInventario extends javax.swing.JFrame {
 
-    private GenericTableRowEditor tabelaMaquinasGTRE;
-    private GenericTableRowEditor tabelaInveForrageirasGTRE;
-    private GenericTableRowEditor tabelaBenfeitoriasGTRE;
-    private GenericTableRowEditor tabelaTerrasGTRE;
-    private GenericTableRowEditor tabelaAnimaisProdGTRE;
-    private GenericTableRowEditor tabelaAnimaisServGTRE;
+    private GenericTableModifier tabelaMaquinasGTRE;
+    private GenericTableModifier tabelaBenfeitoriasGTRE;
+    private GenericTableModifier tabelaTerrasGTRE;
+    private GenericTableModifier tabelaForrageirasGTRE;
+    private GenericTableModifier tabelaAnimaisProdGTRE;
+    private GenericTableModifier tabelaAnimaisServGTRE;
+    
+    private GenericTableModifier tabelaTerrasGTRI;
+    private GenericTableModifier tabelaForrageirasGTRI;
     
     /**
      * Creates new form VisualizarInventario
@@ -107,15 +109,18 @@ public class VisualizarInventario extends javax.swing.JFrame {
         
         Perfil perfilAtual = ControlePerfil.getInstance().getPerfilSelecionado();
         
-        tabelaTerrasGTRE = new GenericTableRowInserter(this, tabelaInveTerras, adicionarInvTerrasBT, false, true);
         
-        tabelaInveForrageirasGTRE = new GenericTableRowEditor(this, tabelaInveForrageiras, editarInvTerrasBT, true);
-        tabelaMaquinasGTRE = new GenericTableRowEditor(this, tabelaMaquinas, editarInvMaquinasBT, true);
-        tabelaBenfeitoriasGTRE = new GenericTableRowEditor(this, tabelaBenfeitorias, editarInvBenfeitoriasBT, true);
-        tabelaTerrasGTRE = new GenericTableRowEditor(this, tabelaInveTerras, editarInvTerrasBT, true);
+        tabelaTerrasGTRI = new GenericTableRowInserter(this, tabelaInveTerras, false, true);
+        tabelaForrageirasGTRI = new GenericTableRowInserter(this, tabelaInveForrageiras, false, true);
         
-        tabelaAnimaisProdGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisProd, editarInvAnimaisBT, true);
-        tabelaAnimaisServGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisServ, editarInvAnimaisBT, true);
+        tabelaMaquinasGTRE = new GenericTableRowEditor(this, tabelaMaquinas, true);
+        tabelaBenfeitoriasGTRE = new GenericTableRowEditor(this, tabelaBenfeitorias, true);
+        
+        tabelaForrageirasGTRE = new GenericTableRowEditor(this, tabelaInveForrageiras, true);
+        tabelaTerrasGTRE = new GenericTableRowEditor(this, tabelaInveTerras, true);
+        
+        tabelaAnimaisProdGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisProd, true);
+        tabelaAnimaisServGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisServ, true);
         
         try{
             terras = itdao.recuperarPorPerfil(perfilAtual.getIdPerfil());
@@ -180,14 +185,13 @@ public class VisualizarInventario extends javax.swing.JFrame {
             total4.setText("" + Calc.somarLista(totalAreaPropFina));
             total5.setText("" + (Double.parseDouble(total1.getText()) + Double.parseDouble(total2.getText())));
             total6.setText("" + (Double.parseDouble(total3.getText()) + Double.parseDouble(total4.getText())));
-            total7.setText(String.format("R$ %.2f", Calc.somaPonderada(totalAreaPropInic, totalTerraNua)));
-            total8.setText(String.format("R$ %.2f", Calc.somaPonderada(totalAreaPropFina, totalTerraNua)));
-            total9.setText(String.format("R$ %.2f", Calc.mediaAritmetica(Double.parseDouble(total7.getText().substring(2)), Double.parseDouble(total8.getText().substring(2)))));
+            total7.setText(String.format("R$ %.2f", Calc.somaPonderada(totalAreaPropInic, totalTerraNua)).replace(',','.'));
+            total8.setText(String.format("R$ %.2f", Calc.somaPonderada(totalAreaPropFina, totalTerraNua)).replace(',','.'));
+            total9.setText(String.format("R$ %.2f", Calc.mediaAritmetica(Double.parseDouble(total7.getText().substring(2)), Double.parseDouble(total8.getText().substring(2)))).replace(',','.'));
             total10.setText("" + Calc.somarLista(totalHa));
             total11.setText("" + Calc.somarLista(totalValorHa));
             total12.setText("" + Calc.somarLista(totalDepreciacao));
-        
-        
+            
             DefaultTableModel modelAnimaisProd = (DefaultTableModel) tabelaInveAnimaisProd.getModel();
             modelAnimaisProd.setNumRows(0);
 
@@ -270,10 +274,10 @@ public class VisualizarInventario extends javax.swing.JFrame {
             total25.setText("" + Calc.somarLista(totalCompraServ));
             total26.setText("" + Calc.somarLista(totalValFinaServ));
 
-            total28.setText("" + (Double.parseDouble(total13.getText()) + Double.parseDouble(total21.getText())));
-            total29.setText("" + (Double.parseDouble(total26.getText()) + Double.parseDouble(total27.getText().substring(1))));
+            total28.setText("" + (Double.parseDouble(total13.getText().replace(',','.')) + Double.parseDouble(total21.getText().replace(',','.'))));
+            total29.setText("" + (Double.parseDouble(total26.getText().replace(',','.')) + Double.parseDouble(total27.getText().substring(1).replace(',','.'))));
 
-            total31.setText(String.format("R$ %.2f", ((Double.parseDouble(total19.getText()) + Double.parseDouble(total20.getText()))/2)));
+            total31.setText(String.format("R$ %.2f", ((Double.parseDouble(total19.getText().replace(',','.')) + Double.parseDouble(total20.getText().replace(',','.')))/2)));
             
             //total36.setText("" + Calc.dividir(Double.parseDouble(total34.getText()), Double.parseDouble(total35.getText())));
             //total39.setText("" + Calc.dividir(Double.parseDouble(total37.getText()), Double.parseDouble(total38.getText())));
@@ -347,17 +351,17 @@ public class VisualizarInventario extends javax.swing.JFrame {
             total54.setText(total40.getText());
             total55.setText(total42.getText());
             total56.setText(String.format("R$ %.2f", (Double.parseDouble(total51.getText().substring(2)) + 
-                                  Double.parseDouble(total52.getText()) +
-                                  Double.parseDouble(total53.getText().substring(2)) +
-                                  Double.parseDouble(total54.getText()) +
-                                  Double.parseDouble(total55.getText()))));
-            total57.setText(String.format("R$ %.2f", (Double.parseDouble(atividadeLeite.getText()) * Double.parseDouble(total49.getText().substring(2)))));
+                                  Double.parseDouble(total52.getText().replace(',','.')) +
+                                  Double.parseDouble(total53.getText().substring(2).replace(',','.')) +
+                                  Double.parseDouble(total54.getText().replace(',','.')) +
+                                  Double.parseDouble(total55.getText().replace(',','.')))));
+            total57.setText(String.format("R$ %.2f", (Double.parseDouble(atividadeLeite.getText().replace(',','.')) * Double.parseDouble(total49.getText().substring(2).replace(',','.')))));
 
             total58.setText(salarioMinimo.getText());
-            total59.setText(String.format("%.2f", (Double.parseDouble(salarioMinimo.getText()) * 0.3)));
-            total60.setText(String.format("R$ %.2f", ((Double.parseDouble(total58.getText()) * 12+ 
-                                  Double.parseDouble(total59.getText()) +
-                                  Double.parseDouble(total46.getText()))) / 12));
+            total59.setText(String.format("%.2f", (Double.parseDouble(salarioMinimo.getText().replace(',','.')) * 0.3)));
+            total60.setText(String.format("R$ %.2f", ((Double.parseDouble(total58.getText().replace(',','.')) * 12+ 
+                                  Double.parseDouble(total59.getText().replace(',','.')) +
+                                  Double.parseDouble(total46.getText().replace(',','.')))) / 12));
         
     }
 
@@ -1127,7 +1131,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
+                            .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 225, Short.MAX_VALUE)
                             .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1311,6 +1315,11 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total41.setText("<total41>");
 
         editarInvBenfeitoriasBT.setText("Editar Informações");
+        editarInvBenfeitoriasBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editarInvBenfeitoriasBTActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -1934,7 +1943,13 @@ public class VisualizarInventario extends javax.swing.JFrame {
     }//GEN-LAST:event_atividadeLeiteActionPerformed
 
     private void editarInvAnimaisBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarInvAnimaisBTActionPerformed
-        // TODO add your handling code here:
+        
+        if(tabelaInveAnimaisProd.getSelectedRowCount() > 0){
+            tabelaAnimaisProdGTRE.showEditor(evt);
+        }
+        else if(tabelaInveAnimaisServ.getSelectedRowCount() > 0){
+            tabelaAnimaisServGTRE.showEditor(evt);
+        }
     }//GEN-LAST:event_editarInvAnimaisBTActionPerformed
 
     private void btnInserirValorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInserirValorActionPerformed
@@ -1942,15 +1957,28 @@ public class VisualizarInventario extends javax.swing.JFrame {
     }//GEN-LAST:event_btnInserirValorActionPerformed
 
     private void editarInvTerrasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarInvTerrasBTActionPerformed
-        // TODO add your handling code here:
+       
+        if(tabelaInveTerras.getSelectedRowCount() > 0){
+            tabelaTerrasGTRE.showEditor(evt);
+        }
+        else if(tabelaInveForrageiras.getSelectedRowCount() > 0){
+            tabelaForrageirasGTRE.showEditor(evt);
+        }
     }//GEN-LAST:event_editarInvTerrasBTActionPerformed
 
     private void adicionarInvTerrasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarInvTerrasBTActionPerformed
-        // TODO add your handling code here:
+        
+        if(tabelaInveTerras.getSelectedRowCount() > 0){
+            tabelaTerrasGTRI.showEditor(evt);
+        }
+        else if(tabelaInveForrageiras.getSelectedRowCount() > 0){
+            tabelaForrageirasGTRI.showEditor(evt);
+        }
     }//GEN-LAST:event_adicionarInvTerrasBTActionPerformed
 
     private void editarInvMaquinasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarInvMaquinasBTActionPerformed
-        // TODO add your handling code here:
+        
+        tabelaMaquinasGTRE.showEditor(evt);
     }//GEN-LAST:event_editarInvMaquinasBTActionPerformed
 
     private void tabelaInveTerrasFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tabelaInveTerrasFocusGained
@@ -1968,6 +1996,11 @@ public class VisualizarInventario extends javax.swing.JFrame {
     private void tabelaInveAnimaisServFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tabelaInveAnimaisServFocusGained
         tabelaInveAnimaisProd.getSelectionModel().clearSelection();
     }//GEN-LAST:event_tabelaInveAnimaisServFocusGained
+
+    private void editarInvBenfeitoriasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarInvBenfeitoriasBTActionPerformed
+        
+        tabelaBenfeitoriasGTRE.showEditor(evt);
+    }//GEN-LAST:event_editarInvBenfeitoriasBTActionPerformed
 
     /**
      * @param args the command line arguments

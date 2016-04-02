@@ -27,7 +27,7 @@ public class PerfilDAO {
         
         String sql = "INSERT INTO perfil " + 
                 "(nome, cidade, tamPropriedade, areaPecLeite, prodLeiteDiario, empPermanentes, numFamiliares) " +
-                "VALUES (?,?,?,?,?,?,?,?)";
+                "VALUES (?,?,?,?,?,?,?)";
         
         try (PreparedStatement statement = this.connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)) {
             

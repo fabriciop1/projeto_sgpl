@@ -7,25 +7,24 @@ package flex;
 
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.JButton;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Jefferson Sales
  */
-public class GenericTableRowInserter extends GenericTableRowEditor{
+public class GenericTableRowInserter extends GenericTableModifier{
     
     private boolean allowEmptyRows;
     private boolean allowEmptyCells;
     
-    public GenericTableRowInserter(Frame parent, JTable sourceTable, JButton actionButton, boolean allowEmptyRows, boolean allowEmptyCells) {
-        super(parent, sourceTable, actionButton, true);
+    public GenericTableRowInserter(Frame parent, JTable sourceTable, boolean allowEmptyRows, boolean allowEmptyCells) {
+        super(parent, sourceTable, true);
         
         this.allowEmptyCells = allowEmptyCells;
         this.allowEmptyRows = allowEmptyRows;
+        
+        this.setLabelText("Adicionar");
     }
     
     @Override
@@ -38,9 +37,9 @@ public class GenericTableRowInserter extends GenericTableRowEditor{
     protected void updateSourceTable(){
             
         int numEmptyCells = 0;
-        Object[] dataArray = new Object[getColumnCount()];
+        Object[] dataArray = new Object[sourceTable.getColumnCount()];
         
-        for(int i=0; i<getColumnCount(); i++){
+        for(int i=0; i<sourceTable.getColumnCount(); i++){
 
             if(getEditTable().getValueAt(0, i) == null){
 
@@ -52,7 +51,7 @@ public class GenericTableRowInserter extends GenericTableRowEditor{
             dataArray[i] = getEditTable().getValueAt(0, i);
         }
 
-        if(!allowEmptyRows && numEmptyCells == getColumnCount()){
+        if(!allowEmptyRows && numEmptyCells == sourceTable.getColumnCount()){
             return;
         }
         
@@ -60,16 +59,15 @@ public class GenericTableRowInserter extends GenericTableRowEditor{
     }
     
     @Override
-    public void actionPerformed(ActionEvent e){
+    public void showEditor(ActionEvent e){
         
-        if(e.getSource() == getActionButton()){
-            
-            clearEditTable();
-            refillEditTable();
-            
-            this.setVisible(true);
-        }
+        clearEditTable();
+        refillEditTable();
+
+        this.setVisible(true);
     }
+    
+    
     
     public boolean isAllowEmptyRows() {
         return allowEmptyRows;
