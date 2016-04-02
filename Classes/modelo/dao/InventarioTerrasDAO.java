@@ -27,7 +27,7 @@ public class InventarioTerrasDAO {
             
             String sql = "INSERT INTO inventario_terras "
                     + "(especificacao, areaArrendadaInicio, areaPropriaInicio, areaArrendadaFinal, areaPropriaFinal, "
-                    + "valorTerraNuaPropria, vidaUtil, custoFormacaoHectares, idPerfilFK) "
+                    + "valorTerraNuaPropria, vidaUtil, custoFormacaoHectare, idPerfilFK) "
                     + "VALUES (?,?,?,?,?,?,?,?,?)";
             
             PreparedStatement statement = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);

@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import modelo.negocio.Usuario;
 
@@ -32,16 +33,25 @@ public class UsuarioDAO {
                 "(login, senha) " +
                 "VALUES (?,?)";
         
-        try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             // ID cadastrado pelo próprio banco
             statement.setString(1, novoUsuario.getLogin());
             statement.setString(2, novoUsuario.getSenha());
        
-            statement.execute();
+            statement.executeUpdate();
+            
+            ResultSet key = statement.getGeneratedKeys();
+            
+            if(key.next()){
+                novoUsuario.setIdUsuario(key.getInt(1));
+            }
+            
+            key.close();
             statement.close();
             
         } catch(SQLException e){
             System.out.println("Falha ao adicionar novo usuario. " + e.getMessage());
+            e.printStackTrace();
             return false;
         } finally {
             DBConexao.closeConnection(this.connection);
