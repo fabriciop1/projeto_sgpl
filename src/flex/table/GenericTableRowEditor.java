@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package flex;
+package flex.table;
 
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -39,7 +39,11 @@ public class GenericTableRowEditor extends GenericTableModifier {
     }
 
     @Override
-    protected void updateSourceTable(){
+    protected void updateSourceTable(){        
+        
+        if(editTable.isEditing()){
+            editTable.getCellEditor().stopCellEditing();
+        }
         
         for(int i=0; i<columnCount; i++){
             
