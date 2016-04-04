@@ -6,6 +6,7 @@
 package flex.table;
 
 import java.awt.Frame;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.util.Random;
 import javax.swing.JButton;
@@ -44,16 +45,17 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
         editTable.setShowHorizontalLines(true);
         editTable.setShowVerticalLines(true);
         
+        int screenWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
+        int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
+        
         this.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
         this.setMinimumSize(this.getSize());
         this.setLabelText("");
         this.setVisible(false);
         
         composeEditTable();
-        //clearEditTable();
         
-        //actionButton.addActionListener(this);
-        //this.pack();
+        this.setLocation((screenWidth / 2) - (this.getWidth() / 2), (screenHeight / 2) - (this.getHeight() / 2));
     }
     
     protected void composeEditTable(){
