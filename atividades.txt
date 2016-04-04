@@ -1,7 +1,7 @@
 
 INVENTÁRIO
 Seleção única em todas as tabelas
-Btn Editar (funcionar pra ambas as tabelas)
+Btn Editar (funcionar pra ambas as tabelas)		  OK
 Resumo - Edição de 3 campos
 Btn Remover
 Edição, Adição e Remoção do banco de dados

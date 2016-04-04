@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package flex;
+package flex.table;
 
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -38,6 +38,10 @@ public class GenericTableRowInserter extends GenericTableModifier{
             
         int numEmptyCells = 0;
         Object[] dataArray = new Object[sourceTable.getColumnCount()];
+        
+        if(editTable.isEditing()){
+            editTable.getCellEditor().stopCellEditing();
+        } 
         
         for(int i=0; i<sourceTable.getColumnCount(); i++){
 

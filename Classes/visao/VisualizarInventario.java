@@ -5,8 +5,10 @@
  */
 package visao;
 
+import flex.table.GenericTableRowEditor;
+import flex.table.GenericTableModifier;
+import flex.table.GenericTableRowInserter;
 import controle.ControlePerfil;
-import flex.*;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
