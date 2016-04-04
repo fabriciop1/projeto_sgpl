@@ -6,10 +6,10 @@ Resumo - Edição de 3 campos
 Btn Remover
 Edição, Adição e Remoção do banco de dados
 Edição, Adição e Remoção (btns em todas as tabelas)
-Erro em editar (excecao array 0 >= 0)
+Erro em editar (excecao array 0 >= 0)           	  OK
 
 DADOS ECONOMICOS
 
-Buscar Por Periodo - DAO
+Buscar Por Periodo - DAO                        	  OK
 Meses em cima
-Retirar id da tela de perfil
+Retirar id da tela de perfil			 	  OK

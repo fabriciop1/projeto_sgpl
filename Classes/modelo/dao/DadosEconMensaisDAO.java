@@ -183,18 +183,40 @@ public class DadosEconMensaisDAO {
         return dados;
     }
             
-    public ArrayList<DadosEconMensais> recuperarPorPeriodo(int anoInicio, int anoFim, String mesInicio, String mesFim) throws SQLException {
-        String sql = "SELECT * FROM dados_economicos_mensais WHERE ano > ? AND mes > ? ";
+    public ArrayList<DadosEconMensais> recuperarPorPeriodo(int anoInicio, int mesInicio, int anoFim, int mesFim) throws SQLException {
+        String sql = "SELECT * FROM dados_economicos_mensais WHERE (ano >= ? AND ano <= ?) AND (mes >= ? AND mes <= ?)";
          ArrayList<DadosEconMensais> dados = new ArrayList<>();
         
         DadosEconMensais dado;
         
         this.connection = DBConexao.openConnection();
         PreparedStatement statement = this.connection.prepareStatement(sql);
+         statement.setInt(1, anoInicio);
+         statement.setInt(2, anoFim);
+         statement.setInt(3, mesInicio);
+         statement.setInt(4, mesFim);
         
         ResultSet res = statement.executeQuery();
         
-        return null;
+        while(res.next()) {
+            dado = new DadosEconMensais();
+           
+            dado.setAno(res.getInt("ano"));
+            dado.setCampo(res.getString("campo"));
+            dado.setId(res.getInt("idDEM"));
+            dado.setMes(res.getInt("mes"));
+            dado.setPerfil((new PerfilDAO()).recuperar(res.getInt("idPerfilFK")));
+            dado.setQuantidade(res.getInt("quantidade"));
+            dado.setTipoCampo(res.getInt("tipoCampo"));
+            dado.setValorUnitario(res.getDouble("valorUnitario"));
+            
+            dados.add(dado);
+        }
+        res.close();
+        statement.close();
+        
+        DBConexao.closeConnection(this.connection);
+        return dados;    
     }
     
 }
