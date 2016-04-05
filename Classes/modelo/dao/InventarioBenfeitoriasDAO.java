@@ -27,7 +27,6 @@ public class InventarioBenfeitoriasDAO {
     
     public void cadastrar(InventarioBenfeitorias inventario) throws SQLException{
         
-        try {
             connection = DBConexao.openConnection();
             
             String sql = "INSERT INTO inventario_benfeitorias"
@@ -51,18 +50,13 @@ public class InventarioBenfeitoriasDAO {
                 inventario.setId(keys.getInt(1));
             }
             
-            keys.close();
-            
+            keys.close();     
             statement.close();
-            
             DBConexao.closeConnection(connection);
             
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
     }
 
-    public void remover(int id) throws SQLException{
+    public void remover(int id) throws SQLException {
         
         this.connection = DBConexao.openConnection();
         
@@ -162,7 +156,6 @@ public class InventarioBenfeitoriasDAO {
         
         result.close();
         statement.close();
-        
         DBConexao.closeConnection(connection);
     
         return inventarios;
@@ -196,7 +189,6 @@ public class InventarioBenfeitoriasDAO {
         
         result.close();
         statement.close();
-        
         DBConexao.closeConnection(connection);
     
         return inventarios;

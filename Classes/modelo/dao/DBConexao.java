@@ -38,9 +38,7 @@ public class DBConexao {
             
             if(connection == null) {
                 System.out.println("Falha na conexão com banco de dados.");
-            } else {
-                System.out.println("Conexão com banco de dados realizada com sucesso.");
-            }
+            } 
             return connection;
             
         } catch(ClassNotFoundException e) {
@@ -54,7 +52,6 @@ public class DBConexao {
     public static void closeConnection(java.sql.Connection connection) {
         try {
             connection.close();
-            System.out.println("Conexão com banco de dados encerrada.");
         } catch (SQLException ex) {
             System.out.println("Falha ao encerrar conexão com banco de dados." + ex.getMessage());
         }

@@ -91,12 +91,7 @@ public final class Calc {
         else if(valores == null){
             throw new NullPointerException("Calc.somaPonderada(L<Double>,L<Double>): A lista de valores passada é igual a NULL");
         }
-        else if(pesos.isEmpty()){
-            throw new IllegalArgumentException("Calc.somaPonderada(L<Double>,L<Double>): A lista de pesos está vazia");
-        }
-        else if(valores.isEmpty()){
-            throw new IllegalArgumentException("Calc.somaPonderada(L<Double>,L<Double>): A lista de valores está vazia");
-        }
+       
         else if(pesos.size() != valores.size()){
             throw new IllegalArgumentException("Calc.somaPonderada(L<Double>,L<Double>): As listas de pesos e valores tem tamanhos diferentes");
         }

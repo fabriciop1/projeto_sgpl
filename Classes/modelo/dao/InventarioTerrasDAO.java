@@ -21,7 +21,7 @@ public class InventarioTerrasDAO {
     
     private Connection connection;
     
-    public void cadastrar(InventarioTerras inventario) throws SQLException{
+    public void cadastrar(InventarioTerras inventario) throws SQLException {
         try {
             this.connection = DBConexao.openConnection();
             
@@ -50,10 +50,8 @@ public class InventarioTerrasDAO {
                 inventario.setId(keys.getInt(1));
             }
             
-            keys.close();
-            
+            keys.close();      
             statement.close();
-            
             DBConexao.closeConnection(this.connection);
             
         } catch (SQLException e) {
@@ -61,8 +59,7 @@ public class InventarioTerrasDAO {
         }
    }
     
-    public void remover(int id) throws SQLException{
-        
+    public void remover(int id) throws SQLException {    
         this.connection = DBConexao.openConnection();
         
         String sql = "DELETE FROM inventario_terras WHERE idInventarioTerras = ?";
@@ -72,51 +69,42 @@ public class InventarioTerrasDAO {
                 
         statement.executeUpdate();
         statement.close();
-            
         DBConexao.closeConnection(this.connection);        
     }
    
-    public void atualizar(InventarioTerras inventario){
-        
-        try{
-            connection = DBConexao.openConnection();
+    public void atualizar(InventarioTerras inventario) throws SQLException {
+        this.connection = DBConexao.openConnection();
             
-            String sql = "UPDATE inventario_terras SET especificacao=?, areaArrendadaInicio=?, areaPropriaInicio=?, "
+        String sql = "UPDATE inventario_terras SET especificacao=?, areaArrendadaInicio=?, areaPropriaInicio=?, "
                     + "areaArrendadaFinal=?, areaPropriaFinal=?, valorTerraNuaPropria=?, vidaUtil=?, custoFormacaoHectare=?"
                     + " WHERE idInventarioTerras=?";
             
-            PreparedStatement st = connection.prepareStatement(sql);
+        PreparedStatement st = this.connection.prepareStatement(sql);
             
-            st.setString(1, inventario.getEspecificacao());
-            st.setDouble(2, inventario.getAreaArrendadaInicio());
-            st.setDouble(3, inventario.getAreaPropriaInicio());
-            st.setDouble(4, inventario.getAreaArrendadaFinal());
-            st.setDouble(5, inventario.getAreaPropriaFinal());
-            st.setDouble(6, inventario.getValorTerraNuaPropria());
-            st.setInt(7, inventario.getVidaUtil());
-            st.setDouble(8, inventario.getCustoFormacaoHectare());
-            st.setInt(9, inventario.getId()); 
+        st.setString(1, inventario.getEspecificacao());
+        st.setDouble(2, inventario.getAreaArrendadaInicio());
+        st.setDouble(3, inventario.getAreaPropriaInicio());
+        st.setDouble(4, inventario.getAreaArrendadaFinal());
+        st.setDouble(5, inventario.getAreaPropriaFinal());
+        st.setDouble(6, inventario.getValorTerraNuaPropria());
+        st.setInt(7, inventario.getVidaUtil());
+        st.setDouble(8, inventario.getCustoFormacaoHectare());
+        st.setInt(9, inventario.getId()); 
             
-            st.executeUpdate();
-            st.close();
-            
-            DBConexao.closeConnection(connection);
-        }
-        
-        catch(Exception e){
-            System.out.println(e.getMessage());
-        }
+        st.executeUpdate();
+        st.close();    
+        DBConexao.closeConnection(this.connection);
     }
     
-    public InventarioTerras recuperar(int id) throws SQLException{
+    public InventarioTerras recuperar(int id) throws SQLException {
         
         String sql = "SELECT * FROM inventario_terras WHERE idInventarioTerras=?";
         
         InventarioTerras inventario = null;
         
-        connection = DBConexao.openConnection();
+        this.connection = DBConexao.openConnection();
         
-        PreparedStatement statement = connection.prepareStatement(sql);
+        PreparedStatement statement = this.connection.prepareStatement(sql);
         statement.setInt(1, id);
         
         ResultSet result = statement.executeQuery();
@@ -138,7 +126,7 @@ public class InventarioTerrasDAO {
         
         result.close();
         statement.close();
-        DBConexao.closeConnection(connection);
+        DBConexao.closeConnection(this.connection);
         
         return inventario;
     }
@@ -149,8 +137,8 @@ public class InventarioTerrasDAO {
         
         ArrayList<InventarioTerras> inventarios = new ArrayList<>();
         
-        connection = DBConexao.openConnection();
-        PreparedStatement statement = connection.prepareStatement(sql);
+        this.connection = DBConexao.openConnection();
+        PreparedStatement statement = this.connection.prepareStatement(sql);
         
         statement.setInt(1, idPerfil);
         
@@ -175,23 +163,22 @@ public class InventarioTerrasDAO {
         
         result.close();
         statement.close();
-        
-        DBConexao.closeConnection(connection);
+        DBConexao.closeConnection(this.connection);
     
         return inventarios;
     }
     
-    public ArrayList<InventarioTerras> recuperarTodos() throws SQLException{
+    public ArrayList<InventarioTerras> recuperarTodos() throws SQLException {
         
         String sql = "SELECT * FROM inventario_terras";
         
         ArrayList<InventarioTerras> inventarios = new ArrayList<>();
         
-        connection = DBConexao.openConnection();
-        PreparedStatement statement = connection.prepareStatement(sql);
+        this.connection = DBConexao.openConnection();
+        PreparedStatement statement = this.connection.prepareStatement(sql);
         ResultSet result = statement.executeQuery();
         
-        while(result.next()){
+        while(result.next()) {
             
             InventarioTerras inventario = new InventarioTerras();
             
@@ -209,9 +196,8 @@ public class InventarioTerrasDAO {
         }
         
         result.close();
-        statement.close();
-        
-        DBConexao.closeConnection(connection);
+        statement.close();  
+        DBConexao.closeConnection(this.connection);
     
         return inventarios;
     }

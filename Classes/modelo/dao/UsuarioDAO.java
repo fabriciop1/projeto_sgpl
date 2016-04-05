@@ -25,176 +25,149 @@ public class UsuarioDAO {
   
     }
 
-    public boolean cadastrar(Usuario novoUsuario) {
-        
+    public void  cadastrar(Usuario novoUsuario) throws SQLException {      
         this.connection = DBConexao.openConnection();
         
-        String sql = "INSERT INTO usuario" + 
-                "(login, senha) " +
-                "VALUES (?,?)";
+        String sql = "INSERT INTO usuario (login, senha) VALUES (?,?)";
         
-        try (PreparedStatement statement = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            // ID cadastrado pelo próprio banco
-            statement.setString(1, novoUsuario.getLogin());
-            statement.setString(2, novoUsuario.getSenha());
+        PreparedStatement statement = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        // ID cadastrado pelo próprio banco
+        statement.setString(1, novoUsuario.getLogin());
+        statement.setString(2, novoUsuario.getSenha());
        
-            statement.executeUpdate();
+        statement.executeUpdate();
             
-            ResultSet key = statement.getGeneratedKeys();
+        ResultSet key = statement.getGeneratedKeys();
             
-            if(key.next()){
-                novoUsuario.setIdUsuario(key.getInt(1));
-            }
-            
-            key.close();
-            statement.close();
-            
-        } catch(SQLException e){
-            System.out.println("Falha ao adicionar novo usuario. " + e.getMessage());
-            e.printStackTrace();
-            return false;
-        } finally {
-            DBConexao.closeConnection(this.connection);
+        if(key.next()){
+            novoUsuario.setIdUsuario(key.getInt(1));
         }
-        return true;
+            
+        key.close();
+        statement.close();
+        DBConexao.closeConnection(this.connection);
+
     }
 
-    public Usuario buscarPorLogin(String login) {
-        
+    public Usuario recuperarPorLogin(String login) throws SQLException {
         this.connection = DBConexao.openConnection();
         
         Usuario usuario = null;
         String sql = "SELECT * FROM usuario WHERE login = ?";
         
-        try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
-            statement.setString(1, login);
+        PreparedStatement statement = this.connection.prepareStatement(sql);
+        statement.setString(1, login);
             
-            ResultSet rs = statement.executeQuery();
+        ResultSet rs = statement.executeQuery();
             
-            if(rs.next()) {
-                usuario = new Usuario();
+        if(rs.next()) {
+            usuario = new Usuario();
                 
-                usuario.setIdUsuario(rs.getInt("idUsuario"));
-                usuario.setLogin(rs.getString("login"));
-                usuario.setSenha(rs.getString("senha"));
-            }
-                
-            statement.close();
-            
-        } catch(SQLException e) {
-            System.out.println("Falha ao buscar usuário. " + e.getMessage());
-            return null;
-        } finally {
-            DBConexao.closeConnection(this.connection);
+            usuario.setIdUsuario(rs.getInt("idUsuario"));
+            usuario.setLogin(rs.getString("login"));
+            usuario.setSenha(rs.getString("senha"));
         }
+        
+        rs.close();        
+        statement.close();    
+        DBConexao.closeConnection(this.connection);
+            
         return usuario;
     }
 
-    public boolean atualizar(Usuario usuario) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public ArrayList<Usuario> buscarTodos() {
-        
+    public void atualizar(Usuario usuario) throws SQLException {
         this.connection = DBConexao.openConnection();
         
-        String sql = "SELECT * FROM usuario";
-        ArrayList<Usuario> usuarios = new ArrayList<>();
+        String sql = "UPDATE usuario SET login=?, senha=? WHERE idUsuario = ?";
         
-        try {
-            try (PreparedStatement statement = this.connection.prepareStatement(sql); 
-                 ResultSet result = statement.executeQuery()) {
+        PreparedStatement st = connection.prepareStatement(sql);
+        
+        st.setString(1, usuario.getLogin());
+        st.setString(2, usuario.getSenha());
+        st.setInt(3, usuario.getIdUsuario());
+        
+        st.executeUpdate();
+        
+        st.close();    
+        DBConexao.closeConnection(this.connection);
+    }
+
+    public ArrayList<Usuario> recuperarTodos() throws SQLException { 
+       this.connection = DBConexao.openConnection();
+        
+       String sql = "SELECT * FROM usuario";
+       ArrayList<Usuario> usuarios = new ArrayList<>();
+        
+       PreparedStatement statement = this.connection.prepareStatement(sql); 
+       ResultSet result = statement.executeQuery();
                
-                while(result.next()){
+        while(result.next()){
                     
-                    Usuario u = new Usuario();
+            Usuario u = new Usuario();
                     
-                    u.setIdUsuario(result.getInt("idUsuario"));
-                    u.setLogin(result.getString("login"));
-                    u.setSenha(result.getString("senha"));
+            u.setIdUsuario(result.getInt("idUsuario"));
+            u.setLogin(result.getString("login"));
+            u.setSenha(result.getString("senha"));
                     
-                    usuarios.add(u);
-                }
-                
-                statement.close();
-            }
-            
-        } catch (SQLException ex) {
-            System.out.println("Falha ao recuperar todos os usuários. " + ex.getMessage());
-            return null;
-        } finally {
-            DBConexao.closeConnection(this.connection);
+            usuarios.add(u);
         }
+        
+        result.close();
+        statement.close();
+        DBConexao.closeConnection(this.connection);
         
         return usuarios;
     }
     
-    public Usuario buscarPorId(int id) {                    
-        
+    public Usuario recuperar(int id) throws SQLException {         
         this.connection = DBConexao.openConnection();
         
         Usuario usuario = new Usuario();
         
         String sql = "SELECT * FROM usuario WHERE idUsuario = ?";
         
-        try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
-            statement.setInt(1, id);
+        PreparedStatement statement = this.connection.prepareStatement(sql);
+        statement.setInt(1, id);
             
-            ResultSet rs = statement.executeQuery();
+        ResultSet rs = statement.executeQuery();
             
-            usuario.setIdUsuario(id);
-            usuario.setLogin(rs.getString("login"));
-            usuario.setSenha(rs.getString("senha"));
+        usuario.setIdUsuario(id);
+        usuario.setLogin(rs.getString("login"));
+        usuario.setSenha(rs.getString("senha"));
             
-            statement.close();
-            rs.close();
-            
-        } catch (SQLException e) {
-            System.out.println("Falha ao buscar Usuário por ID. " + e.getMessage());
-            return null;
-        }
+        statement.close();
+        rs.close();
+        DBConexao.closeConnection(connection);
+        
         return usuario;
     }
     
-    public void remover(int id) {
+    public void remover(int id) throws SQLException {
         this.connection = DBConexao.openConnection();
         
         String sql = "DELETE FROM usuario WHERE idUsuario = ?";
         
-        try {
-            try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
-                statement.setInt(1, id);
+        PreparedStatement statement = this.connection.prepareStatement(sql);
+        statement.setInt(1, id);
                 
-                statement.executeUpdate();
-                statement.close();
-            }
-            
-        } catch (SQLException ex) {
-            System.out.println("Falha ao remover usuário por id. " + ex.getMessage());
-        } finally {
-            DBConexao.closeConnection(this.connection);
-        }
+        statement.executeUpdate();
+        statement.close();
+        
+        DBConexao.closeConnection(this.connection);
     }
     
-    public void removerPorLogin(String login)
-    {
+    public void removerPorLogin(String login) throws SQLException {
         this.connection = DBConexao.openConnection();
         
         String sql = "DELETE FROM usuario WHERE login = ?";
         
-        try {
-            try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
-                statement.setString(1, login);
+        PreparedStatement statement = this.connection.prepareStatement(sql);
+        statement.setString(1, login);
                 
-                statement.executeUpdate();
-                statement.close();
-            }
-            
-        } catch (SQLException ex) {
-            System.out.println("Falha ao remover Usuario por login. " + ex.getMessage());
-        } finally {
-            DBConexao.closeConnection(this.connection);
-        }
+        statement.executeUpdate();
+        statement.close();
+
+        DBConexao.closeConnection(this.connection); 
     }
     
 }

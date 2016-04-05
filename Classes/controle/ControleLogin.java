@@ -6,6 +6,9 @@
 package controle;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import modelo.dao.UsuarioDAO;
 import modelo.negocio.Usuario;
@@ -34,7 +37,11 @@ public class ControleLogin {
         Usuario atual = new Usuario();
         
         usuarioDAO = new UsuarioDAO();
-        atual = usuarioDAO.buscarPorLogin(login);
+        try {
+            atual = usuarioDAO.recuperarPorLogin(login);
+        } catch (SQLException ex) {
+            System.out.println("Erro em recuperar usuário por login: " + ex.getMessage());
+        }
         
         if(atual != null){
             

@@ -5,6 +5,7 @@
  */
 package flex.table;
 
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -39,23 +40,24 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
         
         initComponents();
         
+        
         editTable.setAutoCreateColumnsFromModel(false);
         editTable.setCellEditor(sourceTable.getCellEditor());
         editTable.setCellSelectionEnabled(true);
         editTable.setShowHorizontalLines(true);
         editTable.setShowVerticalLines(true);
         
-        int screenWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
-        int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
-        
         this.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
         this.setMinimumSize(this.getSize());
         this.setLabelText("");
+        
         this.setVisible(false);
+        this.setResizable(false);
         
         composeEditTable();
         
-        this.setLocation((screenWidth / 2) - (this.getWidth() / 2), (screenHeight / 2) - (this.getHeight() / 2));
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setLocation((screenSize.width / 2) - (this.getWidth() / 2), (screenSize.height / 2) - (this.getHeight() / 2));
     }
     
     protected void composeEditTable(){
@@ -110,8 +112,6 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
             //System.out.println("" + (i+1) + ". Edit: " + editTable.getColumnClass(i).getName());
 
         }
-        
-        System.out.println("------------------------------------------------");
         
         this.setSize(minDialogSize, this.getHeight());
     }
@@ -230,8 +230,8 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
                 .addGap(32, 32, 32)
                 .addComponent(editLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))

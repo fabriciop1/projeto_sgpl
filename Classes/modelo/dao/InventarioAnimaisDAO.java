@@ -52,13 +52,9 @@ public class InventarioAnimaisDAO {
                 inventario.setId(keys.getInt(1));
             }
             
-            keys.close();
-            
+            keys.close();     
             st.close();
-            
             DBConexao.closeConnection(this.connection);
-            
-        
     }
     
     public void remover(int id) throws SQLException{
@@ -78,7 +74,7 @@ public class InventarioAnimaisDAO {
     
     public void atualizar(InventarioAnimais inventario) throws SQLException {
      
-            connection = DBConexao.openConnection();
+            this.connection = DBConexao.openConnection();
             
             String sql = "UPDATE inventario_animais SET categoria=?, inicio=?, nascimento=?, morte=?, venda=?, compra=?, final=?, valorCabeca=?,"
                     + " vidaUtilReprodutores=?, vidaUtilAnimaisServico=?, tipoAnimal=?, valorGastoCompraAnimais=?"
@@ -103,7 +99,7 @@ public class InventarioAnimaisDAO {
             st.executeUpdate();
             st.close();
             
-            DBConexao.closeConnection(connection);
+            DBConexao.closeConnection(this.connection);
         
         
 
@@ -115,9 +111,9 @@ public class InventarioAnimaisDAO {
         
         InventarioAnimais inventario = null;
         
-        connection = DBConexao.openConnection();
+        this.connection = DBConexao.openConnection();
         
-        PreparedStatement statement = connection.prepareStatement(sql);
+        PreparedStatement statement = this.connection.prepareStatement(sql);
         
         statement.setInt(1, id);
         
@@ -144,7 +140,7 @@ public class InventarioAnimaisDAO {
         
         res.close();
         statement.close();
-        DBConexao.closeConnection(connection);
+        DBConexao.closeConnection(this.connection);
         
         return inventario;
     }
@@ -155,16 +151,15 @@ public class InventarioAnimaisDAO {
         
         ArrayList<InventarioAnimais> inventarios = new ArrayList<>();
         
-        connection = DBConexao.openConnection();
+        this.connection = DBConexao.openConnection();
         
-        PreparedStatement statement = connection.prepareStatement(sql);
+        PreparedStatement statement = this.connection.prepareStatement(sql);
         
         statement.setInt(1, idPerfil);
         
         ResultSet res = statement.executeQuery();
         
-        while(res.next()){
-            
+        while(res.next()){  
             InventarioAnimais inventario = new InventarioAnimais();
             
             inventario.setId(res.getInt("idInventarioAnimais"));
@@ -186,8 +181,7 @@ public class InventarioAnimaisDAO {
         }
         
         res.close();
-        statement.close();
-        
+        statement.close(); 
         DBConexao.closeConnection(connection);
     
         return inventarios;
@@ -227,7 +221,6 @@ public class InventarioAnimaisDAO {
         
         res.close();
         statement.close();
-        
         DBConexao.closeConnection(connection);
     
         return inventarios;

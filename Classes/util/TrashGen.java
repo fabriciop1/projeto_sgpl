@@ -83,14 +83,14 @@ public final class TrashGen {
             new UsuarioDAO().cadastrar(u);
         }
         
-        u = new UsuarioDAO().buscarPorLogin(login);
+        u = new UsuarioDAO().recuperarPorLogin(login);
         
         Perfil p = new Perfil(generateString(20, false, false, false), generateString(20,false,false,false), 
                 rand.nextInt() % 1000, rand.nextInt() % 1000, rand.nextInt() % 1000, rand.nextInt() % 1000, rand.nextInt() % 1000);
         
         new PerfilDAO().cadastrar(p, false);
         
-        new UsuarioPerfilDAO().cadastrar(u.getIdUsuario(), p.getIdPerfil());
+        new UsuarioPerfilDAO().cadastrar(u, p);
         
         for(int i=0; i<rand.nextInt(30) + 1; i++){
 

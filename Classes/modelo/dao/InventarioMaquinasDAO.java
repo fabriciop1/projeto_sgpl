@@ -27,7 +27,6 @@ public class InventarioMaquinasDAO {
     
     public void cadastrar(InventarioMaquinas inventario) throws SQLException{
         
-        try {
             connection = DBConexao.openConnection();
             
             String sql = "INSERT INTO inventario_maquinas"
@@ -50,15 +49,10 @@ public class InventarioMaquinasDAO {
                 inventario.setId(keys.getInt(1));
             }
             
-            keys.close();
-            
+            keys.close();        
             statement.close();
-            
             DBConexao.closeConnection(connection);
             
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
     }
 
     public void remover(int id) throws SQLException{
@@ -78,12 +72,12 @@ public class InventarioMaquinasDAO {
 
     public void atualizar(InventarioMaquinas inventario) throws SQLException{
         
-        connection = DBConexao.openConnection();
+        this.connection = DBConexao.openConnection();
         
         String sql = "UPDATE inventario_maquinas SET especificacao=?, unidade=?, quantidade=?, valorUnitario=?,"
                 + "vidaUtil=? WHERE idInventarioMaquinas = ?";
         
-        PreparedStatement statement = connection.prepareStatement(sql);
+        PreparedStatement statement = this.connection.prepareStatement(sql);
         
         statement.setString(1, inventario.getEspecificacao());
         statement.setString(2, inventario.getUnidade());
@@ -95,7 +89,7 @@ public class InventarioMaquinasDAO {
         statement.executeUpdate();
         statement.close();
         
-        DBConexao.closeConnection(connection);
+        DBConexao.closeConnection(this.connection);
     }
 
     public InventarioMaquinas recuperar(int id) throws SQLException{
@@ -104,9 +98,9 @@ public class InventarioMaquinasDAO {
         
         InventarioMaquinas inventario = null;
         
-        connection = DBConexao.openConnection();
+        this.connection = DBConexao.openConnection();
         
-        PreparedStatement statement = connection.prepareStatement(sql);
+        PreparedStatement statement = this.connection.prepareStatement(sql);
         statement.setInt(1, id);
         
         ResultSet result = statement.executeQuery();
@@ -125,7 +119,7 @@ public class InventarioMaquinasDAO {
         
         result.close();
         statement.close();
-        DBConexao.closeConnection(connection);
+        DBConexao.closeConnection(this.connection);
         
         return inventario;
         
@@ -137,8 +131,8 @@ public class InventarioMaquinasDAO {
         
         ArrayList<InventarioMaquinas> inventarios = new ArrayList<>();
         
-        connection = DBConexao.openConnection();
-        PreparedStatement statement = connection.prepareStatement(sql);
+        this.connection = DBConexao.openConnection();
+        PreparedStatement statement = this.connection.prepareStatement(sql);
         
         statement.setInt(1, idPerfil);
         
@@ -161,21 +155,20 @@ public class InventarioMaquinasDAO {
         
         result.close();
         statement.close();
-        
-        DBConexao.closeConnection(connection);
+        DBConexao.closeConnection(this.connection);
     
         return inventarios;
         
     }
     
-    public ArrayList<InventarioMaquinas> recuperarTodos() throws SQLException{
+    public ArrayList<InventarioMaquinas> recuperarTodos() throws SQLException {
         
         String sql = "SELECT * FROM inventario_maquinas";
         
         ArrayList<InventarioMaquinas> inventarios = new ArrayList<>();
         
-        connection = DBConexao.openConnection();
-        PreparedStatement statement = connection.prepareStatement(sql);
+        this.connection = DBConexao.openConnection();
+        PreparedStatement statement = this.connection.prepareStatement(sql);
         ResultSet result = statement.executeQuery();
         
         while(result.next()){
@@ -195,8 +188,7 @@ public class InventarioMaquinasDAO {
         
         result.close();
         statement.close();
-        
-        DBConexao.closeConnection(connection);
+        DBConexao.closeConnection(this.connection);
     
         return inventarios;
         

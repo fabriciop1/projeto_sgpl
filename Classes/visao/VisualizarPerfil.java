@@ -7,7 +7,10 @@ package visao;
 
 import controle.ControleLogin;
 import controle.ControlePerfil;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.dao.PerfilDAO;
@@ -45,7 +48,11 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         usuario = ControleLogin.getInstance().getUsuario();
         
         idPerfis = new ArrayList<>();
-        perfis = usuarioPerfil.buscarPerfisPorUsuario(usuario.getIdUsuario());
+        try {
+            perfis = usuarioPerfil.recuperarPerfisPorUsuario(usuario.getIdUsuario());
+        } catch (SQLException ex) {
+            System.out.println("Erro em recuperar Perfis Por Usuário - Visualizar Perfil.");
+        }
         
         DefaultTableModel model = (DefaultTableModel) listaPerfis.getModel();
         model.setNumRows(0);
