@@ -5,10 +5,8 @@
  */
 package visao;
 
-import flex.table.GenericTableRowEditor;
-import flex.table.GenericTableModifier;
-import flex.table.GenericTableRowInserter;
 import controle.ControlePerfil;
+import flex.*;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -290,7 +288,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             for(int i = 0; i < benfeitorias.size(); i++){
 
                 double total = benfeitorias.get(i).getQuantidade() * benfeitorias.get(i).getValorUnitario();
-                double depreciacao = total / benfeitorias.get(i).getVidaUtil();
+                double depreciacao = Calc.dividir(total, benfeitorias.get(i).getVidaUtil());
 
                 modelBenfeitorias.addRow(new Object[] {
                     benfeitorias.get(i).getEspecificacao(),
@@ -315,7 +313,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             for(int i = 0; i < maquinas.size(); i++){
 
                 double total = maquinas.get(i).getQuantidade() * maquinas.get(i).getValorUnitario();
-                double depreciacao = total / maquinas.get(i).getVidaUtil();
+                double depreciacao = Calc.dividir(total, maquinas.get(i).getVidaUtil());
 
                 modelMaquinas.addRow(new Object[] {
                     maquinas.get(i).getEspecificacao(),

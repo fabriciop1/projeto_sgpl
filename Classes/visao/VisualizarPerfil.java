@@ -24,6 +24,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
     UsuarioPerfilDAO usuarioPerfil;
     PerfilDAO perfilDao;
     ArrayList<Perfil> perfis;
+    ArrayList<Integer> idPerfis;
     Usuario usuario;
     
     /**
@@ -43,6 +44,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         usuarioPerfil = new UsuarioPerfilDAO();
         usuario = ControleLogin.getInstance().getUsuario();
         
+        idPerfis = new ArrayList<>();
         perfis = usuarioPerfil.buscarPerfisPorUsuario(usuario.getIdUsuario());
         
         DefaultTableModel model = (DefaultTableModel) listaPerfis.getModel();
@@ -50,8 +52,9 @@ public class VisualizarPerfil extends javax.swing.JFrame {
                 
         for(int i = 0; i < perfis.size(); i++){
             
+            idPerfis.add(perfis.get(i).getIdPerfil());
+            
             model.addRow(new Object[]{
-                perfis.get(i).getIdPerfil(),
                 perfis.get(i).getNome(),
                 perfis.get(i).getCidade(),
                 perfis.get(i).getTamPropriedade(),
@@ -108,36 +111,36 @@ public class VisualizarPerfil extends javax.swing.JFrame {
 
         listaPerfis.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Id", "Nome", "Cidade", "Tamanho Propriedade", "Área Pecuária Leiteira", "Produção Leite Diária", "Empregados Permanentes", "Número de Familiares"
+                "Nome", "Cidade", "Tamanho Propriedade", "Área Pecuária Leiteira", "Produção Leite Diária", "Empregados Permanentes", "Número de Familiares"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Integer.class
+                java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -159,7 +162,6 @@ public class VisualizarPerfil extends javax.swing.JFrame {
             listaPerfis.getColumnModel().getColumn(4).setResizable(false);
             listaPerfis.getColumnModel().getColumn(5).setResizable(false);
             listaPerfis.getColumnModel().getColumn(6).setResizable(false);
-            listaPerfis.getColumnModel().getColumn(7).setResizable(false);
         }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -200,14 +202,14 @@ public class VisualizarPerfil extends javax.swing.JFrame {
     private void btnAcessarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcessarActionPerformed
         // TODO add your handling code here:
         Perfil atual = new Perfil();
-        atual.setIdPerfil((int) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 0));
-        atual.setNome((String) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 1));
-        atual.setCidade((String) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 2));
-        atual.setTamPropriedade((double) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 3));
-        atual.setAreaPecLeite((double) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 4));
-        atual.setProdLeiteDiario((double) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 5));
-        atual.setEmpPermanentes((int) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 6));
-        atual.setNumFamiliares((int) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 7));
+        atual.setIdPerfil(idPerfis.get(listaPerfis.getSelectedRow()));
+        atual.setNome((String) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 0));
+        atual.setCidade((String) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 1));
+        atual.setTamPropriedade((double) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 2));
+        atual.setAreaPecLeite((double) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 3));
+        atual.setProdLeiteDiario((double) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 4));
+        atual.setEmpPermanentes((int) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 5));
+        atual.setNumFamiliares((int) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 6));
         
         ControlePerfil.getInstance().setPerfilSelecionado(atual);
         
