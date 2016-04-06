@@ -2,8 +2,11 @@ campos B67, total calculado, H61, G56, G57, diferença, B71, B75, B74, B70
 
 inventario benfeitorias - Cochos e campos em vermelho
 
+Um perfil poderá ter mais de um resumo?
+
+
 USUARIO PODE ADICIONAR NOVAS COLUNAS EM INVENTARIO?
 
 ---- DADOS ECONOMICOS ----- IDEIA GERAL
-USUARIO PODE ADICIONAR LINHAS EM DADOS ECONOMICOS?
+USUARIO PODE ADICIONAR NOVAS LINHAS EM DADOS ECONOMICOS?
 NOME DO SISTEMA

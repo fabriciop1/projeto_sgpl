@@ -103,7 +103,12 @@ public class UsuarioPerfilDAO {
         
     }
     
-    public void removerUsuario(int idUsuario) throws SQLException {
+    /**
+     *
+     * @param idUsuario
+     * @throws SQLException
+     */
+    public void removerPorUsuario(int idUsuario) throws SQLException {
         
         this.connection = DBConexao.openConnection();
 

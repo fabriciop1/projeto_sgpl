@@ -17,11 +17,12 @@ import modelo.negocio.InventarioAnimais;
  *
  * @author Jefferson Sales
  */
-public class InventarioAnimaisDAO {
+public class InventarioAnimaisDAO implements InterfaceDAO<InventarioAnimais> {
     
      private Connection connection;
     
-    public void cadastrar(InventarioAnimais inventario) throws SQLException{
+    @Override
+    public void cadastrar(InventarioAnimais inventario) throws SQLException {
             this.connection = DBConexao.openConnection();
             
             String sql = "INSERT INTO inventario_animais "  
@@ -57,6 +58,7 @@ public class InventarioAnimaisDAO {
             DBConexao.closeConnection(this.connection);
     }
     
+    @Override
     public void remover(int id) throws SQLException{
         
         this.connection = DBConexao.openConnection();
@@ -72,39 +74,37 @@ public class InventarioAnimaisDAO {
         DBConexao.closeConnection(this.connection);        
     }
     
+    @Override
     public void atualizar(InventarioAnimais inventario) throws SQLException {
-     
-            this.connection = DBConexao.openConnection();
+        this.connection = DBConexao.openConnection();
             
-            String sql = "UPDATE inventario_animais SET categoria=?, inicio=?, nascimento=?, morte=?, venda=?, compra=?, final=?, valorCabeca=?,"
+        String sql = "UPDATE inventario_animais SET categoria=?, inicio=?, nascimento=?, morte=?, venda=?, compra=?, final=?, valorCabeca=?,"
                     + " vidaUtilReprodutores=?, vidaUtilAnimaisServico=?, tipoAnimal=?, valorGastoCompraAnimais=?"
                     + " WHERE idInventarioTerras=?";
             
-            PreparedStatement st = connection.prepareStatement(sql);
+        PreparedStatement st = connection.prepareStatement(sql);
             
-            st.setString(1, inventario.getCategoria());
-            st.setInt(2, inventario.getValorInicio());
-            st.setInt(3, inventario.getNascimento());
-            st.setInt(4, inventario.getMorte());
-            st.setInt(5, inventario.getVenda());
-            st.setInt(6, inventario.getCompra());
-            st.setInt(7, inventario.getValorFinal());
-            st.setDouble(8, inventario.getValorCabeca());
-            st.setInt(9, inventario.getVidaUtilReprodutores());
-            st.setInt(10, inventario.getVidaUtilAnimaisServico());
-            st.setInt(11, inventario.getTipoAnimal());
-            st.setDouble(12, inventario.getValorGastoCompraAnimais());
-            st.setInt(13, inventario.getId());
+        st.setString(1, inventario.getCategoria());
+        st.setInt(2, inventario.getValorInicio());
+        st.setInt(3, inventario.getNascimento());
+        st.setInt(4, inventario.getMorte());
+        st.setInt(5, inventario.getVenda());
+        st.setInt(6, inventario.getCompra());
+        st.setInt(7, inventario.getValorFinal());
+        st.setDouble(8, inventario.getValorCabeca());
+        st.setInt(9, inventario.getVidaUtilReprodutores());
+        st.setInt(10, inventario.getVidaUtilAnimaisServico());
+        st.setInt(11, inventario.getTipoAnimal());
+        st.setDouble(12, inventario.getValorGastoCompraAnimais());
+        st.setInt(13, inventario.getId());
             
-            st.executeUpdate();
-            st.close();
+        st.executeUpdate();
+        st.close();
             
-            DBConexao.closeConnection(this.connection);
-        
-        
-
+        DBConexao.closeConnection(this.connection);
     }
     
+    @Override
     public InventarioAnimais recuperar(int id) throws SQLException{
         
         String sql = "SELECT * FROM inventario_animais WHERE idInventarioAnimais=?";
@@ -187,6 +187,7 @@ public class InventarioAnimaisDAO {
         return inventarios;
     }
     
+    @Override
     public ArrayList<InventarioAnimais> recuperarTodos() throws SQLException{
         
         String sql = "SELECT * FROM inventario_animais";
@@ -224,6 +225,5 @@ public class InventarioAnimaisDAO {
         DBConexao.closeConnection(connection);
     
         return inventarios;
-    }
-    
+    }  
 }

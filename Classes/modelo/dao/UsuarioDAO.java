@@ -17,7 +17,7 @@ import modelo.negocio.Usuario;
  *
  * @author usuario
  */
-public class UsuarioDAO {
+public class UsuarioDAO implements InterfaceDAO<Usuario> {
     
     private Connection connection; 
     
@@ -25,6 +25,12 @@ public class UsuarioDAO {
   
     }
 
+    /**
+     *
+     * @param novoUsuario
+     * @throws SQLException
+     */
+    @Override
     public void  cadastrar(Usuario novoUsuario) throws SQLException {      
         this.connection = DBConexao.openConnection();
         
@@ -75,6 +81,12 @@ public class UsuarioDAO {
         return usuario;
     }
 
+    /**
+     *
+     * @param usuario
+     * @throws SQLException
+     */
+    @Override
     public void atualizar(Usuario usuario) throws SQLException {
         this.connection = DBConexao.openConnection();
         
@@ -92,6 +104,12 @@ public class UsuarioDAO {
         DBConexao.closeConnection(this.connection);
     }
 
+    /**
+     *
+     * @return
+     * @throws SQLException
+     */
+    @Override
     public ArrayList<Usuario> recuperarTodos() throws SQLException { 
        this.connection = DBConexao.openConnection();
         
@@ -119,6 +137,13 @@ public class UsuarioDAO {
         return usuarios;
     }
     
+    /**
+     *
+     * @param id
+     * @return
+     * @throws SQLException
+     */
+    @Override
     public Usuario recuperar(int id) throws SQLException {         
         this.connection = DBConexao.openConnection();
         
@@ -142,6 +167,12 @@ public class UsuarioDAO {
         return usuario;
     }
     
+    /**
+     *
+     * @param id
+     * @throws SQLException
+     */
+    @Override
     public void remover(int id) throws SQLException {
         this.connection = DBConexao.openConnection();
         

@@ -22,8 +22,7 @@ public class InventarioResumo {
         
     }
     
-    public InventarioResumo(int idInventarioResumo, double custoOportunidade, double atividadeLeiteira, double salarioMinimo, int mes, int ano, Perfil perfil) {
-        this.idInventarioResumo = idInventarioResumo;
+    public InventarioResumo(double custoOportunidade, double atividadeLeiteira, double salarioMinimo, int mes, int ano, Perfil perfil) {
         this.custoOportunidade = custoOportunidade;
         this.atividadeLeiteira = atividadeLeiteira;
         this.salarioMinimo = salarioMinimo;
@@ -84,7 +83,7 @@ public class InventarioResumo {
         return perfil;
     }
 
-    public void setIdPerfilFK(Perfil perfil) {
+    public void setPerfil(Perfil perfil) {
         this.perfil = perfil;
     }
     

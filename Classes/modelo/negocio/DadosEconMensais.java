@@ -14,19 +14,21 @@ public class DadosEconMensais {
     private int id;
     private int mes;
     private int ano;
-    private String campo; // Nome do campo do tabela
     private double quantidade;
     private double valorUnitario;
-    private int tipoCampo; // A qual tabela o campo pertence? 1 - Entradas /2 - Saidas /3 - Despesas com Volumoso /4 - Concentrado /5 - Mineralização /6 - Medicamentos /7 - Ordenha /8 - Inseminação Artificial /9 - Despesas de Investimentos /10 - Despesas de Empréstimos /11 - COE da atividade leiteira
+    private int tipoCampo; // A qual tabela o campo pertence? 1 - Entradas /2 - Saidas /3 - Despesas com Volumoso 
+                           //4 - Concentrado /5 - Mineralização /6 - Medicamentos /7 - Ordenha /8 - Inseminação Artificial 
+                           //9 - Despesas de Investimentos /10 - Despesas de Empréstimos /11 - COE da atividade leiteira
+    private String especificacao; // id da especificacao associada à tabela DEM_especificacao
     private Perfil perfil;
     
     public DadosEconMensais() {
     }
 
-    public DadosEconMensais(int mes, int ano, String campo, double quantidade, double valorUnitario, int tipoCampo, Perfil perfil) {
+    public DadosEconMensais(int mes, int ano, double quantidade, double valorUnitario, int tipoCampo, String especificacao, Perfil perfil) {
         this.mes = mes;
         this.ano = ano;
-        this.campo = campo;
+        this.especificacao = especificacao;
         this.quantidade = quantidade;
         this.valorUnitario = valorUnitario;
         this.tipoCampo = tipoCampo;
@@ -57,12 +59,12 @@ public class DadosEconMensais {
         this.ano = ano;
     }
 
-    public String getCampo() {
-        return campo;
+    public String getEspecificacao() {
+        return especificacao;
     }
 
-    public void setCampo(String campo) {
-        this.campo = campo;
+    public void setEspecificacao(String especificacao) {
+        this.especificacao = especificacao;
     }
 
     public double getQuantidade() {

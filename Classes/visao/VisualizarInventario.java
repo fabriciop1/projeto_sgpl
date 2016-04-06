@@ -11,6 +11,7 @@ import flex.table.GenericTableRowInserter;
 import controle.ControlePerfil;
 import flex.*;
 import java.util.ArrayList;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.dao.InventarioAnimaisDAO;
@@ -47,27 +48,10 @@ public class VisualizarInventario extends javax.swing.JFrame {
     public VisualizarInventario() {
         initComponents();
              
-        tabelaBenfeitorias.setShowHorizontalLines(true);
-        tabelaBenfeitorias.setShowVerticalLines(true);
-    
-        tabelaInveAnimaisProd.setShowHorizontalLines(true);
-        tabelaInveAnimaisProd.setShowVerticalLines(true);
-    
-        tabelaInveAnimaisServ.setShowHorizontalLines(true);
-        tabelaInveAnimaisServ.setShowVerticalLines(true);
-    
-        tabelaInveForrageiras.setShowHorizontalLines(true);
-        tabelaInveForrageiras.setShowVerticalLines(true);
-    
-        tabelaInveTerras.setShowHorizontalLines(true);
-        tabelaInveTerras.setShowVerticalLines(true);
-    
-        tabelaMaquinas.setShowHorizontalLines(true);
-        tabelaMaquinas.setShowVerticalLines(true);
+        showTableLines();
    
         setLocationRelativeTo(null);
         this.setResizable(false);
-        
         
         ArrayList<InventarioTerras> terras = new ArrayList<>();
         ArrayList<InventarioAnimais> animais = new ArrayList<>();
@@ -111,19 +95,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
         //InventarioResumoDAO irdao = new InventarioResumoDAO();
         
         Perfil perfilAtual = ControlePerfil.getInstance().getPerfilSelecionado();
-        
-        
-        tabelaTerrasGTRI = new GenericTableRowInserter(this, tabelaInveTerras, false, true);
-        tabelaForrageirasGTRI = new GenericTableRowInserter(this, tabelaInveForrageiras, false, true);
-        
-        tabelaMaquinasGTRE = new GenericTableRowEditor(this, tabelaMaquinas, true);
-        tabelaBenfeitoriasGTRE = new GenericTableRowEditor(this, tabelaBenfeitorias, true);
-        
-        tabelaForrageirasGTRE = new GenericTableRowEditor(this, tabelaInveForrageiras, true);
-        tabelaTerrasGTRE = new GenericTableRowEditor(this, tabelaInveTerras, true);
-        
-        tabelaAnimaisProdGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisProd, true);
-        tabelaAnimaisServGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisServ, true);
+     
+        iniciarGTREIs();
         
         try{
             terras = itdao.recuperarPorPerfil(perfilAtual.getIdPerfil());
@@ -157,9 +130,11 @@ public class VisualizarInventario extends javax.swing.JFrame {
             totalTerraNua.add(terras.get(i).getValorTerraNuaPropria());
             
         }
+        verificaTabelaVazia(modelTerras, editarInvTerrasBT, removerInvTerrasBT);
         
         DefaultTableModel modelForrageiras = (DefaultTableModel) tabelaInveForrageiras.getModel();
         modelForrageiras.setNumRows(0);
+        
         
         for(int i = 0; i < terras.size(); i++){
             
@@ -180,47 +155,49 @@ public class VisualizarInventario extends javax.swing.JFrame {
             totalValorHa.add(valorHa);
             totalDepreciacao.add(depreciacao);
         }
+        verificaTabelaVazia(modelForrageiras, editarInvTerrasBT, removerInvTerrasBT);
         
+        total1.setText("" + Calc.somarLista(totalAreaArreInic));
+        total2.setText("" + Calc.somarLista(totalAreaPropInic));
+        total3.setText("" + Calc.somarLista(totalAreaArreFina));
+        total4.setText("" + Calc.somarLista(totalAreaPropFina));
+        total5.setText("" + (Double.parseDouble(total1.getText()) + Double.parseDouble(total2.getText())));
+        total6.setText("" + (Double.parseDouble(total3.getText()) + Double.parseDouble(total4.getText())));
+        total7.setText(String.format("R$ %.2f", Calc.somaPonderada(totalAreaPropInic, totalTerraNua)).replace(',','.'));
+        total8.setText(String.format("R$ %.2f", Calc.somaPonderada(totalAreaPropFina, totalTerraNua)).replace(',','.'));
+        total9.setText(String.format("R$ %.2f", Calc.mediaAritmetica(Double.parseDouble(total7.getText().substring(2)), Double.parseDouble(total8.getText().substring(2)))).replace(',','.'));
+        total10.setText("" + Calc.somarLista(totalHa));
+        total11.setText("" + Calc.somarLista(totalValorHa));
+        total12.setText("" + Calc.somarLista(totalDepreciacao));
         
-            total1.setText("" + Calc.somarLista(totalAreaArreInic));
-            total2.setText("" + Calc.somarLista(totalAreaPropInic));
-            total3.setText("" + Calc.somarLista(totalAreaArreFina));
-            total4.setText("" + Calc.somarLista(totalAreaPropFina));
-            total5.setText("" + (Double.parseDouble(total1.getText()) + Double.parseDouble(total2.getText())));
-            total6.setText("" + (Double.parseDouble(total3.getText()) + Double.parseDouble(total4.getText())));
-            total7.setText(String.format("R$ %.2f", Calc.somaPonderada(totalAreaPropInic, totalTerraNua)).replace(',','.'));
-            total8.setText(String.format("R$ %.2f", Calc.somaPonderada(totalAreaPropFina, totalTerraNua)).replace(',','.'));
-            total9.setText(String.format("R$ %.2f", Calc.mediaAritmetica(Double.parseDouble(total7.getText().substring(2)), Double.parseDouble(total8.getText().substring(2)))).replace(',','.'));
-            total10.setText("" + Calc.somarLista(totalHa));
-            total11.setText("" + Calc.somarLista(totalValorHa));
-            total12.setText("" + Calc.somarLista(totalDepreciacao));
+        DefaultTableModel modelAnimaisProd = (DefaultTableModel) tabelaInveAnimaisProd.getModel();
+        modelAnimaisProd.setNumRows(0);
             
-            DefaultTableModel modelAnimaisProd = (DefaultTableModel) tabelaInveAnimaisProd.getModel();
-            modelAnimaisProd.setNumRows(0);
 
-            DefaultTableModel modelAnimaisServ = (DefaultTableModel) tabelaInveAnimaisServ.getModel();
-            modelAnimaisServ.setNumRows(0);
+        DefaultTableModel modelAnimaisServ = (DefaultTableModel) tabelaInveAnimaisServ.getModel();
+        modelAnimaisServ.setNumRows(0);
+           
 
-            for(int i = 0; i < animais.size(); i++){
+        for(int i = 0; i < animais.size(); i++){
 
-                if(animais.get(i).getTipoAnimal() == 1){ //Producao
+            if(animais.get(i).getTipoAnimal() == 1){ //Producao
 
-                    double valorInicio = animais.get(i).getValorInicio() * animais.get(i).getValorCabeca();
-                    double valorFinal = animais.get(i).getValorFinal() * animais.get(i).getValorCabeca();
+                double valorInicio = animais.get(i).getValorInicio() * animais.get(i).getValorCabeca();
+                double valorFinal = animais.get(i).getValorFinal() * animais.get(i).getValorCabeca();
 
-                    modelAnimaisProd.addRow(new Object[]{
-                        animais.get(i).getCategoria(),
-                        animais.get(i).getValorInicio(),
-                        animais.get(i).getNascimento(),
-                        animais.get(i).getMorte(),
-                        animais.get(i).getVenda(),
-                        animais.get(i).getCompra(),
-                        animais.get(i).getValorFinal(),
-                        animais.get(i).getValorCabeca(),
-                        valorInicio,
-                        valorFinal,
+                modelAnimaisProd.addRow(new Object[]{
+                    animais.get(i).getCategoria(),
+                    animais.get(i).getValorInicio(),
+                    animais.get(i).getNascimento(),
+                    animais.get(i).getMorte(),
+                    animais.get(i).getVenda(),
+                    animais.get(i).getCompra(),
+                    animais.get(i).getValorFinal(),
+                    animais.get(i).getValorCabeca(),
+                    valorInicio,
+                    valorFinal,
 
-                    });
+                });
 
                     totalValInicProd.add(animais.get(i).getValorInicio() * 1.0);  
                     totalNascProd.add(animais.get(i).getNascimento() * 1.0);
@@ -254,6 +231,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 }
 
             }
+            verificaTabelaVazia(modelAnimaisProd, editarInvAnimaisBT, removerInvAnimaisBT);
+            verificaTabelaVazia(modelAnimaisServ, editarInvAnimaisBT, removerInvAnimaisBT);
 
             total13.setText("" + Calc.somarLista(totalValInicProd));
             total14.setText("" + Calc.somarLista(totalNascProd));
@@ -306,6 +285,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 totalValorBenfeit.add(total);
                 totalDeprecBenfeit.add(depreciacao);
             }
+            
+            verificaTabelaVazia(modelBenfeitorias, editarInvBenfeitoriasBT, removerInvBenfeitoriasBT);
 
             total40.setText(String.format("%.2f", Calc.somarLista(totalValorBenfeit)));
             total41.setText(String.format("%.2f", Calc.somarLista(totalDeprecBenfeit)));
@@ -331,6 +312,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 totalValorMaquin.add(total);
                 totalDeprecMaquin.add(depreciacao);
             }
+            verificaTabelaVazia(modelMaquinas, editarInvMaquinasBT, removerInvMaquinasBT);
 
             total42.setText("" + Calc.somarLista(totalValorMaquin));
             total43.setText("" + Calc.somarLista(totalDeprecMaquin));
@@ -472,7 +454,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total42 = new javax.swing.JLabel();
         total43 = new javax.swing.JLabel();
         editarInvMaquinasBT = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        removerInvMaquinasBT = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jLabel26 = new javax.swing.JLabel();
@@ -1517,7 +1499,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Remover");
+        removerInvMaquinasBT.setText("Remover");
 
         jButton2.setText("Adicionar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -1551,7 +1533,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(editarInvMaquinasBT)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton1)
+                        .addComponent(removerInvMaquinasBT)
                         .addContainerGap())))
         );
         jPanel4Layout.setVerticalGroup(
@@ -1569,7 +1551,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                         .addComponent(total43)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(removerInvMaquinasBT, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(jButton2)
                                 .addComponent(editarInvMaquinasBT))))
@@ -2095,7 +2077,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
     private void adicionarInvAnimaisBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarInvAnimaisBTActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_adicionarInvAnimaisBTActionPerformed
-
+    
     /**
      * @param args the command line arguments
      */
@@ -2131,8 +2113,50 @@ public class VisualizarInventario extends javax.swing.JFrame {
         });
         
     }
-
     
+    private void verificaTabelaVazia(DefaultTableModel table, JButton editarBtn, JButton removerBtn) {
+        if(table.getRowCount() == 0) {
+            editarBtn.setEnabled(false);
+            removerBtn.setEnabled(false);
+        } else {
+            editarBtn.setEnabled(true);
+            editarBtn.setEnabled(true);
+        }
+    }
+
+    private void showTableLines() {
+        tabelaBenfeitorias.setShowHorizontalLines(true);
+        tabelaBenfeitorias.setShowVerticalLines(true);
+    
+        tabelaInveAnimaisProd.setShowHorizontalLines(true);
+        tabelaInveAnimaisProd.setShowVerticalLines(true);
+    
+        tabelaInveAnimaisServ.setShowHorizontalLines(true);
+        tabelaInveAnimaisServ.setShowVerticalLines(true);
+    
+        tabelaInveForrageiras.setShowHorizontalLines(true);
+        tabelaInveForrageiras.setShowVerticalLines(true);
+    
+        tabelaInveTerras.setShowHorizontalLines(true);
+        tabelaInveTerras.setShowVerticalLines(true);
+    
+        tabelaMaquinas.setShowHorizontalLines(true);
+        tabelaMaquinas.setShowVerticalLines(true);
+    }
+    
+    private void iniciarGTREIs() {
+        tabelaTerrasGTRI = new GenericTableRowInserter(this, tabelaInveTerras, false, true);
+        tabelaForrageirasGTRI = new GenericTableRowInserter(this, tabelaInveForrageiras, false, true);
+        
+        tabelaMaquinasGTRE = new GenericTableRowEditor(this, tabelaMaquinas, true);
+        tabelaBenfeitoriasGTRE = new GenericTableRowEditor(this, tabelaBenfeitorias, true);
+        
+        tabelaForrageirasGTRE = new GenericTableRowEditor(this, tabelaInveForrageiras, true);
+        tabelaTerrasGTRE = new GenericTableRowEditor(this, tabelaInveTerras, true);
+        
+        tabelaAnimaisProdGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisProd, true);
+        tabelaAnimaisServGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisServ, true);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton adicionarInvAnimaisBT;
@@ -2146,7 +2170,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
     private javax.swing.JButton editarInvBenfeitoriasBT;
     private javax.swing.JButton editarInvMaquinasBT;
     private javax.swing.JButton editarInvTerrasBT;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -2211,6 +2234,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JButton removerInvAnimaisBT;
     private javax.swing.JButton removerInvBenfeitoriasBT;
+    private javax.swing.JButton removerInvMaquinasBT;
     private javax.swing.JButton removerInvTerrasBT;
     private javax.swing.JTextField salarioMinimo;
     private javax.swing.JTable tabelaBenfeitorias;

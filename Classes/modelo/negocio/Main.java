@@ -21,13 +21,29 @@ public class Main {
            InventarioAnimaisDAO dao = new InventarioAnimaisDAO();
            InventarioTerrasDAO dao2 = new InventarioTerrasDAO();
            DadosEconMensaisDAO dao3 = new DadosEconMensaisDAO();
+           InventarioResumoDAO dao4 = new InventarioResumoDAO();
+           DEMEspecificacaoDAO dao5 = new DEMEspecificacaoDAO();
+           
+           
            
            try {
-              ArrayList<DadosEconMensais> dados = dao3.recuperarPorPeriodo(2015, 3, 2015, 6);
+               Perfil perfil = (new PerfilDAO()).recuperar(13) ;
               
-              for(int i = 0; i < dados.size(); i++) {
-                  System.out.println(dados.get(i).getMes());
-              }
+             //  dao5.cadastrar("Venda de leite(L)");
+             //  dao5.remover(1);
+              // System.out.println(dados.get(0));
+            //   DadosEconMensais dados = new DadosEconMensais(1, 2015, 1.0, 1600.0, 1, dao5.recuperar(1), perfil);
+             //  dao3.cadastrar(dados);
+              // InventarioResumo inv = new InventarioResumo(0.0, 0.0, 0.0, 1, 2015, perfil);
+             //  dao4.cadastrar(inv);
+            //   System.out.println(inv.get(0).getAno());
+               
+             //  dao4.recuperarPorPerfil(13);
+             // ArrayList<DadosEconMensais> dados = dao3.recuperarPorPeriodo(2015, 3, 2015, 6);
+              // System.out.println("");
+            //  for(int i = 0; i < dados.size(); i++) {
+            //      System.out.println(dados.get(i).getMes());
+            //  }
                
                
            } catch (SQLException ex) {

@@ -88,7 +88,7 @@ public final class TrashGen {
         Perfil p = new Perfil(generateString(20, false, false, false), generateString(20,false,false,false), 
                 rand.nextInt() % 1000, rand.nextInt() % 1000, rand.nextInt() % 1000, rand.nextInt() % 1000, rand.nextInt() % 1000);
         
-        new PerfilDAO().cadastrar(p, false);
+        new PerfilDAO().cadastrar(p);
         
         new UsuarioPerfilDAO().cadastrar(u, p);
         

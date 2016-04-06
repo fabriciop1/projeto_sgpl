@@ -14,14 +14,20 @@ import java.util.ArrayList;
 import modelo.negocio.Perfil;
 
 
-public class PerfilDAO {
+public class PerfilDAO implements InterfaceDAO<Perfil>{
  
     private Connection connection; 
     
     public PerfilDAO(){
     }
     
-    public void cadastrar(Perfil perfil, boolean cadastrarInventarios)  throws SQLException {  
+    /**
+     *
+     * @param perfil
+     * @throws SQLException
+     */
+    @Override
+    public void cadastrar(Perfil perfil)  throws SQLException {  
         this.connection = DBConexao.openConnection();
         
         String sql = "INSERT INTO perfil " + 
@@ -51,6 +57,12 @@ public class PerfilDAO {
         DBConexao.closeConnection(this.connection);
     } 
     
+    /**
+     *
+     * @param perfil
+     * @throws SQLException
+     */
+    @Override
     public void atualizar(Perfil perfil) throws SQLException {
         this.connection = DBConexao.openConnection();
         
@@ -109,6 +121,13 @@ public class PerfilDAO {
         return perfis;
     }
     
+    /**
+     *
+     * @param id
+     * @return
+     * @throws SQLException
+     */
+    @Override
     public Perfil recuperar(int id) throws SQLException {
         this.connection = DBConexao.openConnection();
        
@@ -140,6 +159,12 @@ public class PerfilDAO {
         return perfil;
     }
     
+    /**
+     *
+     * @return
+     * @throws SQLException
+     */
+    @Override
     public ArrayList<Perfil> recuperarTodos() throws SQLException  {
         this.connection = DBConexao.openConnection();
         
@@ -171,6 +196,12 @@ public class PerfilDAO {
         return perfis;
     }
     
+    /**
+     *
+     * @param idPerfil
+     * @throws SQLException
+     */
+    @Override
     public void remover(int idPerfil) throws SQLException {
         this.connection = DBConexao.openConnection();
         

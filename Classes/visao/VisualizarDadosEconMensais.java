@@ -23,6 +23,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
 
     ArrayList<String> especificacoes;    
     ArrayList<DadosEconMensais> dems;
+     
     
     /**
      * Creates new form VisualizarDadosEconMensais
@@ -61,9 +62,9 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         modelDadosEconomicos.setNumRows(0);
         
         for (DadosEconMensais dem : dems) {
-            if (!especificacoes.contains(dem.getCampo())) {
-                especificacoes.add(dem.getCampo());
-                modelEspecificacao.addRow(new Object[]{dem.getCampo()}); 
+            if (!especificacoes.contains(dem.getEspecificacao())) {
+                especificacoes.add(dem.getEspecificacao());
+                modelEspecificacao.addRow(new Object[]{dem.getEspecificacao()}); 
             }
         }
         

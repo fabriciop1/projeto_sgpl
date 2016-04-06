@@ -17,7 +17,7 @@ import modelo.negocio.InventarioBenfeitorias;
  *
  * @author Jefferson Sales
  */
-public class InventarioBenfeitoriasDAO {
+public class InventarioBenfeitoriasDAO implements InterfaceDAO<InventarioBenfeitorias> {
     
     private Connection connection;
     
@@ -25,6 +25,12 @@ public class InventarioBenfeitoriasDAO {
         
     }
     
+    /**
+     *
+     * @param inventario
+     * @throws SQLException
+     */
+    @Override
     public void cadastrar(InventarioBenfeitorias inventario) throws SQLException{
         
             connection = DBConexao.openConnection();
@@ -56,6 +62,12 @@ public class InventarioBenfeitoriasDAO {
             
     }
 
+    /**
+     *
+     * @param id
+     * @throws SQLException
+     */
+    @Override
     public void remover(int id) throws SQLException {
         
         this.connection = DBConexao.openConnection();
@@ -71,6 +83,12 @@ public class InventarioBenfeitoriasDAO {
         DBConexao.closeConnection(this.connection);   
     }
 
+    /**
+     *
+     * @param inventario
+     * @throws SQLException
+     */
+    @Override
     public void atualizar(InventarioBenfeitorias inventario) throws SQLException{
         
         connection = DBConexao.openConnection();
@@ -93,6 +111,13 @@ public class InventarioBenfeitoriasDAO {
         DBConexao.closeConnection(connection);
     }
     
+    /**
+     *
+     * @param id
+     * @return
+     * @throws SQLException
+     */
+    @Override
     public InventarioBenfeitorias recuperar(int id) throws SQLException{
         
         String sql = "SELECT * FROM inventario_benfeitorias WHERE idInventarioBenfeitorias=?";
@@ -162,6 +187,12 @@ public class InventarioBenfeitoriasDAO {
         
     }
     
+    /**
+     *
+     * @return
+     * @throws SQLException
+     */
+    @Override
     public ArrayList<InventarioBenfeitorias> recuperarTodos() throws SQLException{
         
         String sql = "SELECT * FROM inventario_benfeitorias";

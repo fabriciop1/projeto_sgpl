@@ -17,24 +17,30 @@ import modelo.negocio.DadosEconMensais;
  *
  * @author Fabricio
  */
-public class DadosEconMensaisDAO {
+public class DadosEconMensaisDAO implements InterfaceDAO<DadosEconMensais>{
     
     private Connection connection;
     
+    /**
+     *
+     * @param dados
+     * @throws SQLException
+     */
+    @Override
     public void cadastrar(DadosEconMensais dados) throws SQLException {
         this.connection = DBConexao.openConnection();
         
         String sql = "INSERT INTO dados_economicos_mensais "
-                + "(mes, ano, campo, quantidade, valorUnitario, tipoCampo, idPerfilFK) "
+                + "(mes, ano, quantidade, valorUnitario, tipoCampo, idDEM_especificacaoFK, idPerfilFK) "
                 + "VALUES (?,?,?,?,?,?,?)";
         
         PreparedStatement st = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         st.setInt(1, dados.getMes());
         st.setInt(2, dados.getAno());
-        st.setString(3, dados.getCampo());
-        st.setDouble(4, dados.getQuantidade());
-        st.setDouble(5, dados.getValorUnitario());
-        st.setInt(6, dados.getTipoCampo());
+        st.setDouble(3, dados.getQuantidade());
+        st.setDouble(4, dados.getValorUnitario());
+        st.setInt(5, dados.getTipoCampo());
+        st.setInt(6, (new DEMEspecificacaoDAO()).recuperar(dados.getEspecificacao()));
         st.setInt(7, dados.getPerfil().getIdPerfil());
         
         st.executeUpdate();
@@ -51,6 +57,12 @@ public class DadosEconMensaisDAO {
         DBConexao.closeConnection(this.connection);
     }
     
+    /**
+     *
+     * @param id
+     * @throws SQLException
+     */
+    @Override
     public void remover(int id) throws SQLException {
         this.connection = DBConexao.openConnection();
         
@@ -65,20 +77,25 @@ public class DadosEconMensaisDAO {
         DBConexao.closeConnection(this.connection);   
     }
     
+    /**
+     *
+     * @param dados
+     * @throws SQLException
+     */
+    @Override
     public void atualizar(DadosEconMensais dados) throws SQLException {
         this.connection = DBConexao.openConnection();
         
-        String sql = "UPDATE dados_economicos_mensais SET mes=?, ano=?, campo=?, quantidade=?, valorUnitario=?, tipoCampo=? "
+        String sql = "UPDATE dados_economicos_mensais SET mes=?, ano=?, quantidade=?, valorUnitario=?, tipoCampo=? "
                 + "WHERE idDEM=?";
         
         PreparedStatement st = connection.prepareStatement(sql);
         st.setInt(1, dados.getMes());
         st.setInt(2, dados.getAno());
-        st.setString(3, dados.getCampo());
-        st.setDouble(4, dados.getQuantidade());
-        st.setDouble(5, dados.getValorUnitario());
-        st.setInt(6, dados.getTipoCampo());
-        st.setInt(7, dados.getId());
+        st.setDouble(3, dados.getQuantidade());
+        st.setDouble(4, dados.getValorUnitario());
+        st.setInt(5, dados.getTipoCampo());
+        st.setInt(6, dados.getId());
         
         st.executeUpdate();
         st.close();
@@ -86,6 +103,13 @@ public class DadosEconMensaisDAO {
         DBConexao.closeConnection(this.connection);
     }
     
+    /**
+     *
+     * @param id
+     * @return
+     * @throws SQLException
+     */
+    @Override
     public DadosEconMensais recuperar(int id) throws SQLException {
         String sql = "SELECT * FROM dados_economicos_mensais WHERE idDEM=?";
         
@@ -102,13 +126,14 @@ public class DadosEconMensaisDAO {
             
             dados.setAno(res.getInt("ano"));
             dados.setMes(res.getInt("mes"));
-            dados.setCampo(res.getString("campo"));
+            dados.setEspecificacao((new DEMEspecificacaoDAO()).recuperar(res.getInt("idDEM_especificacaoFK")));
             dados.setId(res.getInt("idDEM"));
             dados.setQuantidade(res.getDouble("quantidade"));
             dados.setTipoCampo(res.getInt("tipoCampo"));
             dados.setValorUnitario(res.getDouble("valorUnitario"));
             dados.setPerfil((new PerfilDAO()).recuperar(res.getInt("idPerfilFK")));
         }
+        
         res.close();
         statement.close();
         DBConexao.closeConnection(this.connection);
@@ -130,7 +155,7 @@ public class DadosEconMensaisDAO {
             DadosEconMensais dado = new DadosEconMensais();
             
             dado.setAno(res.getInt("ano"));
-            dado.setCampo(res.getString("campo"));
+            dado.setEspecificacao((new DEMEspecificacaoDAO()).recuperar(res.getInt("idDEM_especificacaoFK")));
             dado.setId(res.getInt("idDEM"));
             dado.setMes(res.getInt("mes"));
             dado.setPerfil((new PerfilDAO()).recuperar(res.getInt("idPerfilFK")));
@@ -148,6 +173,12 @@ public class DadosEconMensaisDAO {
         
     }
     
+    /**
+     *
+     * @return
+     * @throws SQLException
+     */
+    @Override
     public ArrayList<DadosEconMensais> recuperarTodos() throws SQLException {
         String sql = "SELECT * FROM dados_economicos_mensais";
         
@@ -164,7 +195,7 @@ public class DadosEconMensaisDAO {
             dado = new DadosEconMensais();
            
             dado.setAno(res.getInt("ano"));
-            dado.setCampo(res.getString("campo"));
+            dado.setEspecificacao((new DEMEspecificacaoDAO()).recuperar(res.getInt("idDEM_especificacaoFK")));
             dado.setId(res.getInt("idDEM"));
             dado.setMes(res.getInt("mes"));
             dado.setPerfil((new PerfilDAO()).recuperar(res.getInt("idPerfilFK")));
@@ -187,8 +218,6 @@ public class DadosEconMensaisDAO {
         String sql = "SELECT * FROM dados_economicos_mensais WHERE (ano >= ? AND ano <= ?) AND (mes >= ? AND mes <= ?)";
         ArrayList<DadosEconMensais> dados = new ArrayList<>();
         
-        DadosEconMensais dado;
-        
         this.connection = DBConexao.openConnection();
         
         PreparedStatement statement = this.connection.prepareStatement(sql);
@@ -200,10 +229,10 @@ public class DadosEconMensaisDAO {
         ResultSet res = statement.executeQuery();
         
         while(res.next()) {
-            dado = new DadosEconMensais();
+            DadosEconMensais dado = new DadosEconMensais();
            
             dado.setAno(res.getInt("ano"));
-            dado.setCampo(res.getString("campo"));
+            dado.setEspecificacao((new DEMEspecificacaoDAO()).recuperar(res.getInt("idDEM_especificacaoFK")));
             dado.setId(res.getInt("idDEM"));
             dado.setMes(res.getInt("mes"));
             dado.setPerfil((new PerfilDAO()).recuperar(res.getInt("idPerfilFK")));
