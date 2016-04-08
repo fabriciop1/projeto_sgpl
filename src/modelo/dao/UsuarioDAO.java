@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import modelo.negocio.Rota;
 import modelo.negocio.Usuario;
 
 /**
@@ -34,12 +35,13 @@ public class UsuarioDAO implements InterfaceDAO<Usuario> {
     public void  cadastrar(Usuario novoUsuario) throws SQLException {      
         this.connection = DBConexao.openConnection();
         
-        String sql = "INSERT INTO usuario (login, senha) VALUES (?,?)";
+        String sql = "INSERT INTO usuario (login, senha, idRotaFK) VALUES (?,?,?)";
         
         PreparedStatement statement = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         // ID cadastrado pelo próprio banco
         statement.setString(1, novoUsuario.getLogin());
         statement.setString(2, novoUsuario.getSenha());
+        statement.setInt(3, novoUsuario.getRota().getId());
        
         statement.executeUpdate();
             
@@ -52,7 +54,6 @@ public class UsuarioDAO implements InterfaceDAO<Usuario> {
         key.close();
         statement.close();
         DBConexao.closeConnection(this.connection);
-
     }
 
     public Usuario recuperarPorLogin(String login) throws SQLException {
@@ -72,6 +73,7 @@ public class UsuarioDAO implements InterfaceDAO<Usuario> {
             usuario.setIdUsuario(rs.getInt("idUsuario"));
             usuario.setLogin(rs.getString("login"));
             usuario.setSenha(rs.getString("senha"));
+            usuario.setRota((new RotaDAO()).recuperar(rs.getInt("idRotaFK")));
         }
         
         rs.close();        
@@ -126,6 +128,7 @@ public class UsuarioDAO implements InterfaceDAO<Usuario> {
             u.setIdUsuario(result.getInt("idUsuario"));
             u.setLogin(result.getString("login"));
             u.setSenha(result.getString("senha"));
+            u.setRota((new RotaDAO()).recuperar(result.getInt("idRotaFK")));
                     
             usuarios.add(u);
         }
@@ -159,6 +162,7 @@ public class UsuarioDAO implements InterfaceDAO<Usuario> {
         usuario.setIdUsuario(id);
         usuario.setLogin(rs.getString("login"));
         usuario.setSenha(rs.getString("senha"));
+        usuario.setRota((new RotaDAO()).recuperar(rs.getInt("idRotaFK")));
             
         statement.close();
         rs.close();
@@ -200,5 +204,7 @@ public class UsuarioDAO implements InterfaceDAO<Usuario> {
 
         DBConexao.closeConnection(this.connection); 
     }
+    
+    
     
 }

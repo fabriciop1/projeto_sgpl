@@ -21,12 +21,13 @@ public class Perfil implements Serializable {
     private double prodLeiteDiario;
     private int empPermanentes;
     private int numFamiliares;
+    private Rota rota;
     
     public Perfil() {
         
     }
    
-    public Perfil(String nome, String cidade, double tamPropriedade, double areaPecLeite, double prodLeiteDiario, int empPermanentes, int numFamiliares) {
+    public Perfil(String nome, String cidade, double tamPropriedade, double areaPecLeite, double prodLeiteDiario, int empPermanentes, int numFamiliares, Rota rota) {
         this.nome = nome;
         this.cidade = cidade;
         this.tamPropriedade = tamPropriedade;
@@ -34,6 +35,7 @@ public class Perfil implements Serializable {
         this.prodLeiteDiario = prodLeiteDiario;
         this.empPermanentes = empPermanentes;
         this.numFamiliares = numFamiliares;
+        this.rota = rota;
     }
 
     public int getIdPerfil() {
@@ -99,5 +101,15 @@ public class Perfil implements Serializable {
     public void setNumFamiliares(int numFamiliares) {
         this.numFamiliares = numFamiliares;
     }
+
+    public Rota getRota() {
+        return rota;
+    }
+
+    public void setRota(Rota rota) {
+        this.rota = rota;
+    }
+    
+    
 
 }

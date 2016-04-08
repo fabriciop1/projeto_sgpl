@@ -12,6 +12,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import modelo.negocio.Perfil;
+import modelo.negocio.Rota;
+import modelo.negocio.Usuario;
 
 
 public class PerfilDAO implements InterfaceDAO<Perfil>{
@@ -31,8 +33,8 @@ public class PerfilDAO implements InterfaceDAO<Perfil>{
         this.connection = DBConexao.openConnection();
         
         String sql = "INSERT INTO perfil " + 
-                "(nome, cidade, tamPropriedade, areaPecLeite, prodLeiteDiario, empPermanentes, numFamiliares) " +
-                "VALUES (?,?,?,?,?,?,?)";
+                "(nome, cidade, tamPropriedade, areaPecLeite, prodLeiteDiario, empPermanentes, numFamiliares, idRotaFK) " +
+                "VALUES (?,?,?,?,?,?,?,?)";
         
         PreparedStatement statement = this.connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
             
@@ -43,6 +45,7 @@ public class PerfilDAO implements InterfaceDAO<Perfil>{
         statement.setDouble(5, perfil.getProdLeiteDiario());
         statement.setInt(6, perfil.getEmpPermanentes());
         statement.setInt(7, perfil.getNumFamiliares());
+        statement.setInt(8, perfil.getRota().getId());
            
         statement.executeUpdate();
            
@@ -110,6 +113,7 @@ public class PerfilDAO implements InterfaceDAO<Perfil>{
                 p.setProdLeiteDiario(result.getDouble(6)); // Prod Diaria de Leite
                 p.setEmpPermanentes(result.getInt(7)); //Num de Empregados Permanentes
                 p.setNumFamiliares(result.getInt(8)); // Num Familiares
+                p.setRota((new RotaDAO()).recuperar(result.getInt(9))); // idRotaFK
                     
                 perfis.add(p);
         }
@@ -150,6 +154,7 @@ public class PerfilDAO implements InterfaceDAO<Perfil>{
             perfil.setProdLeiteDiario(rs.getDouble(6)); // Prod Diaria de Leite
             perfil.setEmpPermanentes(rs.getInt(7)); //Num de Empregados Permanentes
             perfil.setNumFamiliares(rs.getInt(8)); // Num Familiares
+            perfil.setRota((new RotaDAO()).recuperar(rs.getInt(9))); //idRotaFK
                 
         }
         statement.close();
@@ -185,6 +190,7 @@ public class PerfilDAO implements InterfaceDAO<Perfil>{
             p.setProdLeiteDiario(result.getDouble(6)); // Prod Diaria de Leite
             p.setEmpPermanentes(result.getInt(7)); //Num de Empregados Permanentes
             p.setNumFamiliares(result.getInt(8)); // Num Familiares
+            p.setRota((new RotaDAO()).recuperar(result.getInt(9))); // idRotaFK
                     
             perfis.add(p);
         }
@@ -214,5 +220,37 @@ public class PerfilDAO implements InterfaceDAO<Perfil>{
         statement.close();
         
         DBConexao.closeConnection(this.connection);    
+    }
+    
+    public ArrayList<Perfil> recuperarPorRota(Usuario usuario) throws SQLException {
+        this.connection = DBConexao.openConnection();
+        ArrayList<Perfil> perfis = null;
+        
+        String sql = "SELECT * FROM perfil WHERE rota = ?";
+        
+        PreparedStatement statement = this.connection.prepareStatement(sql);
+        statement.setInt(1, usuario.getRota().getId());
+        
+        ResultSet rs = statement.executeQuery();
+        
+        while(rs.next()) {
+            Perfil perfil = new Perfil();
+            
+            perfil.setIdPerfil(rs.getInt("idPerfil")); //idPerfil
+            perfil.setNome(rs.getString("nome")); //Nome
+            perfil.setCidade(rs.getString("cidade")); //Cidade
+            perfil.setTamPropriedade(rs.getDouble("tamPropriedade")); //Tam da Propriedade
+            perfil.setAreaPecLeite(rs.getDouble("areaPecLeite")); //Area Pec de Leite
+            perfil.setProdLeiteDiario(rs.getDouble("prodLeiteDiario")); // Prod Diaria de Leite
+            perfil.setEmpPermanentes(rs.getInt("empPermanentes")); //Num de Empregados Permanentes
+            perfil.setNumFamiliares(rs.getInt("numFamiliares")); // Num Familiares
+            perfil.setRota((new RotaDAO()).recuperar(rs.getInt("idRotaFK"))); // rota
+            
+            perfis.add(perfil);
+        }
+        rs.close();
+        statement.close();
+        DBConexao.closeConnection(this.connection);
+        return perfis;
     }
 }

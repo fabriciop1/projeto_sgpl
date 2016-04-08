@@ -16,14 +16,16 @@ public class Usuario implements Serializable {
     private int idUsuario;
     private String login;
     private String senha;
+    private Rota rota;
     
     public Usuario(){
-        this.idUsuario = -1;
+       
     }
 
-    public Usuario(String login, String senha) {
+    public Usuario(String login, String senha, Rota rota) {
         this.login = login;
         this.senha = senha;
+        this.rota = rota;
     }
 
     public int getIdUsuario() {
@@ -49,5 +51,15 @@ public class Usuario implements Serializable {
     public String getSenha() {
         return senha;
     }
+
+    public Rota getRota() {
+        return rota;
+    }
+
+    public void setRota(Rota rota) {
+        this.rota = rota;
+    }
+    
+    
     
 }

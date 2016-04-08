@@ -72,13 +72,14 @@ public final class TrashGen {
         return str;
     }
     
+    /*
     public static void generateGarbageInDatabase(String login, String password, boolean createUser) throws SQLException{
         
         Random rand = new Random();
         
         Usuario u = null;
         
-        if(createUser){
+       /* if(createUser){
             u = new Usuario(login, password);
             new UsuarioDAO().cadastrar(u);
         }
@@ -123,17 +124,17 @@ public final class TrashGen {
             new InventarioBenfeitoriasDAO().cadastrar(ib);
             new InventarioMaquinasDAO().cadastrar(im);
             new InventarioTerrasDAO().cadastrar(it);
+               
         }
-
     }
-    
+    */
     public static void main(String[] args){
         
-        try {
-            generateGarbageInDatabase("asdf","asdf",false);
-        } catch (SQLException ex) {
-            Logger.getLogger(TrashGen.class.getName()).log(Level.SEVERE, null, ex);
-        }
+      //  try {
+      //      generateGarbageInDatabase("asdf","asdf",false);
+      //  } catch (SQLException ex) {
+      //      Logger.getLogger(TrashGen.class.getName()).log(Level.SEVERE, null, ex);
+      //  }
         
     }
 }
