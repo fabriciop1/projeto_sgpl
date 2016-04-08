@@ -9,7 +9,6 @@ import flex.table.GenericTableModifier;
 import flex.table.GenericTableRowEditor;
 import flex.table.GenericTableRowInserter;
 import controle.ControlePerfil;
-import flex.*;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -270,6 +269,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
             DefaultTableModel modelBenfeitorias = (DefaultTableModel) tabelaBenfeitorias.getModel();
             modelBenfeitorias.setNumRows(0);
+            
 
             for(int i = 0; i < benfeitorias.size(); i++){
 
@@ -1352,6 +1352,11 @@ public class VisualizarInventario extends javax.swing.JFrame {
         adicionarInvBenfeitoriasBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/add.png"))); // NOI18N
 
         removerInvBenfeitoriasBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/delete.png"))); // NOI18N
+        removerInvBenfeitoriasBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removerInvBenfeitoriasBTActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -1494,6 +1499,11 @@ public class VisualizarInventario extends javax.swing.JFrame {
         });
 
         removerInvMaquinasBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/delete.png"))); // NOI18N
+        removerInvMaquinasBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removerInvMaquinasBTActionPerformed(evt);
+            }
+        });
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/add.png"))); // NOI18N
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -2070,7 +2080,14 @@ public class VisualizarInventario extends javax.swing.JFrame {
     }//GEN-LAST:event_editarInvBenfeitoriasBTActionPerformed
 
     private void removerInvTerrasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerInvTerrasBTActionPerformed
-        // TODO add your handling code here:
+        int indexTerras = tabelaInveTerras.getSelectedRow();
+        int indexForrageiras = tabelaInveForrageiras.getSelectedRow();
+        
+        DefaultTableModel modelInveTerras = (DefaultTableModel) tabelaInveTerras.getModel();
+        DefaultTableModel modelinveForrageiras = (DefaultTableModel) tabelaInveForrageiras.getModel();
+        
+        modelInveTerras.removeRow(indexTerras);
+        modelinveForrageiras.removeRow(indexForrageiras);
     }//GEN-LAST:event_removerInvTerrasBTActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -2096,6 +2113,18 @@ public class VisualizarInventario extends javax.swing.JFrame {
             tabelaAnimaisServGTRI.showEditor(evt);
         }
     }//GEN-LAST:event_adicionarInvAnimaisBTActionPerformed
+
+    private void removerInvBenfeitoriasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerInvBenfeitoriasBTActionPerformed
+        int index = tabelaBenfeitorias.getSelectedRow();
+        DefaultTableModel modelBenfeitorias = (DefaultTableModel) tabelaBenfeitorias.getModel();
+        modelBenfeitorias.removeRow(index);        
+    }//GEN-LAST:event_removerInvBenfeitoriasBTActionPerformed
+
+    private void removerInvMaquinasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerInvMaquinasBTActionPerformed
+        int index = tabelaMaquinas.getSelectedRow();
+        DefaultTableModel modelMaquinas = (DefaultTableModel) tabelaMaquinas.getModel();
+        modelMaquinas.removeRow(index);
+    }//GEN-LAST:event_removerInvMaquinasBTActionPerformed
     
     /**
      * @param args the command line arguments

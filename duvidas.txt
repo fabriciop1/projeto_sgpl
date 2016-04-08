@@ -1,12 +1,40 @@
-campos B67, total calculado, H61, G56, G57, diferença, B71, B75, B74, B70
+campo B67 - DEIXAR COMO ESTÁ
 
-inventario benfeitorias - Cochos e campos em vermelho
+total calculado - RETIRAR
 
-Um perfil poderá ter mais de um resumo?
+CAMPO H61 - RETIRAR
+
+G56, G57 - celula G56 para somar todos os finais FICA e celula G57 que soma todos os animais de produção SAI.
+
+CAMPOS diferença - REITRAR 
+
+B71, B75 - não serão fixos, DEIXAR como está
+
+B74 - FinalEquinos * ValorEquinos + FinalMuares * ValorMuares + FinalBoiDeCarro * ValorBoiDeCarro...
+
+B70 - calculo apenas para Touro
 
 
-USUARIO PODE ADICIONAR NOVAS COLUNAS EM INVENTARIO?
+USUARIO PODE ADICIONAR NOVAS COLUNAS EM INVENTARIO? sim
 
----- DADOS ECONOMICOS ----- IDEIA GERAL
-USUARIO PODE ADICIONAR NOVAS LINHAS EM DADOS ECONOMICOS?
-NOME DO SISTEMA
+USUARIO PODE ADICIONAR NOVAS LINHAS EM DADOS ECONOMICOS? Nao
+NOME DO SISTEMA - ?
+
+Até dados tecnicos mensais - telas
+Até indicadores tecnicos anuais - relatórios por periodo e por indicador
+
+
+ROTAS - 1 - SAO BENTO ROTA CURTA
+	2   sao bento ROTA longa
+	3   Lajedo
+	4   garanhuns - Miracica 
+
+
+1 usuario tem 1 rota
+1 perfil tem 1 rota
+
+1 rota estara em varios perfis
+1 rota tem n usuarios
+
+
+

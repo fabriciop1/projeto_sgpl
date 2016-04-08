@@ -1447,6 +1447,9 @@
                   <Image iconType="3" name="/visao/images/delete.png"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="removerInvBenfeitoriasBTActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -1657,6 +1660,9 @@
                   <Image iconType="3" name="/visao/images/delete.png"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="removerInvMaquinasBTActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="jButton2">
               <Properties>
