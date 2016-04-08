@@ -145,7 +145,13 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tabelaEspecificacao.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tabelaEspecificacao.getTableHeader().setReorderingAllowed(false);
+        tabelaEspecificacao.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                tabelaEspecificacaoFocusGained(evt);
+            }
+        });
         jScrollPane3.setViewportView(tabelaEspecificacao);
         if (tabelaEspecificacao.getColumnModel().getColumnCount() > 0) {
             tabelaEspecificacao.getColumnModel().getColumn(0).setResizable(false);
@@ -169,6 +175,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tabelaMeses.getTableHeader().setReorderingAllowed(false);
         jScrollPane4.setViewportView(tabelaMeses);
         if (tabelaMeses.getColumnModel().getColumnCount() > 0) {
             tabelaMeses.getColumnModel().getColumn(0).setResizable(false);
@@ -201,6 +208,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tabelaDadosEconomicos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tabelaDadosEconomicos.getTableHeader().setReorderingAllowed(false);
         jScrollPane5.setViewportView(tabelaDadosEconomicos);
         if (tabelaDadosEconomicos.getColumnModel().getColumnCount() > 0) {
@@ -264,6 +272,12 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         this.dispose();
 
     }//GEN-LAST:event_btnVoltarActionPerformed
+
+    private void tabelaEspecificacaoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tabelaEspecificacaoFocusGained
+        int index = tabelaEspecificacao.getSelectedRow();
+        tabelaDadosEconomicos.setRowSelectionInterval(index, index);
+
+    }//GEN-LAST:event_tabelaEspecificacaoFocusGained
 
     /**
      * @param args the command line arguments
