@@ -260,7 +260,7 @@
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="6" rowCount="10">
-                        <Column editable="false" title="Forrageiras n&#xe3;o Anuiais" type="java.lang.String"/>
+                        <Column editable="false" title="Forrageiras N&#xe3;o Anuais" type="java.lang.String"/>
                         <Column editable="false" title="R$/Ha" type="java.lang.Double"/>
                         <Column editable="false" title="Ha" type="java.lang.Double"/>
                         <Column editable="false" title="R$/total" type="java.lang.Double"/>
@@ -629,7 +629,7 @@
                               <Component id="jScrollPane4" alignment="0" min="-2" pref="994" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace min="0" pref="1" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1429,6 +1429,9 @@
                   <Image iconType="3" name="/visao/images/add.png"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="adicionarInvBenfeitoriasBTActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="removerInvBenfeitoriasBT">
               <Properties>
@@ -1473,7 +1476,7 @@
                           </Group>
                           <Group type="102" alignment="1" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jButton2" min="-2" pref="37" max="-2" attributes="0"/>
+                              <Component id="adicionarInvMaquinasBT" min="-2" pref="37" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="editarInvMaquinasBT" min="-2" pref="38" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -1511,7 +1514,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="removerInvMaquinasBT" alignment="1" min="-2" max="-2" attributes="0"/>
                           <Component id="editarInvMaquinasBT" alignment="1" min="-2" max="-2" attributes="0"/>
-                          <Component id="jButton2" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="adicionarInvMaquinasBT" alignment="1" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -1653,14 +1656,14 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="removerInvMaquinasBTActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton2">
+            <Component class="javax.swing.JButton" name="adicionarInvMaquinasBT">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/visao/images/add.png"/>
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="adicionarInvMaquinasBTActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>

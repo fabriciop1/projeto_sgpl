@@ -296,7 +296,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnIndicTecnMensaisActionPerformed
 
     private void btnInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInventarioActionPerformed
-        new VisualizarInventario().setVisible(true);
+        
+        VisualizarInventario inventario = new VisualizarInventario();
+        inventario.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnInventarioActionPerformed
 

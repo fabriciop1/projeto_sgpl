@@ -19,11 +19,12 @@ public class GenericTableRowInserter extends GenericTableModifier{
     private boolean allowEmptyCells;
     
     public GenericTableRowInserter(Frame parent, JTable sourceTable, boolean allowEmptyRows, boolean allowEmptyCells) {
-        super(parent, sourceTable, true);
+        super(parent, sourceTable, false);
         
         this.allowEmptyCells = allowEmptyCells;
         this.allowEmptyRows = allowEmptyRows;
         
+        this.setAllColumnsEditable(true);
         this.setLabelText("Adicionar");
     }
     
@@ -64,14 +65,12 @@ public class GenericTableRowInserter extends GenericTableModifier{
     
     @Override
     public void showEditor(ActionEvent e){
-        
+
         clearEditTable();
         refillEditTable();
 
         this.setVisible(true);
     }
-    
-    
     
     public boolean isAllowEmptyRows() {
         return allowEmptyRows;

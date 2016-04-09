@@ -5,10 +5,12 @@
  */
 package visao;
 
+import com.sun.corba.se.impl.ior.NewObjectKeyTemplateBase;
 import flex.table.GenericTableModifier;
 import flex.table.GenericTableRowEditor;
 import flex.table.GenericTableRowInserter;
 import controle.ControlePerfil;
+import flex.table.TableModifyListener;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -44,11 +46,15 @@ public class VisualizarInventario extends javax.swing.JFrame {
     private GenericTableModifier tabelaForrageirasGTRI;
     private GenericTableModifier tabelaAnimaisProdGTRI;
     private GenericTableModifier tabelaAnimaisServGTRI;
+    private GenericTableModifier tabelaMaquinasGTRI;
+    private GenericTableModifier tabelaBenfeitoriasGTRI;
+
     
     /**
      * Creates new form VisualizarInventario
      */
     public VisualizarInventario() {
+        
         initComponents();
              
         showTableLines();
@@ -452,7 +458,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total43 = new javax.swing.JLabel();
         editarInvMaquinasBT = new javax.swing.JButton();
         removerInvMaquinasBT = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        adicionarInvMaquinasBT = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jLabel26 = new javax.swing.JLabel();
         jLabel27 = new javax.swing.JLabel();
@@ -574,7 +580,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 {null, null, null, null, null, null}
             },
             new String [] {
-                "Forrageiras não Anuiais", "R$/Ha", "Ha", "R$/total", "Vida Útil Anos", "Depreciação R$/Ano"
+                "Forrageiras Não Anuais", "R$/Ha", "Ha", "R$/total", "Vida Útil Anos", "Depreciação R$/Ano"
             }
         ) {
             Class[] types = new Class [] {
@@ -1098,7 +1104,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
+                            .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 225, Short.MAX_VALUE)
                             .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1178,7 +1184,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                                 .addComponent(total29, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(total26, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)))
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 994, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 1, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1342,6 +1348,11 @@ public class VisualizarInventario extends javax.swing.JFrame {
         });
 
         adicionarInvBenfeitoriasBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/add.png"))); // NOI18N
+        adicionarInvBenfeitoriasBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                adicionarInvBenfeitoriasBTActionPerformed(evt);
+            }
+        });
 
         removerInvBenfeitoriasBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/delete.png"))); // NOI18N
         removerInvBenfeitoriasBT.addActionListener(new java.awt.event.ActionListener() {
@@ -1497,10 +1508,10 @@ public class VisualizarInventario extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/add.png"))); // NOI18N
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        adicionarInvMaquinasBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/add.png"))); // NOI18N
+        adicionarInvMaquinasBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                adicionarInvMaquinasBTActionPerformed(evt);
             }
         });
 
@@ -1525,7 +1536,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                         .addComponent(total43, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(adicionarInvMaquinasBT, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(editarInvMaquinasBT, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -1554,7 +1565,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(removerInvMaquinasBT, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(editarInvMaquinasBT, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(adicionarInvMaquinasBT, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
 
@@ -1997,6 +2008,26 @@ public class VisualizarInventario extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void iniciarGTREIs() {
+        tabelaMaquinasGTRE = new GenericTableRowEditor(this, tabelaMaquinas, true);
+        
+        tabelaBenfeitoriasGTRE = new GenericTableRowEditor(this, tabelaBenfeitorias, true);
+        tabelaForrageirasGTRE = new GenericTableRowEditor(this, tabelaInveForrageiras, true);
+        tabelaTerrasGTRE = new GenericTableRowEditor(this, tabelaInveTerras, true);
+        tabelaAnimaisProdGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisProd, true);
+        tabelaAnimaisServGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisServ, true);
+        
+        tabelaMaquinasGTRI = new GenericTableRowInserter(this, tabelaMaquinas, false, true);
+        tabelaBenfeitoriasGTRI = new GenericTableRowInserter(this, tabelaBenfeitorias, false, true);
+        tabelaTerrasGTRI = new GenericTableRowInserter(this, tabelaInveTerras, false, true);
+        tabelaForrageirasGTRI = new GenericTableRowInserter(this, tabelaInveForrageiras, false, true);
+        tabelaAnimaisProdGTRI = new GenericTableRowInserter(this, tabelaInveAnimaisProd, false, true);
+        tabelaAnimaisProdGTRI.setColumnEditable(7, false); // Valor (R$/Cab)
+        
+        tabelaAnimaisServGTRI = new GenericTableRowInserter(this, tabelaInveAnimaisServ, false, true);
+        tabelaAnimaisServGTRI.setColumnEditable(7, false); // Valor (R$/Cab)
+    }
+    
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
         
         new MenuPrincipal().setVisible(true);
@@ -2103,9 +2134,10 @@ public class VisualizarInventario extends javax.swing.JFrame {
         
     }//GEN-LAST:event_removerInvTerrasBTActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void adicionarInvMaquinasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarInvMaquinasBTActionPerformed
+        
+        tabelaMaquinasGTRI.showEditor(evt);
+    }//GEN-LAST:event_adicionarInvMaquinasBTActionPerformed
 
     private void adicionarInvAnimaisBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarInvAnimaisBTActionPerformed
         
@@ -2201,6 +2233,11 @@ public class VisualizarInventario extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Insira um valor válido!");
         }
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void adicionarInvBenfeitoriasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarInvBenfeitoriasBTActionPerformed
+        
+        tabelaBenfeitoriasGTRI.showEditor(evt);
+    }//GEN-LAST:event_adicionarInvBenfeitoriasBTActionPerformed
     
     /**
      * @param args the command line arguments
@@ -2268,26 +2305,10 @@ public class VisualizarInventario extends javax.swing.JFrame {
         tabelaMaquinas.setShowVerticalLines(true);
     }
     
-    private void iniciarGTREIs() {
-        tabelaTerrasGTRI = new GenericTableRowInserter(this, tabelaInveTerras, false, true);
-        tabelaForrageirasGTRI = new GenericTableRowInserter(this, tabelaInveForrageiras, false, true);
-        
-        tabelaMaquinasGTRE = new GenericTableRowEditor(this, tabelaMaquinas, true);
-        tabelaBenfeitoriasGTRE = new GenericTableRowEditor(this, tabelaBenfeitorias, true);
-        
-        tabelaForrageirasGTRE = new GenericTableRowEditor(this, tabelaInveForrageiras, true);
-        tabelaTerrasGTRE = new GenericTableRowEditor(this, tabelaInveTerras, true);
-        
-        tabelaAnimaisProdGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisProd, true);
-        tabelaAnimaisServGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisServ, true);
-        
-        tabelaAnimaisProdGTRI = new GenericTableRowInserter(this, tabelaInveAnimaisProd, false, true);
-        tabelaAnimaisServGTRI = new GenericTableRowInserter(this, tabelaInveAnimaisServ, false, true);
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton adicionarInvAnimaisBT;
     private javax.swing.JButton adicionarInvBenfeitoriasBT;
+    private javax.swing.JButton adicionarInvMaquinasBT;
     private javax.swing.JButton adicionarInvTerrasBT;
     private javax.swing.JLabel atividadeLeite;
     private javax.swing.JButton btnInserirValor;
@@ -2298,7 +2319,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
     private javax.swing.JButton editarInvMaquinasBT;
     private javax.swing.JButton editarInvTerrasBT;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;

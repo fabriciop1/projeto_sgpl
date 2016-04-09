@@ -5,19 +5,13 @@
  */
 package flex.table;
 
-import flex.db.GenericDBModifier;
 import java.awt.Frame;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.util.Random;
-import javax.swing.JButton;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JDialog;
-import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
-import util.Pair;
 
 /**
  *
@@ -33,8 +27,8 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
     
     private boolean forceCellEditing;
     private Frame parent;
-    private GenericDBModifier dbModifier;
-    private TableModelListener dbModifierListener;
+    private boolean columnEditableArray[];
+    private List<TableModifyListener> tableModifylisteners;
     
     public GenericTableModifier(Frame parent, JTable sourceTable, boolean forceCellEditing) {
         super(parent, true);
@@ -42,6 +36,9 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
         this.parent = parent;
         this.sourceTable = sourceTable;
         this.forceCellEditing = forceCellEditing;
+        this.tableModifylisteners = new ArrayList<>();
+        
+        this.columnEditableArray = new boolean[sourceTable.getColumnCount()];
         
         initComponents();
         
@@ -51,9 +48,6 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
         editTable.setShowHorizontalLines(true);
         editTable.setShowVerticalLines(true);
         
-        int screenWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
-        int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
-        
         this.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
         this.setMinimumSize(this.getSize());
         this.setLabelText("");
@@ -61,49 +55,27 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
         
         composeEditTable();
         
-        this.setLocation((screenWidth / 2) - (this.getWidth() / 2), (screenHeight / 2) - (this.getHeight() / 2));
+        this.setLocationRelativeTo(null);
     }
     
-    public void setDatabaseModifier(GenericDBModifier dbModifier, String tableName, boolean ignoreIDColumn){        
-        
-        this.dbModifier = dbModifier;
-        
-        this.dbModifierListener = (TableModelEvent event) -> {
-            
-            switch(event.getType()){
-                
-                case TableModelEvent.INSERT:
-                    dbModifier.insertTableRow(tableName, getSourceTableRowData(sourceTable.getSelectedRow()), ignoreIDColumn);
-                    break;
-                    
-                case TableModelEvent.UPDATE:
-                    dbModifier.updateTableRow(tableName, getSourceTableRowData(sourceTable.getSelectedRow()), ignoreIDColumn);
-                    break;
-                    
-                case TableModelEvent.DELETE:
-                    dbModifier.deleteTableRow(tableName, getSourceTableRowData(sourceTable.getSelectedRow()), ignoreIDColumn);
-                    break;
-            }
-        };
-        
-        getSourceTableModel().addTableModelListener(dbModifierListener); 
+    public void addTableModifyListener(TableModifyListener listener){
+        tableModifylisteners.add(listener);
     }
     
-    public void removeDatabaseModifier(){
-        
-        getSourceTableModel().removeTableModelListener(dbModifierListener);
-        
-        dbModifierListener = null;
-        dbModifier = null;        
+    public void removeTableModifyListener(TableModifyListener listener){
+        tableModifylisteners.remove(listener);
     }
     
-    public GenericDBModifier getDatabaseModifier(){
-        return this.dbModifier;
-    }
+    public void showEditor(ActionEvent e){
+        
+        clearEditTable();
+        refillEditTable();
+
+        this.setVisible(true);
+    }   
     
     protected void composeEditTable(){
         
-        boolean[] columnEditableArray = new boolean[sourceTable.getColumnCount()];
         Class[] columnTypeArray = new Class[sourceTable.getColumnCount()];
         String[] columnNameArray = new String[sourceTable.getColumnCount()];
         Object[][] dataMatrix = new Object[sourceTable.getColumnCount()][1];  
@@ -119,7 +91,6 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
         editTable.setModel(new DefaultTableModel(dataMatrix, columnNameArray){
             
             Class[] types = columnTypeArray;
-            boolean[] isColumnEditable = columnEditableArray;
             
             @Override
             public Class getColumnClass(int columnIndex) {
@@ -130,7 +101,7 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 
                 if(!isForceCellEditingEnabled()){
-                    return isColumnEditable[columnIndex];
+                    return columnEditableArray[columnIndex];
                 } else {
                     return true;
                 }
@@ -148,28 +119,21 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
             minDialogSize += sourceColumnWidth;
             
             editTable.getColumnModel().getColumn(i).setMinWidth(sourceColumnWidth);
-            
-            //System.out.println("" + (i+1) + ". Source: " + sourceTable.getColumnClass(i).getName());
-            //System.out.println("" + (i+1) + ". Edit: " + editTable.getColumnClass(i).getName());
-
         }
         
         this.setSize(minDialogSize, this.getHeight());
     }
     
-    public void showEditor(ActionEvent e){
+    protected void notifyListeners(int modifType){
         
-        clearEditTable();
-        refillEditTable();
-
-        this.setVisible(true);
-    }    
-    
+        for(TableModifyListener listener : tableModifylisteners){
+            listener.tableModified(modifType, this);
+        }
+    }
     
     protected abstract void refillEditTable();
     
     protected abstract void updateSourceTable();
-    
     
     protected void addEditTableRow(Object[] dataArray){
         ((DefaultTableModel)editTable.getModel()).addRow(dataArray);
@@ -179,6 +143,84 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
     protected void addSourceTableRow(Object[] dataArray){
         getSourceTableModel().addRow(dataArray);
         getSourceTableModel().fireTableRowsInserted(sourceTable.getRowCount()-1, sourceTable.getRowCount()-1);
+        
+        notifyListeners(TableModifyListener.ROW_INSERTED);
+    }
+    
+    protected Object[] getEditTableRowData(int row){
+        
+        Object[] data = new Object[editTable.getColumnCount()];
+        
+        for (int i = 0; i < data.length; i++) {
+            data[i] = editTable.getValueAt(row, i);
+        }
+        
+        return data;
+    }
+    
+    protected Object[] getSourceTableRowData(int row){
+        
+        Object[] data = new Object[sourceTable.getColumnCount()];
+        
+        for (int i = 0; i < data.length; i++) {
+            data[i] = sourceTable.getValueAt(row, i);
+        }
+        
+        return data;
+    }
+    
+    protected void removeSourceTableRow(int row){
+        getSourceTableModel().removeRow(row);
+        getSourceTableModel().fireTableRowsDeleted(row, row);
+        
+        notifyListeners(TableModifyListener.ROW_DELETED);
+    }
+    
+    protected void removeEditTableRow(int row){
+        getEditTableModel().removeRow(row);
+        getEditTableModel().fireTableRowsDeleted(row, row);
+        
+        notifyListeners(TableModifyListener.ROW_DELETED);
+    }
+    
+    protected void updateSourceTableRow(int row, Object[] dataArray){
+        
+        boolean isEqual = true;
+        
+        for (int i = 0; i < dataArray.length; i++) {
+            
+            if(!sourceTable.getValueAt(row, i).equals(dataArray[i])){
+                
+                sourceTable.setValueAt(dataArray[i], row, i);
+                isEqual = false;
+            }
+        }
+        
+        getSourceTableModel().fireTableRowsUpdated(row, row);
+        
+        if(!isEqual){
+            notifyListeners(TableModifyListener.ROW_UPDATED);
+        }
+    }
+    
+    protected void updateEditTableRow(int row, Object[] dataArray){
+        
+        boolean isEqual = true;
+        
+        for (int i = 0; i < dataArray.length; i++) {
+            
+            if(!editTable.getValueAt(row, i).equals(dataArray[i])){
+                
+                editTable.setValueAt(dataArray[i], row, i);
+                isEqual = false;
+            }
+        }
+        
+        getEditTableModel().fireTableRowsUpdated(row, row);
+        
+        if(!isEqual){
+            notifyListeners(TableModifyListener.ROW_UPDATED);
+        }
     }
     
     protected int getEditorColumnCount(){
@@ -196,11 +238,6 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
         this.setVisible(false);
     }
     
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -301,7 +338,6 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
         clearEditTable();
     }//GEN-LAST:event_cancelButtonActionPerformed
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
     private javax.swing.JLabel editLabel;
@@ -310,28 +346,6 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
     private javax.swing.JButton saveButton;
     // End of variables declaration//GEN-END:variables
 
-    protected Object[] getEditTableRowData(int row){
-        
-        Object[] data = new Object[editTable.getColumnCount()];
-        
-        for (int i = 0; i < data.length; i++) {
-            data[i] = editTable.getValueAt(row, i);
-        }
-        
-        return data;
-    }
-    
-    protected Object[] getSourceTableRowData(int row){
-        
-        Object[] data = new Object[sourceTable.getColumnCount()];
-        
-        for (int i = 0; i < data.length; i++) {
-            data[i] = sourceTable.getValueAt(row, i);
-        }
-        
-        return data;
-    }
-    
     protected JTable getSourceTable() {
         return sourceTable;
     }
@@ -340,16 +354,12 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
         return (DefaultTableModel) sourceTable.getModel();
     }
 
-    public int getSelectedRow() {
+    protected int getSelectedRow() {
         return sourceTable.getSelectedRow();
     }
 
     protected javax.swing.JButton getCancelButton() {
         return cancelButton;
-    }
-
-    public String getLabelText() {
-        return editLabel.getText();
     }
 
     protected javax.swing.JTable getEditTable() {
@@ -362,6 +372,15 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
     
     protected javax.swing.JButton getSaveButton() {
         return saveButton;
+    }
+    
+    
+    public Object[] getSourceTableSelectedRowData(){
+        return getSourceTableRowData(sourceTable.getSelectedRow());
+    }
+    
+    public String getLabelText() {
+        return editLabel.getText();
     }
 
     public void setLabelText(String text) {
@@ -376,4 +395,18 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
         this.forceCellEditing = forceCellEditing;
     }
     
+    public void setColumnEditable(int columnIndex, boolean editable){
+        columnEditableArray[columnIndex] = editable;
+    }
+    
+    public boolean isColumnEditable(int columnIndex){
+        return columnEditableArray[columnIndex];
+    }
+    
+    public void setAllColumnsEditable(boolean editable){
+        
+        for(int i=0; i<columnEditableArray.length; i++){
+            columnEditableArray[i] = editable;
+        }
+    }
 }

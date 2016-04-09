@@ -45,21 +45,7 @@ public class GenericTableRowEditor extends GenericTableModifier {
             editTable.getCellEditor().stopCellEditing();
         }
         
-        for(int i=0; i<columnCount; i++){
-            
-            Object value = editTable.getValueAt(0, i);
-            
-            if(value == null){
-                System.err.println("Warning: NULL value at R=0 C=" + i);
-                continue;
-            }
-            
-            sourceTable.setValueAt(value, sourceTable.getSelectedRow(), i);
-            
-            getSourceTableModel().fireTableCellUpdated(sourceTable.getSelectedRow(), i);
-        }
-        
-        getSourceTableModel().fireTableRowsUpdated(sourceTable.getSelectedRow(), sourceTable.getSelectedRow());
+        updateSourceTableRow(getSourceTable().getSelectedRow(), getEditTableRowData(0));
     }
     
     @Override
