@@ -14,11 +14,15 @@ import java.util.ArrayList;
  * @param <T>
  */
 public interface InterfaceDAO<T> {
-    
+
     public void cadastrar(T dado) throws SQLException;
+
     public void atualizar(T dado) throws SQLException;
+
     public void remover(int id) throws SQLException;
+
     public T recuperar(int id) throws SQLException;
+
     public ArrayList<T> recuperarTodos() throws SQLException;
-    
+
 }

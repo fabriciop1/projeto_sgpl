@@ -15,6 +15,7 @@ import modelo.dao.InventarioBenfeitoriasDAO;
 import modelo.dao.InventarioMaquinasDAO;
 import modelo.dao.InventarioTerrasDAO;
 import modelo.dao.PerfilDAO;
+import modelo.dao.RotaDAO;
 import modelo.dao.UsuarioDAO;
 import modelo.dao.UsuarioPerfilDAO;
 import modelo.negocio.DadosEconMensais;
@@ -24,6 +25,7 @@ import modelo.negocio.InventarioMaquinas;
 import modelo.negocio.InventarioResumo;
 import modelo.negocio.InventarioTerras;
 import modelo.negocio.Perfil;
+import modelo.negocio.Rota;
 import modelo.negocio.Usuario;
 
 /**
@@ -72,44 +74,38 @@ public final class TrashGen {
         return str;
     }
     
-    /*
-    public static void generateGarbageInDatabase(String login, String password, boolean createUser) throws SQLException{
+    
+    public static void generateGarbageInDatabase(int insertions, String login, String password, boolean createUser) throws SQLException{
         
         Random rand = new Random();
         
         Usuario u = null;
+        Rota rota = new RotaDAO().recuperar(1);
         
-       /* if(createUser){
-            u = new Usuario(login, password);
+        if(createUser){
+            u = new Usuario(login, password, rota);
             new UsuarioDAO().cadastrar(u);
         }
         
         u = new UsuarioDAO().recuperarPorLogin(login);
         
         Perfil p = new Perfil(generateString(20, false, false, false), generateString(20,false,false,false), 
-                rand.nextInt() % 1000, rand.nextInt() % 1000, rand.nextInt() % 1000, rand.nextInt() % 1000, rand.nextInt() % 1000);
+                rand.nextInt() % 1000, rand.nextInt() % 1000, rand.nextInt() % 1000, rand.nextInt() % 1000, 
+                rand.nextInt() % 1000, rota);
         
         new PerfilDAO().cadastrar(p);
         
         new UsuarioPerfilDAO().cadastrar(u, p);
         
-        for(int i=0; i<rand.nextInt(30) + 1; i++){
+        for(int i=0; i<insertions; i++){
 
             InventarioAnimais ia = new InventarioAnimais();
-            ia.setPerfil(p);
-            ia.setCategoria(generateString(200,false,false,false));
-            ia.setCompra(rand.nextInt() % 10000);
-            ia.setMorte(rand.nextInt() % 10000);
-            ia.setNascimento(rand.nextInt() % 10000);
-            ia.setTipoAnimal(rand.nextInt() % 10000);
-            ia.setValorCabeca(rand.nextInt() % 10000);
-            ia.setValorFinal(rand.nextInt() % 10000);
-            ia.setValorGastoCompraAnimais(rand.nextInt() % 10000);
-            ia.setValorInicio(rand.nextInt() % 10000);
-            ia.setVenda(rand.nextInt() % 10000);
-            ia.setVidaUtilAnimaisServico(rand.nextInt() % 10000);
-            ia.setVidaUtilReprodutores(rand.nextInt() % 10000);
-            ia.setPerfil(p);
+            ia.setPerfil(p); ia.setCategoria(generateString(200,false,false,false));
+            ia.setCompra(rand.nextInt() % 10000); ia.setMorte(rand.nextInt() % 10000);
+            ia.setNascimento(rand.nextInt() % 10000);ia.setTipoAnimal(rand.nextInt() % 10000);ia.setValorCabeca(rand.nextInt() % 10000);
+            ia.setValorFinal(rand.nextInt() % 10000);ia.setValorGastoCompraAnimais(rand.nextInt() % 10000);
+            ia.setValorInicio(rand.nextInt() % 10000);ia.setVenda(rand.nextInt() % 10000);ia.setVidaUtilAnimaisServico(rand.nextInt() % 10000);
+            ia.setVidaUtilReprodutores(rand.nextInt() % 10000);ia.setPerfil(p);
 
             InventarioBenfeitorias ib = new InventarioBenfeitorias(generateString(20,false,false,false), generateString(10,false,false,false),
                     rand.nextInt() % 1000, rand.nextInt() % 10000, 0, p);
@@ -127,14 +123,14 @@ public final class TrashGen {
                
         }
     }
-    */
+    
     public static void main(String[] args){
         
-      //  try {
-      //      generateGarbageInDatabase("asdf","asdf",false);
-      //  } catch (SQLException ex) {
-      //      Logger.getLogger(TrashGen.class.getName()).log(Level.SEVERE, null, ex);
-      //  }
+        try {
+            generateGarbageInDatabase(700, "adriana","adriana",false);
+        } catch (SQLException ex) {
+            Logger.getLogger(TrashGen.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
 }

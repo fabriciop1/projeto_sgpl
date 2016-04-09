@@ -5,17 +5,20 @@
  */
 package visao;
 
-import com.sun.corba.se.impl.ior.NewObjectKeyTemplateBase;
 import flex.table.GenericTableModifier;
 import flex.table.GenericTableRowEditor;
 import flex.table.GenericTableRowInserter;
 import controle.ControlePerfil;
-import flex.table.TableModifyListener;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import modelo.dao.DBConexao;
 import modelo.dao.InventarioAnimaisDAO;
 import modelo.dao.InventarioBenfeitoriasDAO;
 import modelo.dao.InventarioMaquinasDAO;
@@ -68,33 +71,36 @@ public class VisualizarInventario extends javax.swing.JFrame {
         ArrayList<InventarioMaquinas> maquinas = new ArrayList<>();
         
         //Arrays para totais
-        ArrayList<Double> totalAreaArreInic  = new ArrayList<>();
-        ArrayList<Double> totalAreaArreFina  = new ArrayList<>();
+        double totalAreaArreInic  = 0;
+        double totalAreaArreFina  = 0;
+        double totalHa            = 0;
+        double totalValorHa       = 0;
+        double totalDepreciacao   = 0;
+        double totalValInicProd   = 0;
+        double totalValInicServ   = 0;
+        double totalNascProd      = 0;
+        double totalMorteProd     = 0;
+        double totalVendaProd     = 0;
+        double totalCompraProd    = 0;
+        double totalNascServ      = 0;
+        double totalMorteServ     = 0;
+        double totalVendaServ     = 0;
+        double totalCompraServ    = 0;
+        double totalValFinaProd   = 0;
+        double totalValorInicio   = 0;
+        double totalValorFinal    = 0;
+        double totalValorBenfeit  = 0;
+        double totalValorMaquin   = 0;
+        double totalDeprecBenfeit = 0;
+        double totalDeprecMaquin  = 0;
+        
         ArrayList<Double> totalAreaPropInic  = new ArrayList<>();
         ArrayList<Double> totalAreaPropFina  = new ArrayList<>();
         ArrayList<Double> totalTerraNua      = new ArrayList<>();
-        ArrayList<Double> totalHa            = new ArrayList<>();
-        ArrayList<Double> totalValorHa       = new ArrayList<>();
-        ArrayList<Double> totalDepreciacao   = new ArrayList<>();
-        ArrayList<Double> totalValInicProd   = new ArrayList<>();
-        ArrayList<Double> totalValInicServ   = new ArrayList<>();
-        ArrayList<Double> totalNascProd      = new ArrayList<>();
-        ArrayList<Double> totalMorteProd     = new ArrayList<>();
-        ArrayList<Double> totalVendaProd     = new ArrayList<>();
-        ArrayList<Double> totalCompraProd    = new ArrayList<>();
-        ArrayList<Double> totalNascServ      = new ArrayList<>();
-        ArrayList<Double> totalMorteServ     = new ArrayList<>();
-        ArrayList<Double> totalVendaServ     = new ArrayList<>();
-        ArrayList<Double> totalCompraServ    = new ArrayList<>();
-        ArrayList<Double> totalValFinaProd   = new ArrayList<>();
         ArrayList<Double> totalValFinaServ   = new ArrayList<>();
-        ArrayList<Double> totalValorInicio   = new ArrayList<>();
-        ArrayList<Double> totalValorFinal    = new ArrayList<>();
-        ArrayList<Double> totalValorBenfeit  = new ArrayList<>();
-        ArrayList<Double> totalValorMaquin   = new ArrayList<>();
-        ArrayList<Double> totalDeprecBenfeit = new ArrayList<>();
-        ArrayList<Double> totalDeprecMaquin  = new ArrayList<>();
         ArrayList<Double> totalValCabeServ   = new ArrayList<>();
+        
+        
         
         InventarioResumo resumo = new InventarioResumo();
         
@@ -108,14 +114,13 @@ public class VisualizarInventario extends javax.swing.JFrame {
      
         iniciarGTREIs();
         
-        try{
+        try {
             terras = itdao.recuperarPorPerfil(perfilAtual.getIdPerfil());
-            
             animais = iadao.recuperarPorPerfil(perfilAtual.getIdPerfil());
             benfeitorias = ibdao.recuperarPorPerfil(perfilAtual.getIdPerfil());
             maquinas = imdao.recuperarPorPerfil(perfilAtual.getIdPerfil());
-        }catch(Exception e){
-            System.out.println("Erro em Construtor Visualizar Invent�rio.");
+        } catch (SQLException ex) {
+            Logger.getLogger(VisualizarInventario.class.getName()).log(Level.SEVERE, null, ex);
         }
      
         DefaultTableModel modelTerras = (DefaultTableModel) tabelaInveTerras.getModel();
@@ -133,9 +138,9 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 terras.get(i).getValorTerraNuaPropria(),
             });
             
-            totalAreaArreInic.add(terras.get(i).getAreaArrendadaInicio());
+            totalAreaArreInic += (terras.get(i).getAreaArrendadaInicio());
             totalAreaPropInic.add(terras.get(i).getAreaPropriaInicio());
-            totalAreaArreFina.add(terras.get(i).getAreaArrendadaFinal());
+            totalAreaArreFina += (terras.get(i).getAreaArrendadaFinal());
             totalAreaPropFina.add(terras.get(i).getAreaPropriaFinal());
             totalTerraNua.add(terras.get(i).getValorTerraNuaPropria());
             
@@ -161,24 +166,24 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 
             });
             
-            totalHa.add(ha);
-            totalValorHa.add(valorHa);
-            totalDepreciacao.add(depreciacao);
+            totalHa += (ha);
+            totalValorHa += (valorHa);
+            totalDepreciacao += (depreciacao);
         }
         verificaTabelaVazia(modelForrageiras, editarInvTerrasBT, removerInvTerrasBT);
         
-        total1.setText("" + Calc.somarLista(totalAreaArreInic));
+        total1.setText("" + (totalAreaArreInic));
         total2.setText("" + Calc.somarLista(totalAreaPropInic));
-        total3.setText("" + Calc.somarLista(totalAreaArreFina));
+        total3.setText("" + (totalAreaArreFina));
         total4.setText("" + Calc.somarLista(totalAreaPropFina));
         total5.setText("" + (Double.parseDouble(total1.getText()) + Double.parseDouble(total2.getText())));
         total6.setText("" + (Double.parseDouble(total3.getText()) + Double.parseDouble(total4.getText())));
         total7.setText(String.format("R$ %.2f", Calc.somaPonderada(totalAreaPropInic, totalTerraNua)).replace(',','.'));
         total8.setText(String.format("R$ %.2f", Calc.somaPonderada(totalAreaPropFina, totalTerraNua)).replace(',','.'));
         total9.setText(String.format("R$ %.2f", Calc.mediaAritmetica(Double.parseDouble(total7.getText().substring(2)), Double.parseDouble(total8.getText().substring(2)))).replace(',','.'));
-        total10.setText("" + Calc.somarLista(totalHa));
-        total11.setText("" + Calc.somarLista(totalValorHa));
-        total12.setText("" + Calc.somarLista(totalDepreciacao));
+        total10.setText("" + (totalHa));
+        total11.setText("" + (totalValorHa));
+        total12.setText("" + (totalDepreciacao));
         
         DefaultTableModel modelAnimaisProd = (DefaultTableModel) tabelaInveAnimaisProd.getModel();
         modelAnimaisProd.setNumRows(0);
@@ -213,14 +218,14 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
                 });
 
-                    totalValInicProd.add(animais.get(i).getValorInicio() * 1.0);  
-                    totalNascProd.add(animais.get(i).getNascimento() * 1.0);
-                    totalMorteProd.add(animais.get(i).getMorte() * 1.0); 
-                    totalVendaProd.add(animais.get(i).getVenda() * 1.0); 
-                    totalCompraProd.add(animais.get(i).getCompra() * 1.0);
-                    totalValFinaProd.add(animais.get(i).getValorFinal() * 1.0);
-                    totalValorInicio.add(valorInicio);
-                    totalValorFinal.add(valorFinal);
+                    totalValInicProd += (animais.get(i).getValorInicio() * 1.0);  
+                    totalNascProd += (animais.get(i).getNascimento() * 1.0);
+                    totalMorteProd += (animais.get(i).getMorte() * 1.0); 
+                    totalVendaProd += (animais.get(i).getVenda() * 1.0); 
+                    totalCompraProd += (animais.get(i).getCompra() * 1.0);
+                    totalValFinaProd += (animais.get(i).getValorFinal() * 1.0);
+                    totalValorInicio += (valorInicio);
+                    totalValorFinal += (valorFinal);
 
                 } else if (animais.get(i).getTipoAnimal() == 2) { //servico
 
@@ -236,11 +241,11 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
                     });
 
-                    totalValInicServ.add(animais.get(i).getValorInicio() * 1.0);
-                    totalNascServ.add(animais.get(i).getNascimento() * 1.0);  
-                    totalMorteServ.add(animais.get(i).getMorte() * 1.0);
-                    totalVendaServ.add(animais.get(i).getVenda() * 1.0); 
-                    totalCompraServ.add(animais.get(i).getCompra() * 1.0);
+                    totalValInicServ += (animais.get(i).getValorInicio() * 1.0);
+                    totalNascServ += (animais.get(i).getNascimento() * 1.0);  
+                    totalMorteServ += (animais.get(i).getMorte() * 1.0);
+                    totalVendaServ += (animais.get(i).getVenda() * 1.0); 
+                    totalCompraServ += (animais.get(i).getCompra() * 1.0);
                     totalValFinaServ.add(animais.get(i).getValorFinal() * 1.0);
                     totalValCabeServ.add(animais.get(i).getValorCabeca() * 1.0);
                 }
@@ -249,20 +254,20 @@ public class VisualizarInventario extends javax.swing.JFrame {
             verificaTabelaVazia(modelAnimaisProd, editarInvAnimaisBT, removerInvAnimaisBT);
             verificaTabelaVazia(modelAnimaisServ, editarInvAnimaisBT, removerInvAnimaisBT);
 
-            total13.setText("" + Calc.somarLista(totalValInicProd));
-            total14.setText("" + Calc.somarLista(totalNascProd));
-            total15.setText("" + Calc.somarLista(totalMorteProd));
-            total16.setText("" + Calc.somarLista(totalVendaProd));
-            total17.setText("" + Calc.somarLista(totalCompraProd));
-            total18.setText("" + Calc.somarLista(totalValFinaProd));
+            total13.setText("" + (totalValInicProd));
+            total14.setText("" + (totalNascProd));
+            total15.setText("" + (totalMorteProd));
+            total16.setText("" + (totalVendaProd));
+            total17.setText("" + (totalCompraProd));
+            total18.setText("" + (totalValFinaProd));
                         
-            total19.setText("" + Calc.somarLista(totalValorInicio));
-            total20.setText("" + Calc.somarLista(totalValorFinal));
-            total21.setText("" + Calc.somarLista(totalValInicServ));
-            total22.setText("" + Calc.somarLista(totalNascServ));
-            total23.setText("" + Calc.somarLista(totalMorteServ));
-            total24.setText("" + Calc.somarLista(totalVendaServ));
-            total25.setText("" + Calc.somarLista(totalCompraServ));
+            total19.setText("" + (totalValorInicio));
+            total20.setText("" + (totalValorFinal));
+            total21.setText("" + (totalValInicServ));
+            total22.setText("" + (totalNascServ));
+            total23.setText("" + (totalMorteServ));
+            total24.setText("" + (totalVendaServ));
+            total25.setText("" + (totalCompraServ));
             total26.setText("" + Calc.somarLista(totalValFinaServ));
 
             total28.setText("" + (Double.parseDouble(total13.getText().replace(',','.')) + Double.parseDouble(total21.getText().replace(',','.'))));
@@ -303,14 +308,14 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     depreciacao,
                 });
 
-                totalValorBenfeit.add(total);
-                totalDeprecBenfeit.add(depreciacao);
+                totalValorBenfeit += (total);
+                totalDeprecBenfeit += (depreciacao);
             }
             
             verificaTabelaVazia(modelBenfeitorias, editarInvBenfeitoriasBT, removerInvBenfeitoriasBT);
 
-            total40.setText(String.format("%.2f", Calc.somarLista(totalValorBenfeit)));
-            total41.setText(String.format("%.2f", Calc.somarLista(totalDeprecBenfeit)));
+            total40.setText(String.format("%.2f", (totalValorBenfeit)));
+            total41.setText(String.format("%.2f", (totalDeprecBenfeit)));
 
             DefaultTableModel modelMaquinas = (DefaultTableModel) tabelaMaquinas.getModel();
             modelMaquinas.setNumRows(0);
@@ -330,13 +335,13 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     depreciacao,
                 });
 
-                totalValorMaquin.add(total);
-                totalDeprecMaquin.add(depreciacao);
+                totalValorMaquin += (total);
+                totalDeprecMaquin += (depreciacao);
             }
             verificaTabelaVazia(modelMaquinas, editarInvMaquinasBT, removerInvMaquinasBT);
 
-            total42.setText("" + Calc.somarLista(totalValorMaquin));
-            total43.setText("" + Calc.somarLista(totalDeprecMaquin));
+            total42.setText("" + (totalValorMaquin));
+            total43.setText("" + (totalDeprecMaquin));
 
             //Resumo
             total44.setText(total12.getText());
@@ -2255,42 +2260,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
         
         tabelaBenfeitoriasGTRI.showEditor(evt);
     }//GEN-LAST:event_adicionarInvBenfeitoriasBTActionPerformed
-    
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VisualizarInventario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VisualizarInventario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VisualizarInventario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(VisualizarInventario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new VisualizarInventario().setVisible(true);
-            }
-        });
-        
-    }
     
     private void verificaTabelaVazia(DefaultTableModel table, JButton editarBtn, JButton removerBtn) {
         if(table.getRowCount() == 0) {

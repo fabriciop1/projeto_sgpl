@@ -9,40 +9,38 @@ import com.mysql.jdbc.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-
 /**
  *
  * @author Fabricio
  */
 public class DBConexao {
-    
-    public DBConexao(){
-        
+
+    public DBConexao() {
+
     }
-    
-    public static Connection openConnection() 
-    {
+
+    public static Connection openConnection() {
         Connection connection;
         String driverName = "com.mysql.jdbc.Driver";
         try {
             Class.forName(driverName);
-            
+
             String serverName = "localhost";
-            String portNumber = "3306"; 
+            String portNumber = "9090";
             String database = "projeto_pesquisa";
             String url = "jdbc:mysql://" + serverName + ":" + portNumber + "/" + database;
             String username = "root";
             //String password = "root"; 
-            String password = "1234";
-            
+            String password = "";
+
             connection = (Connection) DriverManager.getConnection(url, username, password);
-            
-            if(connection == null) {
+
+            if (connection == null) {
                 System.out.println("Falha na conexão com banco de dados.");
-            } 
+            }
             return connection;
-            
-        } catch(ClassNotFoundException e) {
+
+        } catch (ClassNotFoundException e) {
             System.out.println("Driver não encontrado. " + e.getMessage());
             return null;
         } catch (SQLException ex) {
@@ -50,6 +48,7 @@ public class DBConexao {
             return null;
         }
     }
+
     public static void closeConnection(java.sql.Connection connection) {
         try {
             connection.close();
