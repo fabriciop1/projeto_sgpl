@@ -1,18 +1,18 @@
-campo B67 - DEIXAR COMO ESTÁ
+campo B67 - DEIXAR COMO ESTÁ (ok)
 
-total calculado - RETIRAR
+total calculado - RETIRAR (ok)
 
 CAMPO H61 - RETIRAR
 
-G56, G57 - celula G56 para somar todos os finais FICA e celula G57 que soma todos os animais de produção SAI.
+G56, G57 - celula G56 para somar todos os finais FICA e celula G57 que soma todos os animais de produção SAI.(ok)
 
-CAMPOS diferença - REITRAR 
+CAMPOS diferença - RETIRAR (ok)
 
 B71, B75 - não serão fixos, DEIXAR como está
 
-B74 - FinalEquinos * ValorEquinos + FinalMuares * ValorMuares + FinalBoiDeCarro * ValorBoiDeCarro...
+B74 - FinalEquinos * ValorEquinos + FinalMuares * ValorMuares + FinalBoiDeCarro * ValorBoiDeCarro... (ok)
 
-B70 - calculo apenas para Touro
+B70 - calculo apenas para Touro (ok)
 
 
 USUARIO PODE ADICIONAR NOVAS COLUNAS EM INVENTARIO? sim

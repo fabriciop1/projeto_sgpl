@@ -62,32 +62,33 @@ public class VisualizarInventario extends javax.swing.JFrame {
         ArrayList<InventarioMaquinas> maquinas = new ArrayList<>();
         
         //Arrays para totais
-        ArrayList<Double> totalAreaArreInic = new ArrayList<>();
-        ArrayList<Double> totalAreaArreFina = new ArrayList<>();
-        ArrayList<Double> totalAreaPropInic = new ArrayList<>();
-        ArrayList<Double> totalAreaPropFina = new ArrayList<>();
-        ArrayList<Double> totalTerraNua     = new ArrayList<>();
-        ArrayList<Double> totalHa           = new ArrayList<>();
-        ArrayList<Double> totalValorHa      = new ArrayList<>();
-        ArrayList<Double> totalDepreciacao  = new ArrayList<>();
-        ArrayList<Double> totalValInicProd  = new ArrayList<>();
-        ArrayList<Double> totalValInicServ  = new ArrayList<>();
-        ArrayList<Double> totalNascProd     = new ArrayList<>();
-        ArrayList<Double> totalMorteProd    = new ArrayList<>();
-        ArrayList<Double> totalVendaProd    = new ArrayList<>();
-        ArrayList<Double> totalCompraProd   = new ArrayList<>();
-        ArrayList<Double> totalNascServ     = new ArrayList<>();
-        ArrayList<Double> totalMorteServ    = new ArrayList<>();
-        ArrayList<Double> totalVendaServ    = new ArrayList<>();
-        ArrayList<Double> totalCompraServ   = new ArrayList<>();
-        ArrayList<Double> totalValFinaProd  = new ArrayList<>();
-        ArrayList<Double> totalValFinaServ  = new ArrayList<>();
-        ArrayList<Double> totalValorInicio  = new ArrayList<>();
-        ArrayList<Double> totalValorFinal   = new ArrayList<>();
-        ArrayList<Double> totalValorBenfeit = new ArrayList<>();
-        ArrayList<Double> totalValorMaquin  = new ArrayList<>();
-        ArrayList<Double> totalDeprecBenfeit  = new ArrayList<>();
-        ArrayList<Double> totalDeprecMaquin   = new ArrayList<>();
+        ArrayList<Double> totalAreaArreInic  = new ArrayList<>();
+        ArrayList<Double> totalAreaArreFina  = new ArrayList<>();
+        ArrayList<Double> totalAreaPropInic  = new ArrayList<>();
+        ArrayList<Double> totalAreaPropFina  = new ArrayList<>();
+        ArrayList<Double> totalTerraNua      = new ArrayList<>();
+        ArrayList<Double> totalHa            = new ArrayList<>();
+        ArrayList<Double> totalValorHa       = new ArrayList<>();
+        ArrayList<Double> totalDepreciacao   = new ArrayList<>();
+        ArrayList<Double> totalValInicProd   = new ArrayList<>();
+        ArrayList<Double> totalValInicServ   = new ArrayList<>();
+        ArrayList<Double> totalNascProd      = new ArrayList<>();
+        ArrayList<Double> totalMorteProd     = new ArrayList<>();
+        ArrayList<Double> totalVendaProd     = new ArrayList<>();
+        ArrayList<Double> totalCompraProd    = new ArrayList<>();
+        ArrayList<Double> totalNascServ      = new ArrayList<>();
+        ArrayList<Double> totalMorteServ     = new ArrayList<>();
+        ArrayList<Double> totalVendaServ     = new ArrayList<>();
+        ArrayList<Double> totalCompraServ    = new ArrayList<>();
+        ArrayList<Double> totalValFinaProd   = new ArrayList<>();
+        ArrayList<Double> totalValFinaServ   = new ArrayList<>();
+        ArrayList<Double> totalValorInicio   = new ArrayList<>();
+        ArrayList<Double> totalValorFinal    = new ArrayList<>();
+        ArrayList<Double> totalValorBenfeit  = new ArrayList<>();
+        ArrayList<Double> totalValorMaquin   = new ArrayList<>();
+        ArrayList<Double> totalDeprecBenfeit = new ArrayList<>();
+        ArrayList<Double> totalDeprecMaquin  = new ArrayList<>();
+        ArrayList<Double> totalValCabeServ   = new ArrayList<>();
         
         InventarioResumo resumo = new InventarioResumo();
         
@@ -187,7 +188,11 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
                 double valorInicio = animais.get(i).getValorInicio() * animais.get(i).getValorCabeca();
                 double valorFinal = animais.get(i).getValorFinal() * animais.get(i).getValorCabeca();
-
+                
+                if(animais.get(i).getCategoria().equals("Touro")){
+                    total34.setText(String.format("%.2f", Calc.mediaAritmetica(valorInicio, valorFinal)));
+                }
+                
                 modelAnimaisProd.addRow(new Object[]{
                     animais.get(i).getCategoria(),
                     animais.get(i).getValorInicio(),
@@ -231,6 +236,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     totalVendaServ.add(animais.get(i).getVenda() * 1.0); 
                     totalCompraServ.add(animais.get(i).getCompra() * 1.0);
                     totalValFinaServ.add(animais.get(i).getValorFinal() * 1.0);
+                    totalValCabeServ.add(animais.get(i).getValorCabeca() * 1.0);
                 }
 
             }
@@ -258,9 +264,20 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
             total31.setText(String.format("R$ %.2f", ((Double.parseDouble(total19.getText().replace(',','.')) + Double.parseDouble(total20.getText().replace(',','.')))/2)));
             
-            //total36.setText("" + Calc.dividir(Double.parseDouble(total34.getText()), Double.parseDouble(total35.getText())));
-            //total39.setText("" + Calc.dividir(Double.parseDouble(total37.getText()), Double.parseDouble(total38.getText())));
-
+            try{
+                total36.setText("" + Calc.dividir(Double.parseDouble(total34.getText().replace(',','.')), Double.parseDouble(total35.getText().replace(',','.'))));
+            } catch (IllegalArgumentException e) {
+                total36.setText("");
+            }
+            
+            total37.setText(String.format("%.2f", Calc.somaPonderada(totalValFinaServ, totalValCabeServ)));
+            
+            try{
+                total39.setText("" + Calc.dividir(Double.parseDouble(total37.getText().replace(',','.')), Double.parseDouble(total38.getText().replace(',','.'))));
+            } catch (IllegalArgumentException e){
+                total39.setText("");
+            }
+                
             DefaultTableModel modelBenfeitorias = (DefaultTableModel) tabelaBenfeitorias.getModel();
             modelBenfeitorias.setNumRows(0);
             
@@ -1215,35 +1232,35 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(total31))
-                .addGap(48, 48, 48)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(total32)
+                    .addComponent(jLabel11)
+                    .addComponent(total33)
+                    .addComponent(btnInserirValor))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel13)
+                    .addComponent(jLabel17)
+                    .addComponent(total34)
+                    .addComponent(total37))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel15)
+                    .addComponent(jLabel18)
+                    .addComponent(total35)
+                    .addComponent(total38))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel16)
+                    .addComponent(jLabel19)
+                    .addComponent(total36)
+                    .addComponent(total39))
+                .addGap(7, 7, 7)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel10)
-                            .addComponent(total32)
-                            .addComponent(jLabel11)
-                            .addComponent(total33)
-                            .addComponent(btnInserirValor))
-                        .addGap(25, 25, 25)
-                        .addComponent(jLabel12)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel13)
-                            .addComponent(jLabel17)
-                            .addComponent(total34)
-                            .addComponent(total37))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel15)
-                            .addComponent(jLabel18)
-                            .addComponent(total35)
-                            .addComponent(total38))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel16)
-                            .addComponent(jLabel19)
-                            .addComponent(total36)
-                            .addComponent(total39)))
                     .addComponent(removerInvAnimaisBT)
                     .addComponent(editarInvAnimaisBT)
                     .addComponent(adicionarInvAnimaisBT))
