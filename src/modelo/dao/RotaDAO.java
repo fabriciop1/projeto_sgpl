@@ -148,4 +148,33 @@ public class RotaDAO extends DAO implements InterfaceDAO<Rota> {
         }
         return rota;
     }
+    
+    public Rota recuperar(String rota) throws SQLException {
+         if (isConnectionOwner()) {
+            this.connection = DBConexao.openConnection();
+        }
+         
+        Rota rotaObj = null;
+
+        String sql = "SELECT * FROM rota WHERE rota = ?";
+        
+        PreparedStatement st = this.connection.prepareStatement(sql);
+        st.setString(1, rota);
+
+        ResultSet rs = st.executeQuery();
+        if (rs.next()) {
+            rotaObj = new Rota();
+
+            rotaObj.setRota(rs.getString("rota"));
+            rotaObj.setId(rs.getInt("idRota"));
+        }
+        rs.close();
+        st.close();
+        if (isConnectionOwner()) {
+            DBConexao.closeConnection(this.connection);
+        }
+        
+        return rotaObj;
+        
+    }
 }

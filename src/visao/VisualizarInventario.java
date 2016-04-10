@@ -9,7 +9,6 @@ import flex.table.GenericTableModifier;
 import flex.table.GenericTableRowEditor;
 import flex.table.GenericTableRowInserter;
 import controle.ControlePerfil;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -18,7 +17,6 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import modelo.dao.DBConexao;
 import modelo.dao.InventarioAnimaisDAO;
 import modelo.dao.InventarioBenfeitoriasDAO;
 import modelo.dao.InventarioMaquinasDAO;
@@ -70,7 +68,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         ArrayList<InventarioBenfeitorias> benfeitorias = new ArrayList<>();
         ArrayList<InventarioMaquinas> maquinas = new ArrayList<>();
         
-        //Arrays para totais
+        //Totais
         double totalAreaArreInic  = 0;
         double totalAreaArreFina  = 0;
         double totalHa            = 0;
@@ -98,9 +96,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         ArrayList<Double> totalAreaPropFina  = new ArrayList<>();
         ArrayList<Double> totalTerraNua      = new ArrayList<>();
         ArrayList<Double> totalValFinaServ   = new ArrayList<>();
-        ArrayList<Double> totalValCabeServ   = new ArrayList<>();
-        
-        
+        ArrayList<Double> totalValCabeServ   = new ArrayList<>(); 
         
         InventarioResumo resumo = new InventarioResumo();
         
@@ -261,8 +257,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
             total17.setText("" + (totalCompraProd));
             total18.setText("" + (totalValFinaProd));
                         
-            total19.setText("" + (totalValorInicio));
-            total20.setText("" + (totalValorFinal));
+            total19.setText(String.format("R$ %.2f", totalValorInicio));
+            total20.setText(String.format("R$ %.2f", totalValorFinal));
             total21.setText("" + (totalValInicServ));
             total22.setText("" + (totalNascServ));
             total23.setText("" + (totalMorteServ));
@@ -273,7 +269,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             total28.setText("" + (Double.parseDouble(total13.getText().replace(',','.')) + Double.parseDouble(total21.getText().replace(',','.'))));
             total29.setText("" + (Double.parseDouble(total26.getText().replace(',','.')) + Double.parseDouble(total18.getText().substring(1).replace(',','.'))));
 
-            total31.setText(String.format("R$ %.2f", ((Double.parseDouble(total19.getText().replace(',','.')) + Double.parseDouble(total20.getText().replace(',','.')))/2)));
+            total31.setText(String.format("R$ %.2f", ((Double.parseDouble(total19.getText().substring(2).replace(',','.')) + Double.parseDouble(total20.getText().substring(2).replace(',','.')))/2)));
             
             try{
                 total36.setText("" + Calc.dividir(Double.parseDouble(total34.getText().replace(',','.')), Double.parseDouble(total35.getText().replace(',','.'))));
@@ -345,8 +341,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
             //Resumo
             total44.setText(total12.getText());
-            total45.setText("0.0");/*total39.getText());*/
-            total46.setText("0.0");/*total36.getText());*/
+            total45.setText(total39.getText());
+            total46.setText(total36.getText());
             total47.setText(String.format("%.2f", (Double.parseDouble(total41.getText().replace(',','.')))));
             total48.setText(total43.getText());
             total49.setText(String.format("R$ %.2f", (Double.parseDouble(total44.getText().replace(',','.')) + 
@@ -1037,7 +1033,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
         total33.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         total33.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        total33.setText("<total33>");
+        total33.setText("0.0");
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -1126,7 +1122,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 225, Short.MAX_VALUE)
+                            .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
                             .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -2074,6 +2070,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
             
             if(temp >= 0.0){
                 total32.setText("" + temp);
+                total33.setText(String.format("R$ %.2f", (Double.parseDouble(total20.getText().substring(2).replace(',','.')) -
+                        Double.parseDouble(total19.getText().substring(2).replace(',','.')) - Double.parseDouble(total32.getText()))));
             } else {
                 JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
             }
@@ -2289,6 +2287,10 @@ public class VisualizarInventario extends javax.swing.JFrame {
     
         tabelaMaquinas.setShowHorizontalLines(true);
         tabelaMaquinas.setShowVerticalLines(true);
+    }
+    
+    private void setTotaisTerras() {
+        
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

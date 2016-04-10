@@ -14,8 +14,10 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.dao.PerfilDAO;
+import modelo.dao.RotaDAO;
 import modelo.dao.UsuarioPerfilDAO;
 import modelo.negocio.Perfil;
+import modelo.negocio.Rota;
 import modelo.negocio.Usuario;
 
 /**
@@ -64,6 +66,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
             model.addRow(new Object[]{
                 perfis.get(i).getNome(),
                 perfis.get(i).getCidade(),
+                perfis.get(i).getRota().getRota(),
                 perfis.get(i).getTamPropriedade(),
                 perfis.get(i).getAreaPecLeite(),
                 perfis.get(i).getProdLeiteDiario(),
@@ -159,6 +162,11 @@ public class VisualizarPerfil extends javax.swing.JFrame {
             }
         });
         listaPerfis.setColumnSelectionAllowed(true);
+        listaPerfis.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                listaPerfisMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(listaPerfis);
         listaPerfis.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         if (listaPerfis.getColumnModel().getColumnCount() > 0) {
@@ -215,11 +223,16 @@ public class VisualizarPerfil extends javax.swing.JFrame {
             atual.setIdPerfil(idPerfis.get(listaPerfis.getSelectedRow()));
             atual.setNome((String) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 0));
             atual.setCidade((String) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 1));
-            atual.setTamPropriedade((double) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 2));
-            atual.setAreaPecLeite((double) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 3));
-            atual.setProdLeiteDiario((double) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 4));
-            atual.setEmpPermanentes((int) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 5));
-            atual.setNumFamiliares((int) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 6));
+            try {
+                atual.setRota((new RotaDAO()).recuperar((String)listaPerfis.getValueAt(listaPerfis.getSelectedRow(), 2)));
+            } catch (SQLException ex) {
+                System.out.println("Erro em VisualizarInventario.class - setRota");
+            }
+            atual.setTamPropriedade((double) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 3));
+            atual.setAreaPecLeite((double) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 4));
+            atual.setProdLeiteDiario((double) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 5));
+            atual.setEmpPermanentes((int) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 6));
+            atual.setNumFamiliares((int) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 7));
         
             ControlePerfil.getInstance().setPerfilSelecionado(atual);
 
@@ -246,6 +259,12 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_btnSairActionPerformed
+
+    private void listaPerfisMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listaPerfisMouseClicked
+        if (evt.getClickCount() == 2) {
+            btnAcessarActionPerformed(null);
+        }
+    }//GEN-LAST:event_listaPerfisMouseClicked
 
     /**
      * @param args the command line arguments
