@@ -266,23 +266,30 @@ public class VisualizarInventario extends javax.swing.JFrame {
             total25.setText("" + (totalCompraServ));
             total26.setText("" + Calc.somarLista(totalValFinaServ));
 
-            total28.setText("" + (Double.parseDouble(total13.getText().replace(',','.')) + Double.parseDouble(total21.getText().replace(',','.'))));
-            total29.setText("" + (Double.parseDouble(total26.getText().replace(',','.')) + Double.parseDouble(total18.getText().substring(1).replace(',','.'))));
+            total28.setText("" + (Double.parseDouble(total13.getText().replace(',','.')) + 
+                    Double.parseDouble(total21.getText().replace(',','.'))));
+            total29.setText("" + (Double.parseDouble(total26.getText().replace(',','.')) +
+                    Double.parseDouble(total18.getText().substring(1).replace(',','.'))));
 
-            total31.setText(String.format("R$ %.2f", ((Double.parseDouble(total19.getText().substring(2).replace(',','.')) + Double.parseDouble(total20.getText().substring(2).replace(',','.')))/2)));
+            total31.setText(String.format("R$ %.2f", ((Double.parseDouble(total19.getText().substring(2).replace(',','.')) +
+                    Double.parseDouble(total20.getText().substring(2).replace(',','.'))) / 2 )));
             
             try{
-                total36.setText("" + Calc.dividir(Double.parseDouble(total34.getText().replace(',','.')), Double.parseDouble(total35.getText().replace(',','.'))));
+                total36.setText("" + Calc.dividir(Double.parseDouble(total34.getText().replace(',','.')),
+                        Double.parseDouble(total35.getText().replace(',','.'))));
             } catch (IllegalArgumentException e) {
                 total36.setText("");
+                System.out.println("Erro em total 36 - Divisão Inválida.");
             }
             
             total37.setText(String.format("%.2f", Calc.somaPonderada(totalValFinaServ, totalValCabeServ)));
             
             try{
-                total39.setText("" + Calc.dividir(Double.parseDouble(total37.getText().replace(',','.')), Double.parseDouble(total38.getText().replace(',','.'))));
+                total39.setText("" + Calc.dividir(Double.parseDouble(total37.getText().replace(',','.')), 
+                        Double.parseDouble(total38.getText().replace(',','.'))));
             } catch (IllegalArgumentException e){
                 total39.setText("");
+                System.out.println("Erro em total39 - Divisão Inválida");
             }
                 
             DefaultTableModel modelBenfeitorias = (DefaultTableModel) tabelaBenfeitorias.getModel();
@@ -350,7 +357,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
                                   Double.parseDouble(total46.getText().replace(',','.')) +
                                   Double.parseDouble(total47.getText().replace(',','.')) +
                                   Double.parseDouble(total48.getText().replace(',','.')))));
-            total50.setText(String.format("R$ %.2f", (Double.parseDouble(atividadeLeite.getText().replace(',','.')) * Double.parseDouble(total49.getText().substring(2).replace(',','.')))));
+            total50.setText(String.format("R$ %.2f", (Double.parseDouble(atividadeLeite.getText().replace(',','.')) * 
+                    Double.parseDouble(total49.getText().substring(2).replace(',','.')))));
 
             total51.setText(total9.getText().substring(2));
             total52.setText(total12.getText());
@@ -362,7 +370,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
                                   Double.parseDouble(total53.getText().substring(2).replace(',','.')) +
                                   Double.parseDouble(total54.getText().replace(',','.')) +
                                   Double.parseDouble(total55.getText().replace(',','.')))));
-            total57.setText(String.format("R$ %.2f", (Double.parseDouble(atividadeLeite.getText().replace(',','.')) * Double.parseDouble(total49.getText().substring(2).replace(',','.')))));
+            total57.setText(String.format("R$ %.2f", (Double.parseDouble(atividadeLeite.getText().replace(',','.')) * 
+                    Double.parseDouble(total49.getText().substring(2).replace(',','.')))));
 
             total58.setText(salarioMinimo.getText());
             total59.setText(String.format("%.2f", (Double.parseDouble(salarioMinimo.getText().replace(',','.')) * 0.3)));
