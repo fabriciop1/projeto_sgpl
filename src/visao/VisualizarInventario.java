@@ -5,10 +5,11 @@
  */
 package visao;
 
-import flex.table.GenericTableModifier;
 import flex.table.GenericTableRowEditor;
-import flex.table.GenericTableRowInserter;
+import static flex.table.GenericTableRowEditor.*;
 import controle.ControlePerfil;
+import flex.table.GenericTableModifier;
+import flex.table.TableModifyListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -36,24 +37,13 @@ import util.Pair;
  */
 public class VisualizarInventario extends javax.swing.JFrame {
 
-    private GenericTableModifier tabelaMaquinasGTRE;
-    private GenericTableModifier tabelaBenfeitoriasGTRE;
-    private GenericTableModifier tabelaTerrasGTRE;
-    private GenericTableModifier tabelaForrageirasGTRE;
-    private GenericTableModifier tabelaAnimaisProdGTRE;
-    private GenericTableModifier tabelaAnimaisServGTRE;
+    private GenericTableRowEditor tabelaMaquinasGTRE;
+    private GenericTableRowEditor tabelaBenfeitoriasGTRE;
+    private GenericTableRowEditor tabelaTerrasGTRE;
+    private GenericTableRowEditor tabelaForrageirasGTRE;
+    private GenericTableRowEditor tabelaAnimaisProdGTRE;
+    private GenericTableRowEditor tabelaAnimaisServGTRE;
     
-    private GenericTableModifier tabelaTerrasGTRI;
-    private GenericTableModifier tabelaForrageirasGTRI;
-    private GenericTableModifier tabelaAnimaisProdGTRI;
-    private GenericTableModifier tabelaAnimaisServGTRI;
-    private GenericTableModifier tabelaMaquinasGTRI;
-    private GenericTableModifier tabelaBenfeitoriasGTRI;
-
-    
-    /**
-     * Creates new form VisualizarInventario
-     */
     public VisualizarInventario() {
         
         initComponents();
@@ -2036,23 +2026,28 @@ public class VisualizarInventario extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void iniciarGTREIs() {
-        tabelaMaquinasGTRE = new GenericTableRowEditor(this, tabelaMaquinas, true);
         
-        tabelaBenfeitoriasGTRE = new GenericTableRowEditor(this, tabelaBenfeitorias, true);
-        tabelaForrageirasGTRE = new GenericTableRowEditor(this, tabelaInveForrageiras, true);
-        tabelaTerrasGTRE = new GenericTableRowEditor(this, tabelaInveTerras, true);
-        tabelaAnimaisProdGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisProd, true);
-        tabelaAnimaisServGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisServ, true);
+        TableModifyListener listener = new TableModifyListener() {
+            @Override
+            public void tableModified(int modifType, GenericTableModifier modifier) {
+                String msg = "";
+                switch(modifType){
+                    case TableModifyListener.ROW_INSERTED: msg = "Linha inserida"; break;
+                    case TableModifyListener.ROW_UPDATED: msg = "Linha atualizada"; break;
+                    case TableModifyListener.ROW_DELETED: msg = "Linha removida"; break;
+                }
+                JOptionPane.showMessageDialog(rootPane, msg, "Inventario Maquinas", JOptionPane.INFORMATION_MESSAGE);
+            }
+        };
         
-        tabelaMaquinasGTRI = new GenericTableRowInserter(this, tabelaMaquinas, false, true);
-        tabelaBenfeitoriasGTRI = new GenericTableRowInserter(this, tabelaBenfeitorias, false, true);
-        tabelaTerrasGTRI = new GenericTableRowInserter(this, tabelaInveTerras, false, true);
-        tabelaForrageirasGTRI = new GenericTableRowInserter(this, tabelaInveForrageiras, false, true);
-        tabelaAnimaisProdGTRI = new GenericTableRowInserter(this, tabelaInveAnimaisProd, false, true);
-        tabelaAnimaisProdGTRI.setColumnEditable(7, false); // Valor (R$/Cab)
+        tabelaMaquinasGTRE = new GenericTableRowEditor(this, tabelaMaquinas, false);
+        tabelaMaquinasGTRE.addTableModifyListener(listener);
         
-        tabelaAnimaisServGTRI = new GenericTableRowInserter(this, tabelaInveAnimaisServ, false, true);
-        tabelaAnimaisServGTRI.setColumnEditable(7, false); // Valor (R$/Cab)
+        tabelaBenfeitoriasGTRE = new GenericTableRowEditor(this, tabelaBenfeitorias, false);
+        tabelaForrageirasGTRE = new GenericTableRowEditor(this, tabelaInveForrageiras, false);
+        tabelaTerrasGTRE = new GenericTableRowEditor(this, tabelaInveTerras, false);
+        tabelaAnimaisProdGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisProd, false);
+        tabelaAnimaisServGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisServ, false);
     }
     
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
@@ -2066,10 +2061,16 @@ public class VisualizarInventario extends javax.swing.JFrame {
     private void editarInvAnimaisBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarInvAnimaisBTActionPerformed
         
         if(tabelaInveAnimaisProd.getSelectedRowCount() > 0){
+            tabelaAnimaisProdGTRE.setEditorType(GTRE_UPDATE);
             tabelaAnimaisProdGTRE.showEditor(evt);
         }
         else if(tabelaInveAnimaisServ.getSelectedRowCount() > 0){
+            tabelaAnimaisServGTRE.setEditorType(GTRE_UPDATE);
             tabelaAnimaisServGTRE.showEditor(evt);
+        }
+        else {
+            JOptionPane.showMessageDialog(rootPane, "Selecione uma linha da tabela para editar",
+                        "Editar - Nenhuma linha selecionada", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_editarInvAnimaisBTActionPerformed
 
@@ -2094,10 +2095,16 @@ public class VisualizarInventario extends javax.swing.JFrame {
     private void editarInvTerrasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarInvTerrasBTActionPerformed
        
         if(tabelaInveTerras.getSelectedRowCount() > 0){
+            tabelaTerrasGTRE.setEditorType(GTRE_UPDATE);
             tabelaTerrasGTRE.showEditor(evt);
         }
         else if(tabelaInveForrageiras.getSelectedRowCount() > 0){
+            tabelaForrageirasGTRE.setEditorType(GTRE_UPDATE);
             tabelaForrageirasGTRE.showEditor(evt);
+        }
+        else{
+            JOptionPane.showMessageDialog(rootPane, "Selecione uma linha da tabela para editar",
+                        "Editar - Nenhuma linha selecionada", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_editarInvTerrasBTActionPerformed
 
@@ -2114,15 +2121,17 @@ public class VisualizarInventario extends javax.swing.JFrame {
         JTable selecionada = selector.showSelector();
         
         if(selecionada == tabelaInveTerras){
-            tabelaTerrasGTRI.showEditor(evt);
+            tabelaTerrasGTRE.setEditorType(GTRE_INSERT);
+            tabelaTerrasGTRE.showEditor(evt);
         }
         else if(selecionada == tabelaInveForrageiras){
-            tabelaForrageirasGTRI.showEditor(evt);
+            tabelaForrageirasGTRE.setEditorType(GTRE_INSERT);
+            tabelaForrageirasGTRE.showEditor(evt);
         }
     }//GEN-LAST:event_adicionarInvTerrasBTActionPerformed
 
     private void editarInvMaquinasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarInvMaquinasBTActionPerformed
-        
+        tabelaMaquinasGTRE.setEditorType(GTRE_UPDATE);
         tabelaMaquinasGTRE.showEditor(evt);
     }//GEN-LAST:event_editarInvMaquinasBTActionPerformed
 
@@ -2143,29 +2152,27 @@ public class VisualizarInventario extends javax.swing.JFrame {
     }//GEN-LAST:event_tabelaInveAnimaisServFocusGained
 
     private void editarInvBenfeitoriasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarInvBenfeitoriasBTActionPerformed
-        
+        tabelaBenfeitoriasGTRE.setEditorType(GTRE_UPDATE);
         tabelaBenfeitoriasGTRE.showEditor(evt);
     }//GEN-LAST:event_editarInvBenfeitoriasBTActionPerformed
 
     private void removerInvTerrasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerInvTerrasBTActionPerformed
-        int indexTerras = tabelaInveTerras.getSelectedRow();
-        int indexForrageiras = tabelaInveForrageiras.getSelectedRow();
-        
-        if(indexTerras != -1){
-            DefaultTableModel modelInveTerras = (DefaultTableModel) tabelaInveTerras.getModel();
-            modelInveTerras.removeRow(indexTerras);
+
+        if(tabelaInveTerras.getSelectedRowCount() > 0){
+            tabelaTerrasGTRE.removeSourceTableRow(tabelaInveTerras.getSelectedRow());
         }
-        
-        if(indexForrageiras != -1){
-            DefaultTableModel modelinveForrageiras = (DefaultTableModel) tabelaInveForrageiras.getModel();
-            modelinveForrageiras.removeRow(indexForrageiras);
+        else if(tabelaInveForrageiras.getSelectedRowCount() > 0){
+            tabelaForrageirasGTRE.removeSourceTableRow(tabelaInveForrageiras.getSelectedRow());
         }
-        
+        else {
+            JOptionPane.showMessageDialog(rootPane, "Selecione uma linha da tabela para remover",
+                        "Remoer - Nenhuma linha selecionada", JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_removerInvTerrasBTActionPerformed
 
     private void adicionarInvMaquinasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarInvMaquinasBTActionPerformed
-        
-        tabelaMaquinasGTRI.showEditor(evt);
+        tabelaMaquinasGTRE.setEditorType(GTRE_INSERT);
+        tabelaMaquinasGTRE.showEditor(evt);
     }//GEN-LAST:event_adicionarInvMaquinasBTActionPerformed
 
     private void adicionarInvAnimaisBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarInvAnimaisBTActionPerformed
@@ -2181,43 +2188,48 @@ public class VisualizarInventario extends javax.swing.JFrame {
         JTable selecionada = selector.showSelector();
         
         if(selecionada == tabelaInveAnimaisProd){
-            tabelaAnimaisProdGTRI.showEditor(evt);
+            tabelaAnimaisProdGTRE.setEditorType(GTRE_INSERT);
+            tabelaAnimaisProdGTRE.showEditor(evt);
         }
         else if(selecionada == tabelaInveAnimaisServ){
-            tabelaAnimaisServGTRI.showEditor(evt);
+            tabelaAnimaisServGTRE.setEditorType(GTRE_INSERT);
+            tabelaAnimaisServGTRE.showEditor(evt);
         }
     }//GEN-LAST:event_adicionarInvAnimaisBTActionPerformed
 
     private void removerInvBenfeitoriasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerInvBenfeitoriasBTActionPerformed
-        int index = tabelaBenfeitorias.getSelectedRow();
         
-        if(index != -1){
-            DefaultTableModel modelBenfeitorias = (DefaultTableModel) tabelaBenfeitorias.getModel();
-            modelBenfeitorias.removeRow(index);
+        if(tabelaBenfeitorias.getSelectedRowCount() > 0){
+            tabelaBenfeitoriasGTRE.removeSourceTableRow(tabelaBenfeitorias.getSelectedRow());
+        }
+        else {
+            JOptionPane.showMessageDialog(rootPane, "Selecione uma linha da tabela para remover",
+                        "Remoer - Nenhuma linha selecionada", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_removerInvBenfeitoriasBTActionPerformed
 
     private void removerInvMaquinasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerInvMaquinasBTActionPerformed
-        int index = tabelaMaquinas.getSelectedRow();
-        
-        if(index != -1){
-            DefaultTableModel modelMaquinas = (DefaultTableModel) tabelaMaquinas.getModel();
-            modelMaquinas.removeRow(index);
+       
+        if(tabelaMaquinas.getSelectedRowCount() > 0){
+            tabelaMaquinasGTRE.removeSourceTableRow(tabelaMaquinas.getSelectedRow());
+        }
+        else {
+            JOptionPane.showMessageDialog(rootPane, "Selecione uma linha da tabela para remover",
+                        "Remoer - Nenhuma linha selecionada", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_removerInvMaquinasBTActionPerformed
 
     private void removerInvAnimaisBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerInvAnimaisBTActionPerformed
-        int indexAnimProd = tabelaInveAnimaisProd.getSelectedRow();
-        int indexAnimServ = tabelaInveAnimaisServ.getSelectedRow();
         
-        if(indexAnimProd != -1){
-            DefaultTableModel modelInveAnimProd = (DefaultTableModel) tabelaInveAnimaisProd.getModel();
-            modelInveAnimProd.removeRow(indexAnimProd);
+        if(tabelaInveAnimaisProd.getSelectedRowCount() > 0){
+            tabelaAnimaisProdGTRE.removeSourceTableRow(tabelaInveAnimaisProd.getSelectedRow());
+        } 
+        else if(tabelaInveAnimaisServ.getSelectedRowCount() > 0){
+            tabelaAnimaisServGTRE.removeSourceTableRow(tabelaInveAnimaisServ.getSelectedRow());
         }
-        
-        if(indexAnimServ != -1){
-            DefaultTableModel modelInveAnimServ = (DefaultTableModel) tabelaInveAnimaisServ.getModel();
-            modelInveAnimServ.removeRow(indexAnimServ);
+        else {
+            JOptionPane.showMessageDialog(rootPane, "Selecione uma linha da tabela para remover",
+                        "Remoer - Nenhuma linha selecionada", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_removerInvAnimaisBTActionPerformed
 
@@ -2264,8 +2276,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void adicionarInvBenfeitoriasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarInvBenfeitoriasBTActionPerformed
-        
-        tabelaBenfeitoriasGTRI.showEditor(evt);
+        tabelaBenfeitoriasGTRE.setEditorType(GTRE_INSERT);
+        tabelaBenfeitoriasGTRE.showEditor(evt);
     }//GEN-LAST:event_adicionarInvBenfeitoriasBTActionPerformed
     
     private void verificaTabelaVazia(DefaultTableModel table, JButton editarBtn, JButton removerBtn) {

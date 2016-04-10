@@ -30,6 +30,9 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
     private boolean columnEditableArray[];
     private List<TableModifyListener> tableModifylisteners;
     
+    private boolean allowEmptyRows;
+    private boolean allowEmptyCells;
+    
     public GenericTableModifier(Frame parent, JTable sourceTable, boolean forceCellEditing) {
         super(parent, true);
         
@@ -37,9 +40,11 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
         this.sourceTable = sourceTable;
         this.forceCellEditing = forceCellEditing;
         this.tableModifylisteners = new ArrayList<>();
+        this.allowEmptyCells = true;
+        this.allowEmptyRows = false;
         
         this.columnEditableArray = new boolean[sourceTable.getColumnCount()];
-        
+
         initComponents();
         
         editTable.setAutoCreateColumnsFromModel(false);
@@ -85,7 +90,7 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
         for(int i=0; i<sourceTable.getColumnCount(); i++){
             columnTypeArray[i] = sourceTable.getColumnClass(i);
             columnNameArray[i] = sourceTable.getColumnName(i);
-            columnEditableArray[i] = sourceTable.isCellEditable(sourceTable.getSelectedRow(), i);
+            columnEditableArray[i] = sourceTable.isCellEditable(0, i);
         }
         
         editTable.setModel(new DefaultTableModel(dataMatrix, columnNameArray){
@@ -101,7 +106,7 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 
                 if(!isForceCellEditingEnabled()){
-                    return columnEditableArray[columnIndex];
+                    return GenericTableModifier.this.columnEditableArray[columnIndex];
                 } else {
                     return true;
                 }
@@ -135,16 +140,70 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
     
     protected abstract void updateSourceTable();
     
-    protected void addEditTableRow(Object[] dataArray){
-        ((DefaultTableModel)editTable.getModel()).addRow(dataArray);
-        getEditTableModel().fireTableRowsInserted(editTable.getRowCount()-1, editTable.getRowCount()-1);
-    }
     
-    protected void addSourceTableRow(Object[] dataArray){
+    public void addSourceTableRow(Object[] dataArray){
         getSourceTableModel().addRow(dataArray);
         getSourceTableModel().fireTableRowsInserted(sourceTable.getRowCount()-1, sourceTable.getRowCount()-1);
         
         notifyListeners(TableModifyListener.ROW_INSERTED);
+    }
+    
+    public Object[] getSourceTableRowData(int row){
+        
+        Object[] data = new Object[sourceTable.getColumnCount()];
+        
+        for (int i = 0; i < data.length; i++) {
+            data[i] = sourceTable.getValueAt(row, i);
+        }
+        
+        return data;
+    }
+    
+    public void removeSourceTableRow(int row){
+        getSourceTableModel().removeRow(row);
+        getSourceTableModel().fireTableRowsDeleted(row, row);
+        
+        notifyListeners(TableModifyListener.ROW_DELETED);
+    }
+    
+    public void updateSourceTableRow(int row, Object[] dataArray){
+        
+        for (int i = 0; i < dataArray.length; i++) {
+            sourceTable.setValueAt(dataArray[i], row, i);
+        }
+        
+        getSourceTableModel().fireTableRowsUpdated(row, row);
+        
+        notifyListeners(TableModifyListener.ROW_UPDATED);
+    }
+    
+    public JTable getSourceTable() {
+        return sourceTable;
+    }
+
+    public DefaultTableModel getSourceTableModel(){
+        return (DefaultTableModel) sourceTable.getModel();
+    }
+    
+    
+    protected void removeEditTableRow(int row){
+        
+        getEditTableModel().removeRow(row);
+        getEditTableModel().fireTableRowsDeleted(row, row);
+    }
+    
+    protected void updateEditTableRow(int row, Object[] dataArray){
+        
+        for (int i = 0; i < dataArray.length; i++) {
+            editTable.setValueAt(dataArray[i], row, i);
+        }
+        
+        getEditTableModel().fireTableRowsUpdated(row, row);
+    }
+    
+    protected void addEditTableRow(Object[] dataArray){
+        getEditTableModel().addRow(dataArray);
+        getEditTableModel().fireTableRowsInserted(editTable.getRowCount()-1, editTable.getRowCount()-1);
     }
     
     protected Object[] getEditTableRowData(int row){
@@ -158,79 +217,20 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
         return data;
     }
     
-    protected Object[] getSourceTableRowData(int row){
-        
-        Object[] data = new Object[sourceTable.getColumnCount()];
-        
-        for (int i = 0; i < data.length; i++) {
-            data[i] = sourceTable.getValueAt(row, i);
-        }
-        
-        return data;
+    protected javax.swing.JTable getEditTable() {
+        return editTable;
+    }
+
+    protected DefaultTableModel getEditTableModel(){
+        return (DefaultTableModel) editTable.getModel();
     }
     
-    protected void removeSourceTableRow(int row){
-        getSourceTableModel().removeRow(row);
-        getSourceTableModel().fireTableRowsDeleted(row, row);
-        
-        notifyListeners(TableModifyListener.ROW_DELETED);
-    }
     
-    protected void removeEditTableRow(int row){
-        getEditTableModel().removeRow(row);
-        getEditTableModel().fireTableRowsDeleted(row, row);
-        
-        notifyListeners(TableModifyListener.ROW_DELETED);
-    }
-    
-    protected void updateSourceTableRow(int row, Object[] dataArray){
-        
-        boolean isEqual = true;
-        
-        for (int i = 0; i < dataArray.length; i++) {
-            
-            if(!sourceTable.getValueAt(row, i).equals(dataArray[i])){
-                
-                sourceTable.setValueAt(dataArray[i], row, i);
-                isEqual = false;
-            }
-        }
-        
-        getSourceTableModel().fireTableRowsUpdated(row, row);
-        
-        if(!isEqual){
-            notifyListeners(TableModifyListener.ROW_UPDATED);
-        }
-    }
-    
-    protected void updateEditTableRow(int row, Object[] dataArray){
-        
-        boolean isEqual = true;
-        
-        for (int i = 0; i < dataArray.length; i++) {
-            
-            if(!editTable.getValueAt(row, i).equals(dataArray[i])){
-                
-                editTable.setValueAt(dataArray[i], row, i);
-                isEqual = false;
-            }
-        }
-        
-        getEditTableModel().fireTableRowsUpdated(row, row);
-        
-        if(!isEqual){
-            notifyListeners(TableModifyListener.ROW_UPDATED);
-        }
-    }
-    
-    protected int getEditorColumnCount(){
-        return editTable.getColumnCount();
-    }
     
     protected void clearEditTable(){
         
         while(editTable.getRowCount() > 0){
-            ((DefaultTableModel)editTable.getModel()).removeRow(0); 
+            removeEditTableRow(0);
         }
     }
     
@@ -346,34 +346,13 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
     private javax.swing.JButton saveButton;
     // End of variables declaration//GEN-END:variables
 
-    protected JTable getSourceTable() {
-        return sourceTable;
-    }
-
-    protected DefaultTableModel getSourceTableModel(){
-        return (DefaultTableModel) sourceTable.getModel();
-    }
-
-    protected int getSelectedRow() {
-        return sourceTable.getSelectedRow();
-    }
-
     protected javax.swing.JButton getCancelButton() {
         return cancelButton;
     }
 
-    protected javax.swing.JTable getEditTable() {
-        return editTable;
-    }
-
-    protected DefaultTableModel getEditTableModel(){
-        return (DefaultTableModel) editTable.getModel();
-    }
-    
     protected javax.swing.JButton getSaveButton() {
         return saveButton;
     }
-    
     
     public Object[] getSourceTableSelectedRowData(){
         return getSourceTableRowData(sourceTable.getSelectedRow());
@@ -405,8 +384,24 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
     
     public void setAllColumnsEditable(boolean editable){
         
-        for(int i=0; i<columnEditableArray.length; i++){
-            columnEditableArray[i] = editable;
+        for(int i=0; i<this.columnEditableArray.length; i++){
+            this.columnEditableArray[i] = editable;
         }
+    }
+
+    public boolean isAllowedEmptyRows() {
+        return allowEmptyRows;
+    }
+
+    public void setAllowEmptyRows(boolean allowEmptyRows) {
+        this.allowEmptyRows = allowEmptyRows;
+    }
+
+    public boolean isAllowedEmptyCells() {
+        return allowEmptyCells;
+    }
+
+    public void setAllowEmptyCells(boolean allowEmptyCells) {
+        this.allowEmptyCells = allowEmptyCells;
     }
 }

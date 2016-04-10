@@ -16,26 +16,27 @@ import javax.swing.JTable;
  */
 public class GenericTableRowEditor extends GenericTableModifier {
     
-    private final int columnCount;
+    public static final int GTRE_INSERT = 1;
+    public static final int GTRE_UPDATE = 2;
+    
+    private int editorType;
     
     public GenericTableRowEditor(Frame parent, JTable sourceTable, boolean forceCellEditing) {
         super(parent, sourceTable, forceCellEditing);
         
-        this.columnCount = sourceTable.getColumnCount();
+        this.editorType = GTRE_INSERT;
         
-        this.setLabelText("Editar");
+        this.setAllColumnsEditable(true);
     }
     
     @Override
     protected void refillEditTable(){
         
-        Object[] dataArray = new Object[columnCount];
-        
-        for(int i=0; i<columnCount; i++){
-            dataArray[i] = sourceTable.getValueAt(sourceTable.getSelectedRow(), i);
+        if (editorType == GTRE_UPDATE) {
+            addEditTableRow( getSourceTableSelectedRowData() );
+        } else if(editorType == GTRE_INSERT) {
+            addEditTableRow(new Object[]{ });
         }
-        
-        addEditTableRow(dataArray);
     }
 
     @Override
@@ -45,19 +46,67 @@ public class GenericTableRowEditor extends GenericTableModifier {
             editTable.getCellEditor().stopCellEditing();
         }
         
-        updateSourceTableRow(getSourceTable().getSelectedRow(), getEditTableRowData(0));
+        int numEmptyCells = 0;
+        Object[] rowData = getEditTableRowData(0);
+        
+        for(int i=0; i<rowData.length; i++){
+
+            if(rowData[i] == null){
+
+                if(!isAllowedEmptyCells()){
+                    return;
+                }
+                numEmptyCells++;
+            }
+        }
+        
+        if(!isAllowedEmptyRows() && (numEmptyCells == sourceTable.getColumnCount()) ){
+            return;
+        }
+        
+        if (editorType == GTRE_UPDATE) {
+            updateSourceTableRow(getSourceTable().getSelectedRow(), rowData);
+            
+        } else if(editorType == GTRE_INSERT) {
+            addSourceTableRow(rowData);
+        }
     }
     
     @Override
     public void showEditor(ActionEvent e) {
         
-        if(sourceTable.getSelectedRowCount() > 0){
-
+        if (editorType == GTRE_UPDATE) {
+            
+            if (sourceTable.getSelectedRowCount() > 0) {
+                
+                super.showEditor(e);
+                
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "Selecione uma linha da tabela para editar",
+                        "Editar - Nenhuma linha selecionada", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } else if(editorType == GTRE_INSERT){
+            
             super.showEditor(e);
+        }
+    }
 
-        } else {
-            JOptionPane.showMessageDialog(rootPane, "Selecione uma linha da tabela para editar",
-                    "Editar - Nenhuma linha selecionada", JOptionPane.INFORMATION_MESSAGE);
+    public int getEditorType() {
+        return editorType;
+    }
+
+    public void setEditorType(int editorType) {
+        
+        if(editorType < 1 || editorType > 2){
+            throw new IllegalArgumentException("GenericTableRowEditor.setEditorType(int): O tipo de editor passado é inválido.");
+        }
+        
+        this.editorType = editorType;
+        
+        if(editorType == GTRE_INSERT){
+            setLabelText("Adicionar");
+        } else if(editorType == GTRE_UPDATE){
+            setLabelText("Editar");
         }
     }
 }
