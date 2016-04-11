@@ -171,9 +171,13 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
         Object[] rowData = getSourceTableRowData(row);
         Object customRowData = getCustomRowData(row);
         
+        System.out.println("(Before Remotion) Row: " + row + " | Custom Row ID: " + (Integer)customRowData);
+        
         getSourceTableModel().removeRow(row);
         getSourceTableModel().fireTableRowsDeleted(row, row);
         removeCustomRowData(row);
+        
+        System.out.println("(After Remotion) Row: " + row + " | Custom Row ID: " + (Integer)customRowData + "\n");
         
         notifyListeners( TableModifyListener.ROW_DELETED, (Object)Pair.create(rowData,customRowData) );
     }
@@ -421,7 +425,7 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
     
     public Object setCustomRowData(int row, Object data){
         
-        if(row < 0 || row > sourceTable.getRowCount()-1){
+        if(row < 0 || row > customRowDataList.size()-1){
             throw new IllegalArgumentException("GenericTableModifier.setCustomRowData(int,Object): O numero da linha da tabela passado é inválido.");
         }
         
@@ -430,7 +434,7 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
     
     public Object getCustomRowData(int row){
         
-        if(row < 0 || row > sourceTable.getRowCount()-1){
+        if(row < 0 || row > customRowDataList.size()-1){
             throw new IllegalArgumentException("GenericTableModifier.setCustomRowData(int,Object): O numero da linha da tabela passado é inválido.");
         }
         
@@ -439,7 +443,7 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
     
     public Object removeCustomRowData(int row){
         
-        if(row < 0 || row > sourceTable.getRowCount()-1){
+        if(row < 0 || row > customRowDataList.size()-1){
             throw new IllegalArgumentException("GenericTableModifier.setCustomRowData(int,Object): O numero da linha da tabela passado é inválido.");
         }
         
