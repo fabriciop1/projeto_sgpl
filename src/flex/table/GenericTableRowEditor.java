@@ -34,6 +34,7 @@ public class GenericTableRowEditor extends GenericTableModifier {
         
         if (editorType == GTRE_UPDATE) {
             addEditTableRow( getSourceTableSelectedRowData() );
+            
         } else if(editorType == GTRE_INSERT) {
             addEditTableRow(new Object[]{ });
         }
@@ -68,7 +69,7 @@ public class GenericTableRowEditor extends GenericTableModifier {
             updateSourceTableRow(getSourceTable().getSelectedRow(), rowData);
             
         } else if(editorType == GTRE_INSERT) {
-            addSourceTableRow(rowData);
+            addSourceTableRow(rowData, null);
         }
     }
     

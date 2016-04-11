@@ -30,6 +30,8 @@ import modelo.negocio.InventarioTerras;
 import modelo.negocio.Perfil;
 import util.Calc;
 import util.Pair;
+import util.Cast;
+
 
 /**
  *
@@ -57,6 +59,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
         ArrayList<InventarioAnimais> animais = new ArrayList<>();
         ArrayList<InventarioBenfeitorias> benfeitorias = new ArrayList<>();
         ArrayList<InventarioMaquinas> maquinas = new ArrayList<>();
+        
+        inicializarGTRE();
         
         //Totais
         double totalAreaArreInic  = 0;
@@ -98,8 +102,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
         
         Perfil perfilAtual = ControlePerfil.getInstance().getPerfilSelecionado();
      
-        iniciarGTREIs();
-        
         try {
             terras = itdao.recuperarPorPerfil(perfilAtual.getIdPerfil());
             animais = iadao.recuperarPorPerfil(perfilAtual.getIdPerfil());
@@ -109,20 +111,19 @@ public class VisualizarInventario extends javax.swing.JFrame {
             Logger.getLogger(VisualizarInventario.class.getName()).log(Level.SEVERE, null, ex);
         }
      
-        DefaultTableModel modelTerras = (DefaultTableModel) tabelaInveTerras.getModel();
-        modelTerras.setNumRows(0);
-       // tabelaInveTerras.setSelectionMode(modelTerras);
+        tabelaTerrasGTRE.getSourceTableModel().setRowCount(0);
           
         for(int i = 0; i < terras.size(); i++){
             
-            modelTerras.addRow(new Object[]{
+            tabelaTerrasGTRE.addSourceTableRow(new Object[]{
                 terras.get(i).getEspecificacao(),
                 terras.get(i).getAreaArrendadaInicio(),
                 terras.get(i).getAreaPropriaInicio(),
                 terras.get(i).getAreaArrendadaFinal(),
                 terras.get(i).getAreaPropriaFinal(),
                 terras.get(i).getValorTerraNuaPropria(),
-            });
+                
+            }, terras.get(i).getId());
             
             totalAreaArreInic += (terras.get(i).getAreaArrendadaInicio());
             totalAreaPropInic.add(terras.get(i).getAreaPropriaInicio());
@@ -131,18 +132,19 @@ public class VisualizarInventario extends javax.swing.JFrame {
             totalTerraNua.add(terras.get(i).getValorTerraNuaPropria());
             
         }
-        verificaTabelaVazia(modelTerras, editarInvTerrasBT, removerInvTerrasBT);
+        verificaTabelaVazia(tabelaTerrasGTRE.getSourceTableModel(), editarInvTerrasBT, removerInvTerrasBT);
         
-        DefaultTableModel modelForrageiras = (DefaultTableModel) tabelaInveForrageiras.getModel();
-        modelForrageiras.setNumRows(0);
         
+        
+        tabelaForrageirasGTRE.getSourceTableModel().setRowCount(0);
         
         for(int i = 0; i < terras.size(); i++){
             
             double ha = (terras.get(i).getAreaPropriaInicio() + terras.get(i).getAreaPropriaFinal())/2;
             double valorHa = terras.get(i).getCustoFormacaoHectare() * ha;
             double depreciacao = valorHa/terras.get(i).getVidaUtil();
-            modelForrageiras.addRow(new Object[]{
+            
+            tabelaForrageirasGTRE.addSourceTableRow(new Object[]{
                 terras.get(i).getEspecificacao(),
                 terras.get(i).getCustoFormacaoHectare(),
                 ha,
@@ -150,13 +152,13 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 terras.get(i).getVidaUtil(),
                 depreciacao,
                 
-            });
+            }, terras.get(i).getId());
             
             totalHa += (ha);
             totalValorHa += (valorHa);
             totalDepreciacao += (depreciacao);
         }
-        verificaTabelaVazia(modelForrageiras, editarInvTerrasBT, removerInvTerrasBT);
+        verificaTabelaVazia(tabelaForrageirasGTRE.getSourceTableModel(), editarInvTerrasBT, removerInvTerrasBT);
         
         total1.setText("" + (totalAreaArreInic));
         total2.setText("" + Calc.somarLista(totalAreaPropInic));
@@ -171,12 +173,11 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total11.setText("" + (totalValorHa));
         total12.setText("" + (totalDepreciacao));
         
-        DefaultTableModel modelAnimaisProd = (DefaultTableModel) tabelaInveAnimaisProd.getModel();
-        modelAnimaisProd.setNumRows(0);
-            
+        
+        
+        tabelaAnimaisProdGTRE.getSourceTableModel().setRowCount(0);
 
-        DefaultTableModel modelAnimaisServ = (DefaultTableModel) tabelaInveAnimaisServ.getModel();
-        modelAnimaisServ.setNumRows(0);
+        tabelaAnimaisServGTRE.getSourceTableModel().setRowCount(0);
            
 
         for(int i = 0; i < animais.size(); i++){
@@ -190,7 +191,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     total34.setText(String.format("%.2f", Calc.mediaAritmetica(valorInicio, valorFinal)));
                 }
                 
-                modelAnimaisProd.addRow(new Object[]{
+                tabelaAnimaisProdGTRE.addSourceTableRow(new Object[]{
                     animais.get(i).getCategoria(),
                     animais.get(i).getValorInicio(),
                     animais.get(i).getNascimento(),
@@ -201,9 +202,9 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     animais.get(i).getValorCabeca(),
                     valorInicio,
                     valorFinal,
-
-                });
-
+                    
+                }, animais.get(i).getId());
+                
                     totalValInicProd += (animais.get(i).getValorInicio() * 1.0);  
                     totalNascProd += (animais.get(i).getNascimento() * 1.0);
                     totalMorteProd += (animais.get(i).getMorte() * 1.0); 
@@ -215,7 +216,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
                 } else if (animais.get(i).getTipoAnimal() == 2) { //servico
 
-                    modelAnimaisServ.addRow(new Object[]{
+                    tabelaAnimaisServGTRE.addSourceTableRow(new Object[]{
                         animais.get(i).getCategoria(),
                         animais.get(i).getValorInicio(),
                         animais.get(i).getNascimento(),
@@ -224,8 +225,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
                         animais.get(i).getCompra(),
                         animais.get(i).getValorFinal(),
                         animais.get(i).getValorCabeca(),
-
-                    });
+                        
+                    }, animais.get(i).getId());
 
                     totalValInicServ += (animais.get(i).getValorInicio() * 1.0);
                     totalNascServ += (animais.get(i).getNascimento() * 1.0);  
@@ -237,8 +238,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 }
 
             }
-            verificaTabelaVazia(modelAnimaisProd, editarInvAnimaisBT, removerInvAnimaisBT);
-            verificaTabelaVazia(modelAnimaisServ, editarInvAnimaisBT, removerInvAnimaisBT);
+            verificaTabelaVazia(tabelaAnimaisProdGTRE.getSourceTableModel(), editarInvAnimaisBT, removerInvAnimaisBT);
+            verificaTabelaVazia(tabelaAnimaisServGTRE.getSourceTableModel(), editarInvAnimaisBT, removerInvAnimaisBT);
 
             total13.setText("" + (totalValInicProd));
             total14.setText("" + (totalNascProd));
@@ -282,16 +283,15 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 System.out.println("Erro em total39 - Divisão Inválida");
             }
                 
-            DefaultTableModel modelBenfeitorias = (DefaultTableModel) tabelaBenfeitorias.getModel();
-            modelBenfeitorias.setNumRows(0);
             
+            tabelaBenfeitoriasGTRE.getSourceTableModel().setRowCount(0);
 
             for(int i = 0; i < benfeitorias.size(); i++){
 
                 double total = benfeitorias.get(i).getQuantidade() * benfeitorias.get(i).getValorUnitario();
                 double depreciacao = Calc.dividir(total, benfeitorias.get(i).getVidaUtil());
 
-                modelBenfeitorias.addRow(new Object[] {
+                tabelaBenfeitoriasGTRE.addSourceTableRow(new Object[] {
                     benfeitorias.get(i).getEspecificacao(),
                     benfeitorias.get(i).getUnidade(),
                     benfeitorias.get(i).getQuantidade(),
@@ -299,26 +299,28 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     total,
                     benfeitorias.get(i).getVidaUtil(),
                     depreciacao,
-                });
+                    
+                }, benfeitorias.get(i).getId());
 
                 totalValorBenfeit += (total);
                 totalDeprecBenfeit += (depreciacao);
             }
             
-            verificaTabelaVazia(modelBenfeitorias, editarInvBenfeitoriasBT, removerInvBenfeitoriasBT);
+            verificaTabelaVazia(tabelaBenfeitoriasGTRE.getSourceTableModel(), editarInvBenfeitoriasBT, removerInvBenfeitoriasBT);
 
             total40.setText(String.format("%.2f", (totalValorBenfeit)));
             total41.setText(String.format("%.2f", (totalDeprecBenfeit)));
 
-            DefaultTableModel modelMaquinas = (DefaultTableModel) tabelaMaquinas.getModel();
-            modelMaquinas.setNumRows(0);
+            
+            
+            tabelaMaquinasGTRE.getSourceTableModel().setRowCount(0);
 
             for(int i = 0; i < maquinas.size(); i++){
 
                 double total = maquinas.get(i).getQuantidade() * maquinas.get(i).getValorUnitario();
                 double depreciacao = Calc.dividir(total, maquinas.get(i).getVidaUtil());
 
-                modelMaquinas.addRow(new Object[] {
+                tabelaMaquinasGTRE.addSourceTableRow(new Object[] {
                     maquinas.get(i).getEspecificacao(),
                     maquinas.get(i).getUnidade(),
                     maquinas.get(i).getQuantidade(),
@@ -326,12 +328,13 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     total,
                     maquinas.get(i).getVidaUtil(),
                     depreciacao,
-                });
+                    
+                }, maquinas.get(i).getId());
 
                 totalValorMaquin += (total);
                 totalDeprecMaquin += (depreciacao);
             }
-            verificaTabelaVazia(modelMaquinas, editarInvMaquinasBT, removerInvMaquinasBT);
+            verificaTabelaVazia(tabelaMaquinasGTRE.getSourceTableModel(), editarInvMaquinasBT, removerInvMaquinasBT);
 
             total42.setText("" + (totalValorMaquin));
             total43.setText("" + (totalDeprecMaquin));
@@ -368,7 +371,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
             total60.setText(String.format("R$ %.2f", ((Double.parseDouble(total58.getText().replace(',','.')) * 12+ 
                                   Double.parseDouble(total59.getText().replace(',','.')) +
                                   Double.parseDouble(total46.getText().replace(',','.')))) / 12));
-        
+            
+            definirBDListeners();
     }
 
     /**
@@ -2025,29 +2029,120 @@ public class VisualizarInventario extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void iniciarGTREIs() {
-        
-        TableModifyListener listener = new TableModifyListener() {
-            @Override
-            public void tableModified(int modifType, GenericTableModifier modifier) {
-                String msg = "";
-                switch(modifType){
-                    case TableModifyListener.ROW_INSERTED: msg = "Linha inserida"; break;
-                    case TableModifyListener.ROW_UPDATED: msg = "Linha atualizada"; break;
-                    case TableModifyListener.ROW_DELETED: msg = "Linha removida"; break;
-                }
-                JOptionPane.showMessageDialog(rootPane, msg, "Inventario Maquinas", JOptionPane.INFORMATION_MESSAGE);
-            }
-        };
+    
+    private void inicializarGTRE() {
         
         tabelaMaquinasGTRE = new GenericTableRowEditor(this, tabelaMaquinas, false);
-        tabelaMaquinasGTRE.addTableModifyListener(listener);
         
         tabelaBenfeitoriasGTRE = new GenericTableRowEditor(this, tabelaBenfeitorias, false);
+        tabelaMaquinasGTRE.addTableModifyListener(new TableModifyListener() {
+            @Override
+            public void tableModified(int modifType, GenericTableModifier modifier, Object data) {
+                
+                
+            }
+        });
+        
         tabelaForrageirasGTRE = new GenericTableRowEditor(this, tabelaInveForrageiras, false);
+        tabelaMaquinasGTRE.addTableModifyListener(new TableModifyListener() {
+            @Override
+            public void tableModified(int modifType, GenericTableModifier modifier, Object data) {
+                
+                
+            }
+        });
+        
         tabelaTerrasGTRE = new GenericTableRowEditor(this, tabelaInveTerras, false);
+        tabelaMaquinasGTRE.addTableModifyListener(new TableModifyListener() {
+            @Override
+            public void tableModified(int modifType, GenericTableModifier modifier, Object data) {
+                
+                
+            }
+        });
+        
         tabelaAnimaisProdGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisProd, false);
+        tabelaMaquinasGTRE.addTableModifyListener(new TableModifyListener() {
+            @Override
+            public void tableModified(int modifType, GenericTableModifier modifier, Object data) {
+                
+                
+            }
+        });
+        
         tabelaAnimaisServGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisServ, false);
+        tabelaMaquinasGTRE.addTableModifyListener(new TableModifyListener() {
+            @Override
+            public void tableModified(int modifType, GenericTableModifier modifier, Object data) {
+                
+                
+            }
+        });
+    }
+    
+    private void definirBDListeners(){
+        
+        tabelaMaquinasGTRE.addTableModifyListener(new TableModifyListener() {
+            @Override
+            public void tableModified(int modifType, GenericTableModifier modifier, Object data) {
+                
+                InventarioMaquinasDAO dao = new InventarioMaquinasDAO();
+                
+                Pair<Object[],Object> rowDataPair = (Pair<Object[],Object>)data;
+                Object[] rowData = rowDataPair.first;
+                Integer rowID = (Integer)rowDataPair.second;
+                
+                if(modifType == TableModifyListener.ROW_INSERTED){
+                    
+                    try {
+                        Perfil perfil = ControlePerfil.getInstance().getPerfilSelecionado();
+                        
+                        InventarioMaquinas inv = new InventarioMaquinas();
+                        inv.setEspecificacao(Cast.toString(rowData[0]));
+                        inv.setUnidade(Cast.toString(rowData[1]));
+                        inv.setQuantidade(Cast.toDouble(rowData[2]));
+                        inv.setValorUnitario(Cast.toDouble(rowData[3]));
+                        inv.setVidaUtil(Cast.toInt(rowData[5]));
+                        inv.setPerfil(perfil);
+                        
+                        dao.cadastrar(inv);
+                        
+                        modifier.setCustomRowData(modifier.getSourceTable().getRowCount()-1, inv.getId());
+                        
+                    } catch (SQLException ex) {
+                        Logger.getLogger(VisualizarInventario.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                else if(modifType == TableModifyListener.ROW_UPDATED){
+                    
+                    try {
+                        Perfil perfil = ControlePerfil.getInstance().getPerfilSelecionado();
+                        
+                        InventarioMaquinas inv = new InventarioMaquinas();
+                        inv.setId(rowID);
+                        inv.setEspecificacao(Cast.toString(rowData[0]));
+                        inv.setUnidade(Cast.toString(rowData[1]));
+                        inv.setQuantidade(Cast.toDouble(rowData[2]));
+                        inv.setValorUnitario(Cast.toDouble(rowData[3]));
+                        inv.setVidaUtil(Cast.toInt(rowData[5]));
+                        inv.setPerfil(perfil);
+                        
+                        dao.atualizar(inv);
+                        
+                    } catch (SQLException ex) {
+                        Logger.getLogger(VisualizarInventario.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                else if(modifType == TableModifyListener.ROW_DELETED){
+                    try {
+                        dao.remover(rowID);
+                        
+                    } catch (SQLException ex) {
+                        Logger.getLogger(VisualizarInventario.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
     }
     
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed

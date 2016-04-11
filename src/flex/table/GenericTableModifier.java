@@ -12,6 +12,8 @@ import java.util.List;
 import javax.swing.JDialog;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import util.Pair;
+
 
 /**
  *
@@ -28,6 +30,7 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
     private boolean forceCellEditing;
     private Frame parent;
     private boolean columnEditableArray[];
+    private List<Object> customRowDataList;
     private List<TableModifyListener> tableModifylisteners;
     
     private boolean allowEmptyRows;
@@ -40,6 +43,7 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
         this.sourceTable = sourceTable;
         this.forceCellEditing = forceCellEditing;
         this.tableModifylisteners = new ArrayList<>();
+        this.customRowDataList = new ArrayList<>();
         this.allowEmptyCells = true;
         this.allowEmptyRows = false;
         
@@ -70,6 +74,7 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
     public void removeTableModifyListener(TableModifyListener listener){
         tableModifylisteners.remove(listener);
     }
+    
     
     public void showEditor(ActionEvent e){
         
@@ -129,23 +134,25 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
         this.setSize(minDialogSize, this.getHeight());
     }
     
-    protected void notifyListeners(int modifType){
+    protected void notifyListeners(int modifType, Object data){
         
         for(TableModifyListener listener : tableModifylisteners){
-            listener.tableModified(modifType, this);
+            listener.tableModified(modifType, this, data);
         }
     }
+    
+    
     
     protected abstract void refillEditTable();
     
     protected abstract void updateSourceTable();
     
-    
-    public void addSourceTableRow(Object[] dataArray){
+    public void addSourceTableRow(Object[] dataArray, Object customRowData){
         getSourceTableModel().addRow(dataArray);
         getSourceTableModel().fireTableRowsInserted(sourceTable.getRowCount()-1, sourceTable.getRowCount()-1);
+        customRowDataList.add(customRowData);
         
-        notifyListeners(TableModifyListener.ROW_INSERTED);
+        notifyListeners(TableModifyListener.ROW_INSERTED, (Object)Pair.create(dataArray, customRowData));
     }
     
     public Object[] getSourceTableRowData(int row){
@@ -160,10 +167,15 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
     }
     
     public void removeSourceTableRow(int row){
+        
+        Object[] rowData = getSourceTableRowData(row);
+        Object customRowData = getCustomRowData(row);
+        
         getSourceTableModel().removeRow(row);
         getSourceTableModel().fireTableRowsDeleted(row, row);
+        removeCustomRowData(row);
         
-        notifyListeners(TableModifyListener.ROW_DELETED);
+        notifyListeners( TableModifyListener.ROW_DELETED, (Object)Pair.create(rowData,customRowData) );
     }
     
     public void updateSourceTableRow(int row, Object[] dataArray){
@@ -174,7 +186,10 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
         
         getSourceTableModel().fireTableRowsUpdated(row, row);
         
-        notifyListeners(TableModifyListener.ROW_UPDATED);
+        Object[] rowData = getSourceTableRowData(row);
+        Object customRowData = getCustomRowData(row);
+        
+        notifyListeners( TableModifyListener.ROW_UPDATED, (Object)Pair.create(rowData, customRowData) );
     }
     
     public JTable getSourceTable() {
@@ -224,7 +239,6 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
     protected DefaultTableModel getEditTableModel(){
         return (DefaultTableModel) editTable.getModel();
     }
-    
     
     
     protected void clearEditTable(){
@@ -403,5 +417,36 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
 
     public void setAllowEmptyCells(boolean allowEmptyCells) {
         this.allowEmptyCells = allowEmptyCells;
+    }
+    
+    public Object setCustomRowData(int row, Object data){
+        
+        if(row < 0 || row > sourceTable.getRowCount()-1){
+            throw new IllegalArgumentException("GenericTableModifier.setCustomRowData(int,Object): O numero da linha da tabela passado é inválido.");
+        }
+        
+        return customRowDataList.set(row, data);
+    }
+    
+    public Object getCustomRowData(int row){
+        
+        if(row < 0 || row > sourceTable.getRowCount()-1){
+            throw new IllegalArgumentException("GenericTableModifier.setCustomRowData(int,Object): O numero da linha da tabela passado é inválido.");
+        }
+        
+        return customRowDataList.get(row);
+    }
+    
+    public Object removeCustomRowData(int row){
+        
+        if(row < 0 || row > sourceTable.getRowCount()-1){
+            throw new IllegalArgumentException("GenericTableModifier.setCustomRowData(int,Object): O numero da linha da tabela passado é inválido.");
+        }
+        
+        return customRowDataList.remove(row);
+    }
+    
+    public List<Object> getCustomRowDataList(){
+        return customRowDataList;
     }
 }
