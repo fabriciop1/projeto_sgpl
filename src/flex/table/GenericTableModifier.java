@@ -147,6 +147,8 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
     
     protected abstract void updateSourceTable();
     
+    
+    
     public void addSourceTableRow(Object[] dataArray, Object customRowData){
         getSourceTableModel().addRow(dataArray);
         getSourceTableModel().fireTableRowsInserted(sourceTable.getRowCount()-1, sourceTable.getRowCount()-1);
@@ -171,13 +173,9 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
         Object[] rowData = getSourceTableRowData(row);
         Object customRowData = getCustomRowData(row);
         
-        System.out.println("(Before Remotion) Row: " + row + " | Custom Row ID: " + (Integer)customRowData);
-        
         getSourceTableModel().removeRow(row);
         getSourceTableModel().fireTableRowsDeleted(row, row);
         removeCustomRowData(row);
-        
-        System.out.println("(After Remotion) Row: " + row + " | Custom Row ID: " + (Integer)customRowData + "\n");
         
         notifyListeners( TableModifyListener.ROW_DELETED, (Object)Pair.create(rowData,customRowData) );
     }

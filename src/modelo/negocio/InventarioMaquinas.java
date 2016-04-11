@@ -22,7 +22,7 @@ public class InventarioMaquinas {
     public InventarioMaquinas() {
     }
 
-    public InventarioMaquinas(String especificacao, String unidade, int quantidade, double valorUnitario, int vidaUtil, Perfil perfil) {
+    public InventarioMaquinas(String especificacao, String unidade, double quantidade, double valorUnitario, int vidaUtil, Perfil perfil) {
         this.especificacao = especificacao;
         this.unidade = unidade;
         this.quantidade = quantidade;

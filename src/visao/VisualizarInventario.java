@@ -2057,6 +2057,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             public void tableModified(int modifType, GenericTableModifier modifier, Object data) {
                 
                 InventarioMaquinasDAO dao = new InventarioMaquinasDAO();
+                Perfil perfil = ControlePerfil.getInstance().getPerfilSelecionado();
                 
                 Pair<Object[],Object> rowDataPair = (Pair<Object[],Object>)data;
                 Object[] rowData = rowDataPair.first;
@@ -2065,16 +2066,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 if(modifType == TableModifyListener.ROW_INSERTED){
                     
                     try {
-                        Perfil perfil = ControlePerfil.getInstance().getPerfilSelecionado();
-                        
-                        InventarioMaquinas inv = new InventarioMaquinas();
-                        inv.setEspecificacao(Cast.toString(rowData[0]));
-                        inv.setUnidade(Cast.toString(rowData[1]));
-                        inv.setQuantidade(Cast.toDouble(rowData[2]));
-                        inv.setValorUnitario(Cast.toDouble(rowData[3]));
-                        inv.setVidaUtil(Cast.toInt(rowData[5]));
-                        inv.setPerfil(perfil);
-                        
+                        InventarioMaquinas inv = new InventarioMaquinas(Cast.toString(rowData[0]),Cast.toString(rowData[1]),Cast.toDouble(rowData[2]),
+                                                                        Cast.toDouble(rowData[3]),Cast.toInt(rowData[5]),perfil);
                         dao.cadastrar(inv);
                         
                         modifier.setCustomRowData(modifier.getSourceTable().getRowCount()-1, inv.getId());
@@ -2086,16 +2079,9 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 else if(modifType == TableModifyListener.ROW_UPDATED){
                     
                     try {
-                        Perfil perfil = ControlePerfil.getInstance().getPerfilSelecionado();
-                        
-                        InventarioMaquinas inv = new InventarioMaquinas();
+                        InventarioMaquinas inv = new InventarioMaquinas(Cast.toString(rowData[0]),Cast.toString(rowData[1]),Cast.toDouble(rowData[2]),
+                                                                        Cast.toDouble(rowData[3]),Cast.toInt(rowData[5]),perfil);
                         inv.setId(rowID);
-                        inv.setEspecificacao(Cast.toString(rowData[0]));
-                        inv.setUnidade(Cast.toString(rowData[1]));
-                        inv.setQuantidade(Cast.toDouble(rowData[2]));
-                        inv.setValorUnitario(Cast.toDouble(rowData[3]));
-                        inv.setVidaUtil(Cast.toInt(rowData[5]));
-                        inv.setPerfil(perfil);
                         
                         dao.atualizar(inv);
                         
@@ -2113,6 +2099,56 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 }
             }
         });
+        
+        tabelaBenfeitoriasGTRE.addTableModifyListener(new TableModifyListener() {
+            @Override
+            public void tableModified(int modifType, GenericTableModifier modifier, Object data) {
+                
+                InventarioBenfeitoriasDAO dao = new InventarioBenfeitoriasDAO();
+                
+                Perfil perfil = ControlePerfil.getInstance().getPerfilSelecionado();
+                Pair<Object[],Object> rowDataPair = (Pair<Object[],Object>)data;
+                Object[] rowData = rowDataPair.first;
+                Integer rowID = (Integer)rowDataPair.second;
+                
+                if(modifType == TableModifyListener.ROW_INSERTED){
+                    
+                    try {
+                        InventarioBenfeitorias inv = new InventarioBenfeitorias(Cast.toString(rowData[0]),Cast.toString(rowData[1]),Cast.toDouble(rowData[2]),
+                                                                                Cast.toDouble(rowData[3]),Cast.toInt(rowData[5]),perfil);
+                        dao.cadastrar(inv);
+                        
+                        modifier.setCustomRowData(modifier.getSourceTable().getRowCount()-1, inv.getId());  
+                        
+                    } catch (SQLException ex) {
+                        Logger.getLogger(VisualizarInventario.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                else if(modifType == TableModifyListener.ROW_UPDATED){
+                    
+                    try {
+                        InventarioBenfeitorias inv = new InventarioBenfeitorias(Cast.toString(rowData[0]),Cast.toString(rowData[1]),Cast.toDouble(rowData[2]),
+                                                                                Cast.toDouble(rowData[3]),Cast.toInt(rowData[5]),perfil);
+                        inv.setId(rowID);
+                        
+                        dao.atualizar(inv);
+                        
+                    } catch (SQLException ex) {
+                        Logger.getLogger(VisualizarInventario.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                else if(modifType == TableModifyListener.ROW_DELETED){
+                    
+                    try {
+                        dao.remover(rowID);
+                        
+                    } catch (SQLException ex) {
+                        Logger.getLogger(VisualizarInventario.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+        
     }
     
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
