@@ -1,0 +1,10 @@
+Campos editar (não permitir para campos de cálculos) OK
+conexão telas - BD para edição, remoção e adição 
+atualizar tela após alterações
+Informar mensagem caso não haja clique em nenhuma linha da tabela e o usuário clique em editar/remover OK
+Verificar quais totais precisam do "R$"
+
+
+Inserir todas as especificacoes em dados economicos OK
+Permitir o usuario adicionar novo periodo e editar os campos (fora a especificacao)
+Insrir codigos sql

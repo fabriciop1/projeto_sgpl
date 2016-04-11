@@ -1,4 +1,4 @@
-﻿INSERT INTO projeto_pesquisa.dem_especificacao VALUES (0, "Produção Total de Leite");
+INSERT INTO projeto_pesquisa.dem_especificacao VALUES (0, "Produção Total de Leite");
 INSERT INTO projeto_pesquisa.dem_especificacao VALUES (0, "Venda de Leite (L)");
 INSERT INTO projeto_pesquisa.dem_especificacao VALUES (0, "Venda de Animais(und)");
 INSERT INTO projeto_pesquisa.dem_especificacao VALUES (0, "Empréstimos");

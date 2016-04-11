@@ -269,7 +269,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 total36.setText("" + Calc.dividir(Double.parseDouble(total34.getText().replace(',','.')),
                         Double.parseDouble(total35.getText().replace(',','.'))));
             } catch (IllegalArgumentException e) {
-                total36.setText("");
+                total36.setText("0.0");
                 System.out.println("Erro em total 36 - Divisão Inválida.");
             }
             
@@ -279,8 +279,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 total39.setText("" + Calc.dividir(Double.parseDouble(total37.getText().replace(',','.')), 
                         Double.parseDouble(total38.getText().replace(',','.'))));
             } catch (IllegalArgumentException e){
-                total39.setText("");
-                System.out.println("Erro em total39 - Divisão Inválida");
+                total39.setText("0.0"); // Caso haja divisão por 0
+             //   System.out.println("Erro em total39 - Divisão Inválida");
             }
                 
             
@@ -310,9 +310,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
             total40.setText(String.format("%.2f", (totalValorBenfeit)));
             total41.setText(String.format("%.2f", (totalDeprecBenfeit)));
-
-            
-            
             tabelaMaquinasGTRE.getSourceTableModel().setRowCount(0);
 
             for(int i = 0; i < maquinas.size(); i++){
@@ -1061,7 +1058,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         jLabel19.setText("Depreciação dos Animais de Serviços - R$/ano");
 
         total34.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        total34.setText("<total34>");
+        total34.setText("0.0");
 
         total35.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total35.setText("5");
@@ -2031,53 +2028,26 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
     
     private void inicializarGTRE() {
-        
-        tabelaMaquinasGTRE = new GenericTableRowEditor(this, tabelaMaquinas, false);
-        
+        tabelaMaquinasGTRE = new GenericTableRowEditor(this, tabelaMaquinas, false);       
         tabelaBenfeitoriasGTRE = new GenericTableRowEditor(this, tabelaBenfeitorias, false);
-        tabelaMaquinasGTRE.addTableModifyListener(new TableModifyListener() {
-            @Override
-            public void tableModified(int modifType, GenericTableModifier modifier, Object data) {
-                
-                
-            }
-        });
-        
         tabelaForrageirasGTRE = new GenericTableRowEditor(this, tabelaInveForrageiras, false);
-        tabelaMaquinasGTRE.addTableModifyListener(new TableModifyListener() {
-            @Override
-            public void tableModified(int modifType, GenericTableModifier modifier, Object data) {
-                
-                
-            }
-        });
-        
         tabelaTerrasGTRE = new GenericTableRowEditor(this, tabelaInveTerras, false);
-        tabelaMaquinasGTRE.addTableModifyListener(new TableModifyListener() {
-            @Override
-            public void tableModified(int modifType, GenericTableModifier modifier, Object data) {
-                
-                
-            }
-        });
-        
         tabelaAnimaisProdGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisProd, false);
-        tabelaMaquinasGTRE.addTableModifyListener(new TableModifyListener() {
-            @Override
-            public void tableModified(int modifType, GenericTableModifier modifier, Object data) {
-                
-                
-            }
-        });
-        
         tabelaAnimaisServGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisServ, false);
-        tabelaMaquinasGTRE.addTableModifyListener(new TableModifyListener() {
-            @Override
-            public void tableModified(int modifType, GenericTableModifier modifier, Object data) {
-                
-                
-            }
-        });
+       
+        tabelaForrageirasGTRE.setColumnEditable(2, false);
+        tabelaForrageirasGTRE.setColumnEditable(3, false);
+        tabelaForrageirasGTRE.setColumnEditable(5, false);
+        
+        tabelaAnimaisProdGTRE.setColumnEditable(8, false);
+        tabelaAnimaisProdGTRE.setColumnEditable(9, false);
+        
+        tabelaBenfeitoriasGTRE.setColumnEditable(4, false);
+        tabelaBenfeitoriasGTRE.setColumnEditable(6, false);
+        
+        tabelaMaquinasGTRE.setColumnEditable(4, false);
+        tabelaMaquinasGTRE.setColumnEditable(6, false);
+        
     }
     
     private void definirBDListeners(){
@@ -2218,10 +2188,13 @@ public class VisualizarInventario extends javax.swing.JFrame {
         if(selecionada == tabelaInveTerras){
             tabelaTerrasGTRE.setEditorType(GTRE_INSERT);
             tabelaTerrasGTRE.showEditor(evt);
+            verificaTabelaVazia(tabelaTerrasGTRE.getSourceTableModel(), editarInvTerrasBT, removerInvTerrasBT);
+            
         }
         else if(selecionada == tabelaInveForrageiras){
             tabelaForrageirasGTRE.setEditorType(GTRE_INSERT);
             tabelaForrageirasGTRE.showEditor(evt);
+            verificaTabelaVazia(tabelaForrageirasGTRE.getSourceTableModel(), editarInvTerrasBT, removerInvTerrasBT);
         }
     }//GEN-LAST:event_adicionarInvTerrasBTActionPerformed
 
@@ -2268,6 +2241,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
     private void adicionarInvMaquinasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarInvMaquinasBTActionPerformed
         tabelaMaquinasGTRE.setEditorType(GTRE_INSERT);
         tabelaMaquinasGTRE.showEditor(evt);
+         verificaTabelaVazia(tabelaMaquinasGTRE.getSourceTableModel(), editarInvMaquinasBT, removerInvMaquinasBT);
     }//GEN-LAST:event_adicionarInvMaquinasBTActionPerformed
 
     private void adicionarInvAnimaisBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarInvAnimaisBTActionPerformed
@@ -2285,10 +2259,13 @@ public class VisualizarInventario extends javax.swing.JFrame {
         if(selecionada == tabelaInveAnimaisProd){
             tabelaAnimaisProdGTRE.setEditorType(GTRE_INSERT);
             tabelaAnimaisProdGTRE.showEditor(evt);
+            verificaTabelaVazia(tabelaAnimaisProdGTRE.getSourceTableModel(), editarInvAnimaisBT, removerInvAnimaisBT);
+           
         }
         else if(selecionada == tabelaInveAnimaisServ){
             tabelaAnimaisServGTRE.setEditorType(GTRE_INSERT);
             tabelaAnimaisServGTRE.showEditor(evt);
+             verificaTabelaVazia(tabelaAnimaisServGTRE.getSourceTableModel(), editarInvAnimaisBT, removerInvAnimaisBT);
         }
     }//GEN-LAST:event_adicionarInvAnimaisBTActionPerformed
 
@@ -2373,6 +2350,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
     private void adicionarInvBenfeitoriasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarInvBenfeitoriasBTActionPerformed
         tabelaBenfeitoriasGTRE.setEditorType(GTRE_INSERT);
         tabelaBenfeitoriasGTRE.showEditor(evt);
+        verificaTabelaVazia(tabelaBenfeitoriasGTRE.getSourceTableModel(), editarInvBenfeitoriasBT, removerInvBenfeitoriasBT);
     }//GEN-LAST:event_adicionarInvBenfeitoriasBTActionPerformed
     
     private void verificaTabelaVazia(DefaultTableModel table, JButton editarBtn, JButton removerBtn) {
@@ -2381,7 +2359,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             removerBtn.setEnabled(false);
         } else {
             editarBtn.setEnabled(true);
-            editarBtn.setEnabled(true);
+            removerBtn.setEnabled(true);
         }
     }
 
