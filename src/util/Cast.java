@@ -34,4 +34,8 @@ public final class Cast {
     public static Boolean toBool(Object o){
         return (o != null ? (Boolean)o : false);
     }
+    
+    public static String toSQLString(Object o){
+        return "\"" + toString(o) + "\"";
+    }
 }
