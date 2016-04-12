@@ -265,6 +265,11 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
         cancelButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         editTable.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         editTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -349,10 +354,14 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
     }//GEN-LAST:event_saveButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-
         hideEditor();
         clearEditTable();
     }//GEN-LAST:event_cancelButtonActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        hideEditor();
+        clearEditTable();
+    }//GEN-LAST:event_formWindowClosed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;

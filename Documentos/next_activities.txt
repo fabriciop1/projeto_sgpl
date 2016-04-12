@@ -1,10 +1,25 @@
-Campos editar (não permitir para campos de cálculos) OK
+
 conexão telas - BD para edição, remoção e adição 
 atualizar tela após alterações
-Informar mensagem caso não haja clique em nenhuma linha da tabela e o usuário clique em editar/remover OK
+ (ANIMAIS E TERRAS)
 Verificar quais totais precisam do "R$"
+Insrir codigos sql -- COMECAR DO 1
 
 
-Inserir todas as especificacoes em dados economicos OK
+COLOCAR vidaUtilReprodutores, vidaUJtilAnimaisServico, valorGastoComComprasDeAnimais EM RESUMO
+CADASTRAR INFORMAÇÕES DE RESUMO NO BANCO
+CÁLCULOS DE RESUMO 
+
+fora o adm, exibir perfis por rota de usuário
+inserir perfil (adm)
+editar perfil  (adm, usuario do perfil)
+remover perfil (adm)
+
+
 Permitir o usuario adicionar novo periodo e editar os campos (fora a especificacao)
-Insrir codigos sql
+
+inserção, edição e remoção de campos em Dados Econômicos
+
+
+COR DAS LINHAS DE DEM TOTAIS E VAZIOS
+MODIFICAR CAMPOS "OUTROS"

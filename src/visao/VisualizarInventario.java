@@ -825,7 +825,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "", "", "", "", "", "", "", ""
+                "Categoria", "Início", "Nasci/to", "Morte", "Venda", "Compra", "Final", "Valor (R$/Cab)"
             }
         ) {
             Class[] types = new Class [] {
@@ -858,21 +858,15 @@ public class VisualizarInventario extends javax.swing.JFrame {
             tabelaInveAnimaisServ.getColumnModel().getColumn(1).setPreferredWidth(50);
             tabelaInveAnimaisServ.getColumnModel().getColumn(2).setResizable(false);
             tabelaInveAnimaisServ.getColumnModel().getColumn(2).setPreferredWidth(50);
-            tabelaInveAnimaisServ.getColumnModel().getColumn(2).setHeaderValue("");
             tabelaInveAnimaisServ.getColumnModel().getColumn(3).setResizable(false);
             tabelaInveAnimaisServ.getColumnModel().getColumn(3).setPreferredWidth(50);
-            tabelaInveAnimaisServ.getColumnModel().getColumn(3).setHeaderValue("");
             tabelaInveAnimaisServ.getColumnModel().getColumn(4).setResizable(false);
             tabelaInveAnimaisServ.getColumnModel().getColumn(4).setPreferredWidth(50);
-            tabelaInveAnimaisServ.getColumnModel().getColumn(4).setHeaderValue("");
             tabelaInveAnimaisServ.getColumnModel().getColumn(5).setResizable(false);
             tabelaInveAnimaisServ.getColumnModel().getColumn(5).setPreferredWidth(50);
-            tabelaInveAnimaisServ.getColumnModel().getColumn(5).setHeaderValue("");
             tabelaInveAnimaisServ.getColumnModel().getColumn(6).setResizable(false);
             tabelaInveAnimaisServ.getColumnModel().getColumn(6).setPreferredWidth(50);
-            tabelaInveAnimaisServ.getColumnModel().getColumn(6).setHeaderValue("");
             tabelaInveAnimaisServ.getColumnModel().getColumn(7).setResizable(false);
-            tabelaInveAnimaisServ.getColumnModel().getColumn(7).setHeaderValue("");
         }
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -2270,7 +2264,11 @@ public class VisualizarInventario extends javax.swing.JFrame {
         }
         else {
             JOptionPane.showMessageDialog(rootPane, "Selecione uma linha da tabela para remover",
-                        "Remoer - Nenhuma linha selecionada", JOptionPane.INFORMATION_MESSAGE);
+                        "Remover - Nenhuma linha selecionada", JOptionPane.INFORMATION_MESSAGE);
+        }
+        if (tabelaInveTerras.getRowCount() == 0 && tabelaInveForrageiras.getRowCount() == 0) {
+            editarInvTerrasBT.setEnabled(false);
+            removerInvTerrasBT.setEnabled(false);
         }
     }//GEN-LAST:event_removerInvTerrasBTActionPerformed
 
@@ -2312,8 +2310,9 @@ public class VisualizarInventario extends javax.swing.JFrame {
         }
         else {
             JOptionPane.showMessageDialog(rootPane, "Selecione uma linha da tabela para remover",
-                        "Remoer - Nenhuma linha selecionada", JOptionPane.INFORMATION_MESSAGE);
+                        "Remover - Nenhuma linha selecionada", JOptionPane.INFORMATION_MESSAGE);
         }
+        verificaTabelaVazia(tabelaBenfeitoriasGTRE.getSourceTableModel(), editarInvBenfeitoriasBT, removerInvBenfeitoriasBT);
     }//GEN-LAST:event_removerInvBenfeitoriasBTActionPerformed
 
     private void removerInvMaquinasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerInvMaquinasBTActionPerformed
@@ -2323,8 +2322,9 @@ public class VisualizarInventario extends javax.swing.JFrame {
         }
         else {
             JOptionPane.showMessageDialog(rootPane, "Selecione uma linha da tabela para remover",
-                        "Remoer - Nenhuma linha selecionada", JOptionPane.INFORMATION_MESSAGE);
+                        "Remover - Nenhuma linha selecionada", JOptionPane.INFORMATION_MESSAGE);
         }
+        verificaTabelaVazia(tabelaMaquinasGTRE.getSourceTableModel(), editarInvMaquinasBT, removerInvMaquinasBT);
     }//GEN-LAST:event_removerInvMaquinasBTActionPerformed
 
     private void removerInvAnimaisBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerInvAnimaisBTActionPerformed
@@ -2337,7 +2337,11 @@ public class VisualizarInventario extends javax.swing.JFrame {
         }
         else {
             JOptionPane.showMessageDialog(rootPane, "Selecione uma linha da tabela para remover",
-                        "Remoer - Nenhuma linha selecionada", JOptionPane.INFORMATION_MESSAGE);
+                        "Remover - Nenhuma linha selecionada", JOptionPane.INFORMATION_MESSAGE);
+        }
+        if (tabelaInveAnimaisProd.getRowCount() == 0 && tabelaInveAnimaisServ.getRowCount() == 0) {
+            editarInvAnimaisBT.setEnabled(false);
+            removerInvAnimaisBT.setEnabled(false);
         }
     }//GEN-LAST:event_removerInvAnimaisBTActionPerformed
 

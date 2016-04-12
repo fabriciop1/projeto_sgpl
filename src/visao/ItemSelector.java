@@ -7,10 +7,15 @@ package visao;
 
 import java.awt.Frame;
 import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
 import util.Pair;
 import util.TrashGen;
 
@@ -18,7 +23,7 @@ import util.TrashGen;
  *
  * @author Jefferson Sales
  */
-public class ItemSelector< T > extends javax.swing.JDialog {
+public class ItemSelector< T > extends JDialog {
 
     private List<Pair<String, T>> optionList;
     private List<JRadioButton> radioList;
@@ -44,6 +49,14 @@ public class ItemSelector< T > extends javax.swing.JDialog {
             
             JRadioButton radio = new JRadioButton(optionList.get(i).first);
             radio.setHorizontalAlignment(SwingConstants.CENTER);
+            radio.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    ItemSelector.this.setVisible(false);
+                }
+            }
+        });
             
             radioGroup.add(radio);
             panel.add(radio);
@@ -145,21 +158,6 @@ public class ItemSelector< T > extends javax.swing.JDialog {
         this.setVisible(false);
     }//GEN-LAST:event_okayBTActionPerformed
 
-    
-    
-//    public static void main(String[] args) {
-//        
-//        List<Pair<String,String>> options = new ArrayList<>();
-//        
-//        for (int i = 0; i < 15; i++) {
-//            
-//            options.add( new Pair<>(TrashGen.generateString(15, true, true, false), ""+(i+1)) );
-//        }
-//        
-//        ItemSelector<String> dialog = new ItemSelector<>(null, options);
-//        dialog.setVisible(true);
-//    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel label;
     private javax.swing.JButton okayBT;
@@ -173,5 +171,18 @@ public class ItemSelector< T > extends javax.swing.JDialog {
 
     public void setLabel(String label) {
         this.label.setText(label);
+    }
+    
+    public static void main(String[] args) {
+        
+        List<Pair<String,String>> options = new ArrayList<>();
+        options.add(new Pair<>("asdf","555555555"));
+        options.add(new Pair<>("asdf","9999999"));
+        options.add(new Pair<>("yuoi","88888888888"));
+        options.add(new Pair<>("zxcv","7777777777"));
+        
+        ItemSelector<String> selector = new ItemSelector<>(null,options);
+        selector.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        System.out.println(selector.showSelector());
     }
 }
