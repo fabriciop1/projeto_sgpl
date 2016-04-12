@@ -57,7 +57,6 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
         editTable.setShowHorizontalLines(true);
         editTable.setShowVerticalLines(true);
         
-        this.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
         this.setMinimumSize(this.getSize());
         this.setLabelText("");
         this.setVisible(false);
@@ -264,7 +263,6 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
         saveButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);
