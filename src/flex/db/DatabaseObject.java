@@ -14,21 +14,33 @@ import java.util.Map;
 public abstract class DatabaseObject {
     
     private final String tableName;
+    private final String idTableColumn;
     private int id; 
     
-    protected DatabaseObject(String tableName, int id){
+    protected DatabaseObject(String tableName, String idTableColumn, int id){
         this.tableName = tableName;
+        this.idTableColumn = idTableColumn;
         this.id = id;
     }
 
-    public String getTableName() {
-        return tableName;
+    protected DatabaseObject(String tableName, String idTableColumn){
+        this(tableName, idTableColumn, 0);
     }
     
-    public abstract Map<String,String> getObjectTableData();
+    
+    public abstract Map<String,Object> getObjectTableData();
     
     public abstract void setObjectData(Map<String,Object> objectData);
 
+    
+    public String getTableName() {
+        return tableName;
+    }
+
+    public String getIdTableColumn() {
+        return idTableColumn;
+    }
+    
     public int getId() {
         return id;
     }

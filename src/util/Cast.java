@@ -35,7 +35,14 @@ public final class Cast {
         return (o != null ? (Boolean)o : false);
     }
     
-    public static String toSQLString(Object o){
-        return "\"" + toString(o) + "\"";
+    public static String toSQLValue(Object o){
+        
+        if(o.getClass() == String.class){
+            
+            return "\"" + o.toString() + "\"";
+        }
+        else {
+            return o.toString();
+        }
     }
 }

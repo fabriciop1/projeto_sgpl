@@ -16,27 +16,16 @@ import util.Cast;
  */
 public class Rota extends DatabaseObject{
     
-    private int id;
     private String rota;
 
     public Rota() {
-        super("rota",0);
+        super("rota", "idRota");
     }
     
     public Rota(String rota) {
-        super("rota",0);
+        super("rota", "idRota");
         
         this.rota = rota;
-    }
-
-    @Override
-    public int getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getRota() {
@@ -48,10 +37,10 @@ public class Rota extends DatabaseObject{
     }
 
     @Override
-    public Map<String, String> getObjectTableData() {
+    public Map<String, Object> getObjectTableData() {
         
-        HashMap<String,String> data = new HashMap<>();
-        data.put("rota", Cast.toSQLString(rota));
+        HashMap<String,Object> data = new HashMap<>();
+        data.put("rota", rota);
         
         return data;
     }
