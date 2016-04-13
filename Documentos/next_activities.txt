@@ -1,25 +1,22 @@
-
 conexão telas - BD para edição, remoção e adição 
+(animais e terras)
 atualizar tela após alterações
- (ANIMAIS E TERRAS)
+ 
 Verificar quais totais precisam do "R$"
-Insrir codigos sql -- COMECAR DO 1
-
+Inserir codigos sql -- COMECAR DO 1
 
 COLOCAR vidaUtilReprodutores, vidaUJtilAnimaisServico, valorGastoComComprasDeAnimais EM RESUMO
 CADASTRAR INFORMAÇÕES DE RESUMO NO BANCO
 CÁLCULOS DE RESUMO 
+vidaUtilReprodutores, vidaUtilServico pode ser editado e salvo no banco
 
 fora o adm, exibir perfis por rota de usuário
 inserir perfil (adm)
 editar perfil  (adm, usuario do perfil)
 remover perfil (adm)
 
-
 Permitir o usuario adicionar novo periodo e editar os campos (fora a especificacao)
 
 inserção, edição e remoção de campos em Dados Econômicos
 
-
-COR DAS LINHAS DE DEM TOTAIS E VAZIOS
-MODIFICAR CAMPOS "OUTROS"
+COR DAS LINHAS DE DEM: TOTAIS E VAZIOS
