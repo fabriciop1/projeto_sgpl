@@ -51,7 +51,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         
         idPerfis = new ArrayList<>();
         try {
-            perfis = usuarioPerfil.recuperarPerfisPorUsuario(usuario.getIdUsuario());
+            perfis = usuarioPerfil.recuperarPerfisPorUsuario(usuario.getId());
         } catch (SQLException ex) {
             System.out.println("Erro em recuperar Perfis Por Usuário - Visualizar Perfil.");
         }
@@ -61,7 +61,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
                 
         for(int i = 0; i < perfis.size(); i++){
             
-            idPerfis.add(perfis.get(i).getIdPerfil());
+            idPerfis.add(perfis.get(i).getId());
             
             model.addRow(new Object[]{
                 perfis.get(i).getNome(),
@@ -220,7 +220,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         
         if(listaPerfis.getSelectedRow() != -1){
             Perfil atual = new Perfil();
-            atual.setIdPerfil(idPerfis.get(listaPerfis.getSelectedRow()));
+            atual.setId(idPerfis.get(listaPerfis.getSelectedRow()));
             atual.setNome((String) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 0));
             atual.setCidade((String) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 1));
             try {

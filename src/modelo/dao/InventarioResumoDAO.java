@@ -33,8 +33,9 @@ public class InventarioResumoDAO extends DAO implements InterfaceDAO<InventarioR
             this.connection = DBConexao.openConnection();
         }
 
-        String sql = "INSERT into inventario_resumo (custoOportunidade, atividadeLeiteira, salarioMinimo, mes, ano, idPerfilFK)"
-                + " VALUES (?,?,?,?,?,?)";
+        String sql = "INSERT into inventario_resumo (custoOportunidade, atividadeLeiteira, salarioMinimo, mes, ano, vidaUtilReprodutores,"
+                + "vidaUtilAnimaisServico, valorGastoCompraAnimais, idPerfilFK)"
+                + " VALUES (?,?,?,?,?,?,?,?,?)";
 
         PreparedStatement st = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         st.setDouble(1, inventario.getCustoOportunidade());
@@ -42,7 +43,10 @@ public class InventarioResumoDAO extends DAO implements InterfaceDAO<InventarioR
         st.setDouble(3, inventario.getSalarioMinimo());
         st.setInt(4, inventario.getMes());
         st.setInt(5, inventario.getAno());
-        st.setInt(6, inventario.getPerfil().getIdPerfil());
+        st.setInt(6, inventario.getVidaUtilReprodutores());
+        st.setInt(7, inventario.getVidaUtilAnimaisServico());
+        st.setDouble(8, inventario.getValorGastoCompraAnimais());
+        st.setInt(9, inventario.getPerfil().getId());
 
         st.executeUpdate();
 
@@ -94,7 +98,8 @@ public class InventarioResumoDAO extends DAO implements InterfaceDAO<InventarioR
             this.connection = DBConexao.openConnection();
         }
 
-        String sql = "UPDATE inventario_resumo SET custoOportunidade=?, atividadeLeiteira=?, salarioMinimo=?, mes=?, ano=? "
+        String sql = "UPDATE inventario_resumo SET custoOportunidade=?, atividadeLeiteira=?, salarioMinimo=?, mes=?, ano=?,"
+                + "vidaUtilReprodutores=?, vidaUtilAnimaisServico=?, valorGastoCompraAnimais=?"
                 + "WHERE idInventarioResumo=?";
 
         PreparedStatement ps = this.connection.prepareStatement(sql);
@@ -103,8 +108,10 @@ public class InventarioResumoDAO extends DAO implements InterfaceDAO<InventarioR
         ps.setDouble(3, inventario.getSalarioMinimo());
         ps.setInt(4, inventario.getMes());
         ps.setInt(5, inventario.getAno());
-
-        ps.setInt(6, inventario.getIdInventarioResumo());
+        ps.setInt(6, inventario.getVidaUtilReprodutores());
+        ps.setInt(7, inventario.getVidaUtilAnimaisServico());
+        ps.setDouble(8, inventario.getValorGastoCompraAnimais());
+        ps.setInt(9, inventario.getIdInventarioResumo());
 
         ps.executeUpdate();
 
@@ -142,6 +149,9 @@ public class InventarioResumoDAO extends DAO implements InterfaceDAO<InventarioR
             inventario.setSalarioMinimo(rs.getDouble("salarioMinimo"));
             inventario.setMes(rs.getInt("mes"));
             inventario.setAno(rs.getInt("ano"));
+            inventario.setVidaUtilReprodutores(rs.getInt("vidaUtilReprodutores"));
+            inventario.setVidaUtilAnimaisServico(rs.getInt("vidaUtilAnimaisServico"));
+            inventario.setValorGastoCompraAnimais(rs.getDouble("valorGastoCompraAnimais"));
             inventario.setPerfil((new PerfilDAO()).recuperar(rs.getInt("idPerfilFK")));
             inventario.setIdInventarioResumo(rs.getInt("idInventarioResumo"));
         }
@@ -176,6 +186,9 @@ public class InventarioResumoDAO extends DAO implements InterfaceDAO<InventarioR
             inventario.setSalarioMinimo(rs.getDouble("salarioMinimo"));
             inventario.setMes(rs.getInt("mes"));
             inventario.setAno(rs.getInt("ano"));
+            inventario.setVidaUtilReprodutores(rs.getInt("vidaUtilReprodutores"));
+            inventario.setVidaUtilAnimaisServico(rs.getInt("vidaUtilAnimaisServico"));
+            inventario.setValorGastoCompraAnimais(rs.getDouble("valorGastoCompraAnimais"));
             inventario.setPerfil((new PerfilDAO()).recuperar(rs.getInt("idPerfilFK")));
             inventario.setIdInventarioResumo(rs.getInt("idInventarioResumo"));
         }
@@ -213,6 +226,9 @@ public class InventarioResumoDAO extends DAO implements InterfaceDAO<InventarioR
             inventario.setSalarioMinimo(rs.getDouble("salarioMinimo"));
             inventario.setMes(rs.getInt("mes"));
             inventario.setAno(rs.getInt("ano"));
+            inventario.setVidaUtilReprodutores(rs.getInt("vidaUtilReprodutores"));
+            inventario.setVidaUtilAnimaisServico(rs.getInt("vidaUtilAnimaisServico"));
+            inventario.setValorGastoCompraAnimais(rs.getDouble("valorGastoCompraAnimais"));
             inventario.setPerfil((new PerfilDAO()).recuperar(rs.getInt("idPerfilFK")));
             inventario.setIdInventarioResumo(rs.getInt("idInventarioResumo"));
 
@@ -253,6 +269,9 @@ public class InventarioResumoDAO extends DAO implements InterfaceDAO<InventarioR
             inventario.setSalarioMinimo(rs.getDouble("salarioMinimo"));
             inventario.setMes(rs.getInt("mes"));
             inventario.setAno(rs.getInt("ano"));
+            inventario.setVidaUtilReprodutores(rs.getInt("vidaUtilReprodutores"));
+            inventario.setVidaUtilAnimaisServico(rs.getInt("vidaUtilAnimaisServico"));
+            inventario.setValorGastoCompraAnimais(rs.getDouble("valorGastoCompraAnimais"));
             inventario.setPerfil((new PerfilDAO()).recuperar(rs.getInt("idPerfilFK")));
             inventario.setIdInventarioResumo(rs.getInt("idInventarioResumo"));
 

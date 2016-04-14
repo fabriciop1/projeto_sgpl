@@ -52,7 +52,7 @@ public class UsuarioDAO extends DAO implements InterfaceDAO<Usuario> {
         ResultSet key = statement.getGeneratedKeys();
 
         if (key.next()) {
-            novoUsuario.setIdUsuario(key.getInt(1));
+            novoUsuario.setId(key.getInt(1));
         }
 
         key.close();
@@ -78,7 +78,7 @@ public class UsuarioDAO extends DAO implements InterfaceDAO<Usuario> {
         if (rs.next()) {
             usuario = new Usuario();
 
-            usuario.setIdUsuario(rs.getInt("idUsuario"));
+            usuario.setId(rs.getInt("idUsuario"));
             usuario.setLogin(rs.getString("login"));
             usuario.setSenha(rs.getString("senha"));
             usuario.setRota((new RotaDAO()).recuperar(rs.getInt("idRotaFK")));
@@ -110,7 +110,7 @@ public class UsuarioDAO extends DAO implements InterfaceDAO<Usuario> {
 
         st.setString(1, usuario.getLogin());
         st.setString(2, usuario.getSenha());
-        st.setInt(3, usuario.getIdUsuario());
+        st.setInt(3, usuario.getId());
 
         st.executeUpdate();
 
@@ -140,7 +140,7 @@ public class UsuarioDAO extends DAO implements InterfaceDAO<Usuario> {
 
             Usuario u = new Usuario();
 
-            u.setIdUsuario(result.getInt("idUsuario"));
+            u.setId(result.getInt("idUsuario"));
             u.setLogin(result.getString("login"));
             u.setSenha(result.getString("senha"));
             u.setRota((new RotaDAO()).recuperar(result.getInt("idRotaFK")));
@@ -178,7 +178,7 @@ public class UsuarioDAO extends DAO implements InterfaceDAO<Usuario> {
 
         ResultSet rs = statement.executeQuery();
 
-        usuario.setIdUsuario(id);
+        usuario.setId(id);
         usuario.setLogin(rs.getString("login"));
         usuario.setSenha(rs.getString("senha"));
         usuario.setRota((new RotaDAO()).recuperar(rs.getInt("idRotaFK")));

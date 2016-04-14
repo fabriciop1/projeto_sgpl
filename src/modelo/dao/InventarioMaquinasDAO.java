@@ -42,7 +42,7 @@ public class InventarioMaquinasDAO extends DAO implements InterfaceDAO<Inventari
         statement.setDouble(3, inventario.getQuantidade());
         statement.setDouble(4, inventario.getValorUnitario());
         statement.setInt(5, inventario.getVidaUtil());
-        statement.setInt(6, inventario.getPerfil().getIdPerfil());
+        statement.setInt(6, inventario.getPerfil().getId());
 
         statement.executeUpdate();
 
