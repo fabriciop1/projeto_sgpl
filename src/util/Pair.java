@@ -5,6 +5,10 @@
  */
 package util;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  *
  * @author Android SDK (adapted to plain Java)
@@ -35,5 +39,10 @@ public class Pair<F, S> {
 
     public static <A, B> Pair <A, B> create(A a, B b) {
         return new Pair<>(a, b);
+    }
+    
+    public static <A, B> List<Pair<A,B>> asList(Pair<A, B>... pairs){
+        
+        return Arrays.asList(pairs);
     }
 }

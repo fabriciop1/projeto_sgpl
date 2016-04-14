@@ -51,7 +51,7 @@ public class InventarioAnimaisDAO extends DAO implements InterfaceDAO<Inventario
         st.setInt(10, inventario.getVidaUtilAnimaisServico());
         st.setInt(11, inventario.getTipoAnimal());
         st.setDouble(12, inventario.getValorGastoCompraAnimais());
-        st.setInt(13, inventario.getPerfil().getIdPerfil());
+        st.setInt(13, inventario.getPerfil().getId());
 
         st.executeUpdate();
 

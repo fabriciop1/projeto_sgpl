@@ -37,7 +37,7 @@ public class UsuarioPerfilDAO extends DAO {
 
         PreparedStatement statement = this.connection.prepareStatement(sql);
         // ID cadastrado automaticamente pelo banco de dados
-        statement.setInt(1, perfil.getIdPerfil());
+        statement.setInt(1, perfil.getId());
         statement.setInt(2, usuario.getIdUsuario());
 
         statement.executeUpdate();
