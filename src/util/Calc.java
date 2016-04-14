@@ -24,8 +24,7 @@ public final class Calc {
         if (b != 0) {
             return a / b;
         }
-        //throw new IllegalArgumentException("Inválida divisão por 0.");
-        return 0.0;
+        throw new IllegalArgumentException("Inválida divisão por 0.");
     }
     
     public static double substrairLista(Double... list){

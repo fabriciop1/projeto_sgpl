@@ -170,25 +170,20 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total8.setText(String.format("R$ %.2f", Calc.somaPonderada(totalAreaPropFina, totalTerraNua)).replace(',','.'));
         total9.setText(String.format("R$ %.2f", Calc.mediaAritmetica(Double.parseDouble(total7.getText().substring(2)), Double.parseDouble(total8.getText().substring(2)))).replace(',','.'));
         total10.setText("" + (totalHa));
-        total11.setText("" + (totalValorHa));
-        total12.setText("" + (totalDepreciacao));
-        
-        
+        total11.setText(String.format("R$ %.2f", totalValorHa));
+        total12.setText(String.format("R$ %.2f", totalDepreciacao));
         
         tabelaAnimaisProdGTRE.getSourceTableModel().setRowCount(0);
-
         tabelaAnimaisServGTRE.getSourceTableModel().setRowCount(0);
            
-
         for(int i = 0; i < animais.size(); i++){
-
             if(animais.get(i).getTipoAnimal() == 1){ //Producao
 
                 double valorInicio = animais.get(i).getValorInicio() * animais.get(i).getValorCabeca();
                 double valorFinal = animais.get(i).getValorFinal() * animais.get(i).getValorCabeca();
                 
                 if(animais.get(i).getCategoria().equals("Touro")){
-                    total34.setText(String.format("%.2f", Calc.mediaAritmetica(valorInicio, valorFinal)));
+                    total34.setText(String.format("R$ %.2f", Calc.mediaAritmetica(valorInicio, valorFinal)));
                 }
                 
                 tabelaAnimaisProdGTRE.addSourceTableRow(new Object[]{
@@ -202,7 +197,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     animais.get(i).getValorCabeca(),
                     valorInicio,
                     valorFinal,
-                    
                 }, animais.get(i).getId());
                 
                     totalValInicProd += (animais.get(i).getValorInicio() * 1.0);  
@@ -266,24 +260,23 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     Double.parseDouble(total20.getText().substring(2).replace(',','.'))) / 2 )));
             
             try{
-                total36.setText("" + Calc.dividir(Double.parseDouble(total34.getText().replace(',','.')),
+                total36.setText("" + Calc.dividir(Double.parseDouble(total34.getText().substring(2).replace(',','.')),
                         Double.parseDouble(total35.getText().replace(',','.'))));
             } catch (IllegalArgumentException e) {
-                total36.setText("0.0");
-                System.out.println("Erro em total 36 - Divisão Inválida.");
+                total36.setText("0.00");
+                System.out.println("Erro em total 36 - Divisão Inválida. " + e.getMessage());
             }
             
-            total37.setText(String.format("%.2f", Calc.somaPonderada(totalValFinaServ, totalValCabeServ)));
+            total37.setText(String.format("R$ %.2f", Calc.somaPonderada(totalValFinaServ, totalValCabeServ)));
             
             try{
-                total39.setText("" + Calc.dividir(Double.parseDouble(total37.getText().replace(',','.')), 
+                total39.setText("" + Calc.dividir(Double.parseDouble(total37.getText().substring(2).replace(',','.')), 
                         Double.parseDouble(total38.getText().replace(',','.'))));
             } catch (IllegalArgumentException e){
-                total39.setText("0.0"); // Caso haja divisão por 0
-             //   System.out.println("Erro em total39 - Divisão Inválida");
+                total39.setText("0.00"); // Caso haja divisão por 0
+               System.out.println("Erro em total39 - Divisão Inválida " + e.getMessage());
             }
                 
-            
             tabelaBenfeitoriasGTRE.getSourceTableModel().setRowCount(0);
 
             for(int i = 0; i < benfeitorias.size(); i++){
@@ -308,8 +301,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
             
             verificaTabelaVazia(tabelaBenfeitoriasGTRE.getSourceTableModel(), editarInvBenfeitoriasBT, removerInvBenfeitoriasBT);
 
-            total40.setText(String.format("%.2f", (totalValorBenfeit)));
-            total41.setText(String.format("%.2f", (totalDeprecBenfeit)));
+            total40.setText(String.format("R$ %.2f", totalValorBenfeit));
+            total41.setText(String.format("R$ %.2f", totalDeprecBenfeit));
             tabelaMaquinasGTRE.getSourceTableModel().setRowCount(0);
 
             for(int i = 0; i < maquinas.size(); i++){
@@ -333,15 +326,15 @@ public class VisualizarInventario extends javax.swing.JFrame {
             }
             verificaTabelaVazia(tabelaMaquinasGTRE.getSourceTableModel(), editarInvMaquinasBT, removerInvMaquinasBT);
 
-            total42.setText("" + (totalValorMaquin));
-            total43.setText("" + (totalDeprecMaquin));
+            total42.setText(String.format("R$ %.2f", totalValorMaquin));
+            total43.setText(String.format("R$ %.2f", totalDeprecMaquin));
 
             //Resumo
-            total44.setText(total12.getText());
+            total44.setText(total12.getText().substring(2));
             total45.setText(total39.getText());
             total46.setText(total36.getText());
-            total47.setText(String.format("%.2f", (Double.parseDouble(total41.getText().replace(',','.')))));
-            total48.setText(total43.getText());
+            total47.setText(String.format("%.2f", (Double.parseDouble(total41.getText().substring(2).replace(',','.')))));
+            total48.setText(total43.getText().substring(2));
             total49.setText(String.format("R$ %.2f", (Double.parseDouble(total44.getText().replace(',','.')) + 
                                   Double.parseDouble(total45.getText().replace(',','.')) +
                                   Double.parseDouble(total46.getText().replace(',','.')) +
@@ -351,10 +344,10 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     Double.parseDouble(total49.getText().substring(2).replace(',','.')))));
 
             total51.setText(total9.getText().substring(2));
-            total52.setText(total12.getText());
+            total52.setText(total12.getText().substring(2));
             total53.setText(total31.getText().substring(2));
-            total54.setText(total40.getText());
-            total55.setText(total42.getText());
+            total54.setText(total40.getText().substring(2));
+            total55.setText(total42.getText().substring(2));
             total56.setText(String.format("R$ %.2f", (Double.parseDouble(total51.getText().substring(2)) + 
                                   Double.parseDouble(total52.getText().replace(',','.')) +
                                   Double.parseDouble(total53.getText().substring(2).replace(',','.')) +
@@ -548,7 +541,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 {null, null, null, null, null, null}
             },
             new String [] {
-                "Especificação", "Área Arrendada INÍCIO", "Área Própria INÍCIO", "Área Arrendada FINAL", "Área Própria FINAL", "Valor da terra Nua Própria"
+                "Especificação", "Área Arrendada INÍCIO", "Área Própria INÍCIO", "Área Arrendada FINAL", "Área Própria FINAL", "Valor da terra Nua Própria(R$/Ha)"
             }
         ) {
             Class[] types = new Class [] {
@@ -576,11 +569,15 @@ public class VisualizarInventario extends javax.swing.JFrame {
         jScrollPane2.setViewportView(tabelaInveTerras);
         if (tabelaInveTerras.getColumnModel().getColumnCount() > 0) {
             tabelaInveTerras.getColumnModel().getColumn(0).setResizable(false);
-            tabelaInveTerras.getColumnModel().getColumn(0).setPreferredWidth(180);
+            tabelaInveTerras.getColumnModel().getColumn(0).setPreferredWidth(100);
             tabelaInveTerras.getColumnModel().getColumn(1).setResizable(false);
+            tabelaInveTerras.getColumnModel().getColumn(1).setPreferredWidth(20);
             tabelaInveTerras.getColumnModel().getColumn(2).setResizable(false);
+            tabelaInveTerras.getColumnModel().getColumn(2).setPreferredWidth(20);
             tabelaInveTerras.getColumnModel().getColumn(3).setResizable(false);
+            tabelaInveTerras.getColumnModel().getColumn(3).setPreferredWidth(20);
             tabelaInveTerras.getColumnModel().getColumn(4).setResizable(false);
+            tabelaInveTerras.getColumnModel().getColumn(4).setPreferredWidth(20);
             tabelaInveTerras.getColumnModel().getColumn(5).setResizable(false);
         }
 
@@ -598,7 +595,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 {null, null, null, null, null, null}
             },
             new String [] {
-                "Forrageiras Não Anuais", "R$/Ha", "Ha", "R$/total", "Vida Útil Anos", "Depreciação R$/Ano"
+                "Forrageiras Não Anuais", "R$/Ha", "Ha", "R$/total", "Vida Útil Anos", "Depreciação(R$/Ano)"
             }
         ) {
             Class[] types = new Class [] {
@@ -626,11 +623,15 @@ public class VisualizarInventario extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tabelaInveForrageiras);
         if (tabelaInveForrageiras.getColumnModel().getColumnCount() > 0) {
             tabelaInveForrageiras.getColumnModel().getColumn(0).setResizable(false);
-            tabelaInveForrageiras.getColumnModel().getColumn(0).setPreferredWidth(165);
+            tabelaInveForrageiras.getColumnModel().getColumn(0).setPreferredWidth(100);
             tabelaInveForrageiras.getColumnModel().getColumn(1).setResizable(false);
+            tabelaInveForrageiras.getColumnModel().getColumn(1).setPreferredWidth(20);
             tabelaInveForrageiras.getColumnModel().getColumn(2).setResizable(false);
+            tabelaInveForrageiras.getColumnModel().getColumn(2).setPreferredWidth(20);
             tabelaInveForrageiras.getColumnModel().getColumn(3).setResizable(false);
+            tabelaInveForrageiras.getColumnModel().getColumn(3).setPreferredWidth(20);
             tabelaInveForrageiras.getColumnModel().getColumn(4).setResizable(false);
+            tabelaInveForrageiras.getColumnModel().getColumn(4).setPreferredWidth(20);
             tabelaInveForrageiras.getColumnModel().getColumn(5).setResizable(false);
         }
 
@@ -919,7 +920,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Categoria", "Início", "Nasci/to", "Morte", "Venda", "Compra", "Final", "Valor (R$/Cab)", "Valor Inicial", "Valor Final"
+                "Categoria", "Início", "Nasci/to", "Morte", "Venda", "Compra", "Final", "Valor (R$/Cab)", "Valor Inicial(R$))", "Valor Final(R$)"
             }
         ) {
             Class[] types = new Class [] {
@@ -1023,11 +1024,11 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
         total32.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         total32.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        total32.setText("0.0");
+        total32.setText("R$ 0.0");
 
         total33.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         total33.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        total33.setText("0.0");
+        total33.setText("R$ 0.0");
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -1052,7 +1053,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         jLabel19.setText("Depreciação dos Animais de Serviços - R$/ano");
 
         total34.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        total34.setText("0.0");
+        total34.setText("<total34>");
 
         total35.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total35.setText("5");
@@ -1128,17 +1129,18 @@ public class VisualizarInventario extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(total37, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(total39, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(total38, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(total39, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(30, 30, 30)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(total37, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(total38, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(25, 25, 25)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(adicionarInvAnimaisBT, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -2174,9 +2176,9 @@ public class VisualizarInventario extends javax.swing.JFrame {
             Double temp = Double.parseDouble(JOptionPane.showInputDialog("Valor Gasto com Compra de Animais: "));
             
             if(temp >= 0.0){
-                total32.setText("" + temp);
+                total32.setText(String.format("R$ %.2f", temp));
                 total33.setText(String.format("R$ %.2f", (Double.parseDouble(total20.getText().substring(2).replace(',','.')) -
-                        Double.parseDouble(total19.getText().substring(2).replace(',','.')) - Double.parseDouble(total32.getText()))));
+                        Double.parseDouble(total19.getText().substring(2).replace(',','.')) - Double.parseDouble(total32.getText().substring(2)))));
             } else {
                 JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
             }

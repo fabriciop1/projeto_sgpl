@@ -35,8 +35,8 @@ public class InventarioAnimaisDAO extends DAO implements InterfaceDAO<Inventario
 
         String sql = "INSERT INTO inventario_animais "
                 + "(categoria, inicio, nascimento, morte, venda, compra, final, valorCabeca, "
-                + "vidaUtilReprodutores, vidaUtilAnimaisServico, tipoAnimal, valorGastoCompraAnimais, idPerfilFK) "
-                + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                + "tipoAnimal, idPerfilFK) "
+                + "VALUES (?,?,?,?,?,?,?,?,?,?)";
 
         PreparedStatement st = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         st.setString(1, inventario.getCategoria());
@@ -47,11 +47,8 @@ public class InventarioAnimaisDAO extends DAO implements InterfaceDAO<Inventario
         st.setInt(6, inventario.getCompra());
         st.setInt(7, inventario.getValorFinal());
         st.setDouble(8, inventario.getValorCabeca());
-        st.setInt(9, inventario.getVidaUtilReprodutores());
-        st.setInt(10, inventario.getVidaUtilAnimaisServico());
-        st.setInt(11, inventario.getTipoAnimal());
-        st.setDouble(12, inventario.getValorGastoCompraAnimais());
-        st.setInt(13, inventario.getPerfil().getIdPerfil());
+        st.setInt(9, inventario.getTipoAnimal());
+        st.setInt(10, inventario.getPerfil().getIdPerfil());
 
         st.executeUpdate();
 
@@ -95,8 +92,7 @@ public class InventarioAnimaisDAO extends DAO implements InterfaceDAO<Inventario
         }
 
         String sql = "UPDATE inventario_animais SET categoria=?, inicio=?, nascimento=?, morte=?, venda=?, compra=?, final=?, valorCabeca=?,"
-                + " vidaUtilReprodutores=?, vidaUtilAnimaisServico=?, tipoAnimal=?, valorGastoCompraAnimais=?"
-                + " WHERE idInventarioTerras=?";
+                + " tipoAnimal=? WHERE idInventarioTerras=?";
 
         PreparedStatement st = connection.prepareStatement(sql);
 
@@ -108,11 +104,8 @@ public class InventarioAnimaisDAO extends DAO implements InterfaceDAO<Inventario
         st.setInt(6, inventario.getCompra());
         st.setInt(7, inventario.getValorFinal());
         st.setDouble(8, inventario.getValorCabeca());
-        st.setInt(9, inventario.getVidaUtilReprodutores());
-        st.setInt(10, inventario.getVidaUtilAnimaisServico());
-        st.setInt(11, inventario.getTipoAnimal());
-        st.setDouble(12, inventario.getValorGastoCompraAnimais());
-        st.setInt(13, inventario.getId());
+        st.setInt(9, inventario.getTipoAnimal());
+        st.setInt(10, inventario.getId());
 
         st.executeUpdate();
         st.close();
@@ -151,10 +144,7 @@ public class InventarioAnimaisDAO extends DAO implements InterfaceDAO<Inventario
             inventario.setCompra(res.getInt("compra"));
             inventario.setValorFinal(res.getInt("final"));
             inventario.setValorCabeca(res.getDouble("valorCabeca"));
-            inventario.setVidaUtilReprodutores(res.getInt("vidaUtilReprodutores"));
-            inventario.setVidaUtilAnimaisServico(res.getInt("vidaUtilAnimaisServico"));
             inventario.setPerfil((new PerfilDAO()).recuperar(res.getInt("idPerfilFK")));
-            inventario.setValorGastoCompraAnimais(res.getDouble("valorGastoCompraAnimais"));
             inventario.setTipoAnimal(res.getInt("tipoAnimal"));
         }
 
@@ -195,10 +185,7 @@ public class InventarioAnimaisDAO extends DAO implements InterfaceDAO<Inventario
             inventario.setCompra(res.getInt("compra"));
             inventario.setValorFinal(res.getInt("final"));
             inventario.setValorCabeca(res.getDouble("valorCabeca"));
-            inventario.setVidaUtilReprodutores(res.getInt("vidaUtilReprodutores"));
-            inventario.setVidaUtilAnimaisServico(res.getInt("vidaUtilAnimaisServico"));
             inventario.setPerfil((new PerfilDAO()).recuperar(res.getInt("idPerfilFK")));
-            inventario.setValorGastoCompraAnimais(res.getDouble("valorGastoCompraAnimais"));
             inventario.setTipoAnimal(res.getInt("tipoAnimal"));
 
             inventarios.add(inventario);
@@ -235,10 +222,7 @@ public class InventarioAnimaisDAO extends DAO implements InterfaceDAO<Inventario
             inventario.setCompra(res.getInt("compra"));
             inventario.setValorFinal(res.getInt("final"));
             inventario.setValorCabeca(res.getDouble("valorCabeca"));
-            inventario.setVidaUtilReprodutores(res.getInt("vidaUtilReprodutores"));
-            inventario.setVidaUtilAnimaisServico(res.getInt("vidaUtilAnimaisServico"));
             inventario.setPerfil((new PerfilDAO()).recuperar(res.getInt("idPerfilFK")));
-            inventario.setValorGastoCompraAnimais(res.getDouble("valorGastoCompraAnimais"));
             inventario.setTipoAnimal(res.getInt("tipoAnimal"));
 
             inventarios.add(inventario);

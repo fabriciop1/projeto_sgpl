@@ -16,21 +16,27 @@ public class InventarioResumo {
     private double salarioMinimo;
     private int mes;
     private int ano;
+    private int vidaUtilReprodutores;
+    private int vidaUtilAnimaisServico;
+    private double valorGastoCompraAnimais;
     private Perfil perfil;
 
     public InventarioResumo() {
         
     }
-    
-    public InventarioResumo(double custoOportunidade, double atividadeLeiteira, double salarioMinimo, int mes, int ano, Perfil perfil) {
+
+    public InventarioResumo(double custoOportunidade, double atividadeLeiteira, double salarioMinimo, int mes, int ano, int vidaUtilReprodutores, int vidaUtilAnimaisServico, double valorGastoCompraAnimais, Perfil perfil) {
         this.custoOportunidade = custoOportunidade;
         this.atividadeLeiteira = atividadeLeiteira;
         this.salarioMinimo = salarioMinimo;
         this.mes = mes;
         this.ano = ano;
+        this.vidaUtilReprodutores = vidaUtilReprodutores;
+        this.vidaUtilAnimaisServico = vidaUtilAnimaisServico;
+        this.valorGastoCompraAnimais = valorGastoCompraAnimais;
         this.perfil = perfil;
     }
-
+    
     public int getIdInventarioResumo() {
         return idInventarioResumo;
     }
@@ -77,6 +83,30 @@ public class InventarioResumo {
 
     public void setAno(int ano) {
         this.ano = ano;
+    }
+
+    public int getVidaUtilReprodutores() {
+        return vidaUtilReprodutores;
+    }
+
+    public void setVidaUtilReprodutores(int vidaUtilReprodutores) {
+        this.vidaUtilReprodutores = vidaUtilReprodutores;
+    }
+
+    public int getVidaUtilAnimaisServico() {
+        return vidaUtilAnimaisServico;
+    }
+
+    public void setVidaUtilAnimaisServico(int vidaUtilAnimaisServico) {
+        this.vidaUtilAnimaisServico = vidaUtilAnimaisServico;
+    }
+
+    public double getValorGastoCompraAnimais() {
+        return valorGastoCompraAnimais;
+    }
+
+    public void setValorGastoCompraAnimais(double valorGastoCompraAnimais) {
+        this.valorGastoCompraAnimais = valorGastoCompraAnimais;
     }
 
     public Perfil getPerfil() {

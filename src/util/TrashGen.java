@@ -103,9 +103,9 @@ public final class TrashGen {
             ia.setPerfil(p); ia.setCategoria(generateString(200,false,false,false));
             ia.setCompra(rand.nextInt() % 10000); ia.setMorte(rand.nextInt() % 10000);
             ia.setNascimento(rand.nextInt() % 10000);ia.setTipoAnimal(rand.nextInt() % 10000);ia.setValorCabeca(rand.nextInt() % 10000);
-            ia.setValorFinal(rand.nextInt() % 10000);ia.setValorGastoCompraAnimais(rand.nextInt() % 10000);
-            ia.setValorInicio(rand.nextInt() % 10000);ia.setVenda(rand.nextInt() % 10000);ia.setVidaUtilAnimaisServico(rand.nextInt() % 10000);
-            ia.setVidaUtilReprodutores(rand.nextInt() % 10000);ia.setPerfil(p);
+           // ia.setValorFinal(rand.nextInt() % 10000);ia.setValorGastoCompraAnimais(rand.nextInt() % 10000);
+           // ia.setValorInicio(rand.nextInt() % 10000);ia.setVenda(rand.nextInt() % 10000);ia.setVidaUtilAnimaisServico(rand.nextInt() % 10000);
+          //  ia.setVidaUtilReprodutores(rand.nextInt() % 10000);ia.setPerfil(p);
 
             InventarioBenfeitorias ib = new InventarioBenfeitorias(generateString(20,false,false,false), generateString(10,false,false,false),
                     rand.nextInt() % 1000, rand.nextInt() % 10000, 0, p);
