@@ -52,7 +52,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         especificacoes = new ArrayList<>();
         
         try{
-            dems = demdao.recuperarPorPerfil(atual.getId());
+            dems = demdao.recuperarPorPerfil(atual.getIdPerfil());
         } catch(Exception e){
             System.out.println("Erro em Construtor Visualizar Dados Economicos Mensais (Recuperar DEMs)");
         }

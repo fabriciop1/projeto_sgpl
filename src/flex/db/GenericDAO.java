@@ -17,33 +17,31 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import modelo.negocio.Perfil;
+import modelo.dao.DBConexao;
 import modelo.negocio.Rota;
 import util.Cast;
 
 /**
  *
  * @author Jefferson Sales
- * @param <T>
  */
-public class GenericDAO<T extends DatabaseObject> extends DAO {
+public class GenericDAO {
     
-    private Class<T> objectClass;
+    private Connection connection;
     
-    public GenericDAO(Class<T> objectClass, Connection connection) throws SQLException{
-        super(connection);
+    public GenericDAO(Connection connection) throws SQLException{
+        this.connection = connection;
         
-        if(connection != null && connection.isClosed())
+        if(connection == null)
+            throw new NullPointerException("GenericDAO(Connection): A conexao passada é igual a NULL");
+        
+        if(connection.isClosed())
             throw new IllegalArgumentException("GenericDAO(Connection): A conexao passada esta fechada.");
-        
-        this.objectClass = objectClass;
     }
     
-    public GenericDAO(Class<T> objectClass) throws SQLException{
-        this(objectClass, null);
-    }
     
-    private String createSQLInsert(T object){
+    
+    private String createSQLInsert(DatabaseObject object){
                 
         Map<String,Object> dataMap = object.getObjectTableData();
         
@@ -66,7 +64,7 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
         return sql;
     }
     
-    private String createSQLUpdate(T object){
+    private String createSQLUpdate(DatabaseObject object){
         
         Map<String,Object> dataMap = object.getObjectTableData();
         
@@ -84,7 +82,7 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
         return sql;
     }
     
-    private String createSQLDelete(T object){
+    private String createSQLDelete(DatabaseObject object){
         
         String sql = "DELETE FROM " + object.getTableName() + " WHERE ";
         
@@ -94,7 +92,7 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
         return sql;
     }
     
-    private String createSQLSelectById(T object){
+    private String createSQLSelectById(DatabaseObject object){
         
         String sql = "SELECT * FROM " + object.getTableName() + " WHERE ";
         
@@ -104,7 +102,7 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
         return sql;
     }
     
-    private String createSQLSelectByColumn(T object, String tableColumn, Object value){
+    private String createSQLSelectByColumn(DatabaseObject object, String tableColumn, Object value){
         
         String sql = "SELECT * FROM " + object.getTableName() + " WHERE "; 
         
@@ -114,12 +112,12 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
         return sql;
     }
     
-    private List<T> retrieveBySQL(String sql) throws InstantiationException, IllegalAccessException, SQLException{
+    private List<DatabaseObject> retrieveBySQL(Class databaseObjectSubclass, String sql) throws InstantiationException, 
+            IllegalAccessException, SQLException{
         
-        Connection connection = openConnection();
-        List<T> objects = new ArrayList<>();
+        List<DatabaseObject> objects = new ArrayList<>();
         
-        PreparedStatement st = connection.prepareStatement(sql);
+        PreparedStatement st = this.connection.prepareStatement(sql);
         
         ResultSet rset = st.executeQuery();
         ResultSetMetaData rsetMeta = rset.getMetaData();
@@ -140,7 +138,7 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
                 dataMap.put(rsetMeta.getColumnName(i), rset.getObject(i));
             }
             
-            T object = objectClass.newInstance();
+            DatabaseObject object = (DatabaseObject)databaseObjectSubclass.newInstance();
             
             object.setId(rset.getInt(1));
             object.setObjectData(dataMap);
@@ -156,13 +154,11 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
     }    
     
     
-    public int insert(T object) throws SQLException{
-        
-        Connection connection = openConnection();
+    public int insert(DatabaseObject object) throws SQLException{
         
         String sql = createSQLInsert(object);
 
-        PreparedStatement st = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement st = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         st.executeUpdate();
 
         ResultSet keys = st.getGeneratedKeys();
@@ -174,40 +170,39 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
         keys.close();
         st.close();
         
-        closeConnection(connection);
-        
         return object.getId();
     }
      
-    public void update(T object) throws SQLException{
-        Connection connection = openConnection();
+    public void update(DatabaseObject object) throws SQLException{
+        
         String sql = createSQLUpdate(object);
 
-        PreparedStatement st = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement st = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         st.executeUpdate();
         st.close();
-        closeConnection(connection);
     }
     
-    public void remove(T object) throws SQLException{
-        Connection connection = openConnection();
+    public void remove(DatabaseObject object) throws SQLException{
+        
         String sql = createSQLDelete(object);
 
-        PreparedStatement st = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement st = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         st.executeUpdate();
         st.close();
-        closeConnection(connection);
     }
     
-    public T retrieve(int id) throws InstantiationException, IllegalAccessException, SQLException{
+    public DatabaseObject retrieve(Class databaseObjectSubclass, int id) throws InstantiationException, IllegalAccessException, SQLException{
         
-        Connection connection = openConnection();
-        T object = objectClass.newInstance();
+        if(DatabaseObject.class.isAssignableFrom(databaseObjectSubclass) == false){
+            throw new IllegalArgumentException("GenericDAO.retrieve(int,Class): A classe passada não é subclasse de DatabaseObject");
+        }
+        
+        DatabaseObject object = (DatabaseObject)databaseObjectSubclass.newInstance();
         object.setId(id);
         
         String sql = createSQLSelectById(object);
         
-        PreparedStatement st = connection.prepareStatement(sql);
+        PreparedStatement st = this.connection.prepareStatement(sql);
         
         ResultSet rset = st.executeQuery();
         ResultSetMetaData rsetMeta = rset.getMetaData();
@@ -231,44 +226,53 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
         rset.close();
         st.close();
         
-        closeConnection(connection);
-        
         return object;
     }
     
-    public List<T> retrieveByColumn( String tableColumn, Object value) throws InstantiationException, IllegalAccessException, SQLException{
+    public List<DatabaseObject> retrieveByColumn(Class databaseObjectSubclass, String tableColumn, Object value) throws InstantiationException, IllegalAccessException, SQLException{
         
-        if(tableColumn == null || tableColumn.isEmpty()){
+        if(DatabaseObject.class.isAssignableFrom(databaseObjectSubclass) == false){
+            throw new IllegalArgumentException("GenericDAO.retrieveByColumn(Class,String,Object): A classe passada não é subclasse de DatabaseObject");
+        }
+        else if(tableColumn == null || tableColumn.isEmpty()){
             throw new IllegalArgumentException("GenericDAO.retrieveByColumn(Class,String,Object): O nome da coluna da tabela passado é invalido.");
         }
         else if(value == null){
             throw new NullPointerException("GenericDAO.retrieveByColumn(Class,String,Object): O valor da coluna passado é igual a NULL");
         }
         
-        T object = objectClass.newInstance();
+        DatabaseObject object = (DatabaseObject)databaseObjectSubclass.newInstance();
         
-        return retrieveBySQL(createSQLSelectByColumn(object, tableColumn, value));        
+        return retrieveBySQL(databaseObjectSubclass, createSQLSelectByColumn(object, tableColumn, value));        
     }
     
-    public List<T> retrieveAll() throws InstantiationException, IllegalAccessException, SQLException{
-       
-        T object = objectClass.newInstance();
+    public List<DatabaseObject> retrieveAll(Class databaseObjectSubclass) throws InstantiationException, IllegalAccessException, SQLException{
         
-        return retrieveBySQL("SELECT * FROM " + object.getTableName());
+        if(DatabaseObject.class.isAssignableFrom(databaseObjectSubclass) == false){
+            throw new IllegalArgumentException("GenericDAO.retrieveByColumn(Class,String,Object): A classe passada não é subclasse de DatabaseObject");
+        }
+        
+        DatabaseObject object = (DatabaseObject)databaseObjectSubclass.newInstance();
+        
+        return retrieveBySQL(databaseObjectSubclass, "SELECT * FROM " + object.getTableName());
     }
     
     public static void main(String[] args) throws SQLException {
         
         try {
+            Connection c = DBConexao.openConnection();
             
-            GenericDAO<Perfil> dao = new GenericDAO(Perfil.class);
+            GenericDAO dao = new GenericDAO(c);
             
-            List<Perfil> perfil = dao.retrieveAll();
-            
-            for(Perfil p : perfil){
-                System.out.println(p.getNome());
-            }
+            List<DatabaseObject> rotas = dao.retrieveAll(Rota.class);
 
+            for(DatabaseObject _rota : rotas){
+                Rota rota = (Rota)_rota;
+                System.out.println("ID: " + rota.getId() + " - Rota: " + rota.getRota());
+            }
+            
+            DBConexao.closeConnection(c);
+            
         } catch (InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(GenericDAO.class.getName()).log(Level.SEVERE, null, ex);
         }

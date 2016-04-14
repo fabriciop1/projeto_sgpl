@@ -49,7 +49,7 @@ public class InventarioTerrasDAO extends DAO implements InterfaceDAO<InventarioT
             statement.setDouble(6, inventario.getValorTerraNuaPropria());
             statement.setInt(7, inventario.getVidaUtil());
             statement.setDouble(8, inventario.getCustoFormacaoHectare());
-            statement.setInt(9, inventario.getPerfil().getId());
+            statement.setInt(9, inventario.getPerfil().getIdPerfil());
 
             statement.executeUpdate();
 

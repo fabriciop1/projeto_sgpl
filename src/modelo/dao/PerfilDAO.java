@@ -51,7 +51,7 @@ public class PerfilDAO extends DAO implements InterfaceDAO<Perfil> {
         ResultSet keys = statement.getGeneratedKeys();
 
         if (keys.next()) {
-            perfil.setId(keys.getInt(1));
+            perfil.setIdPerfil(keys.getInt(1));
         }
 
         keys.close();
@@ -85,7 +85,7 @@ public class PerfilDAO extends DAO implements InterfaceDAO<Perfil> {
         statement.setInt(6, perfil.getEmpPermanentes());
         statement.setInt(7, perfil.getNumFamiliares());
 
-        statement.setInt(8, perfil.getId());
+        statement.setInt(8, perfil.getIdPerfil());
 
         statement.executeUpdate();
 
@@ -112,7 +112,7 @@ public class PerfilDAO extends DAO implements InterfaceDAO<Perfil> {
 
         while (result.next()) {
             Perfil p = new Perfil();
-            p.setId(result.getInt(1)); //idPerfil
+            p.setIdPerfil(result.getInt(1)); //idPerfil
             p.setNome(result.getString(2)); //Nome
             p.setCidade(result.getString(3)); //Cidade
             p.setTamPropriedade(result.getDouble(4)); //Tam da Propriedade
@@ -157,7 +157,7 @@ public class PerfilDAO extends DAO implements InterfaceDAO<Perfil> {
         if (rs.next()) {
             perfil = new Perfil();
 
-            perfil.setId(rs.getInt(1));
+            perfil.setIdPerfil(rs.getInt(1));
             perfil.setNome(rs.getString(2));
             perfil.setCidade(rs.getString(3));
             perfil.setTamPropriedade(rs.getDouble(4));
@@ -196,7 +196,7 @@ public class PerfilDAO extends DAO implements InterfaceDAO<Perfil> {
 
         while (result.next()) {
             Perfil p = new Perfil();
-            p.setId(result.getInt(1)); //idPerfil
+            p.setIdPerfil(result.getInt(1)); //idPerfil
             p.setNome(result.getString(2)); //Nome
             p.setCidade(result.getString(3)); //Cidade
             p.setTamPropriedade(result.getDouble(4)); //Tam da Propriedade
@@ -258,7 +258,7 @@ public class PerfilDAO extends DAO implements InterfaceDAO<Perfil> {
         while (rs.next()) {
             Perfil perfil = new Perfil();
 
-            perfil.setId(rs.getInt("idPerfil")); //idPerfil
+            perfil.setIdPerfil(rs.getInt("idPerfil")); //idPerfil
             perfil.setNome(rs.getString("nome")); //Nome
             perfil.setCidade(rs.getString("cidade")); //Cidade
             perfil.setTamPropriedade(rs.getDouble("tamPropriedade")); //Tam da Propriedade

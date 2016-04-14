@@ -103,10 +103,10 @@ public class VisualizarInventario extends javax.swing.JFrame {
         Perfil perfilAtual = ControlePerfil.getInstance().getPerfilSelecionado();
      
         try {
-            terras = itdao.recuperarPorPerfil(perfilAtual.getId());
-            animais = iadao.recuperarPorPerfil(perfilAtual.getId());
-            benfeitorias = ibdao.recuperarPorPerfil(perfilAtual.getId());
-            maquinas = imdao.recuperarPorPerfil(perfilAtual.getId());
+            terras = itdao.recuperarPorPerfil(perfilAtual.getIdPerfil());
+            animais = iadao.recuperarPorPerfil(perfilAtual.getIdPerfil());
+            benfeitorias = ibdao.recuperarPorPerfil(perfilAtual.getIdPerfil());
+            maquinas = imdao.recuperarPorPerfil(perfilAtual.getIdPerfil());
         } catch (SQLException ex) {
             Logger.getLogger(VisualizarInventario.class.getName()).log(Level.SEVERE, null, ex);
         }

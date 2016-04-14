@@ -42,7 +42,7 @@ public class InventarioResumoDAO extends DAO implements InterfaceDAO<InventarioR
         st.setDouble(3, inventario.getSalarioMinimo());
         st.setInt(4, inventario.getMes());
         st.setInt(5, inventario.getAno());
-        st.setInt(6, inventario.getPerfil().getId());
+        st.setInt(6, inventario.getPerfil().getIdPerfil());
 
         st.executeUpdate();
 

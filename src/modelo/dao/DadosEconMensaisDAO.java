@@ -44,7 +44,7 @@ public class DadosEconMensaisDAO extends DAO implements InterfaceDAO<DadosEconMe
         st.setDouble(4, dados.getValorUnitario());
         st.setInt(5, dados.getTipoCampo());
         st.setInt(6, (new DEMEspecificacaoDAO()).recuperar(dados.getEspecificacao()));
-        st.setInt(7, dados.getPerfil().getId());
+        st.setInt(7, dados.getPerfil().getIdPerfil());
 
         st.executeUpdate();
 

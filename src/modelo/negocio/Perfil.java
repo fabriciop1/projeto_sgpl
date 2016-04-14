@@ -5,22 +5,15 @@
  */
 package modelo.negocio;
 
-import flex.db.DatabaseObject;
-import flex.db.GenericDAO;
 import java.io.Serializable;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import util.Cast;
 
 /**
  *
  * @author usuario
  */
-public class Perfil extends DatabaseObject implements Serializable {
+public class Perfil implements Serializable {
     
+    private int idPerfil;
     private String nome;
     private String cidade;
     private double tamPropriedade;
@@ -31,12 +24,10 @@ public class Perfil extends DatabaseObject implements Serializable {
     private Rota rota;
     
     public Perfil() {
-        super("perfil","idPerfil");
+        
     }
    
     public Perfil(String nome, String cidade, double tamPropriedade, double areaPecLeite, double prodLeiteDiario, int empPermanentes, int numFamiliares, Rota rota) {
-        super("perfil","idPerfil");
-        
         this.nome = nome;
         this.cidade = cidade;
         this.tamPropriedade = tamPropriedade;
@@ -45,6 +36,14 @@ public class Perfil extends DatabaseObject implements Serializable {
         this.empPermanentes = empPermanentes;
         this.numFamiliares = numFamiliares;
         this.rota = rota;
+    }
+
+    public int getIdPerfil() {
+        return idPerfil;
+    }
+
+    public void setIdPerfil(int idPerfil) {
+        this.idPerfil = idPerfil;
     }
 
     public String getNome() {
@@ -109,41 +108,6 @@ public class Perfil extends DatabaseObject implements Serializable {
 
     public void setRota(Rota rota) {
         this.rota = rota;
-    }
-
-    @Override
-    public Map<String, Object> getObjectTableData() {
-        
-        Map<String,Object> data = new HashMap<>();
-        
-        data.put("nome", nome);
-        data.put("cidade", cidade);
-        data.put("tamPropriedade", tamPropriedade);
-        data.put("areaPecLeite", areaPecLeite);
-        data.put("prodLeiteDiario", prodLeiteDiario);
-        data.put("empPermanentes", empPermanentes);
-        data.put("numFamiliares", numFamiliares);
-        data.put("idRotaFK", rota.getId());
-        
-        return data;
-    }
-
-    @Override
-    public void setObjectData(Map<String, Object> objectData) {
-        
-        try {
-            nome = Cast.toString(objectData.get("nome"));
-            cidade = Cast.toString(objectData.get("cidade"));
-            tamPropriedade = Cast.toDouble(objectData.get("tamPropriedade"));
-            areaPecLeite = Cast.toDouble(objectData.get("areaPecLeite"));
-            prodLeiteDiario = Cast.toDouble(objectData.get("prodLeiteDiario"));
-            empPermanentes = Cast.toInt(objectData.get("emPermanentes"));
-            numFamiliares = Cast.toInt(objectData.get("numFamiliares"));
-            rota = new GenericDAO<>(Rota.class).retrieve(Cast.toInt(objectData.get("idRotaFK")));
-            
-        } catch (SQLException | InstantiationException | IllegalAccessException ex) {
-            Logger.getLogger(Perfil.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
     
     
