@@ -5,31 +5,36 @@
  */
 package modelo.negocio;
 
+import flex.db.DatabaseObject;
+import flex.db.GenericDAO;
 import java.io.Serializable;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import util.Cast;
 
 /**
  *
  * @author usuario
  */
-public class Usuario implements Serializable {
+public class Usuario extends DatabaseObject implements Serializable {
     
-    private int idUsuario;
     private String login;
     private String senha;
     private Rota rota;
     
     public Usuario(){
-       
+       super("usuario", "idUsuario");
     }
 
     public Usuario(String login, String senha, Rota rota) {
+        super("usuario", "idUsuario");
+        
         this.login = login;
         this.senha = senha;
         this.rota = rota;
-    }
-
-    public int getIdUsuario() {
-        return idUsuario;
     }
 
     public void setLogin(String login) {
@@ -40,10 +45,6 @@ public class Usuario implements Serializable {
         this.senha = senha;
     }
 
-    public void setIdUsuario(int idUsuario) {
-        this.idUsuario = idUsuario;
-    }
-    
     public String getLogin() {
         return login;
     }
@@ -58,6 +59,32 @@ public class Usuario implements Serializable {
 
     public void setRota(Rota rota) {
         this.rota = rota;
+    }
+
+    @Override
+    public Map<String, Object> getObjectTableData() {
+        
+        HashMap<String,Object> map = new HashMap<>();
+        
+        map.put("login", login);
+        map.put("senha", senha);
+        map.put("idRotaFK", rota.getId());
+        
+        return map;
+    }
+
+    @Override
+    public void setObjectData(Map<String, Object> data) {
+        
+        try {
+            login = Cast.toString(data.get("login"));
+            senha = Cast.toSQLValue(data.get("senha"));
+            rota = new GenericDAO<>(Rota.class).retrieve( Cast.toInt(data.get("idRotaFK")) );
+            
+        } catch (InstantiationException | IllegalAccessException | SQLException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
     
     

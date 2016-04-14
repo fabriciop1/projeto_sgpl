@@ -30,7 +30,7 @@ public abstract class DatabaseObject {
     
     public abstract Map<String,Object> getObjectTableData();
     
-    public abstract void setObjectData(Map<String,Object> objectData);
+    public abstract void setObjectData(Map<String,Object> data);
 
     
     public String getTableName() {
