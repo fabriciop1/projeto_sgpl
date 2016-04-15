@@ -5,15 +5,22 @@
  */
 package modelo.negocio;
 
+import flex.db.DatabaseObject;
+import flex.db.GenericDAO;
 import java.io.Serializable;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import util.Cast;
 
 /**
  *
  * @author Jefferson Sales
  */
-public class InventarioTerras implements Serializable {
+public class InventarioTerras extends DatabaseObject implements Serializable {
     
-    private int id;   
     private String especificacao;
     private double areaArrendadaInicio;
     private double areaPropriaInicio;
@@ -25,10 +32,13 @@ public class InventarioTerras implements Serializable {
     private Perfil perfil;
     
     public InventarioTerras() {
+        super("inventario_terras","idInventarioTerras");
     }
 
     public InventarioTerras(String especificacao, double areaArrendadaInicio, double areaPropriaInicio, double areaArrendadaFinal, 
             double areaPropriaFinal, double valorTerraNuaPropria, int vidaUtil, double custoFormacaoHectare, Perfil perfil) {
+        super("inventario_terras","idInventarioTerras");
+        
         this.especificacao = especificacao;
         this.areaArrendadaInicio = areaArrendadaInicio;
         this.areaPropriaInicio = areaPropriaInicio;
@@ -38,14 +48,6 @@ public class InventarioTerras implements Serializable {
         this.vidaUtil = vidaUtil;
         this.custoFormacaoHectare = custoFormacaoHectare;
         this.perfil = perfil;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getEspecificacao() {
@@ -119,4 +121,40 @@ public class InventarioTerras implements Serializable {
     public void setPerfil(Perfil perfil) {
         this.perfil = perfil;
     } 
+
+    @Override
+    public Map<String, Object> getObjectTableData() {
+        
+        HashMap<String,Object> m = new HashMap<>();
+        
+        m.put("especificacao", especificacao);
+        m.put("areaArrendadaInicio", areaArrendadaInicio);
+        m.put("areaPropriaInicio", areaPropriaInicio);
+        m.put("areaArrendadaFinal", areaArrendadaFinal);
+        m.put("areaPropriaFinal", areaPropriaFinal);
+        m.put("valorTerraNuaPropria", valorTerraNuaPropria);
+        m.put("vidaUtil", vidaUtil);
+        m.put("custoFormacaoHectare", custoFormacaoHectare);
+        m.put("idPerfilFK", perfil.getId());
+        
+        return m;
+    }
+
+    @Override
+    public void setObjectData(Map<String, Object> data) {
+        try {
+            especificacao = Cast.toString(data.get("especificacao"));
+            areaArrendadaInicio = Cast.toDouble(data.get("areaArrendadaInicio"));
+            areaPropriaInicio = Cast.toDouble(data.get("areaPropriaInicio"));
+            areaArrendadaFinal = Cast.toDouble(data.get("areaArrendadaFinal"));
+            areaPropriaFinal = Cast.toDouble(data.get("areaPropriaFinal"));
+            valorTerraNuaPropria = Cast.toDouble(data.get("valorTerraNuaPropria"));
+            vidaUtil = Cast.toInt(data.get("vidaUtil"));
+            custoFormacaoHectare = Cast.toDouble(data.get("custoFormacaoHectare"));
+            perfil = new GenericDAO<>(Perfil.class).retrieve( Cast.toInt(data.get("idPerfilFK")) );
+            
+        } catch (SQLException | InstantiationException | IllegalAccessException ex) {
+            Logger.getLogger(InventarioTerras.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

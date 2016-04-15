@@ -5,13 +5,21 @@
  */
 package modelo.negocio;
 
+import flex.db.DatabaseObject;
+import flex.db.GenericDAO;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import util.Cast;
+
 /**
  *
  * @author Jefferson Sales
  */
-public class InventarioMaquinas {
+public class InventarioMaquinas extends DatabaseObject {
     
-    private int id;    
     private String especificacao;
     private String unidade;
     private double quantidade;
@@ -20,23 +28,18 @@ public class InventarioMaquinas {
     private Perfil perfil;
     
     public InventarioMaquinas() {
+        super("inventario_maquinas", "idInventarioMaquinas");
     }
 
     public InventarioMaquinas(String especificacao, String unidade, double quantidade, double valorUnitario, int vidaUtil, Perfil perfil) {
+        super("inventario_maquinas", "idInventarioMaquinas");
+        
         this.especificacao = especificacao;
         this.unidade = unidade;
         this.quantidade = quantidade;
         this.valorUnitario = valorUnitario;
         this.vidaUtil = vidaUtil;
         this.perfil = perfil;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getEspecificacao() {
@@ -85,6 +88,36 @@ public class InventarioMaquinas {
 
     public void setPerfil(Perfil perfil) {
         this.perfil = perfil;
+    }
+
+    @Override
+    public Map<String, Object> getObjectTableData() {
+        
+        HashMap<String,Object> m = new HashMap<>();
+        
+        m.put("especificacao", especificacao);
+        m.put("unidade", unidade);
+        m.put("quantidade", quantidade);
+        m.put("valorUnitario", valorUnitario);
+        m.put("vidaUtil", vidaUtil);
+        m.put("idPerfilFK", perfil.getId());
+        
+        return m;
+    }
+
+    @Override
+    public void setObjectData(Map<String, Object> data) {
+        try {
+            especificacao = Cast.toString(data.get("especificacao"));
+            unidade = Cast.toString(data.get("unidade"));
+            quantidade = Cast.toDouble(data.get("quantidade"));
+            valorUnitario = Cast.toDouble(data.get("valorUnitario"));
+            vidaUtil = Cast.toInt(data.get("vidaUtil"));
+            perfil = new GenericDAO<>(Perfil.class).retrieve( Cast.toInt(data.get("idPerfilFK")) );
+            
+        } catch (InstantiationException | IllegalAccessException | SQLException ex) {
+            Logger.getLogger(InventarioMaquinas.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }
