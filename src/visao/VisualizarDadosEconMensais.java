@@ -7,9 +7,14 @@ package visao;
 
 import controle.ControlePerfil;
 import java.awt.Color;
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.JSlider;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import modelo.dao.DEMEspecificacaoDAO;
 import modelo.dao.DadosEconMensaisDAO;
@@ -35,7 +40,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         
         setLocationRelativeTo(null);
         this.setResizable(false);
-        
+      
         Perfil atual = ControlePerfil.getInstance().getPerfilSelecionado();
         
         Calendar cal = GregorianCalendar.getInstance();
@@ -134,15 +139,15 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                     temp[(dem.get(j).getMes() - 1) * 3 + 1] = dem.get(j).getValorUnitario();
                     temp[(dem.get(j).getMes() - 1) * 3 + 2] = dem.get(j).getQuantidade() * dem.get(j).getValorUnitario();
                     
-                    System.out.println((dem.get(j).getMes() - 1) * 3);
-                    System.out.println(tempTotais[(dem.get(j).getMes() - 1) * 3]);
-                    System.out.println(tempTotais[(dem.get(j).getMes() - 1) * 3] + dem.get(j).getQuantidade());
+                 //   System.out.println((dem.get(j).getMes() - 1) * 3);
+                 //   System.out.println(tempTotais[(dem.get(j).getMes() - 1) * 3]);
+                 //   System.out.println(tempTotais[(dem.get(j).getMes() - 1) * 3] + dem.get(j).getQuantidade());
                     
                     tempTotais[(dem.get(j).getMes() - 1) * 3] = tempTotais[(dem.get(j).getMes() - 1) * 3] + dem.get(j).getQuantidade();
                     tempTotais[(dem.get(j).getMes() - 1) * 3 + 1] = tempTotais[(dem.get(j).getMes() - 1) * 3 + 1] + dem.get(j).getValorUnitario();
                     tempTotais[(dem.get(j).getMes() - 1) * 3 + 1] = tempTotais[(dem.get(j).getMes() - 1) * 3 + 1] + dem.get(j).getQuantidade() * dem.get(j).getValorUnitario();
                     
-                    System.out.println(tempTotais[(dem.get(j).getMes() - 1) * 3]);
+               //     System.out.println(tempTotais[(dem.get(j).getMes() - 1) * 3]);
                 }
                 
                 if( tabelaEspecificacao.getModel().getValueAt(i, 0).equals("SUB-TOTAL") || 
@@ -209,6 +214,12 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         textoEntrada.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         textoEntrada.setForeground(new java.awt.Color(51, 153, 255));
         textoEntrada.setText("DADOS ECONÔMICOS MENSAIS");
+
+        jScrollPane1.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
+            public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
+                jScrollPane1MouseWheelMoved(evt);
+            }
+        });
 
         jPanel1.setPreferredSize(new java.awt.Dimension(2700, 1515));
 
@@ -330,6 +341,11 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         tabelaEspecificacao.setPreferredSize(new java.awt.Dimension(270, 1448));
         tabelaEspecificacao.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tabelaEspecificacao.getTableHeader().setReorderingAllowed(false);
+        tabelaEspecificacao.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
+            public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
+                tabelaEspecificacaoMouseWheelMoved(evt);
+            }
+        });
         jScrollPane2.setViewportView(tabelaEspecificacao);
         tabelaEspecificacao.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         if (tabelaEspecificacao.getColumnModel().getColumnCount() > 0) {
@@ -432,7 +448,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Quant.", "Valor Unit.", "Total", "Quant.", "Valor Unit.", "Total", "Quant.", "Valor Unit.", "Total", "Quant.", "Valor Unit.", "Total", "Quant.", "Valor Unit.", "Total", "Quant.", "Valor Unit.", "Total", "Quant.", "Valor Unit.", "Total", "Quant.", "Valor Unit.", "Total", "Quant.", "Valor Unit.", "Total", "Quant.", "Valor Unit.", "Total", "Quant.", "Valor Unit.", "Total", "Quant.", "Valor Unit.", "Total"
+                "Quant.", "Valor Unit.", "Total (R$)", "Quant.", "Valor Unit.", "Total(R$)", "Quant.", "Valor Unit.", "Total(R$)", "Quant.", "Valor Unit.", "Total(R$)", "Quant.", "Valor Unit.", "Total(R$)", "Quant.", "Valor Unit.", "Total(R$)", "Quant.", "Valor Unit.", "Total(R$)", "Quant.", "Valor Unit.", "Total(R$)", "Quant.", "Valor Unit.", "Total(R$)", "Quant.", "Valor Unit.", "Total(R$)", "Quant.", "Valor Unit.", "Total(R$)", "Quant.", "Valor Unit.", "Total(R$)"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -447,6 +463,11 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         tabelaDadosEconomicos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tabelaDadosEconomicos.getTableHeader().setResizingAllowed(false);
         tabelaDadosEconomicos.getTableHeader().setReorderingAllowed(false);
+        tabelaDadosEconomicos.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
+            public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
+                tabelaDadosEconomicosMouseWheelMoved(evt);
+            }
+        });
         jScrollPane3.setViewportView(tabelaDadosEconomicos);
         if (tabelaDadosEconomicos.getColumnModel().getColumnCount() > 0) {
             tabelaDadosEconomicos.getColumnModel().getColumn(0).setResizable(false);
@@ -579,6 +600,18 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnVoltarActionPerformed
 
+    private void jScrollPane1MouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_jScrollPane1MouseWheelMoved
+        moveScrollBar(evt);
+    }//GEN-LAST:event_jScrollPane1MouseWheelMoved
+
+    private void tabelaDadosEconomicosMouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_tabelaDadosEconomicosMouseWheelMoved
+        moveScrollBar(evt);
+    }//GEN-LAST:event_tabelaDadosEconomicosMouseWheelMoved
+
+    private void tabelaEspecificacaoMouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_tabelaEspecificacaoMouseWheelMoved
+        moveScrollBar(evt);
+    }//GEN-LAST:event_tabelaEspecificacaoMouseWheelMoved
+
     /**
      * @param args the command line arguments
      */
@@ -612,6 +645,15 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                 new VisualizarDadosEconMensais().setVisible(true);
             }
         });
+    }
+    
+    private void moveScrollBar(java.awt.event.MouseWheelEvent evt) {
+        JScrollBar bar = jScrollPane1.getVerticalScrollBar();
+        if(evt.getWheelRotation() > 0) { //Up
+            bar.setValue(bar.getValue()+25);
+        } else { //Down
+            bar.setValue(bar.getValue()-25);
+        }     
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

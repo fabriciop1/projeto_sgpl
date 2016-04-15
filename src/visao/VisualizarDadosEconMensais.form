@@ -68,6 +68,9 @@
       </Properties>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+      <Events>
+        <EventHandler event="mouseWheelMoved" listener="java.awt.event.MouseWheelListener" parameters="java.awt.event.MouseWheelEvent" handler="jScrollPane1MouseWheelMoved"/>
+      </Events>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
@@ -131,7 +134,7 @@
                     </Property>
                     <Property name="columnSelectionAllowed" type="boolean" value="true"/>
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-                      <Color id="Default Cursor"/>
+                      <Color id="Cursor Padr&#xe3;o"/>
                     </Property>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -144,6 +147,9 @@
                       <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="mouseWheelMoved" listener="java.awt.event.MouseWheelListener" parameters="java.awt.event.MouseWheelEvent" handler="tabelaEspecificacaoMouseWheelMoved"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>
@@ -165,40 +171,40 @@
                       <Table columnCount="36" rowCount="90">
                         <Column editable="false" title="Quant." type="java.lang.Object"/>
                         <Column editable="false" title="Valor Unit." type="java.lang.Object"/>
-                        <Column editable="false" title="Total" type="java.lang.Object"/>
+                        <Column editable="false" title="Total (R$)" type="java.lang.Object"/>
                         <Column editable="false" title="Quant." type="java.lang.Object"/>
                         <Column editable="false" title="Valor Unit." type="java.lang.Object"/>
-                        <Column editable="false" title="Total" type="java.lang.Object"/>
+                        <Column editable="false" title="Total(R$)" type="java.lang.Object"/>
                         <Column editable="false" title="Quant." type="java.lang.Object"/>
                         <Column editable="false" title="Valor Unit." type="java.lang.Object"/>
-                        <Column editable="false" title="Total" type="java.lang.Object"/>
+                        <Column editable="false" title="Total(R$)" type="java.lang.Object"/>
                         <Column editable="false" title="Quant." type="java.lang.Object"/>
                         <Column editable="false" title="Valor Unit." type="java.lang.Object"/>
-                        <Column editable="false" title="Total" type="java.lang.Object"/>
+                        <Column editable="false" title="Total(R$)" type="java.lang.Object"/>
                         <Column editable="false" title="Quant." type="java.lang.Object"/>
                         <Column editable="false" title="Valor Unit." type="java.lang.Object"/>
-                        <Column editable="false" title="Total" type="java.lang.Object"/>
+                        <Column editable="false" title="Total(R$)" type="java.lang.Object"/>
                         <Column editable="false" title="Quant." type="java.lang.Object"/>
                         <Column editable="false" title="Valor Unit." type="java.lang.Object"/>
-                        <Column editable="false" title="Total" type="java.lang.Object"/>
+                        <Column editable="false" title="Total(R$)" type="java.lang.Object"/>
                         <Column editable="false" title="Quant." type="java.lang.Object"/>
                         <Column editable="false" title="Valor Unit." type="java.lang.Object"/>
-                        <Column editable="false" title="Total" type="java.lang.Object"/>
+                        <Column editable="false" title="Total(R$)" type="java.lang.Object"/>
                         <Column editable="false" title="Quant." type="java.lang.Object"/>
                         <Column editable="false" title="Valor Unit." type="java.lang.Object"/>
-                        <Column editable="false" title="Total" type="java.lang.Object"/>
+                        <Column editable="false" title="Total(R$)" type="java.lang.Object"/>
                         <Column editable="false" title="Quant." type="java.lang.Object"/>
                         <Column editable="false" title="Valor Unit." type="java.lang.Object"/>
-                        <Column editable="false" title="Total" type="java.lang.Object"/>
+                        <Column editable="false" title="Total(R$)" type="java.lang.Object"/>
                         <Column editable="false" title="Quant." type="java.lang.Object"/>
                         <Column editable="false" title="Valor Unit." type="java.lang.Object"/>
-                        <Column editable="false" title="Total" type="java.lang.Object"/>
+                        <Column editable="false" title="Total(R$)" type="java.lang.Object"/>
                         <Column editable="false" title="Quant." type="java.lang.Object"/>
                         <Column editable="false" title="Valor Unit." type="java.lang.Object"/>
-                        <Column editable="false" title="Total" type="java.lang.Object"/>
+                        <Column editable="false" title="Total(R$)" type="java.lang.Object"/>
                         <Column editable="false" title="Quant." type="java.lang.Object"/>
                         <Column editable="false" title="Valor Unit." type="java.lang.Object"/>
-                        <Column editable="false" title="Total" type="java.lang.Object"/>
+                        <Column editable="false" title="Total(R$)" type="java.lang.Object"/>
                       </Table>
                     </Property>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -395,6 +401,9 @@
                       <TableHeader reorderingAllowed="false" resizingAllowed="false"/>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="mouseWheelMoved" listener="java.awt.event.MouseWheelListener" parameters="java.awt.event.MouseWheelEvent" handler="tabelaDadosEconomicosMouseWheelMoved"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>

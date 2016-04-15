@@ -1,15 +1,19 @@
 conexão telas - BD para edição, remoção e adição 
-(animais e terras)
+(animais e terras) - Jefferson
 atualizar tela após alterações
- 
-Verificar quais totais precisam do "R$"
+ ------
 Inserir codigos sql -- COMECAR DO 1
+botões editar em inventario (valorGasto e Resumo)
+Ajeitar Inserção, remoção e edição em inventário terras - Jefferson
 
-COLOCAR vidaUtilReprodutores, vidaUJtilAnimaisServico, valorGastoComComprasDeAnimais EM RESUMO
-CADASTRAR INFORMAÇÕES DE RESUMO NO BANCO
-CÁLCULOS DE RESUMO 
+CADASTRAR INFORMAÇÕES DE RESUMO E VALOR GASTO COM COMPRA DE ANIMAIS NO BANCO
+CÁLCULOS DE RESUMO E VALOR GASTO COM COMPRAS DE ANIMAIS 
 vidaUtilReprodutores, vidaUtilServico pode ser editado e salvo no banco
+CALCULAR CAMPO VARIAÇÃO DE INVENTÁRIO ANIMAL E RESUMO AO RECUPERAR DO BANCO E/OU ALTERAR
+VIDA UTIL DOS REPRODUTORES E VIDA UTIL ANIMAIS SERVIÇO EDITÁVEIS
 
+
+modificar sql rota - adm
 fora o adm, exibir perfis por rota de usuário
 inserir perfil (adm)
 editar perfil  (adm, usuario do perfil)
@@ -18,5 +22,7 @@ remover perfil (adm)
 Permitir o usuario adicionar novo periodo e editar os campos (fora a especificacao)
 
 inserção, edição e remoção de campos em Dados Econômicos
+selecionar linha de especificação
+
 
 COR DAS LINHAS DE DEM: TOTAIS E VAZIOS
