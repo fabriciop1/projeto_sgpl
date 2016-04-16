@@ -36,5 +36,11 @@ ROTAS - 1 - SAO BENTO ROTA CURTA
 1 rota estara em varios perfis
 1 rota tem n usuarios
 
+----------------------------------------------------------------[ 15/04 ]-----------------
 
+#PLANILHA
+Célula J27 multiplica pela J14 ao invés da J26
+
+#TELAS
+Tabela forrageiras e Tabela terras serão executadas ao mesmo tempo? (Excluir/ADD em 1 == excluir/ADD nas duas) 
 

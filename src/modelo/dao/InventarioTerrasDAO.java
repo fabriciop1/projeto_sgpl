@@ -200,6 +200,7 @@ public class InventarioTerrasDAO extends DAO implements InterfaceDAO<InventarioT
             inventario.setAreaPropriaFinal(result.getDouble("areaPropriaFinal"));
             inventario.setValorTerraNuaPropria(result.getDouble("valorTerraNuaPropria"));
             inventario.setVidaUtil(result.getInt("vidaUtil"));
+            inventario.setCustoFormacaoHectare(result.getDouble("custoFormacaoHectare"));
             inventario.setPerfil((new PerfilDAO()).recuperar(result.getInt("idPerfilFK")));
 
             inventarios.add(inventario);
@@ -243,6 +244,7 @@ public class InventarioTerrasDAO extends DAO implements InterfaceDAO<InventarioT
             inventario.setAreaPropriaFinal(result.getDouble("areaPropriaFinal"));
             inventario.setValorTerraNuaPropria(result.getDouble("valorTerraNuaPropria"));
             inventario.setVidaUtil(result.getInt("vidaUtil"));
+            inventario.setCustoFormacaoHectare(result.getDouble("custoFormacaoHectare"));
             inventario.setPerfil((new PerfilDAO()).recuperar(result.getInt("idPerfilFK")));
 
             inventarios.add(inventario);

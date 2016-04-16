@@ -12,6 +12,8 @@ import flex.table.GenericTableModifier;
 import flex.table.TableModifyListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
@@ -21,6 +23,7 @@ import javax.swing.table.DefaultTableModel;
 import modelo.dao.InventarioAnimaisDAO;
 import modelo.dao.InventarioBenfeitoriasDAO;
 import modelo.dao.InventarioMaquinasDAO;
+import modelo.dao.InventarioResumoDAO;
 import modelo.dao.InventarioTerrasDAO;
 import modelo.negocio.InventarioAnimais;
 import modelo.negocio.InventarioBenfeitorias;
@@ -46,6 +49,15 @@ public class VisualizarInventario extends javax.swing.JFrame {
     private GenericTableRowEditor tabelaAnimaisProdGTRE;
     private GenericTableRowEditor tabelaAnimaisServGTRE;
     
+    private InventarioResumo resumo;
+    private Perfil perfilAtual;
+    
+    private InventarioTerrasDAO       itdao;
+    private InventarioAnimaisDAO      iadao;
+    private InventarioBenfeitoriasDAO ibdao;
+    private InventarioMaquinasDAO     imdao;
+    private InventarioResumoDAO       irdao;
+    
     public VisualizarInventario() {
         
         initComponents();
@@ -54,6 +66,10 @@ public class VisualizarInventario extends javax.swing.JFrame {
    
         setLocationRelativeTo(null);
         this.setResizable(false);
+        
+        Calendar cal = GregorianCalendar.getInstance();
+	int anoAtual = cal.get(Calendar.YEAR);
+        int mesAtual = cal.get(Calendar.MONTH);
         
         ArrayList<InventarioTerras> terras = new ArrayList<>();
         ArrayList<InventarioAnimais> animais = new ArrayList<>();
@@ -91,26 +107,40 @@ public class VisualizarInventario extends javax.swing.JFrame {
         ArrayList<Double> totalTerraNua      = new ArrayList<>();
         ArrayList<Double> totalValFinaServ   = new ArrayList<>();
         ArrayList<Double> totalValCabeServ   = new ArrayList<>(); 
+            
+        itdao = new InventarioTerrasDAO();
+        iadao = new InventarioAnimaisDAO();
+        ibdao = new InventarioBenfeitoriasDAO();
+        imdao = new InventarioMaquinasDAO();
+        irdao = new InventarioResumoDAO();
         
-        InventarioResumo resumo = new InventarioResumo();
-        
-        InventarioTerrasDAO itdao = new InventarioTerrasDAO();
-        InventarioAnimaisDAO iadao = new InventarioAnimaisDAO();
-        InventarioBenfeitoriasDAO ibdao = new InventarioBenfeitoriasDAO();
-        InventarioMaquinasDAO imdao = new InventarioMaquinasDAO();
-        //InventarioResumoDAO irdao = new InventarioResumoDAO();
-        
-        Perfil perfilAtual = ControlePerfil.getInstance().getPerfilSelecionado();
+        perfilAtual = ControlePerfil.getInstance().getPerfilSelecionado();
      
         try {
             terras = itdao.recuperarPorPerfil(perfilAtual.getId());
             animais = iadao.recuperarPorPerfil(perfilAtual.getId());
             benfeitorias = ibdao.recuperarPorPerfil(perfilAtual.getId());
             maquinas = imdao.recuperarPorPerfil(perfilAtual.getId());
+            resumo = irdao.recuperarPorPerfil(perfilAtual.getId());
         } catch (SQLException ex) {
             Logger.getLogger(VisualizarInventario.class.getName()).log(Level.SEVERE, null, ex);
         }
      
+        if(resumo == null){
+            
+            resumo = new InventarioResumo();
+            resumo.setPerfil(perfilAtual);
+            resumo.setMes(mesAtual);
+            resumo.setAno(anoAtual);
+            
+            try {
+                irdao.cadastrar(resumo);
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao cadastrar um novo resumo");
+            }
+            
+        }
+        
         tabelaTerrasGTRE.getSourceTableModel().setRowCount(0);
           
         for(int i = 0; i < terras.size(); i++){
@@ -133,8 +163,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
             
         }
         verificaTabelaVazia(tabelaTerrasGTRE.getSourceTableModel(), editarInvTerrasBT, removerInvTerrasBT);
-        
-        
         
         tabelaForrageirasGTRE.getSourceTableModel().setRowCount(0);
         
@@ -259,6 +287,14 @@ public class VisualizarInventario extends javax.swing.JFrame {
             total31.setText(String.format("R$ %.2f", ((Double.parseDouble(total19.getText().substring(2).replace(',','.')) +
                     Double.parseDouble(total20.getText().substring(2).replace(',','.'))) / 2 )));
             
+            if(resumo != null){
+                total32.setText(String.format("R$ %.2f", resumo.getValorGastoCompraAnimais()));
+                total35.setText(String.format("%d", resumo.getVidaUtilReprodutores()));
+            }
+            
+            total33.setText(String.format("R$ %.2f", (Double.parseDouble(total20.getText().substring(2).replace(',','.')) -
+                        Double.parseDouble(total19.getText().substring(2).replace(',','.')) - Double.parseDouble(total32.getText().substring(2).replace(',','.')))));
+            
             try{
                 total36.setText("" + Calc.dividir(Double.parseDouble(total34.getText().substring(2).replace(',','.')),
                         Double.parseDouble(total35.getText().replace(',','.'))));
@@ -268,6 +304,10 @@ public class VisualizarInventario extends javax.swing.JFrame {
             }
             
             total37.setText(String.format("R$ %.2f", Calc.somaPonderada(totalValFinaServ, totalValCabeServ)));
+            
+            if(resumo != null){
+                total38.setText(String.format("%d", resumo.getVidaUtilAnimaisServico()));
+            }
             
             try{
                 total39.setText("" + Calc.dividir(Double.parseDouble(total37.getText().substring(2).replace(',','.')), 
@@ -330,6 +370,12 @@ public class VisualizarInventario extends javax.swing.JFrame {
             total43.setText(String.format("R$ %.2f", totalDeprecMaquin));
 
             //Resumo
+            if(resumo != null){
+                atividadeLeite.setText(String.format("%.2f", resumo.getAtividadeLeiteira()));
+                custoOportunidade.setText(String.format("%.2f", resumo.getCustoOportunidade()));
+                salarioMinimo.setText(String.format("%.2f", resumo.getSalarioMinimo()));
+            }
+            
             total44.setText(total12.getText().substring(2));
             total45.setText(total39.getText());
             total46.setText(total36.getText());
@@ -340,7 +386,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                                   Double.parseDouble(total46.getText().replace(',','.')) +
                                   Double.parseDouble(total47.getText().replace(',','.')) +
                                   Double.parseDouble(total48.getText().replace(',','.')))));
-            total50.setText(String.format("R$ %.2f", (Double.parseDouble(atividadeLeite.getText().replace(',','.')) * 
+            total50.setText(String.format("R$ %.2f", ((Double.parseDouble(atividadeLeite.getText().replace(',','.'))/100) * 
                     Double.parseDouble(total49.getText().substring(2).replace(',','.')))));
 
             total51.setText(total9.getText().substring(2));
@@ -348,19 +394,18 @@ public class VisualizarInventario extends javax.swing.JFrame {
             total53.setText(total31.getText().substring(2));
             total54.setText(total40.getText().substring(2));
             total55.setText(total42.getText().substring(2));
-            total56.setText(String.format("R$ %.2f", (Double.parseDouble(total51.getText().substring(2)) + 
+            total56.setText(String.format("R$ %.2f", (Double.parseDouble(total51.getText()) + 
                                   Double.parseDouble(total52.getText().replace(',','.')) +
-                                  Double.parseDouble(total53.getText().substring(2).replace(',','.')) +
+                                  Double.parseDouble(total53.getText().replace(',','.')) +
                                   Double.parseDouble(total54.getText().replace(',','.')) +
                                   Double.parseDouble(total55.getText().replace(',','.')))));
-            total57.setText(String.format("R$ %.2f", (Double.parseDouble(atividadeLeite.getText().replace(',','.')) * 
-                    Double.parseDouble(total49.getText().substring(2).replace(',','.')))));
-
+            total57.setText(String.format("R$ %.2f", ((Double.parseDouble(custoOportunidade.getText().replace(',','.')))/100 * 
+                    Double.parseDouble(total56.getText().substring(2).replace(',','.')))));
+   
             total58.setText(salarioMinimo.getText());
             total59.setText(String.format("%.2f", (Double.parseDouble(salarioMinimo.getText().replace(',','.')) * 0.3)));
-            total60.setText(String.format("R$ %.2f", ((Double.parseDouble(total58.getText().replace(',','.')) * 12+ 
-                                  Double.parseDouble(total59.getText().replace(',','.')) +
-                                  Double.parseDouble(total46.getText().replace(',','.')))) / 12));
+            total60.setText(String.format("R$ %.2f", ((Double.parseDouble(total58.getText().replace(',','.')) * 13 + 
+                                  (Double.parseDouble(total58.getText().replace(',','.'))) * 0.3)) / 12));
             
             definirBDListeners();
     }
@@ -445,9 +490,11 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total38 = new javax.swing.JLabel();
         total39 = new javax.swing.JLabel();
         editarInvAnimaisBT = new javax.swing.JButton();
-        btnInserirValor = new javax.swing.JButton();
+        valorGastoAnimaisBT = new javax.swing.JButton();
         removerInvAnimaisBT = new javax.swing.JButton();
         adicionarInvAnimaisBT = new javax.swing.JButton();
+        vidaUtilReprodBT = new javax.swing.JButton();
+        vidaUtilServBT = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         tabelaBenfeitorias = new javax.swing.JTable();
@@ -513,9 +560,9 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total60 = new javax.swing.JLabel();
         jLabel49 = new javax.swing.JLabel();
         jLabel50 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        atividadeLeiteBT = new javax.swing.JButton();
+        custoOportBT = new javax.swing.JButton();
+        salarioMinimoBT = new javax.swing.JButton();
         atividadeLeite = new javax.swing.JLabel();
         custoOportunidade = new javax.swing.JLabel();
         salarioMinimo = new javax.swing.JLabel();
@@ -807,7 +854,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     .addComponent(total10)
                     .addComponent(total11)
                     .addComponent(total12))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(adicionarInvTerrasBT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(editarInvTerrasBT, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1053,7 +1100,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         jLabel19.setText("Depreciação dos Animais de Serviços - R$/ano");
 
         total34.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        total34.setText("<total34>");
+        total34.setText("R$ 0,00");
 
         total35.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total35.setText("5");
@@ -1062,7 +1109,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total36.setText("<total36>");
 
         total37.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        total37.setText("<total37>");
+        total37.setText("R$ 0,00");
 
         total38.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total38.setText("10");
@@ -1077,10 +1124,10 @@ public class VisualizarInventario extends javax.swing.JFrame {
             }
         });
 
-        btnInserirValor.setText("Inserir Valor");
-        btnInserirValor.addActionListener(new java.awt.event.ActionListener() {
+        valorGastoAnimaisBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit_values.png"))); // NOI18N
+        valorGastoAnimaisBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnInserirValorActionPerformed(evt);
+                valorGastoAnimaisBTActionPerformed(evt);
             }
         });
 
@@ -1098,38 +1145,61 @@ public class VisualizarInventario extends javax.swing.JFrame {
             }
         });
 
+        vidaUtilReprodBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit_values.png"))); // NOI18N
+        vidaUtilReprodBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                vidaUtilReprodBTActionPerformed(evt);
+            }
+        });
+
+        vidaUtilServBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit_values.png"))); // NOI18N
+        vidaUtilServBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                vidaUtilServBTActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
                         .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(total32, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnInserirValor)
+                        .addComponent(total32, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(valorGastoAnimaisBT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(77, 77, 77)
                         .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(total33, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
-                            .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
+                                    .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(total34, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(total35, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(total36, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(total35, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(total34, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(vidaUtilReprodBT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(total36, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
+                                .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(total39, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
@@ -1138,9 +1208,11 @@ public class VisualizarInventario extends javax.swing.JFrame {
                                     .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(30, 30, 30)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(total37, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(total38, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                        .addGap(25, 25, 25)))
+                                    .addComponent(total38, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(total37, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(vidaUtilServBT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(17, 17, 17)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(adicionarInvAnimaisBT, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -1198,7 +1270,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                                 .addComponent(total29, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(total26, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)))
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 994, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 1, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1231,43 +1303,62 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     .addComponent(total29)
                     .addComponent(jLabel7)
                     .addComponent(total28))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(total31))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(total32)
-                    .addComponent(jLabel11)
-                    .addComponent(total33)
-                    .addComponent(btnInserirValor))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(valorGastoAnimaisBT)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(total32, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel11)
+                        .addComponent(total33)))
                 .addGap(18, 18, 18)
-                .addComponent(jLabel12)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel13)
-                    .addComponent(jLabel17)
-                    .addComponent(total34)
-                    .addComponent(total37))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel15)
-                    .addComponent(jLabel18)
-                    .addComponent(total35)
-                    .addComponent(total38))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel16)
-                    .addComponent(jLabel19)
-                    .addComponent(total36)
-                    .addComponent(total39))
-                .addGap(7, 7, 7)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(removerInvAnimaisBT)
-                    .addComponent(editarInvAnimaisBT)
-                    .addComponent(adicionarInvAnimaisBT))
-                .addContainerGap())
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel12)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(total34, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                            .addComponent(total37, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addGap(3, 3, 3)
+                                                .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(total38, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addGap(3, 3, 3)
+                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(total35, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                                        .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addGap(0, 0, Short.MAX_VALUE))))))
+                                    .addComponent(vidaUtilReprodBT)))
+                            .addComponent(vidaUtilServBT))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel16)
+                            .addComponent(jLabel19)
+                            .addComponent(total36)
+                            .addComponent(total39))
+                        .addGap(55, 55, 55))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(removerInvAnimaisBT)
+                            .addComponent(editarInvAnimaisBT)
+                            .addComponent(adicionarInvAnimaisBT))
+                        .addGap(24, 24, 24))))
         );
 
         jTabbedPane1.addTab("Animais", jPanel2);
@@ -1383,35 +1474,32 @@ public class VisualizarInventario extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(115, 115, 115)
+                .addGap(124, 124, 124)
                 .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 373, Short.MAX_VALUE)
+                .addComponent(total40, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(124, 124, 124)
+                .addComponent(total41, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(188, Short.MAX_VALUE)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(164, 164, 164)
-                        .addComponent(total40, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(135, 135, 135)
-                        .addComponent(total41, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(adicionarInvBenfeitoriasBT, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(editarInvBenfeitoriasBT, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(removerInvBenfeitoriasBT, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(adicionarInvBenfeitoriasBT, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(editarInvBenfeitoriasBT, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(removerInvBenfeitoriasBT, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGap(8, 8, 8)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel20))
+                    .addComponent(jLabel20)
+                    .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 446, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(14, 14, 14)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(total41)
                     .addComponent(total40)
@@ -1419,7 +1507,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(removerInvBenfeitoriasBT, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(editarInvBenfeitoriasBT)
+                    .addComponent(editarInvBenfeitoriasBT, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(adicionarInvBenfeitoriasBT, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -1534,48 +1622,40 @@ public class VisualizarInventario extends javax.swing.JFrame {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(0, 501, Short.MAX_VALUE)
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(120, 120, 120)
+                .addGap(124, 124, 124)
                 .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addComponent(jScrollPane7)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(186, Short.MAX_VALUE)
+            .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(164, 164, 164)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(total42, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(147, 147, 147)
-                        .addComponent(total43, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(adicionarInvMaquinasBT, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(editarInvMaquinasBT, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(removerInvMaquinasBT, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                .addGap(124, 124, 124)
+                .addComponent(total43, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(852, Short.MAX_VALUE)
+                .addComponent(adicionarInvMaquinasBT, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(editarInvMaquinasBT, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(removerInvMaquinasBT, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel24)
-                    .addComponent(jLabel23, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(jLabel23))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 446, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(total43))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(total42)
-                            .addComponent(jLabel25))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                .addGap(13, 13, 13)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(total43)
+                    .addComponent(total42)
+                    .addComponent(jLabel25))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(removerInvMaquinasBT, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(editarInvMaquinasBT, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -1932,38 +2012,41 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(jLabel50, gridBagConstraints);
 
-        jButton1.setText("Inserir Valor");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        atividadeLeiteBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit_values.png"))); // NOI18N
+        atividadeLeiteBT.setPreferredSize(new java.awt.Dimension(47, 29));
+        atividadeLeiteBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                atividadeLeiteBTActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 7;
-        jPanel5.add(jButton1, gridBagConstraints);
+        jPanel5.add(atividadeLeiteBT, gridBagConstraints);
 
-        jButton3.setText("Inserir Valor");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        custoOportBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit_values.png"))); // NOI18N
+        custoOportBT.setPreferredSize(new java.awt.Dimension(47, 29));
+        custoOportBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                custoOportBTActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 17;
-        jPanel5.add(jButton3, gridBagConstraints);
+        jPanel5.add(custoOportBT, gridBagConstraints);
 
-        jButton4.setText("Inserir Valor");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        salarioMinimoBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit_values.png"))); // NOI18N
+        salarioMinimoBT.setPreferredSize(new java.awt.Dimension(47, 29));
+        salarioMinimoBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                salarioMinimoBTActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 21;
-        jPanel5.add(jButton4, gridBagConstraints);
+        jPanel5.add(salarioMinimoBT, gridBagConstraints);
 
         atividadeLeite.setText("0.0");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2016,7 +2099,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     .addComponent(btnVoltar)
                     .addComponent(textoEntrada))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 584, Short.MAX_VALUE))
         );
 
         pack();
@@ -2171,23 +2254,35 @@ public class VisualizarInventario extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_editarInvAnimaisBTActionPerformed
 
-    private void btnInserirValorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInserirValorActionPerformed
+    private void valorGastoAnimaisBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_valorGastoAnimaisBTActionPerformed
         try{
             Double temp = Double.parseDouble(JOptionPane.showInputDialog("Valor Gasto com Compra de Animais: "));
             
             if(temp >= 0.0){
                 total32.setText(String.format("R$ %.2f", temp));
                 total33.setText(String.format("R$ %.2f", (Double.parseDouble(total20.getText().substring(2).replace(',','.')) -
-                        Double.parseDouble(total19.getText().substring(2).replace(',','.')) - Double.parseDouble(total32.getText().substring(2)))));
+                        Double.parseDouble(total19.getText().substring(2).replace(',','.')) - Double.parseDouble(total32.getText().substring(2).replace(',','.')))));
+                
+                
+                
+                if(resumo != null){
+                    resumo.setValorGastoCompraAnimais(temp);
+                    try {
+                        irdao.atualizar(resumo);
+                    } catch (SQLException ex) {
+                        JOptionPane.showMessageDialog(null, "Erro ao salvar no banco");
+                    }
+                } 
+                
             } else {
                 JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
             }
-        } catch (Exception e){
+        } catch (IllegalArgumentException e){
             JOptionPane.showMessageDialog(null, "Insira um valor válido!");
         }
         
         
-    }//GEN-LAST:event_btnInserirValorActionPerformed
+    }//GEN-LAST:event_valorGastoAnimaisBTActionPerformed
 
     private void editarInvTerrasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarInvTerrasBTActionPerformed
        
@@ -2347,53 +2442,133 @@ public class VisualizarInventario extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_removerInvAnimaisBTActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void atividadeLeiteBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atividadeLeiteBTActionPerformed
         try{
             Double temp = Double.parseDouble(JOptionPane.showInputDialog("Inserir atividade leiteira (%): "));
             
             if(temp >= 0.0){
+                
+                if(resumo != null){
+                    resumo.setAtividadeLeiteira(temp);
+                    irdao.atualizar(resumo);
+                }
+                
                 atividadeLeite.setText("" + temp);
+                total50.setText(String.format("R$ %.2f", Double.parseDouble(total49.getText().substring(2).replace(',','.')) * (temp/100)));
+                
             } else {
                 JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
             }
         } catch (Exception e){
             JOptionPane.showMessageDialog(null, "Insira um valor válido!");
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_atividadeLeiteBTActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void custoOportBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_custoOportBTActionPerformed
         try{
             Double temp = Double.parseDouble(JOptionPane.showInputDialog("Inserir custo de oportunidade (%): "));
             
             if(temp >= 0.0){
+                
+                if(resumo != null){
+                    resumo.setCustoOportunidade(temp);
+                    irdao.atualizar(resumo);
+                }
+                
                 custoOportunidade.setText("" + temp);
+                total57.setText(String.format("R$ %.2f", Double.parseDouble(total56.getText().substring(2).replace(',','.')) * (temp/100)));
             } else {
                 JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
             }
         } catch (Exception e){
-            JOptionPane.showMessageDialog(null, "Insira um valor válido!");
+            e.printStackTrace();
+            //JOptionPane.showMessageDialog(null, "Insira um valor válido!");
         }
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_custoOportBTActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void salarioMinimoBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salarioMinimoBTActionPerformed
         try{
-            Double temp = Double.parseDouble(JOptionPane.showInputDialog("Inserir salário mínimo: "));
+            Double temp = Double.parseDouble(JOptionPane.showInputDialog("Inserir salário mínimo: ").replace(",", "."));
             
             if(temp >= 0.0){
                 salarioMinimo.setText("" + temp);
+                total58.setText("" + temp);
+                total59.setText(String.format("%.2f", (Double.parseDouble(salarioMinimo.getText().replace(',','.')) * 0.3)));
+                
+                if(resumo != null){
+                    resumo.setSalarioMinimo(temp);
+                    irdao.atualizar(resumo);
+                } 
+                
+                total60.setText(String.format("R$ %.2f", (temp*13 + temp*0.3)/12));
+                
             } else {
                 JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
             }
         } catch (Exception e){
             JOptionPane.showMessageDialog(null, "Insira um valor válido!");
         }
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_salarioMinimoBTActionPerformed
 
     private void adicionarInvBenfeitoriasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarInvBenfeitoriasBTActionPerformed
         tabelaBenfeitoriasGTRE.setEditorType(GTRE_INSERT);
         tabelaBenfeitoriasGTRE.showEditor(evt);
         verificaTabelaVazia(tabelaBenfeitoriasGTRE.getSourceTableModel(), editarInvBenfeitoriasBT, removerInvBenfeitoriasBT);
     }//GEN-LAST:event_adicionarInvBenfeitoriasBTActionPerformed
+
+    private void vidaUtilReprodBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vidaUtilReprodBTActionPerformed
+        try{
+            Integer temp = Integer.parseInt(JOptionPane.showInputDialog("Vida últil dos reprodutores: "));
+            
+            if(temp >= 0){
+                total35.setText(String.format("%d", temp));
+                total36.setText(String.format("%.2f", (Double.parseDouble(total34.getText().substring(2).replace(',','.')) /
+                        Double.parseDouble(total35.getText().replace(',','.')))));
+                
+                resumo.setVidaUtilReprodutores(temp);
+                               
+                if(resumo != null){
+                    resumo.setVidaUtilReprodutores(temp);
+                    try {
+                        irdao.atualizar(resumo);
+                    } catch (SQLException ex) {
+                        JOptionPane.showMessageDialog(null, "Erro ao salvar no banco");
+                    }
+                }
+                
+            } else {
+                JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
+            }
+        } catch (IllegalArgumentException e){
+            JOptionPane.showMessageDialog(null, "Insira um valor válido!");
+        }
+    }//GEN-LAST:event_vidaUtilReprodBTActionPerformed
+
+    private void vidaUtilServBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vidaUtilServBTActionPerformed
+        try{
+            Integer temp = Integer.parseInt(JOptionPane.showInputDialog("Capital Investido em Animais de Serviços: "));
+            
+            if(temp >= 0.0){
+                total38.setText(String.format("%d", temp));
+                total39.setText(String.format("%.2f", (Double.parseDouble(total37.getText().substring(2).replace(',','.')) /
+                        Double.parseDouble(total38.getText().replace(',','.')))));
+                               
+                if(resumo != null){
+                    resumo.setVidaUtilAnimaisServico(temp);
+                    try {
+                        irdao.atualizar(resumo);
+                    } catch (SQLException ex) {
+                        JOptionPane.showMessageDialog(null, "Erro ao salvar no banco");
+                    }
+                }
+                
+            } else {
+                JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
+            }
+        } catch (IllegalArgumentException e){
+            JOptionPane.showMessageDialog(null, "Insira um valor válido!");
+        }
+    }//GEN-LAST:event_vidaUtilServBTActionPerformed
     
     private void verificaTabelaVazia(DefaultTableModel table, JButton editarBtn, JButton removerBtn) {
         if(table.getRowCount() == 0) {
@@ -2435,16 +2610,14 @@ public class VisualizarInventario extends javax.swing.JFrame {
     private javax.swing.JButton adicionarInvMaquinasBT;
     private javax.swing.JButton adicionarInvTerrasBT;
     private javax.swing.JLabel atividadeLeite;
-    private javax.swing.JButton btnInserirValor;
+    private javax.swing.JButton atividadeLeiteBT;
     private javax.swing.JButton btnVoltar;
+    private javax.swing.JButton custoOportBT;
     private javax.swing.JLabel custoOportunidade;
     private javax.swing.JButton editarInvAnimaisBT;
     private javax.swing.JButton editarInvBenfeitoriasBT;
     private javax.swing.JButton editarInvMaquinasBT;
     private javax.swing.JButton editarInvTerrasBT;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -2511,6 +2684,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
     private javax.swing.JButton removerInvMaquinasBT;
     private javax.swing.JButton removerInvTerrasBT;
     private javax.swing.JLabel salarioMinimo;
+    private javax.swing.JButton salarioMinimoBT;
     private javax.swing.JTable tabelaBenfeitorias;
     private javax.swing.JTable tabelaInveAnimaisProd;
     private javax.swing.JTable tabelaInveAnimaisServ;
@@ -2576,5 +2750,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
     private javax.swing.JLabel total7;
     private javax.swing.JLabel total8;
     private javax.swing.JLabel total9;
+    private javax.swing.JButton valorGastoAnimaisBT;
+    private javax.swing.JButton vidaUtilReprodBT;
+    private javax.swing.JButton vidaUtilServBT;
     // End of variables declaration//GEN-END:variables
 }
