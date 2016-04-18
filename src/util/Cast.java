@@ -15,15 +15,15 @@ public final class Cast {
         
     }
     
-    public static Integer toInt(Object o){
+    public static int toInt(Object o){
         return (o != null ? (Integer)o : 0);
     }
             
-    public static Double toDouble(Object o){
+    public static double toDouble(Object o){
         return (o != null ? (Double)o : 0.0);
     }        
     
-    public static Float toFloat(Object o){
+    public static float toFloat(Object o){
         return (o != null ? (Float)o : 0.0f);
     }
     
@@ -31,7 +31,7 @@ public final class Cast {
         return (o != null ? o.toString() : "");
     }
     
-    public static Boolean toBool(Object o){
+    public static boolean toBool(Object o){
         return (o != null ? (Boolean)o : false);
     }
     

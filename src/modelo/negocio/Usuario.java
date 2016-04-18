@@ -75,16 +75,9 @@ public class Usuario extends DatabaseObject implements Serializable {
 
     @Override
     public void setObjectData(Map<String, Object> data) {
-        
-        try {
             login = Cast.toString(data.get("login"));
             senha = Cast.toSQLValue(data.get("senha"));
             rota = new GenericDAO<>(Rota.class).retrieve( Cast.toInt(data.get("idRotaFK")) );
-            
-        } catch (InstantiationException | IllegalAccessException | SQLException ex) {
-            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
     }
     
     

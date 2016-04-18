@@ -264,7 +264,7 @@
                         <Column editable="false" title="R$/Ha" type="java.lang.Double"/>
                         <Column editable="false" title="Ha" type="java.lang.Double"/>
                         <Column editable="false" title="R$/total" type="java.lang.Double"/>
-                        <Column editable="false" title="Vida &#xda;til Anos" type="java.lang.Double"/>
+                        <Column editable="false" title="Vida &#xda;til Anos" type="java.lang.Integer"/>
                         <Column editable="false" title="Deprecia&#xe7;&#xe3;o(R$/Ano)" type="java.lang.Double"/>
                       </Table>
                     </Property>

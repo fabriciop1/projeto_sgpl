@@ -8,11 +8,8 @@ package modelo.negocio;
 import flex.db.DatabaseObject;
 import flex.db.GenericDAO;
 import java.io.Serializable;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import util.Cast;
 
 /**
@@ -142,7 +139,6 @@ public class InventarioTerras extends DatabaseObject implements Serializable {
 
     @Override
     public void setObjectData(Map<String, Object> data) {
-        try {
             especificacao = Cast.toString(data.get("especificacao"));
             areaArrendadaInicio = Cast.toDouble(data.get("areaArrendadaInicio"));
             areaPropriaInicio = Cast.toDouble(data.get("areaPropriaInicio"));
@@ -152,9 +148,5 @@ public class InventarioTerras extends DatabaseObject implements Serializable {
             vidaUtil = Cast.toInt(data.get("vidaUtil"));
             custoFormacaoHectare = Cast.toDouble(data.get("custoFormacaoHectare"));
             perfil = new GenericDAO<>(Perfil.class).retrieve( Cast.toInt(data.get("idPerfilFK")) );
-            
-        } catch (SQLException | InstantiationException | IllegalAccessException ex) {
-            Logger.getLogger(InventarioTerras.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 }

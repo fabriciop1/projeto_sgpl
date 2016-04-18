@@ -131,7 +131,6 @@ public class Perfil extends DatabaseObject implements Serializable {
     @Override
     public void setObjectData(Map<String, Object> data) {
         
-        try {
             nome = Cast.toString(data.get("nome"));
             cidade = Cast.toString(data.get("cidade"));
             tamPropriedade = Cast.toDouble(data.get("tamPropriedade"));
@@ -140,10 +139,6 @@ public class Perfil extends DatabaseObject implements Serializable {
             empPermanentes = Cast.toInt(data.get("empPermanentes"));
             numFamiliares = Cast.toInt(data.get("numFamiliares"));
             rota = new GenericDAO<>(Rota.class).retrieve( Cast.toInt(data.get("idRotaFK")) );
-            
-        } catch (InstantiationException | IllegalAccessException | SQLException ex) {
-            Logger.getLogger(Perfil.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
     
     

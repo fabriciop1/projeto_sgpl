@@ -107,17 +107,12 @@ public class InventarioMaquinas extends DatabaseObject {
 
     @Override
     public void setObjectData(Map<String, Object> data) {
-        try {
             especificacao = Cast.toString(data.get("especificacao"));
             unidade = Cast.toString(data.get("unidade"));
             quantidade = Cast.toDouble(data.get("quantidade"));
             valorUnitario = Cast.toDouble(data.get("valorUnitario"));
             vidaUtil = Cast.toInt(data.get("vidaUtil"));
             perfil = new GenericDAO<>(Perfil.class).retrieve( Cast.toInt(data.get("idPerfilFK")) );
-            
-        } catch (InstantiationException | IllegalAccessException | SQLException ex) {
-            Logger.getLogger(InventarioMaquinas.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
 }

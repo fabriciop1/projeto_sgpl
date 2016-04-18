@@ -19,7 +19,7 @@ import util.Pair;
  *
  * @author Jefferson Sales
  */
-public abstract class GenericTableModifier extends javax.swing.JDialog{
+public abstract class GenericTableModifier extends JDialog{
 
     /**
      * Creates new form GenericTableModifier
@@ -133,10 +133,10 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
         this.setSize(minDialogSize, this.getHeight());
     }
     
-    protected void notifyListeners(int modifType, Object data){
+    protected void notifyListeners(TableModifiedEvent event){
         
         for(TableModifyListener listener : tableModifylisteners){
-            listener.tableModified(modifType, this, data);
+            listener.tableModified(event);
         }
     }
     
@@ -149,11 +149,13 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
     
     
     public void addSourceTableRow(Object[] dataArray, Object customRowData){
+        
         getSourceTableModel().addRow(dataArray);
         getSourceTableModel().fireTableRowsInserted(sourceTable.getRowCount()-1, sourceTable.getRowCount()-1);
         customRowDataList.add(customRowData);
         
-        notifyListeners(TableModifyListener.ROW_INSERTED, (Object)Pair.create(dataArray, customRowData));
+        notifyListeners(new TableModifiedEvent(this, sourceTable, sourceTable.getRowCount()-1, dataArray, 
+                            customRowData, TableModifyListener.ROW_INSERTED));
     }
     
     public Object[] getSourceTableRowData(int row){
@@ -176,7 +178,7 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
         getSourceTableModel().fireTableRowsDeleted(row, row);
         removeCustomRowData(row);
         
-        notifyListeners( TableModifyListener.ROW_DELETED, (Object)Pair.create(rowData,customRowData) );
+        notifyListeners(new TableModifiedEvent(this, sourceTable, row, rowData, customRowData, TableModifyListener.ROW_DELETED));
     }
     
     public void updateSourceTableRow(int row, Object[] dataArray){
@@ -190,7 +192,8 @@ public abstract class GenericTableModifier extends javax.swing.JDialog{
         Object[] rowData = getSourceTableRowData(row);
         Object customRowData = getCustomRowData(row);
         
-        notifyListeners( TableModifyListener.ROW_UPDATED, (Object)Pair.create(rowData, customRowData) );
+        notifyListeners(new TableModifiedEvent(this, sourceTable, row, rowData, 
+                            customRowData, TableModifyListener.ROW_UPDATED));
     }
     
     public JTable getSourceTable() {

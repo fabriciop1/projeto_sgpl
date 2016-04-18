@@ -15,9 +15,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import modelo.negocio.InventarioMaquinas;
-
-import modelo.negocio.Perfil;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import util.Cast;
 
 /**
@@ -31,16 +30,21 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
     private Class<T> objectClass;
     
     
-    public GenericDAO(Class<T> objectClass, Connection connection) throws SQLException{
+    public GenericDAO(Class<T> objectClass, Connection connection){
         super(connection);
         
-        this.objectClass = objectClass;
-        
-        if(connection != null && connection.isClosed())
-            throw new IllegalArgumentException("GenericDAO(Connection): A conexao passada esta fechada.");
+        try {
+            this.objectClass = objectClass;
+            
+            if(connection != null && connection.isClosed())
+                throw new IllegalArgumentException("GenericDAO(Connection): A conexao passada esta fechada.");
+            
+        } catch (SQLException | IllegalArgumentException ex) {
+            Logger.getLogger(GenericDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
-    public GenericDAO(Class<T> objectClass) throws SQLException{
+    public GenericDAO(Class<T> objectClass){
         this(objectClass, null);
     }
     
@@ -86,6 +90,24 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
         return sql;
     }
     
+    private String createSQLUpdateObjectColumns(T object, String[] tableColumns){
+        
+        Map<String,Object> dataMap = object.getObjectTableData();
+        
+        String sql = "UPDATE " + object.getTableName() + " SET ";
+        
+        for(String column : tableColumns){
+            
+            sql += column + "=" + Cast.toSQLValue(dataMap.get(column)) + ",";
+        }
+        sql = sql.substring(0, sql.length()-1);
+        
+        sql += " WHERE " + object.getIdTableColumn() + "=" + object.getId();
+        
+        System.out.println(sql);
+        return sql;
+    }
+    
     private String createSQLDeleteObject(T object){
         
         String sql = "DELETE FROM " + object.getTableName() + " WHERE ";
@@ -104,6 +126,7 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
         
         return sql;
     }
+    
     
     private static String createSQLSelect(String tableName, String[] tableColumns, Object[] columnsValues, String groupBy, String orderBy){
         
@@ -130,162 +153,230 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
         return sql;
     }
 
+    private static String createSQLUpdate(String tableName, String[] tableColumns, Object[] columnsValues, String idColumn, Object idValue){
+        
+        String sql = "UPDATE " + tableName + " SET ";
+        
+        for(int i=0; i<tableColumns.length && i<columnsValues.length; i++){
+            
+            sql += tableColumns[i] + "=" + Cast.toSQLValue(columnsValues[i]) + ",";
+        }
+        sql = sql.substring(0, sql.length()-1);
+        
+        sql += " WHERE " + idColumn + "=" + Cast.toSQLValue(idValue);
+        
+        System.out.println(sql);
+        return sql;
+    }
     
-    private List<T> retrieveBySQL(String sql) throws InstantiationException, IllegalAccessException, SQLException{
+    
+    
+    private List<T> executeSQL(String sql){
         
-        Connection connection = openConnection();
-        
-        List<T> objects = new ArrayList<>();
-        
-        PreparedStatement st = connection.prepareStatement(sql);
-        
-        ResultSet rset = st.executeQuery();
-        ResultSetMetaData rsetMeta = rset.getMetaData();
-        
-        if(!rset.first()){
+        try {
+            
+            Connection connection = openConnection();
+            
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.execute();
+            
+            ResultSet rset = st.getResultSet();
+            
+            if(rset == null || !rset.first()){
+                
+                st.close();
+                closeConnection(connection);
+                
+                return null;
+            }
+            
+            List<T> objects = new ArrayList<>();
+            
+            ResultSetMetaData rsetMeta = rset.getMetaData();
+            
+            final int columnCount = rsetMeta.getColumnCount();
+            
+            do{
+                Map<String,Object> dataMap = new HashMap<>();
+                
+                for(int i=1; i<=columnCount; i++){
+                    dataMap.put(rsetMeta.getColumnName(i), rset.getObject(i));
+                }
+                
+                T object = objectClass.newInstance();
+                
+                object.setId(rset.getInt(1));
+                object.setObjectData(dataMap);
+                
+                objects.add(object);
+                
+            }while(rset.next());
             
             rset.close();
             st.close();
+            
+            closeConnection(connection);
+            
+            return objects;
+            
+        } catch (SQLException | InstantiationException | IllegalAccessException ex) {
+            Logger.getLogger(GenericDAO.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
-        
-        final int columnCount = rsetMeta.getColumnCount();
-        
-        do{
-            Map<String,Object> dataMap = new HashMap<>();
-            
-            for(int i=1; i<=columnCount; i++){
-                dataMap.put(rsetMeta.getColumnName(i), rset.getObject(i));
-            }
-            
-            T object = objectClass.newInstance();
-            
-            object.setId(rset.getInt(1));
-            object.setObjectData(dataMap);
-            
-            objects.add(object);
-            
-        }while(rset.next());
-        
-        rset.close();
-        st.close();
-        
-        closeConnection(connection);
-        
-        return objects;
     }    
     
     
-    public int insert(T object) throws SQLException{
+    
+    public int insert(T object){
         
-        Connection connection = openConnection();
-        String sql = createSQLInsertObject(object);
-
-        PreparedStatement st = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        st.executeUpdate();
-
-        ResultSet keys = st.getGeneratedKeys();
-
-        if (keys.next()) {
-            object.setId(keys.getInt(1));
+        try {
+            Connection connection = openConnection();
+            String sql = createSQLInsertObject(object);
+            
+            PreparedStatement st = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            st.executeUpdate();
+            
+            ResultSet keys = st.getGeneratedKeys();
+            
+            if (keys.next()) {
+                object.setId(keys.getInt(1));
+            }
+            
+            keys.close();
+            st.close();
+            
+            closeConnection(connection);
+            
+            return object.getId();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(GenericDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return -1;
         }
-
-        keys.close();
-        st.close();
-        
-        closeConnection(connection);
-        
-        return object.getId();
     }
      
-    public void update(T object) throws SQLException{
+    public void remove(int id){
         
-        Connection connection = openConnection();
-        String sql = createSQLUpdateObject(object);
-
-        PreparedStatement st = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        st.executeUpdate();
-        st.close();
-        closeConnection(connection);
+        try {
+            T object = objectClass.newInstance();
+            object.setId(id);
+            
+            executeSQL( createSQLDeleteObject(object) );
+            
+        } catch (InstantiationException | IllegalAccessException ex) {
+            Logger.getLogger(GenericDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
-    public void remove(T object) throws SQLException{
+    
+    public void update(T object){
         
-        Connection connection = openConnection();
-        String sql = createSQLDeleteObject(object);
-
-        PreparedStatement st = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        st.executeUpdate();
-        st.close();
-        closeConnection(connection);
+        executeSQL( createSQLUpdateObject(object) );
     }
     
-    public T retrieve(int id) throws InstantiationException, IllegalAccessException, SQLException{
+    public void updateByColumns(T object, String[] tableColumns){
         
-        T object = objectClass.newInstance();
-        object.setId(id);
+        executeSQL( createSQLUpdateObjectColumns(object, tableColumns) );
+    }
+    
+    public void updateByColumns(int id, String[] tableColumns, Object[] columnsValues){
+        throw new UnsupportedOperationException("Essa porcaria ta dando erro ainda. Use outro método.");
         
-        List<T> objects = retrieveBySQL( createSQLSelectObject(object) );
+//        try {
+//            T object = objectClass.newInstance();
+//            object.setId(id);
+//            
+//            executeSQL( createSQLUpdate(object.getTableName(), tableColumns, columnsValues, object.getIdTableColumn(), id) );
+//            
+//        } catch (InstantiationException | IllegalAccessException ex) {
+//            Logger.getLogger(GenericDAO.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+    }
+    
+    
+    public T retrieve(int id){
         
-        if(objects.size() > 0){
-            return objects.get(0);
-        } else {
+        try {
+            T object = objectClass.newInstance();
+            object.setId(id);
+            
+            List<T> objects = executeSQL( createSQLSelectObject(object) );
+            
+            if(objects.size() > 0){
+                return objects.get(0);
+            } else {
+                return null;
+            }
+            
+        } catch (InstantiationException | IllegalAccessException ex) {
+            Logger.getLogger(GenericDAO.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
     }
     
     
-    public List<T> retrieveByColumn(String tableColumn, Object columnValue) throws InstantiationException,IllegalAccessException,SQLException{
+    public List<T> retrieveByColumn(String tableColumn, Object columnValue){
        
         return retrieveByColumns(new String[]{tableColumn}, new Object[]{columnValue}, null, null);        
     }
     
-    public List<T> retrieveByColumn(String tableColumn, Object columnValue, String groupBy, String orderBy) throws InstantiationException, IllegalAccessException, SQLException{
+    public List<T> retrieveByColumn(String tableColumn, Object columnValue, String groupBy, String orderBy){
         
         return retrieveByColumns(new String[]{tableColumn}, new Object[]{columnValue}, groupBy, orderBy);
     }
     
-    public List<T> retrieveByColumns(String[] tableColumns, Object[] columnsValues, String groupBy, String orderBy) throws InstantiationException,IllegalAccessException,SQLException{
+    public List<T> retrieveByColumns(String[] tableColumns, Object[] columnsValues){
+        
+        return retrieveByColumns(tableColumns, columnsValues, null, null);
+    }
+    
+    public List<T> retrieveByColumns(String[] tableColumns, Object[] columnsValues, String groupBy, String orderBy){
        
-        if(tableColumns == null || tableColumns.length == 0){
-            throw new IllegalArgumentException("GenericDAO.retrieveByColumns(String[],Object[]): O array de nomes das colunas da tabela passado é invalido.");
+        try {
+            if(tableColumns == null || tableColumns.length == 0){
+                throw new IllegalArgumentException("GenericDAO.retrieveByColumns(String[],Object[]): O array de nomes das colunas da tabela passado é invalido.");
+            }
+            else if(columnsValues == null || columnsValues.length == 0){
+                throw new IllegalArgumentException("GenericDAO.retrieveByColumns(String[],Object[]): O array de valores das colunas da tabela passado é inválido.");
+            }
+            else if(columnsValues.length != tableColumns.length){
+                throw new IllegalArgumentException("GenericDAO.retrieveByColumns(String[],Object[]): Os arrays de colunas e de valores das colunas tem tamanhos diferentes.");
+            }
+            
+            T object = objectClass.newInstance();
+            
+            return executeSQL(createSQLSelect(object.getTableName(),tableColumns,columnsValues,null,null));
+            
+        } catch (InstantiationException | IllegalAccessException ex) {
+            Logger.getLogger(GenericDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
-        else if(columnsValues == null || columnsValues.length == 0){
-            throw new IllegalArgumentException("GenericDAO.retrieveByColumns(String[],Object[]): O array de valores das colunas da tabela passado é inválido.");
-        }
-        else if(columnsValues.length != tableColumns.length){
-            throw new IllegalArgumentException("GenericDAO.retrieveByColumns(String[],Object[]): Os arrays de colunas e de valores das colunas tem tamanhos diferentes.");
-        }
-        
-        T object = objectClass.newInstance();
-        
-        return retrieveBySQL(createSQLSelect(object.getTableName(),tableColumns,columnsValues,null,null));        
-    }
-    
-    public List<T> retrieveAll() throws InstantiationException, IllegalAccessException, SQLException{
-        
-        T object = objectClass.newInstance();
-        
-        return retrieveBySQL( "SELECT * FROM " + object.getTableName() );
-    }
-    
-    public List<T> retrieveAll(String groupBy, String orderBy) throws InstantiationException, IllegalAccessException, SQLException{
-        
-        T object = objectClass.newInstance();
-        
-        return retrieveBySQL(createSQLSelect(object.getTableName(), null, null, groupBy, orderBy));
     }
     
     
-    public static void main(String[] args) throws SQLException, InstantiationException, IllegalAccessException {
+    public List<T> retrieveAll(){
         
-        GenericDAO<InventarioMaquinas> dao = new GenericDAO<>(InventarioMaquinas.class);
+        try {
+            T object = objectClass.newInstance();
+            
+            return executeSQL( "SELECT * FROM " + object.getTableName() );
+            
+        } catch (InstantiationException | IllegalAccessException ex) {
+            Logger.getLogger(GenericDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+    
+    public List<T> retrieveAll(String groupBy, String orderBy){
         
-        List<InventarioMaquinas> inventarios1 = dao.retrieveAll(null, "especificacao"),
-                                 inventarios2 = dao.retrieveAll("unidade", "quantidade");
-        
-        for(InventarioMaquinas i : inventarios2){
-            System.out.println(i.getEspecificacao() + " | " + i.getUnidade() + " | " + i.getQuantidade() + " | " + i.getVidaUtil());
+        try {
+            T object = objectClass.newInstance();
+            
+            return executeSQL(createSQLSelect(object.getTableName(), null, null, groupBy, orderBy));
+            
+        } catch (InstantiationException | IllegalAccessException ex) {
+            Logger.getLogger(GenericDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
     }
 }
