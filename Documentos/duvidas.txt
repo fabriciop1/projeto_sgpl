@@ -23,7 +23,6 @@ NOME DO SISTEMA - ?
 Até dados tecnicos mensais - telas
 Até indicadores tecnicos anuais - relatórios por periodo e por indicador
 
-
 ROTAS - 1 - SAO BENTO ROTA CURTA
 	2   sao bento ROTA longa
 	3   Lajedo
@@ -33,14 +32,14 @@ ROTAS - 1 - SAO BENTO ROTA CURTA
 1 usuario tem 1 rota
 1 perfil tem 1 rota
 
-1 rota estara em varios perfis
+1 rota estará em varios perfis
 1 rota tem n usuarios
 
-----------------------------------------------------------------[ 15/04 ]-----------------
+----------------------------------------------------------------[ 15/04 ]-----------------------
 
 #PLANILHA
 Célula J27 multiplica pela J14 ao invés da J26
 
 #TELAS
-Tabela forrageiras e Tabela terras serão executadas ao mesmo tempo? (Excluir/ADD em 1 == excluir/ADD nas duas) 
+Tabela forrageiras e Tabela terras serão executadas ao mesmo tempo? (Excluir/ADD em 1 == excluir/ADD nas duas ou edição/adição) 
 

@@ -12,12 +12,9 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
-import javax.swing.WindowConstants;
 import util.Pair;
-import util.TrashGen;
 
 /**
  *
@@ -27,7 +24,8 @@ public class ItemSelector< T > extends JDialog {
 
     private List<Pair<String, T>> optionList;
     private List<JRadioButton> radioList;
-   
+    private T selectedOption;
+    
     public ItemSelector(Frame parent, List<Pair<String, T>> optionList) {
         super(parent, true);
         
@@ -42,27 +40,31 @@ public class ItemSelector< T > extends JDialog {
         
         insertOptions();
     }
-
+    
     private void insertOptions(){
-        
+     
         for (int i = 0; i < optionList.size(); i++) {
-            
+
             JRadioButton radio = new JRadioButton(optionList.get(i).first);
+
             radio.setHorizontalAlignment(SwingConstants.CENTER);
+
             radio.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    ItemSelector.this.setVisible(false);
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    
+                    if (e.getClickCount() == 2) {
+                        selectedOption = getSelectedOptionData();
+                        ItemSelector.this.setVisible(false);
+                    }
                 }
-            }
-        });
-            
+            });
+
             radioGroup.add(radio);
             panel.add(radio);
             radioList.add(radio);
         }
-        
+
     }
     
     private T getSelectedOptionData(){
@@ -80,7 +82,7 @@ public class ItemSelector< T > extends JDialog {
     public T showSelector(){
         
         this.setVisible(true);
-        return getSelectedOptionData();
+        return selectedOption;
     }
     
     /**
@@ -98,6 +100,11 @@ public class ItemSelector< T > extends JDialog {
         okayBT = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         label.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -155,8 +162,13 @@ public class ItemSelector< T > extends JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void okayBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okayBTActionPerformed
+        selectedOption = getSelectedOptionData();
         this.setVisible(false);
     }//GEN-LAST:event_okayBTActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        selectedOption = null;
+    }//GEN-LAST:event_formWindowClosed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel label;
@@ -172,7 +184,8 @@ public class ItemSelector< T > extends JDialog {
     public void setLabel(String label) {
         this.label.setText(label);
     }
-    /*
+    
+/*
     public static void main(String[] args) {
         
         List<Pair<String,String>> options = new ArrayList<>();
@@ -184,6 +197,8 @@ public class ItemSelector< T > extends JDialog {
         ItemSelector<String> selector = new ItemSelector<>(null,options);
         selector.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         System.out.println(selector.showSelector());
+        System.exit(0);
     }
-    */
+*/
+    
 }

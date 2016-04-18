@@ -1,11 +1,8 @@
-conexão telas - BD para edição, remoção e adição 
-(animais e terras) - Jefferson
 atualizar tela após alterações
  ------
-Inserir codigos sql -- COMECAR DO 1
-Ajeitar Inserção, remoção e edição em inventário terras - Jefferson
+Confirm Dialog ao Remover linha
 
-modificar sql rota - adm
+
 fora o adm, exibir perfis por rota de usuário
 inserir perfil (adm)
 editar perfil  (adm, usuario do perfil)
@@ -15,6 +12,5 @@ Permitir o usuario adicionar novo periodo e editar os campos (fora a especificac
 
 inserção, edição e remoção de campos em Dados Econômicos
 selecionar linha de especificação
-
 
 COR DAS LINHAS DE DEM: TOTAIS E VAZIOS

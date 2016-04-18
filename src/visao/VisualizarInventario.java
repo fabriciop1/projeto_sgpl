@@ -263,8 +263,10 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 }
 
             }
-            verificaTabelaVazia(tabelaAnimaisProdGTRE.getSourceTableModel(), editarInvAnimaisBT, removerInvAnimaisBT);
-            verificaTabelaVazia(tabelaAnimaisServGTRE.getSourceTableModel(), editarInvAnimaisBT, removerInvAnimaisBT);
+            if (tabelaInveAnimaisProd.getRowCount() == 0 && tabelaInveAnimaisServ.getRowCount() == 0) {
+                editarInvAnimaisBT.setEnabled(false);
+                removerInvAnimaisBT.setEnabled(false);
+            }
 
             total13.setText("" + (totalValInicProd));
             total14.setText("" + (totalNascProd));
@@ -1184,7 +1186,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 225, Short.MAX_VALUE)
+                                    .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
                                     .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jPanel2Layout.createSequentialGroup()
@@ -1665,65 +1667,58 @@ public class VisualizarInventario extends javax.swing.JFrame {
         jLabel26.setFont(new java.awt.Font("Tahoma", 3, 11)); // NOI18N
         jLabel26.setText("RESUMO DA DEPRECIAÇÃO (em reais)");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 110;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(25, 5, 0, 0);
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.insets = new java.awt.Insets(20, 1, 1, 1);
         jPanel5.add(jLabel26, gridBagConstraints);
 
         jLabel27.setText("Forrageiras não anuais");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 9;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 335, 0, 0);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(jLabel27, gridBagConstraints);
 
         jLabel28.setText("Animais de trabalho");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 335, 0, 0);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(jLabel28, gridBagConstraints);
 
         jLabel29.setText("Reprodutores");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 335, 0, 0);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(jLabel29, gridBagConstraints);
 
         jLabel30.setText("Benfeitorias utilizadas para pecuária de leite");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 54;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 335, 0, 0);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(jLabel30, gridBagConstraints);
 
         jLabel31.setText("Máquinas utilizadas na pecuária de leite");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 15;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 335, 0, 0);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(jLabel31, gridBagConstraints);
 
         jLabel32.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel32.setText("Total");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 14;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 40;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(2, 20, 0, 0);
         jPanel5.add(jLabel32, gridBagConstraints);
 
@@ -1731,93 +1726,82 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
-        gridBagConstraints.gridwidth = 10;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(8, 335, 0, 0);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(jLabel33, gridBagConstraints);
 
         jLabel34.setText("Depreciação do leite");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.gridwidth = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(1, 335, 0, 0);
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(jLabel34, gridBagConstraints);
 
         jLabel35.setFont(new java.awt.Font("Tahoma", 3, 11)); // NOI18N
         jLabel35.setText("RESUMO DO INVENTÁRIO (em reais)");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 12;
-        gridBagConstraints.gridwidth = 55;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(15, 4, 0, 0);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.insets = new java.awt.Insets(20, 1, 1, 1);
         jPanel5.add(jLabel35, gridBagConstraints);
 
         jLabel36.setText("Terras");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 13;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 335, 0, 0);
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(jLabel36, gridBagConstraints);
 
         jLabel37.setText("Forrageiras não anuais");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 14;
-        gridBagConstraints.gridwidth = 9;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 335, 0, 0);
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(jLabel37, gridBagConstraints);
 
         jLabel38.setText("Animais");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 15;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 335, 0, 0);
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(jLabel38, gridBagConstraints);
 
         jLabel39.setText("Benfeitorias utilizadas na pecuária de leite");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 16;
-        gridBagConstraints.gridwidth = 28;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 335, 0, 0);
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(jLabel39, gridBagConstraints);
 
         jLabel40.setText("Máquinas utilizadas na pecuária de leite");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 17;
-        gridBagConstraints.gridwidth = 15;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 335, 0, 0);
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(jLabel40, gridBagConstraints);
 
         jLabel41.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel41.setText("Total");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 14;
-        gridBagConstraints.gridy = 18;
-        gridBagConstraints.gridwidth = 40;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(2, 20, 0, 0);
         jPanel5.add(jLabel41, gridBagConstraints);
 
         jLabel42.setText("Salário mínimo (R$)");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 25;
-        gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(12, 335, 0, 0);
+        gridBagConstraints.gridy = 19;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(jLabel42, gridBagConstraints);
 
         jLabel43.setText("   ");
@@ -1832,234 +1816,212 @@ public class VisualizarInventario extends javax.swing.JFrame {
         jLabel44.setText("Capital empatado leite");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 22;
-        gridBagConstraints.gridwidth = 11;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(1, 335, 0, 0);
+        gridBagConstraints.gridy = 17;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(jLabel44, gridBagConstraints);
 
         jLabel45.setText("Custo de oportunidade (%)");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 19;
-        gridBagConstraints.gridwidth = 12;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(8, 335, 0, 0);
+        gridBagConstraints.gridy = 16;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(jLabel45, gridBagConstraints);
 
         jLabel46.setFont(new java.awt.Font("Tahoma", 3, 11)); // NOI18N
         jLabel46.setText("MÃO DE OBRA FAMILIAR");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 24;
-        gridBagConstraints.gridwidth = 39;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(15, 7, 0, 0);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 18;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.insets = new java.awt.Insets(20, 1, 1, 1);
         jPanel5.add(jLabel46, gridBagConstraints);
 
         jLabel47.setText("Décimo terceiro (R$) ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 28;
-        gridBagConstraints.gridwidth = 7;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(1, 335, 0, 0);
+        gridBagConstraints.gridy = 20;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(jLabel47, gridBagConstraints);
 
         jLabel48.setText("Terço de férias (R$)");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 29;
-        gridBagConstraints.gridwidth = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 335, 0, 0);
+        gridBagConstraints.gridy = 21;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(jLabel48, gridBagConstraints);
 
         total44.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total44.setText("<total44>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 56;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 114;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 15;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 22, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(total44, gridBagConstraints);
 
         total45.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total45.setText("<total45>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 56;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 114;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 15;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 22, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(total45, gridBagConstraints);
 
         total46.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total46.setText("<total46>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 56;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 114;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 15;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 22, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(total46, gridBagConstraints);
 
         total47.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total47.setText("<total47>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 56;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 114;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 15;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 22, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(total47, gridBagConstraints);
 
         total48.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total48.setText("<total48>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 56;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 114;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 15;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 22, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(total48, gridBagConstraints);
 
         total49.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         total49.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total49.setText("<total49>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 56;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 114;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 22, 0, 0);
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(total49, gridBagConstraints);
 
         total50.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total50.setText("<total50>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 56;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.gridwidth = 113;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(1, 22, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(total50, gridBagConstraints);
 
         total51.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total51.setText("<total51>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 56;
-        gridBagConstraints.gridy = 13;
-        gridBagConstraints.gridwidth = 113;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 18, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(total51, gridBagConstraints);
 
         total52.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total52.setText("<total52>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 56;
-        gridBagConstraints.gridy = 14;
-        gridBagConstraints.gridwidth = 113;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 18, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(total52, gridBagConstraints);
 
         total53.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total53.setText("<total53>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 56;
-        gridBagConstraints.gridy = 15;
-        gridBagConstraints.gridwidth = 113;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 18, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(total53, gridBagConstraints);
 
         total54.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total54.setText("<total54>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 56;
-        gridBagConstraints.gridy = 16;
-        gridBagConstraints.gridwidth = 113;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 18, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(total54, gridBagConstraints);
 
         total55.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total55.setText("<total55>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 56;
-        gridBagConstraints.gridy = 17;
-        gridBagConstraints.gridwidth = 113;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 18, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(total55, gridBagConstraints);
 
         total56.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         total56.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total56.setText("<total56>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 56;
-        gridBagConstraints.gridy = 18;
-        gridBagConstraints.gridwidth = 113;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 11, 0, 0);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(total56, gridBagConstraints);
 
         total57.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         total57.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total57.setText("<total57>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 56;
-        gridBagConstraints.gridy = 22;
-        gridBagConstraints.gridwidth = 113;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(1, 11, 0, 0);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 17;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(total57, gridBagConstraints);
 
         total58.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total58.setText("<total58>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 56;
-        gridBagConstraints.gridy = 28;
-        gridBagConstraints.gridwidth = 113;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 20;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 14;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(1, 12, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(total58, gridBagConstraints);
 
         total59.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total59.setText("<total59>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 56;
-        gridBagConstraints.gridy = 29;
-        gridBagConstraints.gridwidth = 113;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 21;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 14;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 12, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(total59, gridBagConstraints);
 
         total60.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         total60.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total60.setText("<total60>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 56;
-        gridBagConstraints.gridy = 30;
-        gridBagConstraints.gridwidth = 113;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 11, 22, 0);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 22;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(total60, gridBagConstraints);
 
         jLabel49.setText("   ");
@@ -2074,10 +2036,9 @@ public class VisualizarInventario extends javax.swing.JFrame {
         jLabel50.setText("Custo total do salário mensal");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 30;
-        gridBagConstraints.gridwidth = 13;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 335, 22, 0);
+        gridBagConstraints.gridy = 22;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(jLabel50, gridBagConstraints);
 
         atividadeLeiteBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit_values.png"))); // NOI18N
@@ -2088,12 +2049,9 @@ public class VisualizarInventario extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 169;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 7;
-        gridBagConstraints.gridwidth = 115;
-        gridBagConstraints.gridheight = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(1, 1, 0, 335);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         jPanel5.add(atividadeLeiteBT, gridBagConstraints);
 
         custoOportBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit_values.png"))); // NOI18N
@@ -2104,12 +2062,9 @@ public class VisualizarInventario extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 169;
-        gridBagConstraints.gridy = 19;
-        gridBagConstraints.gridwidth = 115;
-        gridBagConstraints.gridheight = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(1, 1, 0, 335);
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 16;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         jPanel5.add(custoOportBT, gridBagConstraints);
 
         salarioMinimoBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit_values.png"))); // NOI18N
@@ -2120,43 +2075,36 @@ public class VisualizarInventario extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 169;
-        gridBagConstraints.gridy = 25;
-        gridBagConstraints.gridwidth = 115;
-        gridBagConstraints.gridheight = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 1, 0, 335);
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 19;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         jPanel5.add(salarioMinimoBT, gridBagConstraints);
 
         atividadeLeite.setText("     0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 56;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 7;
-        gridBagConstraints.gridwidth = 112;
-        gridBagConstraints.ipadx = 10;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 22, 0, 0);
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.ipadx = 8;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(atividadeLeite, gridBagConstraints);
 
         custoOportunidade.setText(" 0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 56;
-        gridBagConstraints.gridy = 19;
-        gridBagConstraints.gridwidth = 111;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.ipadx = 24;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 11, 0, 0);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 16;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.ipadx = 8;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(custoOportunidade, gridBagConstraints);
 
         salarioMinimo.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 56;
-        gridBagConstraints.gridy = 25;
-        gridBagConstraints.gridwidth = 111;
-        gridBagConstraints.ipadx = 26;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 12, 0, 0);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 19;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.ipadx = 8;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(salarioMinimo, gridBagConstraints);
 
         jTabbedPane1.addTab("Resumo", jPanel5);

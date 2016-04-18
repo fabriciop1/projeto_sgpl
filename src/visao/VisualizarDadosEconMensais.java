@@ -330,14 +330,24 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         tabelaEspecificacao.setPreferredSize(new java.awt.Dimension(270, 1448));
         tabelaEspecificacao.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tabelaEspecificacao.getTableHeader().setReorderingAllowed(false);
-        tabelaEspecificacao.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                tabelaEspecificacaoFocusGained(evt);
+        tabelaEspecificacao.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                tabelaEspecificacaoMouseDragged(evt);
             }
         });
         tabelaEspecificacao.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
             public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
                 tabelaEspecificacaoMouseWheelMoved(evt);
+            }
+        });
+        tabelaEspecificacao.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tabelaEspecificacaoMousePressed(evt);
+            }
+        });
+        tabelaEspecificacao.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tabelaEspecificacaoKeyPressed(evt);
             }
         });
         jScrollPane2.setViewportView(tabelaEspecificacao);
@@ -457,14 +467,24 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         tabelaDadosEconomicos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tabelaDadosEconomicos.getTableHeader().setResizingAllowed(false);
         tabelaDadosEconomicos.getTableHeader().setReorderingAllowed(false);
-        tabelaDadosEconomicos.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                tabelaDadosEconomicosFocusGained(evt);
+        tabelaDadosEconomicos.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                tabelaDadosEconomicosMouseDragged(evt);
             }
         });
         tabelaDadosEconomicos.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
             public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
                 tabelaDadosEconomicosMouseWheelMoved(evt);
+            }
+        });
+        tabelaDadosEconomicos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tabelaDadosEconomicosMousePressed(evt);
+            }
+        });
+        tabelaDadosEconomicos.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tabelaDadosEconomicosKeyPressed(evt);
             }
         });
         jScrollPane3.setViewportView(tabelaDadosEconomicos);
@@ -611,15 +631,43 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         moveScrollBar(evt);
     }//GEN-LAST:event_tabelaEspecificacaoMouseWheelMoved
 
-    private void tabelaEspecificacaoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tabelaEspecificacaoFocusGained
-        tabelaDadosEconomicos.getSelectionModel().setSelectionInterval(tabelaEspecificacao.getSelectedRow(), tabelaEspecificacao.getSelectedRow());
-  
-    }//GEN-LAST:event_tabelaEspecificacaoFocusGained
+    private void tabelaEspecificacaoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaEspecificacaoMousePressed
+       tabelaDadosEconomicos.setRowSelectionInterval(tabelaEspecificacao.getSelectedRow(), tabelaEspecificacao.getSelectedRow());
+    }//GEN-LAST:event_tabelaEspecificacaoMousePressed
 
-    private void tabelaDadosEconomicosFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tabelaDadosEconomicosFocusGained
-       tabelaEspecificacao.getSelectionModel().setSelectionInterval(tabelaDadosEconomicos.getSelectedRow(), tabelaDadosEconomicos.getSelectedRow());
-       
-    }//GEN-LAST:event_tabelaDadosEconomicosFocusGained
+    private void tabelaDadosEconomicosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaDadosEconomicosMousePressed
+        tabelaEspecificacao.setRowSelectionInterval(tabelaDadosEconomicos.getSelectedRow(), tabelaDadosEconomicos.getSelectedRow());
+    }//GEN-LAST:event_tabelaDadosEconomicosMousePressed
+
+    private void tabelaDadosEconomicosMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaDadosEconomicosMouseDragged
+        tabelaDadosEconomicosMousePressed(evt);
+    }//GEN-LAST:event_tabelaDadosEconomicosMouseDragged
+
+    private void tabelaEspecificacaoMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaEspecificacaoMouseDragged
+       tabelaEspecificacaoMousePressed(evt);
+    }//GEN-LAST:event_tabelaEspecificacaoMouseDragged
+
+    private void tabelaEspecificacaoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabelaEspecificacaoKeyPressed
+        int temp = 0;
+        if(evt.getKeyCode() == 40 && tabelaEspecificacao.getSelectedRow() != (tabelaEspecificacao.getRowCount() - 1)) {
+            temp = tabelaEspecificacao.getSelectedRow() + 1;
+            tabelaDadosEconomicos.setRowSelectionInterval(temp, temp);
+        } else if (evt.getKeyCode() == 38 && tabelaEspecificacao.getSelectedRow() != 0){
+            temp = tabelaEspecificacao.getSelectedRow() - 1;
+            tabelaDadosEconomicos.setRowSelectionInterval(temp, temp);
+        }
+    }//GEN-LAST:event_tabelaEspecificacaoKeyPressed
+
+    private void tabelaDadosEconomicosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabelaDadosEconomicosKeyPressed
+        int temp = 0;
+        if(evt.getKeyCode() == 40 && tabelaDadosEconomicos.getSelectedRow() != (tabelaDadosEconomicos.getRowCount() - 1)) {
+            temp =  tabelaDadosEconomicos.getSelectedRow() + 1;
+            tabelaEspecificacao.setRowSelectionInterval(temp, temp);
+        } else if (evt.getKeyCode() == 38 &&  tabelaDadosEconomicos.getSelectedRow() != 0){
+            temp =  tabelaDadosEconomicos.getSelectedRow() - 1;
+            tabelaEspecificacao.setRowSelectionInterval(temp, temp);
+        }
+    }//GEN-LAST:event_tabelaDadosEconomicosKeyPressed
 
     
     private void moveScrollBar(java.awt.event.MouseWheelEvent evt) {

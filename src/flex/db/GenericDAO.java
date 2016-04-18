@@ -68,7 +68,6 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
         sql = sql.substring(0, sql.length()-1);
         sql += ")";
         
-        System.out.println(sql);
         return sql;
     }
     
@@ -86,7 +85,6 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
         
         sql += " WHERE " + object.getIdTableColumn() + "=" + object.getId();
         
-        System.out.println(sql);
         return sql;
     }
     
@@ -104,7 +102,6 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
         
         sql += " WHERE " + object.getIdTableColumn() + "=" + object.getId();
         
-        System.out.println(sql);
         return sql;
     }
     
@@ -114,7 +111,6 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
         
         sql += object.getIdTableColumn() + "=" + object.getId();
         
-        System.out.println(sql);
         return sql;
     }
     
@@ -149,7 +145,6 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
             sql += " ORDER BY " + orderBy;
         }
         
-        System.out.println(sql);
         return sql;
     }
 
@@ -165,7 +160,6 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
         
         sql += " WHERE " + idColumn + "=" + Cast.toSQLValue(idValue);
         
-        System.out.println(sql);
         return sql;
     }
     

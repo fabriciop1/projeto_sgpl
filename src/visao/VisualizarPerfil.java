@@ -9,15 +9,12 @@ import controle.ControleLogin;
 import controle.ControlePerfil;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.dao.PerfilDAO;
 import modelo.dao.RotaDAO;
 import modelo.dao.UsuarioPerfilDAO;
 import modelo.negocio.Perfil;
-import modelo.negocio.Rota;
 import modelo.negocio.Usuario;
 
 /**
