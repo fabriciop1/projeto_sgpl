@@ -7,14 +7,10 @@ package visao;
 
 import controle.ControlePerfil;
 import java.awt.Color;
-import java.awt.Component;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
-import javax.swing.JSlider;
-import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import modelo.dao.DEMEspecificacaoDAO;
 import modelo.dao.DadosEconMensaisDAO;
@@ -45,11 +41,15 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         
         Calendar cal = GregorianCalendar.getInstance();
 	int anoAtual = cal.get(Calendar.YEAR);
+        int mesAtual = cal.get(Calendar.MONTH);
         
         tabelaEspecificacao.setShowHorizontalLines(true);
         
-        tabelaDadosEconomicos.setShowGrid(true);
+       // tabelaEspecificacao.getSelectionModel().setSelectionInterval(tabelaDadosEconomicos.getSelectedRow(), tabelaDadosEconomicos.getSelectedRow());
+       // tabelaEspecificacao.getSelectionModel().addSelectionInterval(tabelaDadosEconomicos.getSelectedRow(), tabelaDadosEconomicos.getSelectedRow());
         
+        tabelaDadosEconomicos.setShowGrid(true);
+            
         DadosEconMensaisDAO demdao = new DadosEconMensaisDAO();
         dems = new ArrayList<>();
         
@@ -72,17 +72,13 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         
         PreencherTabelaESP(especificacoes);
         PreencherTabelaDEM(dems);
-        
-        
     }
     
     public void PreencherTabelaESP(ArrayList<String> esp){
        
         DefaultTableModel modelEspecificacao = (DefaultTableModel) tabelaEspecificacao.getModel();
         modelEspecificacao.setNumRows(0);
-        
-        
-        
+
         for(int i = 0; i < esp.size(); i++){
             
             if(i == 0)  { modelEspecificacao.addRow(new Object[]{ "A - ENTRADAS" }); }
@@ -107,9 +103,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
             if(i == 69) { modelEspecificacao.addRow(new Object[]{ "COE DE ATIVIDADE LEITEIRA" }); }
             
             modelEspecificacao.addRow( new Object[]{ esp.get(i) });
-            
         }
-        
     }
     
     public void PreencherTabelaDEM( ArrayList<DadosEconMensais> dem){
@@ -178,10 +172,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         }
         
     }
-    
-    
-
-
+  
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -335,12 +326,15 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tabelaEspecificacao.setColumnSelectionAllowed(true);
         tabelaEspecificacao.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        tabelaEspecificacao.setEnabled(false);
         tabelaEspecificacao.setPreferredSize(new java.awt.Dimension(270, 1448));
         tabelaEspecificacao.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tabelaEspecificacao.getTableHeader().setReorderingAllowed(false);
+        tabelaEspecificacao.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                tabelaEspecificacaoFocusGained(evt);
+            }
+        });
         tabelaEspecificacao.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
             public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
                 tabelaEspecificacaoMouseWheelMoved(evt);
@@ -463,6 +457,11 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         tabelaDadosEconomicos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tabelaDadosEconomicos.getTableHeader().setResizingAllowed(false);
         tabelaDadosEconomicos.getTableHeader().setReorderingAllowed(false);
+        tabelaDadosEconomicos.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                tabelaDadosEconomicosFocusGained(evt);
+            }
+        });
         tabelaDadosEconomicos.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
             public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
                 tabelaDadosEconomicosMouseWheelMoved(evt);
@@ -612,40 +611,16 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         moveScrollBar(evt);
     }//GEN-LAST:event_tabelaEspecificacaoMouseWheelMoved
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VisualizarDadosEconMensais.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VisualizarDadosEconMensais.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VisualizarDadosEconMensais.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(VisualizarDadosEconMensais.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void tabelaEspecificacaoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tabelaEspecificacaoFocusGained
+        tabelaDadosEconomicos.getSelectionModel().setSelectionInterval(tabelaEspecificacao.getSelectedRow(), tabelaEspecificacao.getSelectedRow());
+  
+    }//GEN-LAST:event_tabelaEspecificacaoFocusGained
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new VisualizarDadosEconMensais().setVisible(true);
-            }
-        });
-    }
+    private void tabelaDadosEconomicosFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tabelaDadosEconomicosFocusGained
+       tabelaEspecificacao.getSelectionModel().setSelectionInterval(tabelaDadosEconomicos.getSelectedRow(), tabelaDadosEconomicos.getSelectedRow());
+       
+    }//GEN-LAST:event_tabelaDadosEconomicosFocusGained
+
     
     private void moveScrollBar(java.awt.event.MouseWheelEvent evt) {
         JScrollBar bar = jScrollPane1.getVerticalScrollBar();

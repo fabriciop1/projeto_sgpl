@@ -172,7 +172,7 @@ public class ItemSelector< T > extends JDialog {
     public void setLabel(String label) {
         this.label.setText(label);
     }
-    
+    /*
     public static void main(String[] args) {
         
         List<Pair<String,String>> options = new ArrayList<>();
@@ -185,4 +185,5 @@ public class ItemSelector< T > extends JDialog {
         selector.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         System.out.println(selector.showSelector());
     }
+    */
 }

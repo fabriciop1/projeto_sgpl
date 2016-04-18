@@ -10,6 +10,7 @@ import static flex.table.GenericTableRowEditor.*;
 import controle.ControlePerfil;
 import flex.table.GenericTableModifier;
 import flex.table.TableModifyListener;
+import java.awt.HeadlessException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -296,11 +297,11 @@ public class VisualizarInventario extends javax.swing.JFrame {
                         Double.parseDouble(total19.getText().substring(2).replace(',','.')) - Double.parseDouble(total32.getText().substring(2).replace(',','.')))));
             
             try{
-                total36.setText("" + Calc.dividir(Double.parseDouble(total34.getText().substring(2).replace(',','.')),
-                        Double.parseDouble(total35.getText().replace(',','.'))));
+                total36.setText(String.format("%.2f", Calc.dividir(Double.parseDouble(total34.getText().substring(2).replace(',','.')),
+                        Double.parseDouble(total35.getText().replace(',','.')))));
             } catch (IllegalArgumentException e) {
                 total36.setText("0.00");
-                System.out.println("Erro em total 36 - Divisão Inválida. " + e.getMessage());
+                //System.out.println("Erro em total 36 - Divisão Inválida. " + e.getMessage());
             }
             
             total37.setText(String.format("R$ %.2f", Calc.somaPonderada(totalValFinaServ, totalValCabeServ)));
@@ -310,11 +311,11 @@ public class VisualizarInventario extends javax.swing.JFrame {
             }
             
             try{
-                total39.setText("" + Calc.dividir(Double.parseDouble(total37.getText().substring(2).replace(',','.')), 
-                        Double.parseDouble(total38.getText().replace(',','.'))));
+                total39.setText(String.format("%.2f", Calc.dividir(Double.parseDouble(total37.getText().substring(2).replace(',','.')), 
+                        Double.parseDouble(total38.getText().replace(',','.')))));
             } catch (IllegalArgumentException e){
-                total39.setText("0.00"); // Caso haja divisão por 0
-               System.out.println("Erro em total39 - Divisão Inválida " + e.getMessage());
+               total39.setText("0.00"); // Caso haja divisão por 0
+               //System.out.println("Erro em total39 - Divisão Inválida " + e.getMessage());
             }
                 
             tabelaBenfeitoriasGTRE.getSourceTableModel().setRowCount(0);
@@ -1103,7 +1104,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total34.setText("R$ 0,00");
 
         total35.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        total35.setText("5");
+        total35.setText("0");
 
         total36.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total36.setText("<total36>");
@@ -1112,7 +1113,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total37.setText("R$ 0,00");
 
         total38.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        total38.setText("10");
+        total38.setText("0");
 
         total39.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total39.setText("<total39>");
@@ -1188,30 +1189,24 @@ public class VisualizarInventario extends javax.swing.JFrame {
                                 .addContainerGap()
                                 .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(total35, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(total34, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(vidaUtilReprodBT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(total36, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(total34, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+                            .addComponent(total36, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(total35, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(vidaUtilReprodBT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(total39, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(30, 30, 30)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(total38, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(total37, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(vidaUtilServBT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(total37, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
+                            .addComponent(total38, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(total39, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(vidaUtilServBT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(17, 17, 17)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(adicionarInvAnimaisBT, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1339,11 +1334,9 @@ public class VisualizarInventario extends javax.swing.JFrame {
                                                 .addComponent(total38, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                             .addGroup(jPanel2Layout.createSequentialGroup()
                                                 .addGap(3, 3, 3)
-                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                                     .addComponent(total35, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                                        .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addGap(0, 0, Short.MAX_VALUE))))))
+                                                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                                     .addComponent(vidaUtilReprodBT)))
                             .addComponent(vidaUtilServBT))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1670,346 +1663,419 @@ public class VisualizarInventario extends javax.swing.JFrame {
         jLabel26.setFont(new java.awt.Font("Tahoma", 3, 11)); // NOI18N
         jLabel26.setText("RESUMO DA DEPRECIAÇÃO (em reais)");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.gridwidth = 110;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(25, 5, 0, 0);
         jPanel5.add(jLabel26, gridBagConstraints);
 
         jLabel27.setText("Forrageiras não anuais");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        gridBagConstraints.gridwidth = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 335, 0, 0);
         jPanel5.add(jLabel27, gridBagConstraints);
 
         jLabel28.setText("Animais de trabalho");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 335, 0, 0);
         jPanel5.add(jLabel28, gridBagConstraints);
 
         jLabel29.setText("Reprodutores");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 335, 0, 0);
         jPanel5.add(jLabel29, gridBagConstraints);
 
         jLabel30.setText("Benfeitorias utilizadas para pecuária de leite");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        gridBagConstraints.gridwidth = 54;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 335, 0, 0);
         jPanel5.add(jLabel30, gridBagConstraints);
 
         jLabel31.setText("Máquinas utilizadas na pecuária de leite");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        gridBagConstraints.gridwidth = 15;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 335, 0, 0);
         jPanel5.add(jLabel31, gridBagConstraints);
 
         jLabel32.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel32.setText("Total");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 14;
         gridBagConstraints.gridy = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        gridBagConstraints.gridwidth = 40;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 20, 0, 0);
         jPanel5.add(jLabel32, gridBagConstraints);
 
         jLabel33.setText("Leite/atividade leiteira (%)");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        gridBagConstraints.gridwidth = 10;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(8, 335, 0, 0);
         jPanel5.add(jLabel33, gridBagConstraints);
 
         jLabel34.setText("Depreciação do leite");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 335, 0, 0);
         jPanel5.add(jLabel34, gridBagConstraints);
 
         jLabel35.setFont(new java.awt.Font("Tahoma", 3, 11)); // NOI18N
         jLabel35.setText("RESUMO DO INVENTÁRIO (em reais)");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridwidth = 55;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(15, 4, 0, 0);
         jPanel5.add(jLabel35, gridBagConstraints);
 
         jLabel36.setText("Terras");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 335, 0, 0);
         jPanel5.add(jLabel36, gridBagConstraints);
 
         jLabel37.setText("Forrageiras não anuais");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 12;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridwidth = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 335, 0, 0);
         jPanel5.add(jLabel37, gridBagConstraints);
 
         jLabel38.setText("Animais");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 13;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 335, 0, 0);
         jPanel5.add(jLabel38, gridBagConstraints);
 
         jLabel39.setText("Benfeitorias utilizadas na pecuária de leite");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 14;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        gridBagConstraints.gridy = 16;
+        gridBagConstraints.gridwidth = 28;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 335, 0, 0);
         jPanel5.add(jLabel39, gridBagConstraints);
 
         jLabel40.setText("Máquinas utilizadas na pecuária de leite");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 15;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        gridBagConstraints.gridy = 17;
+        gridBagConstraints.gridwidth = 15;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 335, 0, 0);
         jPanel5.add(jLabel40, gridBagConstraints);
 
         jLabel41.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel41.setText("Total");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 16;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        gridBagConstraints.gridx = 14;
+        gridBagConstraints.gridy = 18;
+        gridBagConstraints.gridwidth = 40;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 20, 0, 0);
         jPanel5.add(jLabel41, gridBagConstraints);
 
         jLabel42.setText("Salário mínimo (R$)");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 21;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        gridBagConstraints.gridy = 25;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(12, 335, 0, 0);
         jPanel5.add(jLabel42, gridBagConstraints);
 
         jLabel43.setText("   ");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.insets = new java.awt.Insets(10, 20, 10, 20);
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(11, 0, 0, 0);
         jPanel5.add(jLabel43, gridBagConstraints);
 
         jLabel44.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel44.setText("Capital empatado leite");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 18;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        gridBagConstraints.gridy = 22;
+        gridBagConstraints.gridwidth = 11;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 335, 0, 0);
         jPanel5.add(jLabel44, gridBagConstraints);
 
         jLabel45.setText("Custo de oportunidade (%)");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 17;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        gridBagConstraints.gridy = 19;
+        gridBagConstraints.gridwidth = 12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(8, 335, 0, 0);
         jPanel5.add(jLabel45, gridBagConstraints);
 
         jLabel46.setFont(new java.awt.Font("Tahoma", 3, 11)); // NOI18N
         jLabel46.setText("MÃO DE OBRA FAMILIAR");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 20;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 24;
+        gridBagConstraints.gridwidth = 39;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(15, 7, 0, 0);
         jPanel5.add(jLabel46, gridBagConstraints);
 
         jLabel47.setText("Décimo terceiro (R$) ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 22;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        gridBagConstraints.gridy = 28;
+        gridBagConstraints.gridwidth = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 335, 0, 0);
         jPanel5.add(jLabel47, gridBagConstraints);
 
         jLabel48.setText("Terço de férias (R$)");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 23;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        gridBagConstraints.gridy = 29;
+        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 335, 0, 0);
         jPanel5.add(jLabel48, gridBagConstraints);
 
         total44.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total44.setText("<total44>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 56;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        gridBagConstraints.gridwidth = 114;
+        gridBagConstraints.ipadx = 15;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 22, 0, 0);
         jPanel5.add(total44, gridBagConstraints);
 
         total45.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total45.setText("<total45>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 56;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        gridBagConstraints.gridwidth = 114;
+        gridBagConstraints.ipadx = 15;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 22, 0, 0);
         jPanel5.add(total45, gridBagConstraints);
 
         total46.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total46.setText("<total46>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 56;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        gridBagConstraints.gridwidth = 114;
+        gridBagConstraints.ipadx = 15;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 22, 0, 0);
         jPanel5.add(total46, gridBagConstraints);
 
         total47.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total47.setText("<total47>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 56;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        gridBagConstraints.gridwidth = 114;
+        gridBagConstraints.ipadx = 15;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 22, 0, 0);
         jPanel5.add(total47, gridBagConstraints);
 
         total48.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total48.setText("<total48>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 56;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        gridBagConstraints.gridwidth = 114;
+        gridBagConstraints.ipadx = 15;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 22, 0, 0);
         jPanel5.add(total48, gridBagConstraints);
 
         total49.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         total49.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total49.setText("<total49>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 56;
         gridBagConstraints.gridy = 6;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        gridBagConstraints.gridwidth = 114;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 22, 0, 0);
         jPanel5.add(total49, gridBagConstraints);
 
         total50.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total50.setText("<total50>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        gridBagConstraints.gridx = 56;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridwidth = 113;
+        gridBagConstraints.ipadx = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 22, 0, 0);
         jPanel5.add(total50, gridBagConstraints);
 
         total51.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total51.setText("<total51>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 11;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        gridBagConstraints.gridx = 56;
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridwidth = 113;
+        gridBagConstraints.ipadx = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 18, 0, 0);
         jPanel5.add(total51, gridBagConstraints);
 
         total52.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total52.setText("<total52>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 12;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        gridBagConstraints.gridx = 56;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridwidth = 113;
+        gridBagConstraints.ipadx = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 18, 0, 0);
         jPanel5.add(total52, gridBagConstraints);
 
         total53.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total53.setText("<total53>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 13;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        gridBagConstraints.gridx = 56;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridwidth = 113;
+        gridBagConstraints.ipadx = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 18, 0, 0);
         jPanel5.add(total53, gridBagConstraints);
 
         total54.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total54.setText("<total54>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 14;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        gridBagConstraints.gridx = 56;
+        gridBagConstraints.gridy = 16;
+        gridBagConstraints.gridwidth = 113;
+        gridBagConstraints.ipadx = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 18, 0, 0);
         jPanel5.add(total54, gridBagConstraints);
 
         total55.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total55.setText("<total55>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 15;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        gridBagConstraints.gridx = 56;
+        gridBagConstraints.gridy = 17;
+        gridBagConstraints.gridwidth = 113;
+        gridBagConstraints.ipadx = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 18, 0, 0);
         jPanel5.add(total55, gridBagConstraints);
 
         total56.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         total56.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total56.setText("<total56>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 16;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        gridBagConstraints.gridx = 56;
+        gridBagConstraints.gridy = 18;
+        gridBagConstraints.gridwidth = 113;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 11, 0, 0);
         jPanel5.add(total56, gridBagConstraints);
 
         total57.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         total57.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total57.setText("<total57>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 18;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        gridBagConstraints.gridx = 56;
+        gridBagConstraints.gridy = 22;
+        gridBagConstraints.gridwidth = 113;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 11, 0, 0);
         jPanel5.add(total57, gridBagConstraints);
 
         total58.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total58.setText("<total58>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 22;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        gridBagConstraints.gridx = 56;
+        gridBagConstraints.gridy = 28;
+        gridBagConstraints.gridwidth = 113;
+        gridBagConstraints.ipadx = 14;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 12, 0, 0);
         jPanel5.add(total58, gridBagConstraints);
 
         total59.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total59.setText("<total59>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 23;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        gridBagConstraints.gridx = 56;
+        gridBagConstraints.gridy = 29;
+        gridBagConstraints.gridwidth = 113;
+        gridBagConstraints.ipadx = 14;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 12, 0, 0);
         jPanel5.add(total59, gridBagConstraints);
 
         total60.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         total60.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         total60.setText("<total60>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 24;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 1);
+        gridBagConstraints.gridx = 56;
+        gridBagConstraints.gridy = 30;
+        gridBagConstraints.gridwidth = 113;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 11, 22, 0);
         jPanel5.add(total60, gridBagConstraints);
 
         jLabel49.setText("   ");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 19;
-        gridBagConstraints.insets = new java.awt.Insets(10, 20, 10, 20);
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 23;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(11, 0, 0, 0);
         jPanel5.add(jLabel49, gridBagConstraints);
 
         jLabel50.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel50.setText("Custo total do salário mensal");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 24;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
+        gridBagConstraints.gridy = 30;
+        gridBagConstraints.gridwidth = 13;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 335, 22, 0);
         jPanel5.add(jLabel50, gridBagConstraints);
 
         atividadeLeiteBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit_values.png"))); // NOI18N
@@ -2020,8 +2086,12 @@ public class VisualizarInventario extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 169;
         gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 115;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 0, 335);
         jPanel5.add(atividadeLeiteBT, gridBagConstraints);
 
         custoOportBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit_values.png"))); // NOI18N
@@ -2032,8 +2102,12 @@ public class VisualizarInventario extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 17;
+        gridBagConstraints.gridx = 169;
+        gridBagConstraints.gridy = 19;
+        gridBagConstraints.gridwidth = 115;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 1, 0, 335);
         jPanel5.add(custoOportBT, gridBagConstraints);
 
         salarioMinimoBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit_values.png"))); // NOI18N
@@ -2044,26 +2118,43 @@ public class VisualizarInventario extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 21;
+        gridBagConstraints.gridx = 169;
+        gridBagConstraints.gridy = 25;
+        gridBagConstraints.gridwidth = 115;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 1, 0, 335);
         jPanel5.add(salarioMinimoBT, gridBagConstraints);
 
-        atividadeLeite.setText("0.0");
+        atividadeLeite.setText("     0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 56;
         gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 112;
+        gridBagConstraints.ipadx = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 22, 0, 0);
         jPanel5.add(atividadeLeite, gridBagConstraints);
 
-        custoOportunidade.setText("0.0");
+        custoOportunidade.setText(" 0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 17;
+        gridBagConstraints.gridx = 56;
+        gridBagConstraints.gridy = 19;
+        gridBagConstraints.gridwidth = 111;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = 24;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 11, 0, 0);
         jPanel5.add(custoOportunidade, gridBagConstraints);
 
-        salarioMinimo.setText("0.0");
+        salarioMinimo.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 21;
+        gridBagConstraints.gridx = 56;
+        gridBagConstraints.gridy = 25;
+        gridBagConstraints.gridwidth = 111;
+        gridBagConstraints.ipadx = 26;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 12, 0, 0);
         jPanel5.add(salarioMinimo, gridBagConstraints);
 
         jTabbedPane1.addTab("Resumo", jPanel5);
@@ -2263,25 +2354,16 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 total33.setText(String.format("R$ %.2f", (Double.parseDouble(total20.getText().substring(2).replace(',','.')) -
                         Double.parseDouble(total19.getText().substring(2).replace(',','.')) - Double.parseDouble(total32.getText().substring(2).replace(',','.')))));
                 
-                
-                
                 if(resumo != null){
                     resumo.setValorGastoCompraAnimais(temp);
-                    try {
-                        irdao.atualizar(resumo);
-                    } catch (SQLException ex) {
-                        JOptionPane.showMessageDialog(null, "Erro ao salvar no banco");
-                    }
+                    irdao.atualizar(resumo);
                 } 
-                
             } else {
                 JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
             }
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException | SQLException | NullPointerException e){
             JOptionPane.showMessageDialog(null, "Insira um valor válido!");
         }
-        
-        
     }//GEN-LAST:event_valorGastoAnimaisBTActionPerformed
 
     private void editarInvTerrasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarInvTerrasBTActionPerformed
@@ -2459,7 +2541,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
             }
-        } catch (Exception e){
+        } catch (HeadlessException | NumberFormatException | SQLException | NullPointerException e){
             JOptionPane.showMessageDialog(null, "Insira um valor válido!");
         }
     }//GEN-LAST:event_atividadeLeiteBTActionPerformed
@@ -2480,9 +2562,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
             }
-        } catch (Exception e){
-            e.printStackTrace();
-            //JOptionPane.showMessageDialog(null, "Insira um valor válido!");
+        } catch (HeadlessException | NumberFormatException | SQLException | NullPointerException e){
+            JOptionPane.showMessageDialog(null, "Insira um valor válido!");
         }
     }//GEN-LAST:event_custoOportBTActionPerformed
 
@@ -2491,8 +2572,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
             Double temp = Double.parseDouble(JOptionPane.showInputDialog("Inserir salário mínimo: ").replace(",", "."));
             
             if(temp >= 0.0){
-                salarioMinimo.setText("" + temp);
-                total58.setText("" + temp);
+                salarioMinimo.setText(String.format("%.2f", temp));
+                total58.setText(String.format("%.2f", temp));
                 total59.setText(String.format("%.2f", (Double.parseDouble(salarioMinimo.getText().replace(',','.')) * 0.3)));
                 
                 if(resumo != null){
@@ -2505,7 +2586,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
             }
-        } catch (Exception e){
+        } catch (HeadlessException | NumberFormatException | SQLException | NullPointerException e){
             JOptionPane.showMessageDialog(null, "Insira um valor válido!");
         }
     }//GEN-LAST:event_salarioMinimoBTActionPerformed
@@ -2529,17 +2610,12 @@ public class VisualizarInventario extends javax.swing.JFrame {
                                
                 if(resumo != null){
                     resumo.setVidaUtilReprodutores(temp);
-                    try {
-                        irdao.atualizar(resumo);
-                    } catch (SQLException ex) {
-                        JOptionPane.showMessageDialog(null, "Erro ao salvar no banco");
-                    }
-                }
-                
+                    irdao.atualizar(resumo);
+                } 
             } else {
                 JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
             }
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException | SQLException | NullPointerException e){
             JOptionPane.showMessageDialog(null, "Insira um valor válido!");
         }
     }//GEN-LAST:event_vidaUtilReprodBTActionPerformed
@@ -2548,24 +2624,19 @@ public class VisualizarInventario extends javax.swing.JFrame {
         try{
             Integer temp = Integer.parseInt(JOptionPane.showInputDialog("Capital Investido em Animais de Serviços: "));
             
-            if(temp >= 0.0){
+            if(temp >= 0) {
                 total38.setText(String.format("%d", temp));
                 total39.setText(String.format("%.2f", (Double.parseDouble(total37.getText().substring(2).replace(',','.')) /
                         Double.parseDouble(total38.getText().replace(',','.')))));
                                
                 if(resumo != null){
                     resumo.setVidaUtilAnimaisServico(temp);
-                    try {
-                        irdao.atualizar(resumo);
-                    } catch (SQLException ex) {
-                        JOptionPane.showMessageDialog(null, "Erro ao salvar no banco");
-                    }
-                }
-                
+                    irdao.atualizar(resumo);        
+                } 
             } else {
                 JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
             }
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException | NullPointerException | SQLException e){
             JOptionPane.showMessageDialog(null, "Insira um valor válido!");
         }
     }//GEN-LAST:event_vidaUtilServBTActionPerformed

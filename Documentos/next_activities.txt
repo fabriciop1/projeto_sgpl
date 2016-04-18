@@ -3,14 +3,7 @@ conexão telas - BD para edição, remoção e adição
 atualizar tela após alterações
  ------
 Inserir codigos sql -- COMECAR DO 1
-botões editar em inventario (valorGasto e Resumo) - OK
 Ajeitar Inserção, remoção e edição em inventário terras - Jefferson
-
-CADASTRAR INFORMAÇÕES DE RESUMO E VALOR GASTO COM COMPRA DE ANIMAIS NO BANCO - OK
-CÁLCULOS DE RESUMO E VALOR GASTO COM COMPRAS DE ANIMAIS - OK
-vidaUtilReprodutores, vidaUtilServico pode ser editado e salvo no banco - OK
-CALCULAR CAMPO VARIAÇÃO DE INVENTÁRIO ANIMAL E RESUMO AO RECUPERAR DO BANCO E/OU ALTERAR - OK
-VIDA UTIL DOS REPRODUTORES E VIDA UTIL ANIMAIS SERVIÇO EDITÁVEIS - OK
 
 modificar sql rota - adm
 fora o adm, exibir perfis por rota de usuário
