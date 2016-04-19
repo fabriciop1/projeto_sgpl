@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import modelo.dao.DadosEconMensaisDAO;
 import modelo.dao.InventarioAnimaisDAO;
 import modelo.dao.InventarioBenfeitoriasDAO;
 import modelo.dao.InventarioMaquinasDAO;
@@ -18,11 +17,9 @@ import modelo.dao.PerfilDAO;
 import modelo.dao.RotaDAO;
 import modelo.dao.UsuarioDAO;
 import modelo.dao.UsuarioPerfilDAO;
-import modelo.negocio.DadosEconMensais;
 import modelo.negocio.InventarioAnimais;
 import modelo.negocio.InventarioBenfeitorias;
 import modelo.negocio.InventarioMaquinas;
-import modelo.negocio.InventarioResumo;
 import modelo.negocio.InventarioTerras;
 import modelo.negocio.Perfil;
 import modelo.negocio.Rota;
@@ -113,13 +110,13 @@ public final class TrashGen {
             InventarioMaquinas im = new InventarioMaquinas(generateString(20,false,false,true), generateString(10,false,false,false), rand.nextInt() % 1000,
                     rand.nextInt() % 1000, rand.nextInt() % 1000, p);
 
-            InventarioTerras it = new InventarioTerras(generateString(20,false,false,true), rand.nextInt() % 1000, rand.nextInt() % 1000, rand.nextInt() % 1000,
-                    rand.nextInt() % 1000, rand.nextInt() % 1000, rand.nextInt() % 1000, rand.nextInt() % 1000, p);
+         //   InventarioTerras it = new InventarioTerras(generateString(20,false,false,true), rand.nextInt() % 1000, rand.nextInt() % 1000, rand.nextInt() % 1000,
+         //           rand.nextInt() % 1000, rand.nextInt() % 1000, rand.nextInt() % 1000, rand.nextInt() % 1000, p);
 //            
             new InventarioAnimaisDAO().cadastrar(ia);
             new InventarioBenfeitoriasDAO().cadastrar(ib);
             new InventarioMaquinasDAO().cadastrar(im);
-            new InventarioTerrasDAO().cadastrar(it);
+         //   new InventarioTerrasDAO().cadastrar(it);
                
         }
     }

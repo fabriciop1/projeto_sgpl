@@ -24,8 +24,6 @@ public class InventarioTerras extends DatabaseObject implements Serializable {
     private double areaArrendadaFinal;
     private double areaPropriaFinal;
     private double valorTerraNuaPropria;
-    private int vidaUtil;
-    private double custoFormacaoHectare;
     private Perfil perfil;
     
     public InventarioTerras() {
@@ -33,7 +31,7 @@ public class InventarioTerras extends DatabaseObject implements Serializable {
     }
 
     public InventarioTerras(String especificacao, double areaArrendadaInicio, double areaPropriaInicio, double areaArrendadaFinal, 
-            double areaPropriaFinal, double valorTerraNuaPropria, int vidaUtil, double custoFormacaoHectare, Perfil perfil) {
+            double areaPropriaFinal, double valorTerraNuaPropria, Perfil perfil) {
         super("inventario_terras","idInventarioTerras");
         
         this.especificacao = especificacao;
@@ -42,8 +40,6 @@ public class InventarioTerras extends DatabaseObject implements Serializable {
         this.areaArrendadaFinal = areaArrendadaFinal;
         this.areaPropriaFinal = areaPropriaFinal;
         this.valorTerraNuaPropria = valorTerraNuaPropria;
-        this.vidaUtil = vidaUtil;
-        this.custoFormacaoHectare = custoFormacaoHectare;
         this.perfil = perfil;
     }
 
@@ -95,22 +91,6 @@ public class InventarioTerras extends DatabaseObject implements Serializable {
         this.valorTerraNuaPropria = valorTerraNuaPropria;
     }
 
-    public int getVidaUtil() {
-        return vidaUtil;
-    }
-
-    public void setVidaUtil(int vidaUtil) {
-        this.vidaUtil = vidaUtil;
-    }
-
-    public double getCustoFormacaoHectare() {
-        return custoFormacaoHectare;
-    }
-
-    public void setCustoFormacaoHectare(double custoFormacaoHectare) {
-        this.custoFormacaoHectare = custoFormacaoHectare;
-    }
-
     public Perfil getPerfil() {
         return perfil;
     }
@@ -130,8 +110,6 @@ public class InventarioTerras extends DatabaseObject implements Serializable {
         m.put("areaArrendadaFinal", areaArrendadaFinal);
         m.put("areaPropriaFinal", areaPropriaFinal);
         m.put("valorTerraNuaPropria", valorTerraNuaPropria);
-        m.put("vidaUtil", vidaUtil);
-        m.put("custoFormacaoHectare", custoFormacaoHectare);
         m.put("idPerfilFK", perfil.getId());
         
         return m;
@@ -145,8 +123,6 @@ public class InventarioTerras extends DatabaseObject implements Serializable {
             areaArrendadaFinal = Cast.toDouble(data.get("areaArrendadaFinal"));
             areaPropriaFinal = Cast.toDouble(data.get("areaPropriaFinal"));
             valorTerraNuaPropria = Cast.toDouble(data.get("valorTerraNuaPropria"));
-            vidaUtil = Cast.toInt(data.get("vidaUtil"));
-            custoFormacaoHectare = Cast.toDouble(data.get("custoFormacaoHectare"));
             perfil = new GenericDAO<>(Perfil.class).retrieve( Cast.toInt(data.get("idPerfilFK")) );
     }
 }

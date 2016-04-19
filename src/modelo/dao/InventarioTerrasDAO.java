@@ -29,15 +29,14 @@ public class InventarioTerrasDAO extends DAO implements InterfaceDAO<InventarioT
 
     @Override
     public void cadastrar(InventarioTerras inventario) throws SQLException {
-        try {
             if (isConnectionOwner()) {
                 this.connection = DBConexao.openConnection();
             }
 
             String sql = "INSERT INTO inventario_terras "
                     + "(especificacao, areaArrendadaInicio, areaPropriaInicio, areaArrendadaFinal, areaPropriaFinal, "
-                    + "valorTerraNuaPropria, vidaUtil, custoFormacaoHectare, idPerfilFK) "
-                    + "VALUES (?,?,?,?,?,?,?,?,?)";
+                    + "valorTerraNuaPropria, idPerfilFK) "
+                    + "VALUES (?,?,?,?,?,?,?)";
 
             PreparedStatement statement = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
@@ -47,9 +46,7 @@ public class InventarioTerrasDAO extends DAO implements InterfaceDAO<InventarioT
             statement.setDouble(4, inventario.getAreaArrendadaFinal());
             statement.setDouble(5, inventario.getAreaPropriaFinal());
             statement.setDouble(6, inventario.getValorTerraNuaPropria());
-            statement.setInt(7, inventario.getVidaUtil());
-            statement.setDouble(8, inventario.getCustoFormacaoHectare());
-            statement.setInt(9, inventario.getPerfil().getId());
+            statement.setInt(7, inventario.getPerfil().getId());
 
             statement.executeUpdate();
 
@@ -64,11 +61,8 @@ public class InventarioTerrasDAO extends DAO implements InterfaceDAO<InventarioT
             if (isConnectionOwner()) {
                 DBConexao.closeConnection(this.connection);
             }
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
     }
+
 
     /**
      *
@@ -105,7 +99,7 @@ public class InventarioTerrasDAO extends DAO implements InterfaceDAO<InventarioT
         }
 
         String sql = "UPDATE inventario_terras SET especificacao=?, areaArrendadaInicio=?, areaPropriaInicio=?, "
-                + "areaArrendadaFinal=?, areaPropriaFinal=?, valorTerraNuaPropria=?, vidaUtil=?, custoFormacaoHectare=?"
+                + "areaArrendadaFinal=?, areaPropriaFinal=?, valorTerraNuaPropria=?"
                 + " WHERE idInventarioTerras=?";
 
         PreparedStatement st = this.connection.prepareStatement(sql);
@@ -116,9 +110,7 @@ public class InventarioTerrasDAO extends DAO implements InterfaceDAO<InventarioT
         st.setDouble(4, inventario.getAreaArrendadaFinal());
         st.setDouble(5, inventario.getAreaPropriaFinal());
         st.setDouble(6, inventario.getValorTerraNuaPropria());
-        st.setInt(7, inventario.getVidaUtil());
-        st.setDouble(8, inventario.getCustoFormacaoHectare());
-        st.setInt(9, inventario.getId());
+        st.setInt(7, inventario.getId());
 
         st.executeUpdate();
         st.close();
@@ -159,8 +151,6 @@ public class InventarioTerrasDAO extends DAO implements InterfaceDAO<InventarioT
             inventario.setAreaArrendadaFinal(result.getDouble("areaArrendadaFinal"));
             inventario.setAreaPropriaFinal(result.getDouble("areaPropriaFinal"));
             inventario.setValorTerraNuaPropria(result.getDouble("valorTerraNuaPropria"));
-            inventario.setVidaUtil(result.getInt("vidaUtil"));
-            inventario.setCustoFormacaoHectare(result.getDouble("custoFormacaoHectare"));
             inventario.setPerfil((new PerfilDAO()).recuperar(result.getInt("idPerfilFK")));
         }
 
@@ -199,8 +189,6 @@ public class InventarioTerrasDAO extends DAO implements InterfaceDAO<InventarioT
             inventario.setAreaArrendadaFinal(result.getDouble("areaArrendadaFinal"));
             inventario.setAreaPropriaFinal(result.getDouble("areaPropriaFinal"));
             inventario.setValorTerraNuaPropria(result.getDouble("valorTerraNuaPropria"));
-            inventario.setVidaUtil(result.getInt("vidaUtil"));
-            inventario.setCustoFormacaoHectare(result.getDouble("custoFormacaoHectare"));
             inventario.setPerfil((new PerfilDAO()).recuperar(result.getInt("idPerfilFK")));
 
             inventarios.add(inventario);
@@ -243,8 +231,6 @@ public class InventarioTerrasDAO extends DAO implements InterfaceDAO<InventarioT
             inventario.setAreaArrendadaFinal(result.getDouble("areaArrendadaFinal"));
             inventario.setAreaPropriaFinal(result.getDouble("areaPropriaFinal"));
             inventario.setValorTerraNuaPropria(result.getDouble("valorTerraNuaPropria"));
-            inventario.setVidaUtil(result.getInt("vidaUtil"));
-            inventario.setCustoFormacaoHectare(result.getDouble("custoFormacaoHectare"));
             inventario.setPerfil((new PerfilDAO()).recuperar(result.getInt("idPerfilFK")));
 
             inventarios.add(inventario);
