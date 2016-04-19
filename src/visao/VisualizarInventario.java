@@ -25,11 +25,13 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import modelo.dao.InventarioAnimaisDAO;
 import modelo.dao.InventarioBenfeitoriasDAO;
+import modelo.dao.InventarioForrageirasDAO;
 import modelo.dao.InventarioMaquinasDAO;
 import modelo.dao.InventarioResumoDAO;
 import modelo.dao.InventarioTerrasDAO;
 import modelo.negocio.InventarioAnimais;
 import modelo.negocio.InventarioBenfeitorias;
+import modelo.negocio.InventarioForrageiras;
 import modelo.negocio.InventarioMaquinas;
 import modelo.negocio.InventarioResumo;
 import modelo.negocio.InventarioTerras;
@@ -37,7 +39,6 @@ import modelo.negocio.Perfil;
 import util.Calc;
 import util.Pair;
 import util.Cast;
-
 
 /**
  *
@@ -51,76 +52,80 @@ public class VisualizarInventario extends javax.swing.JFrame {
     private GenericTableRowEditor tabelaForrageirasGTRE;
     private GenericTableRowEditor tabelaAnimaisProdGTRE;
     private GenericTableRowEditor tabelaAnimaisServGTRE;
-    
+
     private InventarioResumo resumo;
     private Perfil perfilAtual;
-    
-    private InventarioTerrasDAO       itdao;
-    private InventarioAnimaisDAO      iadao;
+
+    private InventarioTerrasDAO itdao;
+    private InventarioAnimaisDAO iadao;
     private InventarioBenfeitoriasDAO ibdao;
-    private InventarioMaquinasDAO     imdao;
-    private InventarioResumoDAO       irdao;
-    
+    private InventarioMaquinasDAO imdao;
+    private InventarioResumoDAO irdao;
+    private InventarioForrageirasDAO ifdao;
+
     public VisualizarInventario() {
-        
+
         initComponents();
-             
+
         showTableLines();
-   
+
         setLocationRelativeTo(null);
         this.setResizable(false);
-        
+
         Calendar cal = GregorianCalendar.getInstance();
-	int anoAtual = cal.get(Calendar.YEAR);
+        int anoAtual = cal.get(Calendar.YEAR);
         int mesAtual = cal.get(Calendar.MONTH);
-        
+
         ArrayList<InventarioTerras> terras = new ArrayList<>();
+        ArrayList<InventarioForrageiras> forrageiras = new ArrayList<>();
         ArrayList<InventarioAnimais> animais = new ArrayList<>();
         ArrayList<InventarioBenfeitorias> benfeitorias = new ArrayList<>();
         ArrayList<InventarioMaquinas> maquinas = new ArrayList<>();
-        
+
         inicializarGTRE();
-        
+
         //Totais
-        double totalAreaArreInic  = 0;
-        double totalAreaArreFina  = 0;
-        double totalHa            = 0;
-        double totalValorHa       = 0;
-        double totalDepreciacao   = 0;
-        double totalValInicProd   = 0;
-        double totalValInicServ   = 0;
-        double totalNascProd      = 0;
-        double totalMorteProd     = 0;
-        double totalVendaProd     = 0;
-        double totalCompraProd    = 0;
-        double totalNascServ      = 0;
-        double totalMorteServ     = 0;
-        double totalVendaServ     = 0;
-        double totalCompraServ    = 0;
-        double totalValFinaProd   = 0;
-        double totalValorInicio   = 0;
-        double totalValorFinal    = 0;
-        double totalValorBenfeit  = 0;
-        double totalValorMaquin   = 0;
+        double totalAreaArreInic = 0;
+        double totalAreaArreFina = 0;
+        double totalHa = 0;
+        double totalValorHa = 0;
+        double totalDepreciacao = 0;
+        double totalValInicProd = 0;
+        double totalValInicServ = 0;
+        double totalNascProd = 0;
+        double totalMorteProd = 0;
+        double totalVendaProd = 0;
+        double totalCompraProd = 0;
+        double totalNascServ = 0;
+        double totalMorteServ = 0;
+        double totalVendaServ = 0;
+        double totalCompraServ = 0;
+        double totalValFinaProd = 0;
+        double totalValorInicio = 0;
+        double totalValorFinal = 0;
+        double totalValorBenfeit = 0;
+        double totalValorMaquin = 0;
         double totalDeprecBenfeit = 0;
-        double totalDeprecMaquin  = 0;
-        
-        ArrayList<Double> totalAreaPropInic  = new ArrayList<>();
-        ArrayList<Double> totalAreaPropFina  = new ArrayList<>();
-        ArrayList<Double> totalTerraNua      = new ArrayList<>();
-        ArrayList<Double> totalValFinaServ   = new ArrayList<>();
-        ArrayList<Double> totalValCabeServ   = new ArrayList<>(); 
-            
+        double totalDeprecMaquin = 0;
+
+        ArrayList<Double> totalAreaPropInic = new ArrayList<>();
+        ArrayList<Double> totalAreaPropFina = new ArrayList<>();
+        ArrayList<Double> totalTerraNua = new ArrayList<>();
+        ArrayList<Double> totalValFinaServ = new ArrayList<>();
+        ArrayList<Double> totalValCabeServ = new ArrayList<>();
+
         itdao = new InventarioTerrasDAO();
         iadao = new InventarioAnimaisDAO();
         ibdao = new InventarioBenfeitoriasDAO();
         imdao = new InventarioMaquinasDAO();
         irdao = new InventarioResumoDAO();
-        
+        ifdao = new InventarioForrageirasDAO();
+
         perfilAtual = ControlePerfil.getInstance().getPerfilSelecionado();
-     
+
         try {
             terras = itdao.recuperarPorPerfil(perfilAtual.getId());
+            forrageiras = ifdao.recuperarPorPerfil(perfilAtual.getId());
             animais = iadao.recuperarPorPerfil(perfilAtual.getId());
             benfeitorias = ibdao.recuperarPorPerfil(perfilAtual.getId());
             maquinas = imdao.recuperarPorPerfil(perfilAtual.getId());
@@ -128,95 +133,91 @@ public class VisualizarInventario extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(VisualizarInventario.class.getName()).log(Level.SEVERE, null, ex);
         }
-     
-        if(resumo == null){
-            
+
+        if (resumo == null) {
+
             resumo = new InventarioResumo();
             resumo.setPerfil(perfilAtual);
             resumo.setMes(mesAtual);
             resumo.setAno(anoAtual);
-            
+
             try {
                 irdao.cadastrar(resumo);
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao cadastrar um novo resumo");
             }
-            
+
         }
-        
+
         tabelaTerrasGTRE.getSourceTableModel().setRowCount(0);
-          
-        for(int i = 0; i < terras.size(); i++){
-            
+
+        for (int i = 0; i < terras.size(); i++) {
+
             tabelaTerrasGTRE.addSourceTableRow(new Object[]{
                 terras.get(i).getEspecificacao(),
                 terras.get(i).getAreaArrendadaInicio(),
                 terras.get(i).getAreaPropriaInicio(),
                 terras.get(i).getAreaArrendadaFinal(),
                 terras.get(i).getAreaPropriaFinal(),
-                terras.get(i).getValorTerraNuaPropria(),
-                
-            }, terras.get(i).getId());
-            
+                terras.get(i).getValorTerraNuaPropria(),}, terras.get(i).getId());
+
             totalAreaArreInic += (terras.get(i).getAreaArrendadaInicio());
             totalAreaPropInic.add(terras.get(i).getAreaPropriaInicio());
             totalAreaArreFina += (terras.get(i).getAreaArrendadaFinal());
             totalAreaPropFina.add(terras.get(i).getAreaPropriaFinal());
             totalTerraNua.add(terras.get(i).getValorTerraNuaPropria());
-            
+
         }
         verificaTabelaVazia(tabelaTerrasGTRE.getSourceTableModel(), editarInvTerrasBT, removerInvTerrasBT);
-        
+
         tabelaForrageirasGTRE.getSourceTableModel().setRowCount(0);
-        
-        for(int i = 0; i < terras.size(); i++){
-            
-            double ha = (terras.get(i).getAreaPropriaInicio() + terras.get(i).getAreaPropriaFinal())/2;
-            double valorHa = terras.get(i).getCustoFormacaoHectare() * ha;
-            double depreciacao = valorHa/terras.get(i).getVidaUtil();
-            
+
+        for (int i = 0; i < terras.size(); i++) {
+
+            double ha = (terras.get(i).getAreaPropriaInicio() + terras.get(i).getAreaPropriaFinal()) / 2;
+            double valorHa = forrageiras.get(i).getCustoFormacaoHectare() * ha;
+            double depreciacao = valorHa / forrageiras.get(i).getVidaUtil();
+
             tabelaForrageirasGTRE.addSourceTableRow(new Object[]{
                 terras.get(i).getEspecificacao(),
-                terras.get(i).getCustoFormacaoHectare(),
+                forrageiras.get(i).getCustoFormacaoHectare(),
                 ha,
                 valorHa,
-                terras.get(i).getVidaUtil(),
-                depreciacao,
-                
-            }, terras.get(i).getId());
-            
+                forrageiras.get(i).getVidaUtil(),
+                depreciacao,}, terras.get(i).getId());
+
             totalHa += (ha);
             totalValorHa += (valorHa);
             totalDepreciacao += (depreciacao);
         }
         verificaTabelaVazia(tabelaForrageirasGTRE.getSourceTableModel(), editarInvTerrasBT, removerInvTerrasBT);
-        
+
         total1.setText("" + (totalAreaArreInic));
         total2.setText("" + Calc.somarLista(totalAreaPropInic));
         total3.setText("" + (totalAreaArreFina));
         total4.setText("" + Calc.somarLista(totalAreaPropFina));
         total5.setText("" + (Double.parseDouble(total1.getText()) + Double.parseDouble(total2.getText())));
         total6.setText("" + (Double.parseDouble(total3.getText()) + Double.parseDouble(total4.getText())));
-        total7.setText(String.format("R$ %.2f", Calc.somaPonderada(totalAreaPropInic, totalTerraNua)).replace(',','.'));
-        total8.setText(String.format("R$ %.2f", Calc.somaPonderada(totalAreaPropFina, totalTerraNua)).replace(',','.'));
-        total9.setText(String.format("R$ %.2f", Calc.mediaAritmetica(Double.parseDouble(total7.getText().substring(2)), Double.parseDouble(total8.getText().substring(2)))).replace(',','.'));
+        total7.setText(String.format("R$ %.2f", Calc.somaPonderada(totalAreaPropInic, totalTerraNua)).replace(',', '.'));
+        total8.setText(String.format("R$ %.2f", Calc.somaPonderada(totalAreaPropFina, totalTerraNua)).replace(',', '.'));
+        total9.setText(String.format("R$ %.2f", Calc.mediaAritmetica(Double.parseDouble(total7.getText().substring(2)), Double.parseDouble(total8.getText().substring(2)))).replace(',', '.'));
         total10.setText("" + (totalHa));
         total11.setText(String.format("R$ %.2f", totalValorHa));
         total12.setText(String.format("R$ %.2f", totalDepreciacao));
-        
+
         tabelaAnimaisProdGTRE.getSourceTableModel().setRowCount(0);
         tabelaAnimaisServGTRE.getSourceTableModel().setRowCount(0);
-           
-        for(int i = 0; i < animais.size(); i++){
-            if(animais.get(i).getTipoAnimal() == 1){ //Producao
+
+        for (int i = 0; i < animais.size(); i++) {
+            if (animais.get(i).getTipoAnimal() == 1) { //Producao
 
                 double valorInicio = animais.get(i).getValorInicio() * animais.get(i).getValorCabeca();
                 double valorFinal = animais.get(i).getValorFinal() * animais.get(i).getValorCabeca();
-                
-                if(animais.get(i).getCategoria().equals("Touro")){
+
+                if (animais.get(i).getCategoria().equals("Touro")) {
                     total34.setText(String.format("R$ %.2f", Calc.mediaAritmetica(valorInicio, valorFinal)));
                 }
-                
+
                 tabelaAnimaisProdGTRE.addSourceTableRow(new Object[]{
                     animais.get(i).getCategoria(),
                     animais.get(i).getValorInicio(),
@@ -227,192 +228,185 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     animais.get(i).getValorFinal(),
                     animais.get(i).getValorCabeca(),
                     valorInicio,
-                    valorFinal,
-                }, animais.get(i).getId());
-                
-                    totalValInicProd += (animais.get(i).getValorInicio() * 1.0);  
-                    totalNascProd += (animais.get(i).getNascimento() * 1.0);
-                    totalMorteProd += (animais.get(i).getMorte() * 1.0); 
-                    totalVendaProd += (animais.get(i).getVenda() * 1.0); 
-                    totalCompraProd += (animais.get(i).getCompra() * 1.0);
-                    totalValFinaProd += (animais.get(i).getValorFinal() * 1.0);
-                    totalValorInicio += (valorInicio);
-                    totalValorFinal += (valorFinal);
+                    valorFinal,}, animais.get(i).getId());
 
-                } else if (animais.get(i).getTipoAnimal() == 2) { //servico
+                totalValInicProd += (animais.get(i).getValorInicio() * 1.0);
+                totalNascProd += (animais.get(i).getNascimento() * 1.0);
+                totalMorteProd += (animais.get(i).getMorte() * 1.0);
+                totalVendaProd += (animais.get(i).getVenda() * 1.0);
+                totalCompraProd += (animais.get(i).getCompra() * 1.0);
+                totalValFinaProd += (animais.get(i).getValorFinal() * 1.0);
+                totalValorInicio += (valorInicio);
+                totalValorFinal += (valorFinal);
 
-                    tabelaAnimaisServGTRE.addSourceTableRow(new Object[]{
-                        animais.get(i).getCategoria(),
-                        animais.get(i).getValorInicio(),
-                        animais.get(i).getNascimento(),
-                        animais.get(i).getMorte(),
-                        animais.get(i).getVenda(),
-                        animais.get(i).getCompra(),
-                        animais.get(i).getValorFinal(),
-                        animais.get(i).getValorCabeca(),
-                        
-                    }, animais.get(i).getId());
+            } else if (animais.get(i).getTipoAnimal() == 2) { //servico
 
-                    totalValInicServ += (animais.get(i).getValorInicio() * 1.0);
-                    totalNascServ += (animais.get(i).getNascimento() * 1.0);  
-                    totalMorteServ += (animais.get(i).getMorte() * 1.0);
-                    totalVendaServ += (animais.get(i).getVenda() * 1.0); 
-                    totalCompraServ += (animais.get(i).getCompra() * 1.0);
-                    totalValFinaServ.add(animais.get(i).getValorFinal() * 1.0);
-                    totalValCabeServ.add(animais.get(i).getValorCabeca() * 1.0);
-                }
+                tabelaAnimaisServGTRE.addSourceTableRow(new Object[]{
+                    animais.get(i).getCategoria(),
+                    animais.get(i).getValorInicio(),
+                    animais.get(i).getNascimento(),
+                    animais.get(i).getMorte(),
+                    animais.get(i).getVenda(),
+                    animais.get(i).getCompra(),
+                    animais.get(i).getValorFinal(),
+                    animais.get(i).getValorCabeca(),}, animais.get(i).getId());
 
-            }
-            if (tabelaInveAnimaisProd.getRowCount() == 0 && tabelaInveAnimaisServ.getRowCount() == 0) {
-                editarInvAnimaisBT.setEnabled(false);
-                removerInvAnimaisBT.setEnabled(false);
+                totalValInicServ += (animais.get(i).getValorInicio() * 1.0);
+                totalNascServ += (animais.get(i).getNascimento() * 1.0);
+                totalMorteServ += (animais.get(i).getMorte() * 1.0);
+                totalVendaServ += (animais.get(i).getVenda() * 1.0);
+                totalCompraServ += (animais.get(i).getCompra() * 1.0);
+                totalValFinaServ.add(animais.get(i).getValorFinal() * 1.0);
+                totalValCabeServ.add(animais.get(i).getValorCabeca() * 1.0);
             }
 
-            total13.setText("" + (totalValInicProd));
-            total14.setText("" + (totalNascProd));
-            total15.setText("" + (totalMorteProd));
-            total16.setText("" + (totalVendaProd));
-            total17.setText("" + (totalCompraProd));
-            total18.setText("" + (totalValFinaProd));
-                        
-            total19.setText(String.format("R$ %.2f", totalValorInicio));
-            total20.setText(String.format("R$ %.2f", totalValorFinal));
-            total21.setText("" + (totalValInicServ));
-            total22.setText("" + (totalNascServ));
-            total23.setText("" + (totalMorteServ));
-            total24.setText("" + (totalVendaServ));
-            total25.setText("" + (totalCompraServ));
-            total26.setText("" + Calc.somarLista(totalValFinaServ));
+        }
+        if (tabelaInveAnimaisProd.getRowCount() == 0 && tabelaInveAnimaisServ.getRowCount() == 0) {
+            editarInvAnimaisBT.setEnabled(false);
+            removerInvAnimaisBT.setEnabled(false);
+        }
 
-            total28.setText("" + (Double.parseDouble(total13.getText().replace(',','.')) + 
-                    Double.parseDouble(total21.getText().replace(',','.'))));
-            total29.setText("" + (Double.parseDouble(total26.getText().replace(',','.')) +
-                    Double.parseDouble(total18.getText().substring(1).replace(',','.'))));
+        total13.setText("" + (totalValInicProd));
+        total14.setText("" + (totalNascProd));
+        total15.setText("" + (totalMorteProd));
+        total16.setText("" + (totalVendaProd));
+        total17.setText("" + (totalCompraProd));
+        total18.setText("" + (totalValFinaProd));
 
-            total31.setText(String.format("R$ %.2f", ((Double.parseDouble(total19.getText().substring(2).replace(',','.')) +
-                    Double.parseDouble(total20.getText().substring(2).replace(',','.'))) / 2 )));
-            
-            if(resumo != null){
-                total32.setText(String.format("R$ %.2f", resumo.getValorGastoCompraAnimais()));
-                total35.setText(String.format("%d", resumo.getVidaUtilReprodutores()));
-            }
-            
-            total33.setText(String.format("R$ %.2f", (Double.parseDouble(total20.getText().substring(2).replace(',','.')) -
-                        Double.parseDouble(total19.getText().substring(2).replace(',','.')) - Double.parseDouble(total32.getText().substring(2).replace(',','.')))));
-            
-            try{
-                total36.setText(String.format("%.2f", Calc.dividir(Double.parseDouble(total34.getText().substring(2).replace(',','.')),
-                        Double.parseDouble(total35.getText().replace(',','.')))));
-            } catch (IllegalArgumentException e) {
-                total36.setText("0.00");
-                //System.out.println("Erro em total 36 - Divisão Inválida. " + e.getMessage());
-            }
-            
-            total37.setText(String.format("R$ %.2f", Calc.somaPonderada(totalValFinaServ, totalValCabeServ)));
-            
-            if(resumo != null){
-                total38.setText(String.format("%d", resumo.getVidaUtilAnimaisServico()));
-            }
-            
-            try{
-                total39.setText(String.format("%.2f", Calc.dividir(Double.parseDouble(total37.getText().substring(2).replace(',','.')), 
-                        Double.parseDouble(total38.getText().replace(',','.')))));
-            } catch (IllegalArgumentException e){
-               total39.setText("0.00"); // Caso haja divisão por 0
-               //System.out.println("Erro em total39 - Divisão Inválida " + e.getMessage());
-            }
-                
-            tabelaBenfeitoriasGTRE.getSourceTableModel().setRowCount(0);
+        total19.setText(String.format("R$ %.2f", totalValorInicio));
+        total20.setText(String.format("R$ %.2f", totalValorFinal));
+        total21.setText("" + (totalValInicServ));
+        total22.setText("" + (totalNascServ));
+        total23.setText("" + (totalMorteServ));
+        total24.setText("" + (totalVendaServ));
+        total25.setText("" + (totalCompraServ));
+        total26.setText("" + Calc.somarLista(totalValFinaServ));
 
-            for(int i = 0; i < benfeitorias.size(); i++){
+        total28.setText("" + (Double.parseDouble(total13.getText().replace(',', '.'))
+                + Double.parseDouble(total21.getText().replace(',', '.'))));
+        total29.setText("" + (Double.parseDouble(total26.getText().replace(',', '.'))
+                + Double.parseDouble(total18.getText().substring(1).replace(',', '.'))));
 
-                double total = benfeitorias.get(i).getQuantidade() * benfeitorias.get(i).getValorUnitario();
-                double depreciacao = Calc.dividir(total, benfeitorias.get(i).getVidaUtil());
+        total31.setText(String.format("R$ %.2f", ((Double.parseDouble(total19.getText().substring(2).replace(',', '.'))
+                + Double.parseDouble(total20.getText().substring(2).replace(',', '.'))) / 2)));
 
-                tabelaBenfeitoriasGTRE.addSourceTableRow(new Object[] {
-                    benfeitorias.get(i).getEspecificacao(),
-                    benfeitorias.get(i).getUnidade(),
-                    benfeitorias.get(i).getQuantidade(),
-                    benfeitorias.get(i).getValorUnitario(),
-                    total,
-                    benfeitorias.get(i).getVidaUtil(),
-                    depreciacao,
-                    
-                }, benfeitorias.get(i).getId());
+        if (resumo != null) {
+            total32.setText(String.format("R$ %.2f", resumo.getValorGastoCompraAnimais()));
+            total35.setText(String.format("%d", resumo.getVidaUtilReprodutores()));
+        }
 
-                totalValorBenfeit += (total);
-                totalDeprecBenfeit += (depreciacao);
-            }
-            
-            verificaTabelaVazia(tabelaBenfeitoriasGTRE.getSourceTableModel(), editarInvBenfeitoriasBT, removerInvBenfeitoriasBT);
+        total33.setText(String.format("R$ %.2f", (Double.parseDouble(total20.getText().substring(2).replace(',', '.'))
+                - Double.parseDouble(total19.getText().substring(2).replace(',', '.')) - Double.parseDouble(total32.getText().substring(2).replace(',', '.')))));
 
-            total40.setText(String.format("R$ %.2f", totalValorBenfeit));
-            total41.setText(String.format("R$ %.2f", totalDeprecBenfeit));
-            tabelaMaquinasGTRE.getSourceTableModel().setRowCount(0);
+        try {
+            total36.setText(String.format("%.2f", Calc.dividir(Double.parseDouble(total34.getText().substring(2).replace(',', '.')),
+                    Double.parseDouble(total35.getText().replace(',', '.')))));
+        } catch (IllegalArgumentException e) {
+            total36.setText("0.00");
+            //System.out.println("Erro em total 36 - Divisão Inválida. " + e.getMessage());
+        }
 
-            for(int i = 0; i < maquinas.size(); i++){
+        total37.setText(String.format("R$ %.2f", Calc.somaPonderada(totalValFinaServ, totalValCabeServ)));
 
-                double total = maquinas.get(i).getQuantidade() * maquinas.get(i).getValorUnitario();
-                double depreciacao = Calc.dividir(total, maquinas.get(i).getVidaUtil());
+        if (resumo != null) {
+            total38.setText(String.format("%d", resumo.getVidaUtilAnimaisServico()));
+        }
 
-                tabelaMaquinasGTRE.addSourceTableRow(new Object[] {
-                    maquinas.get(i).getEspecificacao(),
-                    maquinas.get(i).getUnidade(),
-                    maquinas.get(i).getQuantidade(),
-                    maquinas.get(i).getValorUnitario(),
-                    total,
-                    maquinas.get(i).getVidaUtil(),
-                    depreciacao,
-                    
-                }, maquinas.get(i).getId());
+        try {
+            total39.setText(String.format("%.2f", Calc.dividir(Double.parseDouble(total37.getText().substring(2).replace(',', '.')),
+                    Double.parseDouble(total38.getText().replace(',', '.')))));
+        } catch (IllegalArgumentException e) {
+            total39.setText("0.00"); // Caso haja divisão por 0
+            //System.out.println("Erro em total39 - Divisão Inválida " + e.getMessage());
+        }
 
-                totalValorMaquin += (total);
-                totalDeprecMaquin += (depreciacao);
-            }
-            verificaTabelaVazia(tabelaMaquinasGTRE.getSourceTableModel(), editarInvMaquinasBT, removerInvMaquinasBT);
+        tabelaBenfeitoriasGTRE.getSourceTableModel().setRowCount(0);
 
-            total42.setText(String.format("R$ %.2f", totalValorMaquin));
-            total43.setText(String.format("R$ %.2f", totalDeprecMaquin));
+        for (int i = 0; i < benfeitorias.size(); i++) {
 
-            //Resumo
-            if(resumo != null){
-                atividadeLeite.setText(String.format("%.2f", resumo.getAtividadeLeiteira()));
-                custoOportunidade.setText(String.format("%.2f", resumo.getCustoOportunidade()));
-                salarioMinimo.setText(String.format("%.2f", resumo.getSalarioMinimo()));
-            }
-            
-            total44.setText(total12.getText().substring(2));
-            total45.setText(total39.getText());
-            total46.setText(total36.getText());
-            total47.setText(String.format("%.2f", (Double.parseDouble(total41.getText().substring(2).replace(',','.')))));
-            total48.setText(total43.getText().substring(2));
-            total49.setText(String.format("R$ %.2f", (Double.parseDouble(total44.getText().replace(',','.')) + 
-                                  Double.parseDouble(total45.getText().replace(',','.')) +
-                                  Double.parseDouble(total46.getText().replace(',','.')) +
-                                  Double.parseDouble(total47.getText().replace(',','.')) +
-                                  Double.parseDouble(total48.getText().replace(',','.')))));
-            total50.setText(String.format("R$ %.2f", ((Double.parseDouble(atividadeLeite.getText().replace(',','.'))/100) * 
-                    Double.parseDouble(total49.getText().substring(2).replace(',','.')))));
+            double total = benfeitorias.get(i).getQuantidade() * benfeitorias.get(i).getValorUnitario();
+            double depreciacao = Calc.dividir(total, benfeitorias.get(i).getVidaUtil());
 
-            total51.setText(total9.getText().substring(2));
-            total52.setText(total12.getText().substring(2));
-            total53.setText(total31.getText().substring(2));
-            total54.setText(total40.getText().substring(2));
-            total55.setText(total42.getText().substring(2));
-            total56.setText(String.format("R$ %.2f", (Double.parseDouble(total51.getText()) + 
-                                  Double.parseDouble(total52.getText().replace(',','.')) +
-                                  Double.parseDouble(total53.getText().replace(',','.')) +
-                                  Double.parseDouble(total54.getText().replace(',','.')) +
-                                  Double.parseDouble(total55.getText().replace(',','.')))));
-            total57.setText(String.format("R$ %.2f", ((Double.parseDouble(custoOportunidade.getText().replace(',','.')))/100 * 
-                    Double.parseDouble(total56.getText().substring(2).replace(',','.')))));
-   
-            total58.setText(salarioMinimo.getText());
-            total59.setText(String.format("%.2f", (Double.parseDouble(salarioMinimo.getText().replace(',','.')) * 0.3)));
-            total60.setText(String.format("R$ %.2f", ((Double.parseDouble(total58.getText().replace(',','.')) * 13 + 
-                                  (Double.parseDouble(total58.getText().replace(',','.'))) * 0.3)) / 12));
-            
-            definirBDListeners();
+            tabelaBenfeitoriasGTRE.addSourceTableRow(new Object[]{
+                benfeitorias.get(i).getEspecificacao(),
+                benfeitorias.get(i).getUnidade(),
+                benfeitorias.get(i).getQuantidade(),
+                benfeitorias.get(i).getValorUnitario(),
+                total,
+                benfeitorias.get(i).getVidaUtil(),
+                depreciacao,}, benfeitorias.get(i).getId());
+
+            totalValorBenfeit += (total);
+            totalDeprecBenfeit += (depreciacao);
+        }
+
+        verificaTabelaVazia(tabelaBenfeitoriasGTRE.getSourceTableModel(), editarInvBenfeitoriasBT, removerInvBenfeitoriasBT);
+
+        total40.setText(String.format("R$ %.2f", totalValorBenfeit));
+        total41.setText(String.format("R$ %.2f", totalDeprecBenfeit));
+        tabelaMaquinasGTRE.getSourceTableModel().setRowCount(0);
+
+        for (int i = 0; i < maquinas.size(); i++) {
+
+            double total = maquinas.get(i).getQuantidade() * maquinas.get(i).getValorUnitario();
+            double depreciacao = Calc.dividir(total, maquinas.get(i).getVidaUtil());
+
+            tabelaMaquinasGTRE.addSourceTableRow(new Object[]{
+                maquinas.get(i).getEspecificacao(),
+                maquinas.get(i).getUnidade(),
+                maquinas.get(i).getQuantidade(),
+                maquinas.get(i).getValorUnitario(),
+                total,
+                maquinas.get(i).getVidaUtil(),
+                depreciacao,}, maquinas.get(i).getId());
+
+            totalValorMaquin += (total);
+            totalDeprecMaquin += (depreciacao);
+        }
+        verificaTabelaVazia(tabelaMaquinasGTRE.getSourceTableModel(), editarInvMaquinasBT, removerInvMaquinasBT);
+
+        total42.setText(String.format("R$ %.2f", totalValorMaquin));
+        total43.setText(String.format("R$ %.2f", totalDeprecMaquin));
+
+        //Resumo
+        if (resumo != null) {
+            atividadeLeite.setText(String.format("%.2f", resumo.getAtividadeLeiteira()));
+            custoOportunidade.setText(String.format("%.2f", resumo.getCustoOportunidade()));
+            salarioMinimo.setText(String.format("%.2f", resumo.getSalarioMinimo()));
+        }
+
+        total44.setText(total12.getText().substring(2));
+        total45.setText(total39.getText());
+        total46.setText(total36.getText());
+        total47.setText(String.format("%.2f", (Double.parseDouble(total41.getText().substring(2).replace(',', '.')))));
+        total48.setText(total43.getText().substring(2));
+        total49.setText(String.format("R$ %.2f", (Double.parseDouble(total44.getText().replace(',', '.'))
+                + Double.parseDouble(total45.getText().replace(',', '.'))
+                + Double.parseDouble(total46.getText().replace(',', '.'))
+                + Double.parseDouble(total47.getText().replace(',', '.'))
+                + Double.parseDouble(total48.getText().replace(',', '.')))));
+        total50.setText(String.format("R$ %.2f", ((Double.parseDouble(atividadeLeite.getText().replace(',', '.')) / 100)
+                * Double.parseDouble(total49.getText().substring(2).replace(',', '.')))));
+
+        total51.setText(total9.getText().substring(2));
+        total52.setText(total12.getText().substring(2));
+        total53.setText(total31.getText().substring(2));
+        total54.setText(total40.getText().substring(2));
+        total55.setText(total42.getText().substring(2));
+        total56.setText(String.format("R$ %.2f", (Double.parseDouble(total51.getText())
+                + Double.parseDouble(total52.getText().replace(',', '.'))
+                + Double.parseDouble(total53.getText().replace(',', '.'))
+                + Double.parseDouble(total54.getText().replace(',', '.'))
+                + Double.parseDouble(total55.getText().replace(',', '.')))));
+        total57.setText(String.format("R$ %.2f", ((Double.parseDouble(custoOportunidade.getText().replace(',', '.'))) / 100
+                * Double.parseDouble(total56.getText().substring(2).replace(',', '.')))));
+
+        total58.setText(salarioMinimo.getText());
+        total59.setText(String.format("%.2f", (Double.parseDouble(salarioMinimo.getText().replace(',', '.')) * 0.3)));
+        total60.setText(String.format("R$ %.2f", ((Double.parseDouble(total58.getText().replace(',', '.')) * 13
+                + (Double.parseDouble(total58.getText().replace(',', '.'))) * 0.3)) / 12));
+
+        definirBDListeners();
     }
 
     /**
@@ -2146,151 +2140,146 @@ public class VisualizarInventario extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
-	private void calcularValoresInvTerras(Object[] terrasRowData, Object[] forrageirasRowData, int forrageirasRow){
-      
+    private void calcularValoresInvTerras(Object[] terrasRowData, Object[] forrageirasRowData, int forrageirasRow) {
+
         forrageirasRowData[2] = Calc.dividir(Cast.toDouble(terrasRowData[2]) + Cast.toDouble(terrasRowData[4]), 2.0);
         //R$/Total = (R$/Ha) * Ha
         forrageirasRowData[3] = Cast.toDouble(forrageirasRowData[1]) * Cast.toDouble(forrageirasRowData[2]);
         //Depreciacao (R$/Ano) = (R$/Total) / VidaUtilAnos
-        forrageirasRowData[5] = Calc.dividir(Cast.toDouble(forrageirasRowData[3]), (double)Cast.toInt(forrageirasRowData[4]));
+        forrageirasRowData[5] = Calc.dividir(Cast.toDouble(forrageirasRowData[3]), (double) Cast.toInt(forrageirasRowData[4]));
 
         for (int i = 0; i < tabelaInveForrageiras.getColumnCount(); i++) {
             tabelaInveForrageiras.setValueAt(forrageirasRowData[i], forrageirasRow, i);
         }
     }
-	
+
     private void inicializarGTRE() {
-        tabelaMaquinasGTRE = new GenericTableRowEditor(this, tabelaMaquinas, false);       
+        tabelaMaquinasGTRE = new GenericTableRowEditor(this, tabelaMaquinas, false);
         tabelaBenfeitoriasGTRE = new GenericTableRowEditor(this, tabelaBenfeitorias, false);
         tabelaForrageirasGTRE = new GenericTableRowEditor(this, tabelaInveForrageiras, false);
         tabelaTerrasGTRE = new GenericTableRowEditor(this, tabelaInveTerras, false);
         tabelaAnimaisProdGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisProd, false);
         tabelaAnimaisServGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisServ, false);
-       
+
         tabelaForrageirasGTRE.setColumnEditable(2, false);
         tabelaForrageirasGTRE.setColumnEditable(3, false);
         tabelaForrageirasGTRE.setColumnEditable(5, false);
-        
+
         tabelaAnimaisProdGTRE.setColumnEditable(8, false);
         tabelaAnimaisProdGTRE.setColumnEditable(9, false);
-        
+
         tabelaBenfeitoriasGTRE.setColumnEditable(4, false);
         tabelaBenfeitoriasGTRE.setColumnEditable(6, false);
-        
+
         tabelaMaquinasGTRE.setColumnEditable(4, false);
         tabelaMaquinasGTRE.setColumnEditable(6, false);
-        
+
     }
-    
-    private void definirBDListeners(){
-        
+
+    private void definirBDListeners() {
+
         tabelaMaquinasGTRE.addTableModifyListener(new TableModifyListener() {
             @Override
             public void tableModified(TableModifiedEvent event) {
-                
+
                 InventarioMaquinasDAO dao = new InventarioMaquinasDAO();
                 Perfil perfil = ControlePerfil.getInstance().getPerfilSelecionado();
-                
+
                 Object[] rowData = event.getRowData();
-                Integer rowID = (Integer)event.getCustomRowData();
+                Integer rowID = (Integer) event.getCustomRowData();
                 GenericTableModifier modifier = event.getSourceModifier();
                 int modifType = event.getEventType();
-                
-                if(modifType == TableModifyListener.ROW_INSERTED){
-                    
+
+                if (modifType == TableModifyListener.ROW_INSERTED) {
+
                     try {
-                        InventarioMaquinas inv = new InventarioMaquinas(Cast.toString(rowData[0]),Cast.toString(rowData[1]),Cast.toDouble(rowData[2]),
-                                                                        Cast.toDouble(rowData[3]),Cast.toInt(rowData[5]),perfil);
+                        InventarioMaquinas inv = new InventarioMaquinas(Cast.toString(rowData[0]), Cast.toString(rowData[1]), Cast.toDouble(rowData[2]),
+                                Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfil);
                         dao.cadastrar(inv);
-                        
-                        modifier.setCustomRowData(modifier.getSourceTable().getRowCount()-1, inv.getId());
-                        
+
+                        modifier.setCustomRowData(modifier.getSourceTable().getRowCount() - 1, inv.getId());
+
                     } catch (SQLException ex) {
                         Logger.getLogger(VisualizarInventario.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                }
-                else if(modifType == TableModifyListener.ROW_UPDATED){
-                    
+                } else if (modifType == TableModifyListener.ROW_UPDATED) {
+
                     try {
-                        InventarioMaquinas inv = new InventarioMaquinas(Cast.toString(rowData[0]),Cast.toString(rowData[1]),Cast.toDouble(rowData[2]),
-                                                                        Cast.toDouble(rowData[3]),Cast.toInt(rowData[5]),perfil);
+                        InventarioMaquinas inv = new InventarioMaquinas(Cast.toString(rowData[0]), Cast.toString(rowData[1]), Cast.toDouble(rowData[2]),
+                                Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfil);
                         inv.setId(rowID);
-                        
+
                         dao.atualizar(inv);
-                        
+
                     } catch (SQLException ex) {
                         Logger.getLogger(VisualizarInventario.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                }
-                else if(modifType == TableModifyListener.ROW_DELETED){
+                } else if (modifType == TableModifyListener.ROW_DELETED) {
                     try {
                         dao.remover(rowID);
-                        
+
                     } catch (SQLException ex) {
                         Logger.getLogger(VisualizarInventario.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }
         });
-        
+
         tabelaBenfeitoriasGTRE.addTableModifyListener(new TableModifyListener() {
             @Override
             public void tableModified(TableModifiedEvent event) {
-                
+
                 InventarioBenfeitoriasDAO dao = new InventarioBenfeitoriasDAO();
-                
+
                 Perfil perfil = ControlePerfil.getInstance().getPerfilSelecionado();
                 Object[] rowData = event.getRowData();
-                Integer rowID = (Integer)event.getCustomRowData();
+                Integer rowID = (Integer) event.getCustomRowData();
                 GenericTableModifier modifier = event.getSourceModifier();
                 int modifType = event.getEventType();
-                
-                if(modifType == TableModifyListener.ROW_INSERTED){
-                    
+
+                if (modifType == TableModifyListener.ROW_INSERTED) {
+
                     try {
-                        InventarioBenfeitorias inv = new InventarioBenfeitorias(Cast.toString(rowData[0]),Cast.toString(rowData[1]),Cast.toDouble(rowData[2]),
-                                                                                Cast.toDouble(rowData[3]),Cast.toInt(rowData[5]),perfil);
+                        InventarioBenfeitorias inv = new InventarioBenfeitorias(Cast.toString(rowData[0]), Cast.toString(rowData[1]), Cast.toDouble(rowData[2]),
+                                Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfil);
                         dao.cadastrar(inv);
-                        
-                        modifier.setCustomRowData(modifier.getSourceTable().getRowCount()-1, inv.getId());  
-                        
+
+                        modifier.setCustomRowData(modifier.getSourceTable().getRowCount() - 1, inv.getId());
+
                     } catch (SQLException ex) {
                         Logger.getLogger(VisualizarInventario.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                }
-                else if(modifType == TableModifyListener.ROW_UPDATED){
-                    
+                } else if (modifType == TableModifyListener.ROW_UPDATED) {
+
                     try {
-                        InventarioBenfeitorias inv = new InventarioBenfeitorias(Cast.toString(rowData[0]),Cast.toString(rowData[1]),Cast.toDouble(rowData[2]),
-                                                                                Cast.toDouble(rowData[3]),Cast.toInt(rowData[5]),perfil);
+                        InventarioBenfeitorias inv = new InventarioBenfeitorias(Cast.toString(rowData[0]), Cast.toString(rowData[1]), Cast.toDouble(rowData[2]),
+                                Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfil);
                         inv.setId(rowID);
-                        
+
                         dao.atualizar(inv);
-                        
+
                     } catch (SQLException ex) {
                         Logger.getLogger(VisualizarInventario.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                }
-                else if(modifType == TableModifyListener.ROW_DELETED){
-                    
+                } else if (modifType == TableModifyListener.ROW_DELETED) {
+
                     try {
                         dao.remover(rowID);
-                        
+
                     } catch (SQLException ex) {
                         Logger.getLogger(VisualizarInventario.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }
         });
-        
+
         tabelaTerrasGTRE.addTableModifyListener(new TableModifyListener() {
             @Override
             public void tableModified(TableModifiedEvent event) {
 
                 GenericDAO<InventarioTerras> dao = new GenericDAO<>(InventarioTerras.class);
                 Perfil perfil = ControlePerfil.getInstance().getPerfilSelecionado();
-                
+
                 Object[] rowData = event.getRowData();
                 Integer rowID = (Integer) event.getCustomRowData();
                 GenericTableModifier modifier = event.getSourceModifier();
@@ -2300,26 +2289,24 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 if (modifType == TableModifyListener.ROW_INSERTED || modifType == TableModifyListener.ROW_UPDATED) {
 
                     InventarioTerras terras = new InventarioTerras(Cast.toString(rowData[0]), Cast.toDouble(rowData[1]), Cast.toDouble(rowData[2]),
-                            Cast.toDouble(rowData[3]), Cast.toDouble(rowData[4]), Cast.toDouble(rowData[5]), 0, 0, perfil);
+                            Cast.toDouble(rowData[3]), Cast.toDouble(rowData[4]), Cast.toDouble(rowData[5]), perfil);
 
                     if (modifType == TableModifyListener.ROW_INSERTED) {
 
                         tabelaForrageirasGTRE.addSourceTableRow(new Object[]{terras.getEspecificacao()}, null);
                         dao.insert(terras);
-                        
+
                         modifier.setCustomRowData(rowIndex, terras.getId());
                         tabelaForrageirasGTRE.setCustomRowData(rowIndex, terras.getId());
-                        
+
                     } else if (modifType == TableModifyListener.ROW_UPDATED) {
 
                         Object[] forrageirasRowData = tabelaForrageirasGTRE.getSourceTableRowData(rowIndex);
 
-                        terras.setVidaUtil( Integer.parseInt(Cast.toString(forrageirasRowData[4])) );
-                        terras.setCustoFormacaoHectare(Cast.toDouble(forrageirasRowData[1]));
                         terras.setId(rowID);
-                        
+
                         calcularValoresInvTerras(rowData, forrageirasRowData, rowIndex);
-                        
+
                         dao.update(terras);
                     }
                 } else if (modifType == TableModifyListener.ROW_DELETED) {
@@ -2327,7 +2314,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 }
             }
         });
-        
+
         tabelaForrageirasGTRE.addTableModifyListener(new TableModifyListener() {
             @Override
             public void tableModified(TableModifiedEvent event) {
@@ -2335,7 +2322,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 if (event.getEventType() == TableModifyListener.ROW_UPDATED) {
 
                     GenericDAO<InventarioTerras> dao = new GenericDAO<>(InventarioTerras.class);
-                    
+
                     Object[] rowData = event.getRowData();
                     GenericTableModifier modifier = event.getSourceModifier();
                     int rowIndex = event.getRowIndex();
@@ -2345,16 +2332,20 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
                     calcularValoresInvTerras(terrasRowData, rowData, rowIndex);
 
-                    InventarioTerras terras = dao.retrieve(rowID);
-                    terras.setVidaUtil(Cast.toInt(rowData[4]));
-                    terras.setCustoFormacaoHectare(Cast.toDouble(rowData[1]));
-                    
-                    dao.update(terras);
+                    InventarioForrageiras forrageiras = null;
+                    try {
+                        forrageiras = ifdao.recuperar(rowID);
+                        forrageiras.setVidaUtil(Cast.toInt(rowData[4]));
+                        forrageiras.setCustoFormacaoHectare(Cast.toDouble(rowData[1]));
+                        ifdao.atualizar(forrageiras);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(VisualizarInventario.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
 
             }
         });
-        
+
         TableModifyListener animaisTMListener = new TableModifyListener() {
             @Override
             public void tableModified(TableModifiedEvent event) {
@@ -2395,74 +2386,70 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 }
             }
         };
-        
+
         tabelaAnimaisProdGTRE.addTableModifyListener(animaisTMListener);
         tabelaAnimaisServGTRE.addTableModifyListener(animaisTMListener);
     }
-    
+
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
-        
+
         new MenuPrincipal().setVisible(true);
         this.setVisible(false);
         this.dispose();
-        
+
     }//GEN-LAST:event_btnVoltarActionPerformed
 
     private void editarInvAnimaisBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarInvAnimaisBTActionPerformed
-        
-        if(tabelaInveAnimaisProd.getSelectedRowCount() > 0){
+
+        if (tabelaInveAnimaisProd.getSelectedRowCount() > 0) {
             tabelaAnimaisProdGTRE.setEditorType(GTRE_UPDATE);
             tabelaAnimaisProdGTRE.showEditor(evt);
-        }
-        else if(tabelaInveAnimaisServ.getSelectedRowCount() > 0){
+        } else if (tabelaInveAnimaisServ.getSelectedRowCount() > 0) {
             tabelaAnimaisServGTRE.setEditorType(GTRE_UPDATE);
             tabelaAnimaisServGTRE.showEditor(evt);
-        }
-        else {
+        } else {
             JOptionPane.showMessageDialog(rootPane, "Selecione uma linha da tabela para editar",
-                        "Editar - Nenhuma linha selecionada", JOptionPane.INFORMATION_MESSAGE);
+                    "Editar - Nenhuma linha selecionada", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_editarInvAnimaisBTActionPerformed
 
     private void valorGastoAnimaisBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_valorGastoAnimaisBTActionPerformed
-        try{
+        try {
             Double temp = Double.parseDouble(JOptionPane.showInputDialog("Valor Gasto com Compra de Animais: "));
-            
-            if(temp >= 0.0){
+
+            if (temp >= 0.0) {
                 total32.setText(String.format("R$ %.2f", temp));
-                total33.setText(String.format("R$ %.2f", (Double.parseDouble(total20.getText().substring(2).replace(',','.')) -
-                        Double.parseDouble(total19.getText().substring(2).replace(',','.')) - Double.parseDouble(total32.getText().substring(2).replace(',','.')))));
-                
-                if(resumo != null){
+                total33.setText(String.format("R$ %.2f", (Double.parseDouble(total20.getText().substring(2).replace(',', '.'))
+                        - Double.parseDouble(total19.getText().substring(2).replace(',', '.')) - Double.parseDouble(total32.getText().substring(2).replace(',', '.')))));
+
+                if (resumo != null) {
                     resumo.setValorGastoCompraAnimais(temp);
                     irdao.atualizar(resumo);
-                } 
+                }
             } else {
                 JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
             }
-        } catch (IllegalArgumentException | SQLException | NullPointerException e){
+        } catch (IllegalArgumentException | SQLException | NullPointerException e) {
             JOptionPane.showMessageDialog(null, "Insira um valor válido!");
         }
     }//GEN-LAST:event_valorGastoAnimaisBTActionPerformed
 
     private void editarInvTerrasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarInvTerrasBTActionPerformed
-       
-        if(tabelaInveTerras.getSelectedRowCount() > 0){
+
+        if (tabelaInveTerras.getSelectedRowCount() > 0) {
             tabelaTerrasGTRE.setEditorType(GTRE_UPDATE);
             tabelaTerrasGTRE.showEditor(evt);
-        }
-        else if(tabelaInveForrageiras.getSelectedRowCount() > 0){
+        } else if (tabelaInveForrageiras.getSelectedRowCount() > 0) {
             tabelaForrageirasGTRE.setEditorType(GTRE_UPDATE);
             tabelaForrageirasGTRE.showEditor(evt);
-        }
-        else{
+        } else {
             JOptionPane.showMessageDialog(rootPane, "Selecione uma linha da tabela para editar",
-                        "Editar - Nenhuma linha selecionada", JOptionPane.INFORMATION_MESSAGE);
+                    "Editar - Nenhuma linha selecionada", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_editarInvTerrasBTActionPerformed
 
     private void adicionarInvTerrasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarInvTerrasBTActionPerformed
-        
+
         tabelaTerrasGTRE.setEditorType(GTRE_INSERT);
         tabelaTerrasGTRE.showEditor(evt);
         verificaTabelaVazia(tabelaTerrasGTRE.getSourceTableModel(), editarInvTerrasBT, removerInvTerrasBT);
@@ -2495,22 +2482,29 @@ public class VisualizarInventario extends javax.swing.JFrame {
     }//GEN-LAST:event_editarInvBenfeitoriasBTActionPerformed
 
     private void removerInvTerrasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerInvTerrasBTActionPerformed
-
-        if(tabelaInveTerras.getSelectedRowCount() > 0){
-            
-            tabelaForrageirasGTRE.removeSourceTableRow(tabelaInveTerras.getSelectedRow());
-            tabelaTerrasGTRE.removeSourceTableRow(tabelaInveTerras.getSelectedRow());
-        }
-        else if(tabelaInveForrageiras.getSelectedRowCount() > 0){
-            
-            tabelaTerrasGTRE.removeSourceTableRow(tabelaInveForrageiras.getSelectedRow());
-            tabelaForrageirasGTRE.removeSourceTableRow(tabelaInveForrageiras.getSelectedRow());
-        }
-        else {
-            JOptionPane.showMessageDialog(rootPane, "Selecione uma linha da tabela para remover",
-                        "Remover - Nenhuma linha selecionada", JOptionPane.INFORMATION_MESSAGE);
-        }
+        int escolha;
         
+        if (tabelaInveTerras.getSelectedRowCount() > 0) {
+            escolha = JOptionPane.showConfirmDialog(null, "A linha será excluída em ambas as tabelas. "
+                    + "\nDeseja realmente excluir '" + tabelaInveTerras.getValueAt(tabelaInveTerras.getSelectedRow(), 0).toString().toUpperCase()
+                    + "'? ", "Confirmar exclusão", JOptionPane.YES_NO_OPTION);
+            if (escolha == 0) {
+                tabelaForrageirasGTRE.removeSourceTableRow(tabelaInveTerras.getSelectedRow());
+                tabelaTerrasGTRE.removeSourceTableRow(tabelaInveTerras.getSelectedRow());
+            }
+        } else if (tabelaInveForrageiras.getSelectedRowCount() > 0) {
+            escolha = JOptionPane.showConfirmDialog(null, "A linha será excluída em ambas as tabelas. "
+                    + "\nDeseja realmente excluir '" + tabelaInveForrageiras.getValueAt(tabelaInveForrageiras.getSelectedRow(), 0).toString().toUpperCase() 
+                    + "'? ", "Confirmar exclusão", JOptionPane.YES_NO_OPTION);
+            if (escolha == 0) {
+                tabelaTerrasGTRE.removeSourceTableRow(tabelaInveForrageiras.getSelectedRow());
+                tabelaForrageirasGTRE.removeSourceTableRow(tabelaInveForrageiras.getSelectedRow());
+            }
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Selecione uma linha da tabela para remover",
+                    "Remover - Nenhuma linha selecionada", JOptionPane.INFORMATION_MESSAGE);
+        }
+
         if (tabelaInveTerras.getRowCount() == 0 && tabelaInveForrageiras.getRowCount() == 0) {
             editarInvTerrasBT.setEnabled(false);
             removerInvTerrasBT.setEnabled(false);
@@ -2520,69 +2514,85 @@ public class VisualizarInventario extends javax.swing.JFrame {
     private void adicionarInvMaquinasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarInvMaquinasBTActionPerformed
         tabelaMaquinasGTRE.setEditorType(GTRE_INSERT);
         tabelaMaquinasGTRE.showEditor(evt);
-         verificaTabelaVazia(tabelaMaquinasGTRE.getSourceTableModel(), editarInvMaquinasBT, removerInvMaquinasBT);
+        verificaTabelaVazia(tabelaMaquinasGTRE.getSourceTableModel(), editarInvMaquinasBT, removerInvMaquinasBT);
     }//GEN-LAST:event_adicionarInvMaquinasBTActionPerformed
 
     private void adicionarInvAnimaisBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarInvAnimaisBTActionPerformed
-        
-        ArrayList<Pair<String,JTable>> tabelas = new ArrayList<>();
-        
+
+        ArrayList<Pair<String, JTable>> tabelas = new ArrayList<>();
+
         tabelas.add(Pair.create("Tabela - Animais de Produção", tabelaInveAnimaisProd));
         tabelas.add(Pair.create("Tabela - Animais de Serviço", tabelaInveAnimaisServ));
-        
+
         ItemSelector<JTable> selector = new ItemSelector<>(this, tabelas);
         selector.setLabel("Selecione uma tabela para adicionar:");
-        
+
         JTable selecionada = selector.showSelector();
-        
-        if(selecionada == tabelaInveAnimaisProd){
+
+        if (selecionada == tabelaInveAnimaisProd) {
             tabelaAnimaisProdGTRE.setEditorType(GTRE_INSERT);
             tabelaAnimaisProdGTRE.showEditor(evt);
             verificaTabelaVazia(tabelaAnimaisProdGTRE.getSourceTableModel(), editarInvAnimaisBT, removerInvAnimaisBT);
-           
-        }
-        else if(selecionada == tabelaInveAnimaisServ){
+
+        } else if (selecionada == tabelaInveAnimaisServ) {
             tabelaAnimaisServGTRE.setEditorType(GTRE_INSERT);
             tabelaAnimaisServGTRE.showEditor(evt);
-             verificaTabelaVazia(tabelaAnimaisServGTRE.getSourceTableModel(), editarInvAnimaisBT, removerInvAnimaisBT);
+            verificaTabelaVazia(tabelaAnimaisServGTRE.getSourceTableModel(), editarInvAnimaisBT, removerInvAnimaisBT);
         }
     }//GEN-LAST:event_adicionarInvAnimaisBTActionPerformed
 
     private void removerInvBenfeitoriasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerInvBenfeitoriasBTActionPerformed
-        
-        if(tabelaBenfeitorias.getSelectedRowCount() > 0){
-            tabelaBenfeitoriasGTRE.removeSourceTableRow(tabelaBenfeitorias.getSelectedRow());
-        }
-        else {
+        int escolha;
+        if (tabelaBenfeitorias.getSelectedRowCount() > 0) {
+            escolha = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir '" 
+                    + tabelaBenfeitorias.getValueAt(tabelaBenfeitorias.getSelectedRow(), 0).toString().toUpperCase()
+                    + "'? ", "Confirmar exclusão", JOptionPane.YES_NO_OPTION);
+            if (escolha == 0) {
+                tabelaBenfeitoriasGTRE.removeSourceTableRow(tabelaBenfeitorias.getSelectedRow());
+            }
+        } else {
             JOptionPane.showMessageDialog(rootPane, "Selecione uma linha da tabela para remover",
-                        "Remover - Nenhuma linha selecionada", JOptionPane.INFORMATION_MESSAGE);
+                    "Remover - Nenhuma linha selecionada", JOptionPane.INFORMATION_MESSAGE);
         }
         verificaTabelaVazia(tabelaBenfeitoriasGTRE.getSourceTableModel(), editarInvBenfeitoriasBT, removerInvBenfeitoriasBT);
     }//GEN-LAST:event_removerInvBenfeitoriasBTActionPerformed
 
     private void removerInvMaquinasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerInvMaquinasBTActionPerformed
-       
-        if(tabelaMaquinas.getSelectedRowCount() > 0){
-            tabelaMaquinasGTRE.removeSourceTableRow(tabelaMaquinas.getSelectedRow());
-        }
-        else {
+        int escolha;
+        if (tabelaMaquinas.getSelectedRowCount() > 0) {
+             escolha = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir '" 
+                    + tabelaMaquinas.getValueAt(tabelaMaquinas.getSelectedRow(), 0).toString().toUpperCase()
+                    + "'? ", "Confirmar exclusão", JOptionPane.YES_NO_OPTION);
+            if (escolha == 0) {
+                tabelaMaquinasGTRE.removeSourceTableRow(tabelaMaquinas.getSelectedRow());
+            }
+        } else {
             JOptionPane.showMessageDialog(rootPane, "Selecione uma linha da tabela para remover",
-                        "Remover - Nenhuma linha selecionada", JOptionPane.INFORMATION_MESSAGE);
+                    "Remover - Nenhuma linha selecionada", JOptionPane.INFORMATION_MESSAGE);
         }
         verificaTabelaVazia(tabelaMaquinasGTRE.getSourceTableModel(), editarInvMaquinasBT, removerInvMaquinasBT);
     }//GEN-LAST:event_removerInvMaquinasBTActionPerformed
 
     private void removerInvAnimaisBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerInvAnimaisBTActionPerformed
-        
-        if(tabelaInveAnimaisProd.getSelectedRowCount() > 0){
-            tabelaAnimaisProdGTRE.removeSourceTableRow(tabelaInveAnimaisProd.getSelectedRow());
-        } 
-        else if(tabelaInveAnimaisServ.getSelectedRowCount() > 0){
-            tabelaAnimaisServGTRE.removeSourceTableRow(tabelaInveAnimaisServ.getSelectedRow());
-        }
-        else {
+        int escolha;
+        if (tabelaInveAnimaisProd.getSelectedRowCount() > 0) {
+            
+            escolha = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir '" 
+                    + tabelaInveAnimaisProd.getValueAt(tabelaInveAnimaisProd.getSelectedRow(), 0).toString().toUpperCase()
+                    + "'? ", "Confirmar exclusão", JOptionPane.YES_NO_OPTION);
+            if (escolha == 0) {
+                tabelaAnimaisProdGTRE.removeSourceTableRow(tabelaInveAnimaisProd.getSelectedRow());
+            }
+        } else if (tabelaInveAnimaisServ.getSelectedRowCount() > 0) {
+            escolha = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir '"
+                    + tabelaInveAnimaisServ.getValueAt(tabelaInveAnimaisServ.getSelectedRow(), 0).toString().toUpperCase()
+                    + "'? ", "Confirmar exclusão", JOptionPane.YES_NO_OPTION);
+            if (escolha == 0) {
+                tabelaAnimaisServGTRE.removeSourceTableRow(tabelaInveAnimaisServ.getSelectedRow());
+            }
+        } else {
             JOptionPane.showMessageDialog(rootPane, "Selecione uma linha da tabela para remover",
-                        "Remover - Nenhuma linha selecionada", JOptionPane.INFORMATION_MESSAGE);
+                    "Remover - Nenhuma linha selecionada", JOptionPane.INFORMATION_MESSAGE);
         }
         if (tabelaInveAnimaisProd.getRowCount() == 0 && tabelaInveAnimaisServ.getRowCount() == 0) {
             editarInvAnimaisBT.setEnabled(false);
@@ -2591,68 +2601,68 @@ public class VisualizarInventario extends javax.swing.JFrame {
     }//GEN-LAST:event_removerInvAnimaisBTActionPerformed
 
     private void atividadeLeiteBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atividadeLeiteBTActionPerformed
-        try{
+        try {
             Double temp = Double.parseDouble(JOptionPane.showInputDialog("Inserir atividade leiteira (%): "));
-            
-            if(temp >= 0.0){
-                
-                if(resumo != null){
+
+            if (temp >= 0.0) {
+
+                if (resumo != null) {
                     resumo.setAtividadeLeiteira(temp);
                     irdao.atualizar(resumo);
                 }
-                
+
                 atividadeLeite.setText("" + temp);
-                total50.setText(String.format("R$ %.2f", Double.parseDouble(total49.getText().substring(2).replace(',','.')) * (temp/100)));
-                
+                total50.setText(String.format("R$ %.2f", Double.parseDouble(total49.getText().substring(2).replace(',', '.')) * (temp / 100)));
+
             } else {
                 JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
             }
-        } catch (HeadlessException | NumberFormatException | SQLException | NullPointerException e){
+        } catch (HeadlessException | NumberFormatException | SQLException | NullPointerException e) {
             JOptionPane.showMessageDialog(null, "Insira um valor válido!");
         }
     }//GEN-LAST:event_atividadeLeiteBTActionPerformed
 
     private void custoOportBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_custoOportBTActionPerformed
-        try{
+        try {
             Double temp = Double.parseDouble(JOptionPane.showInputDialog("Inserir custo de oportunidade (%): "));
-            
-            if(temp >= 0.0){
-                
-                if(resumo != null){
+
+            if (temp >= 0.0) {
+
+                if (resumo != null) {
                     resumo.setCustoOportunidade(temp);
                     irdao.atualizar(resumo);
                 }
-                
+
                 custoOportunidade.setText("" + temp);
-                total57.setText(String.format("R$ %.2f", Double.parseDouble(total56.getText().substring(2).replace(',','.')) * (temp/100)));
+                total57.setText(String.format("R$ %.2f", Double.parseDouble(total56.getText().substring(2).replace(',', '.')) * (temp / 100)));
             } else {
                 JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
             }
-        } catch (HeadlessException | NumberFormatException | SQLException | NullPointerException e){
+        } catch (HeadlessException | NumberFormatException | SQLException | NullPointerException e) {
             JOptionPane.showMessageDialog(null, "Insira um valor válido!");
         }
     }//GEN-LAST:event_custoOportBTActionPerformed
 
     private void salarioMinimoBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salarioMinimoBTActionPerformed
-        try{
+        try {
             Double temp = Double.parseDouble(JOptionPane.showInputDialog("Inserir salário mínimo: ").replace(",", "."));
-            
-            if(temp >= 0.0){
+
+            if (temp >= 0.0) {
                 salarioMinimo.setText(String.format("%.2f", temp));
                 total58.setText(String.format("%.2f", temp));
-                total59.setText(String.format("%.2f", (Double.parseDouble(salarioMinimo.getText().replace(',','.')) * 0.3)));
-                
-                if(resumo != null){
+                total59.setText(String.format("%.2f", (Double.parseDouble(salarioMinimo.getText().replace(',', '.')) * 0.3)));
+
+                if (resumo != null) {
                     resumo.setSalarioMinimo(temp);
                     irdao.atualizar(resumo);
-                } 
-                
-                total60.setText(String.format("R$ %.2f", (temp*13 + temp*0.3)/12));
-                
+                }
+
+                total60.setText(String.format("R$ %.2f", (temp * 13 + temp * 0.3) / 12));
+
             } else {
                 JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
             }
-        } catch (HeadlessException | NumberFormatException | SQLException | NullPointerException e){
+        } catch (HeadlessException | NumberFormatException | SQLException | NullPointerException e) {
             JOptionPane.showMessageDialog(null, "Insira um valor válido!");
         }
     }//GEN-LAST:event_salarioMinimoBTActionPerformed
@@ -2664,51 +2674,51 @@ public class VisualizarInventario extends javax.swing.JFrame {
     }//GEN-LAST:event_adicionarInvBenfeitoriasBTActionPerformed
 
     private void vidaUtilReprodBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vidaUtilReprodBTActionPerformed
-        try{
+        try {
             Integer temp = Integer.parseInt(JOptionPane.showInputDialog("Vida últil dos reprodutores: "));
-            
-            if(temp >= 0){
+
+            if (temp >= 0) {
                 total35.setText(String.format("%d", temp));
-                total36.setText(String.format("%.2f", (Double.parseDouble(total34.getText().substring(2).replace(',','.')) /
-                        Double.parseDouble(total35.getText().replace(',','.')))));
-                
+                total36.setText(String.format("%.2f", (Double.parseDouble(total34.getText().substring(2).replace(',', '.'))
+                        / Double.parseDouble(total35.getText().replace(',', '.')))));
+
                 resumo.setVidaUtilReprodutores(temp);
-                               
-                if(resumo != null){
+
+                if (resumo != null) {
                     resumo.setVidaUtilReprodutores(temp);
                     irdao.atualizar(resumo);
-                } 
+                }
             } else {
                 JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
             }
-        } catch (IllegalArgumentException | SQLException | NullPointerException e){
+        } catch (IllegalArgumentException | SQLException | NullPointerException e) {
             JOptionPane.showMessageDialog(null, "Insira um valor válido!");
         }
     }//GEN-LAST:event_vidaUtilReprodBTActionPerformed
 
     private void vidaUtilServBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vidaUtilServBTActionPerformed
-        try{
+        try {
             Integer temp = Integer.parseInt(JOptionPane.showInputDialog("Capital Investido em Animais de Serviços: "));
-            
-            if(temp >= 0) {
+
+            if (temp >= 0) {
                 total38.setText(String.format("%d", temp));
-                total39.setText(String.format("%.2f", (Double.parseDouble(total37.getText().substring(2).replace(',','.')) /
-                        Double.parseDouble(total38.getText().replace(',','.')))));
-                               
-                if(resumo != null){
+                total39.setText(String.format("%.2f", (Double.parseDouble(total37.getText().substring(2).replace(',', '.'))
+                        / Double.parseDouble(total38.getText().replace(',', '.')))));
+
+                if (resumo != null) {
                     resumo.setVidaUtilAnimaisServico(temp);
-                    irdao.atualizar(resumo);        
-                } 
+                    irdao.atualizar(resumo);
+                }
             } else {
                 JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
             }
-        } catch (IllegalArgumentException | NullPointerException | SQLException e){
+        } catch (IllegalArgumentException | NullPointerException | SQLException e) {
             JOptionPane.showMessageDialog(null, "Insira um valor válido!");
         }
     }//GEN-LAST:event_vidaUtilServBTActionPerformed
-    
+
     private void verificaTabelaVazia(DefaultTableModel table, JButton editarBtn, JButton removerBtn) {
-        if(table.getRowCount() == 0) {
+        if (table.getRowCount() == 0) {
             editarBtn.setEnabled(false);
             removerBtn.setEnabled(false);
         } else {
@@ -2720,27 +2730,27 @@ public class VisualizarInventario extends javax.swing.JFrame {
     private void showTableLines() {
         tabelaBenfeitorias.setShowHorizontalLines(true);
         tabelaBenfeitorias.setShowVerticalLines(true);
-    
+
         tabelaInveAnimaisProd.setShowHorizontalLines(true);
         tabelaInveAnimaisProd.setShowVerticalLines(true);
-    
+
         tabelaInveAnimaisServ.setShowHorizontalLines(true);
         tabelaInveAnimaisServ.setShowVerticalLines(true);
-    
+
         tabelaInveForrageiras.setShowHorizontalLines(true);
         tabelaInveForrageiras.setShowVerticalLines(true);
-    
+
         tabelaInveTerras.setShowHorizontalLines(true);
         tabelaInveTerras.setShowVerticalLines(true);
-    
+
         tabelaMaquinas.setShowHorizontalLines(true);
         tabelaMaquinas.setShowVerticalLines(true);
     }
-    
+
     private void setTotaisTerras() {
-        
+
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton adicionarInvAnimaisBT;
     private javax.swing.JButton adicionarInvBenfeitoriasBT;

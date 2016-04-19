@@ -1,7 +1,5 @@
 atualizar tela após alterações
  ------
-Confirm Dialog ao Remover linha
-
 
 fora o adm, exibir perfis por rota de usuário
 inserir perfil (adm)
@@ -14,3 +12,5 @@ inserção, edição e remoção de campos em Dados Econômicos
 selecionar linha de especificação
 
 COR DAS LINHAS DE DEM: TOTAIS E VAZIOS
+
+Adicionar Usuario

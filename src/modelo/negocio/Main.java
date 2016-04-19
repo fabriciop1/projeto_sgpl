@@ -5,6 +5,7 @@
  */
 
 package modelo.negocio;
+import flex.db.GenericDAO;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -23,11 +24,17 @@ public class Main {
            DadosEconMensaisDAO dao3 = new DadosEconMensaisDAO();
            InventarioResumoDAO dao4 = new InventarioResumoDAO();
            DEMEspecificacaoDAO dao5 = new DEMEspecificacaoDAO();
+          
+           GenericDAO<Perfil> dao6 = new GenericDAO<>(Perfil.class);
            
+           Perfil perfil = null;
            
+           perfil = dao6.retrieveByColumn("cidade", "São Bento do Una").get(0);
+               System.out.println(perfil.getAreaPecLeite());
            
-           try {
-               Perfil perfil = (new PerfilDAO()).recuperar(13) ;
+           //try {
+             //  perfil = (new PerfilDAO()).recuperar(1) ;
+              
               
              //  dao5.cadastrar("Venda de leite(L)");
              //  dao5.remover(1);
@@ -46,8 +53,10 @@ public class Main {
             //  }
                
                
-           } catch (SQLException ex) {
-               Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-           }
+         //  } catch (SQLException ex) {
+         //      Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+         //  }
+           
+          
        }
 }
