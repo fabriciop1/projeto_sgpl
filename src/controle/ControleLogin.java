@@ -5,10 +5,8 @@
  */
 package controle;
 
-import java.io.IOException;
+import flex.db.GenericDAO;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import modelo.dao.UsuarioDAO;
 import modelo.negocio.Usuario;
@@ -20,7 +18,7 @@ import modelo.negocio.Usuario;
 public class ControleLogin {
     
     private Usuario usuario;
-    private UsuarioDAO usuarioDAO;
+    private GenericDAO<Usuario> usuarioDAO;
     
     private ControleLogin() {}
     
@@ -36,12 +34,9 @@ public class ControleLogin {
         
         Usuario atual = new Usuario();
         
-        usuarioDAO = new UsuarioDAO();
-        try {
-            atual = usuarioDAO.recuperarPorLogin(login);
-        } catch (SQLException ex) {
-            System.out.println("Erro em recuperar usuário por login: " + ex.getMessage());
-        }
+        usuarioDAO = new GenericDAO<>(Usuario.class);
+        
+        atual = usuarioDAO.retrieveByColumn("login", login).get(0);
         
         if(atual != null){
             
@@ -83,18 +78,5 @@ public class ControleLogin {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
-    }
-
-    public UsuarioDAO getUsuarioDAO() {
-        return usuarioDAO;
-    }
-
-    public void setUsuarioDAO(UsuarioDAO usuarioDAO) {
-        this.usuarioDAO = usuarioDAO;
-    }
-    
-    
-    
-    
-    
+    }    
 }

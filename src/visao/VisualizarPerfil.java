@@ -50,7 +50,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         try {
             perfis = usuarioPerfil.recuperarPerfisPorUsuario(usuario.getId());
         } catch (SQLException ex) {
-            System.out.println("Erro em recuperar Perfis Por Usuário - Visualizar Perfil.");
+            System.out.println("Erro em recuperar Perfis Por Usuário - Visualizar Perfil. " + ex.getMessage());
         }
         
         DefaultTableModel model = (DefaultTableModel) listaPerfis.getModel();
@@ -253,8 +253,6 @@ public class VisualizarPerfil extends javax.swing.JFrame {
             this.setVisible(false);
             this.dispose();
         }
-        
-        
     }//GEN-LAST:event_btnSairActionPerformed
 
     private void listaPerfisMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listaPerfisMouseClicked

@@ -66,7 +66,7 @@ public class Login extends javax.swing.JFrame {
         getContentPane().add(btnEntrar, gridBagConstraints);
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel3.setText("Bem vindo");
+        jLabel3.setText("Bem vindo ao SGPL");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -84,11 +84,6 @@ public class Login extends javax.swing.JFrame {
         getContentPane().add(jLabel1, gridBagConstraints);
 
         campoLogin.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        campoLogin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                campoLoginActionPerformed(evt);
-            }
-        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -124,7 +119,7 @@ public class Login extends javax.swing.JFrame {
     private void btnEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntrarActionPerformed
 
         ControleLogin controleLogin = ControleLogin.getInstance();
-        boolean logado = false;
+        boolean logado;
 
         logado = controleLogin.fazerLogin(campoLogin.getText(), campoSenha.getPassword());
 
@@ -135,10 +130,6 @@ public class Login extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_btnEntrarActionPerformed
-
-    private void campoLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoLoginActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_campoLoginActionPerformed
 
     /**
      * @param args the command line arguments

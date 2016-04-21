@@ -199,9 +199,6 @@
         </Property>
         <Property name="text" type="java.lang.String" value="An&#xe1;lises"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAnalisesActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnPerfil">
       <Properties>
@@ -232,9 +229,6 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Indicadores T&#xe9;cnicos Mensais"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnIndicTecnMensaisActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnInventario">
       <Properties>
@@ -254,9 +248,6 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Indicadores Econ&#xf4;micos Mensais"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnIndicEconMensaisActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnIndicTecnAnuais">
       <Properties>
@@ -265,9 +256,6 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Indicadores T&#xe9;cnicos Anuais"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnIndicTecnAnuaisActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnDadosEconMensais">
       <Properties>
@@ -287,9 +275,6 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Indicadores Econ&#xf4;micos Anuais"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnIndicEconAnuaisActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnRetornoMensal">
       <Properties>
@@ -298,9 +283,6 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Retorno Mensal"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRetornoMensalActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnCustoImplForra">
       <Properties>
@@ -309,9 +291,6 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Custo de Implanta&#xe7;&#xe3;o de Forrageiras"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCustoImplForraActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnCalculoRacao">
       <Properties>
@@ -320,9 +299,6 @@
         </Property>
         <Property name="text" type="java.lang.String" value="C&#xe1;lculo de Ra&#xe7;&#xe3;o"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCalculoRacaoActionPerformed"/>
-      </Events>
     </Component>
   </SubComponents>
 </Form>

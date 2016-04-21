@@ -6,10 +6,6 @@
 
 package modelo.negocio;
 import flex.db.GenericDAO;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import modelo.dao.*;
 
 /**
@@ -25,12 +21,12 @@ public class Main {
            InventarioResumoDAO dao4 = new InventarioResumoDAO();
            DEMEspecificacaoDAO dao5 = new DEMEspecificacaoDAO();
           
-           GenericDAO<Perfil> dao6 = new GenericDAO<>(Perfil.class);
+           GenericDAO<Usuario> dao6 = new GenericDAO<>(Usuario.class);
            
-           Perfil perfil = null;
+           Usuario usuario = null;
            
-           perfil = dao6.retrieveByColumn("cidade", "São Bento do Una").get(0);
-               System.out.println(perfil.getAreaPecLeite());
+           usuario = dao6.retrieveByColumn("login", "adm").get(0);
+           System.out.println(usuario.getSenha());
            
            //try {
              //  perfil = (new PerfilDAO()).recuperar(1) ;

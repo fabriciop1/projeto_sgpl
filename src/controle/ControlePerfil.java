@@ -11,17 +11,12 @@ package controle;
  */
 import java.io.Serializable;
 import java.util.List;
-import modelo.dao.UsuarioPerfilDAO;
 import modelo.negocio.Perfil;
-import modelo.negocio.Usuario;
 
 public class ControlePerfil implements Serializable {
      
     private List<Perfil> perfis;
     private Perfil perfilSelecionado;
-    private Usuario usuario;
-    
-    private UsuarioPerfilDAO usuarioPerfilDao;
  
     public ControlePerfil() {}
     
@@ -47,14 +42,6 @@ public class ControlePerfil implements Serializable {
 
     public void setPerfilSelecionado(Perfil perfilSelecionado) {
         this.perfilSelecionado = perfilSelecionado;
-    }
-    
-    public UsuarioPerfilDAO getUsuarioPerfilDao() {
-        return usuarioPerfilDao;
-    }
-
-    public void setUsuarioPerfilDao(UsuarioPerfilDAO usuarioPerfilDao) {
-        this.usuarioPerfilDao = usuarioPerfilDao;
     }
     
 }

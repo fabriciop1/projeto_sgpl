@@ -8,11 +8,8 @@ package modelo.negocio;
 import flex.db.DatabaseObject;
 import flex.db.GenericDAO;
 import java.io.Serializable;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import util.Cast;
 
 /**
@@ -76,10 +73,7 @@ public class Usuario extends DatabaseObject implements Serializable {
     @Override
     public void setObjectData(Map<String, Object> data) {
             login = Cast.toString(data.get("login"));
-            senha = Cast.toSQLValue(data.get("senha"));
+            senha = Cast.toString(data.get("senha"));
             rota = new GenericDAO<>(Rota.class).retrieve( Cast.toInt(data.get("idRotaFK")) );
-    }
-    
-    
-    
+    }  
 }

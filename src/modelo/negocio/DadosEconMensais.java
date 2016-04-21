@@ -5,11 +5,17 @@
  */
 package modelo.negocio;
 
+import flex.db.DatabaseObject;
+import flex.db.GenericDAO;
+import java.util.HashMap;
+import java.util.Map;
+import util.Cast;
+
 /**
  *
  * @author Fabricio
  */
-public class DadosEconMensais {
+public class DadosEconMensais extends DatabaseObject {
     
     private int id;
     private int mes;
@@ -19,13 +25,16 @@ public class DadosEconMensais {
     private int tipoCampo; // A qual tabela o campo pertence? 1 - Entradas /2 - Saidas /3 - Despesas com Volumoso 
                            //4 - Concentrado /5 - Mineralização /6 - Medicamentos /7 - Ordenha /8 - Inseminação Artificial 
                            //9 - Despesas de Investimentos /10 - Despesas de Empréstimos /11 - COE da atividade leiteira
-    private String especificacao; // id da especificacao associada à tabela DEM_especificacao
+    private String especificacao; // especificacao associada à tabela DEM_especificacao
     private Perfil perfil;
     
     public DadosEconMensais() {
+        super("dados_economicos_mensais", "idDEM");
     }
 
     public DadosEconMensais(int mes, int ano, double quantidade, double valorUnitario, int tipoCampo, String especificacao, Perfil perfil) {
+        super("dados_economicos_mensais", "idDEM");
+        
         this.mes = mes;
         this.ano = ano;
         this.especificacao = especificacao;
@@ -97,6 +106,32 @@ public class DadosEconMensais {
 
     public void setPerfil(Perfil perfil) {
         this.perfil = perfil;
+    }
+
+    @Override
+    public Map<String, Object> getObjectTableData() {
+        HashMap<String,Object> m = new HashMap<>();
+        
+        m.put("mes", mes);
+        m.put("ano", ano);
+        m.put("quantidade", quantidade);
+        m.put("valorUnitario", valorUnitario);
+        m.put("tipoCampo", tipoCampo);
+       // m.put("idDEM_especificacaoFK", especificacao);
+        m.put("idPErfilFK", perfil.getId());
+        
+        return m;
+    }
+
+    @Override
+    public void setObjectData(Map<String, Object> data) {
+        mes = Cast.toInt(data.get("mes"));
+        ano = Cast.toInt(data.get("ano"));
+        quantidade = Cast.toInt(data.get("quantidade"));
+        valorUnitario = Cast.toDouble(data.get("valorUnitario"));
+        tipoCampo = Cast.toInt(data.get("tipoCampo"));
+       // especificacao = Cast.toString(data.get("idDEM_especificacaoFK"));
+        perfil =  new GenericDAO<>(Perfil.class).retrieve( Cast.toInt(data.get("idPerfilFK")) );
     }
     
     

@@ -5,7 +5,6 @@
  */
 package flex.db;
 
-import java.lang.reflect.Method;
 import java.sql.Connection;
 import modelo.dao.DBConexao;
 

@@ -16,3 +16,8 @@ selecionar linha de especificação
 COR DAS LINHAS DE DEM: TOTAIS E VAZIOS
 
 Adicionar Usuario
+
+
+
+Criptografia para senha
+Nome do Sistema + Figura para Sistema na tela Inicial

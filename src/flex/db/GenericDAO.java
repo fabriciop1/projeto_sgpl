@@ -25,10 +25,8 @@ import util.Cast;
  * @param <T> 
  */
 public class GenericDAO<T extends DatabaseObject> extends DAO {
-    
-    
+        
     private Class<T> objectClass;
-    
     
     public GenericDAO(Class<T> objectClass, Connection connection){
         super(connection);

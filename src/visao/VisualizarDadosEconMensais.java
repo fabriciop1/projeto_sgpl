@@ -7,12 +7,10 @@ package visao;
 
 import controle.ControlePerfil;
 import java.awt.Color;
-import java.awt.ScrollPane;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import javax.swing.JScrollBar;
-import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableModel;
 import modelo.dao.DEMEspecificacaoDAO;
 import modelo.dao.DadosEconMensaisDAO;
@@ -47,9 +45,6 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         
         tabelaEspecificacao.setShowHorizontalLines(true);
         
-       // tabelaEspecificacao.getSelectionModel().setSelectionInterval(tabelaDadosEconomicos.getSelectedRow(), tabelaDadosEconomicos.getSelectedRow());
-       // tabelaEspecificacao.getSelectionModel().addSelectionInterval(tabelaDadosEconomicos.getSelectedRow(), tabelaDadosEconomicos.getSelectedRow());
-        
         tabelaDadosEconomicos.setShowGrid(true);
             
         DadosEconMensaisDAO demdao = new DadosEconMensaisDAO();
@@ -61,7 +56,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         try{
             dems = demdao.recuperarPorPerfil(atual.getId());
         } catch(Exception e){
-            System.out.println("Erro em Construtor Visualizar Dados Economicos Mensais (Recuperar DEMs)");
+            System.out.println("Erro em Construtor Visualizar Dados Economicos Mensais (Recuperar DEMs) " + e.getMessage());
         }
         
         tabelaDadosEconomicos.setDefaultRenderer(Color.class, new ColorRenderer(true));
@@ -69,7 +64,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         try{
             especificacoes = demespdao.recuperarTodos();
         } catch(Exception e){
-            System.out.println("Erro em Construtor Visualizar Dados Economicos Mensais (Recuperar Especificacoes)");
+            System.out.println("Erro em Construtor Visualizar Dados Economicos Mensais (Recuperar Especificacoes) " + e.getMessage());
         }
         
         PreencherTabelaESP(especificacoes);

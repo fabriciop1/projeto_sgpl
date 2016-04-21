@@ -5,10 +5,8 @@
  */
 package visao;
 
-import controle.ControleLogin;
 import controle.ControlePerfil;
 import modelo.negocio.Perfil;
-import modelo.negocio.Usuario;
 
 /**
  *
@@ -27,7 +25,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         this.setResizable(false);
         
         Perfil atual = ControlePerfil.getInstance().getPerfilSelecionado();
-        
         
         nomProd.setText(atual.getNome());
         tamProp.setText("" + atual.getTamPropriedade());
@@ -92,11 +89,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         btnAnalises.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnAnalises.setText("Análises");
-        btnAnalises.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAnalisesActionPerformed(evt);
-            }
-        });
 
         btnPerfil.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnPerfil.setText("Visualizar Perfil(s)");
@@ -116,11 +108,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         btnIndicTecnMensais.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnIndicTecnMensais.setText("Indicadores Técnicos Mensais");
-        btnIndicTecnMensais.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnIndicTecnMensaisActionPerformed(evt);
-            }
-        });
 
         btnInventario.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnInventario.setText("Inventário");
@@ -132,19 +119,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         btnIndicEconMensais.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnIndicEconMensais.setText("Indicadores Econômicos Mensais");
-        btnIndicEconMensais.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnIndicEconMensaisActionPerformed(evt);
-            }
-        });
 
         btnIndicTecnAnuais.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnIndicTecnAnuais.setText("Indicadores Técnicos Anuais");
-        btnIndicTecnAnuais.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnIndicTecnAnuaisActionPerformed(evt);
-            }
-        });
 
         btnDadosEconMensais.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnDadosEconMensais.setText("Dados Econômicos Mensais");
@@ -156,35 +133,15 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         btnIndicEconAnuais.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnIndicEconAnuais.setText("Indicadores Econômicos Anuais");
-        btnIndicEconAnuais.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnIndicEconAnuaisActionPerformed(evt);
-            }
-        });
 
         btnRetornoMensal.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnRetornoMensal.setText("Retorno Mensal");
-        btnRetornoMensal.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRetornoMensalActionPerformed(evt);
-            }
-        });
 
         btnCustoImplForra.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnCustoImplForra.setText("Custo de Implantação de Forrageiras");
-        btnCustoImplForra.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCustoImplForraActionPerformed(evt);
-            }
-        });
 
         btnCalculoRacao.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnCalculoRacao.setText("Cálculo de Ração");
-        btnCalculoRacao.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCalculoRacaoActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -277,10 +234,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnAnalisesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnalisesActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnAnalisesActionPerformed
-
     private void btnPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerfilActionPerformed
         new VisualizarPerfil().setVisible(true);
         this.setVisible(false);
@@ -291,46 +244,17 @@ public class MenuPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnDadosTecnMensaisActionPerformed
 
-    private void btnIndicTecnMensaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIndicTecnMensaisActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnIndicTecnMensaisActionPerformed
-
     private void btnInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInventarioActionPerformed
-        
         VisualizarInventario inventario = new VisualizarInventario();
         inventario.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnInventarioActionPerformed
-
-    private void btnIndicEconMensaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIndicEconMensaisActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnIndicEconMensaisActionPerformed
-
-    private void btnIndicTecnAnuaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIndicTecnAnuaisActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnIndicTecnAnuaisActionPerformed
 
     private void btnDadosEconMensaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDadosEconMensaisActionPerformed
         new VisualizarDadosEconMensais().setVisible(true);
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnDadosEconMensaisActionPerformed
-
-    private void btnIndicEconAnuaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIndicEconAnuaisActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnIndicEconAnuaisActionPerformed
-
-    private void btnRetornoMensalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetornoMensalActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnRetornoMensalActionPerformed
-
-    private void btnCustoImplForraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCustoImplForraActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnCustoImplForraActionPerformed
-
-    private void btnCalculoRacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalculoRacaoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnCalculoRacaoActionPerformed
 
    
 
