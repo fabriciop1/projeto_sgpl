@@ -298,28 +298,18 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total33.setText(String.format("R$ %.2f", (Double.parseDouble(total20.getText().substring(2).replace(',', '.'))
                 - Double.parseDouble(total19.getText().substring(2).replace(',', '.')) - Double.parseDouble(total32.getText().substring(2).replace(',', '.')))));
 
-        try {
-            total36.setText(String.format("%.2f", Calc.dividir(Double.parseDouble(total34.getText().substring(2).replace(',', '.')),
+        total36.setText(String.format("%.2f", Calc.dividir(Double.parseDouble(total34.getText().substring(2).replace(',', '.')),
                     Double.parseDouble(total35.getText().replace(',', '.')))));
-        } catch (IllegalArgumentException e) {
-            total36.setText("0.00");
-            //System.out.println("Erro em total 36 - Divisão Inválida. " + e.getMessage());
-        }
-
+        
         total37.setText(String.format("R$ %.2f", Calc.somaPonderada(totalValFinaServ, totalValCabeServ)));
 
         if (resumo != null) {
             total38.setText(String.format("%d", resumo.getVidaUtilAnimaisServico()));
         }
 
-        try {
-            total39.setText(String.format("%.2f", Calc.dividir(Double.parseDouble(total37.getText().substring(2).replace(',', '.')),
-                    Double.parseDouble(total38.getText().replace(',', '.')))));
-        } catch (IllegalArgumentException e) {
-            total39.setText("0.00"); // Caso haja divisão por 0
-            //System.out.println("Erro em total39 - Divisão Inválida " + e.getMessage());
-        }
-
+        total39.setText(String.format("%.2f", Calc.dividir(Double.parseDouble(total37.getText().substring(2).replace(',', '.')),
+            Double.parseDouble(total38.getText().replace(',', '.')))));
+       
         tabelaBenfeitoriasGTRE.getSourceTableModel().setRowCount(0);
 
         for (int i = 0; i < benfeitorias.size(); i++) {
@@ -1194,10 +1184,10 @@ public class VisualizarInventario extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(vidaUtilReprodBT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+                            .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(total37, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
@@ -2650,7 +2640,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             if (temp >= 0.0) {
                 salarioMinimo.setText(String.format("%.2f", temp));
                 total58.setText(String.format("%.2f", temp));
-                total59.setText(String.format("%.2f", (Double.parseDouble(salarioMinimo.getText().replace(',', '.')) * 0.3)));
+                total59.setText(String.format("%.2f", Calc.multiplicar(Double.parseDouble(salarioMinimo.getText().replace(',', '.')), 0.3)));
 
                 if (resumo != null) {
                     resumo.setSalarioMinimo(temp);
@@ -2675,14 +2665,12 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
     private void vidaUtilReprodBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vidaUtilReprodBTActionPerformed
         try {
-            Integer temp = Integer.parseInt(JOptionPane.showInputDialog("Vida últil dos reprodutores: "));
+            Integer temp = Integer.parseInt(JOptionPane.showInputDialog("Vida útil dos reprodutores: "));
 
             if (temp >= 0) {
-                total35.setText(String.format("%d", temp));
-                total36.setText(String.format("%.2f", (Double.parseDouble(total34.getText().substring(2).replace(',', '.'))
-                        / Double.parseDouble(total35.getText().replace(',', '.')))));
-
-                resumo.setVidaUtilReprodutores(temp);
+                total35.setText("" + temp);
+                total36.setText(String.format("%.2f", Calc.dividir(Double.parseDouble(total34.getText().substring(2).replace(',', '.')),
+                        Double.parseDouble(total35.getText().replace(',', '.')))));
 
                 if (resumo != null) {
                     resumo.setVidaUtilReprodutores(temp);
@@ -2691,19 +2679,21 @@ public class VisualizarInventario extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
             }
-        } catch (IllegalArgumentException | SQLException | NullPointerException e) {
+        } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(null, "Insira um valor válido!");
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
         }
     }//GEN-LAST:event_vidaUtilReprodBTActionPerformed
 
     private void vidaUtilServBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vidaUtilServBTActionPerformed
         try {
-            Integer temp = Integer.parseInt(JOptionPane.showInputDialog("Capital Investido em Animais de Serviços: "));
+            Integer temp = Integer.parseInt(JOptionPane.showInputDialog("Capital Investido em Animais de Serviço: "));
 
             if (temp >= 0) {
-                total38.setText(String.format("%d", temp));
-                total39.setText(String.format("%.2f", (Double.parseDouble(total37.getText().substring(2).replace(',', '.'))
-                        / Double.parseDouble(total38.getText().replace(',', '.')))));
+                total38.setText("" + temp);
+                total39.setText(String.format("%.2f", Calc.dividir(Double.parseDouble(total37.getText().substring(2).replace(',', '.')),
+                        Double.parseDouble(total38.getText().replace(',', '.')))));
 
                 if (resumo != null) {
                     resumo.setVidaUtilAnimaisServico(temp);
@@ -2712,8 +2702,10 @@ public class VisualizarInventario extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
             }
-        } catch (IllegalArgumentException | NullPointerException | SQLException e) {
+        } catch (IllegalArgumentException | NullPointerException e) {
             JOptionPane.showMessageDialog(null, "Insira um valor válido!");
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
         }
     }//GEN-LAST:event_vidaUtilServBTActionPerformed
 
@@ -2745,10 +2737,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
         tabelaMaquinas.setShowHorizontalLines(true);
         tabelaMaquinas.setShowVerticalLines(true);
-    }
-
-    private void setTotaisTerras() {
-
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

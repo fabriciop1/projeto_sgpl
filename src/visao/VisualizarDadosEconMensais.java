@@ -7,10 +7,12 @@ package visao;
 
 import controle.ControlePerfil;
 import java.awt.Color;
+import java.awt.ScrollPane;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import javax.swing.JScrollBar;
+import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableModel;
 import modelo.dao.DEMEspecificacaoDAO;
 import modelo.dao.DadosEconMensaisDAO;
@@ -663,6 +665,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         if(evt.getKeyCode() == 40 && tabelaDadosEconomicos.getSelectedRow() != (tabelaDadosEconomicos.getRowCount() - 1)) {
             temp =  tabelaDadosEconomicos.getSelectedRow() + 1;
             tabelaEspecificacao.setRowSelectionInterval(temp, temp);
+            
         } else if (evt.getKeyCode() == 38 &&  tabelaDadosEconomicos.getSelectedRow() != 0){
             temp =  tabelaDadosEconomicos.getSelectedRow() - 1;
             tabelaEspecificacao.setRowSelectionInterval(temp, temp);

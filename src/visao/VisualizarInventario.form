@@ -552,10 +552,10 @@
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="vidaUtilReprodBT" min="-2" pref="47" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jLabel18" alignment="0" min="-2" pref="231" max="-2" attributes="0"/>
-                                  <Component id="jLabel17" alignment="0" min="-2" pref="237" max="-2" attributes="0"/>
-                                  <Component id="jLabel19" min="-2" pref="248" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="jLabel19" pref="248" max="32767" attributes="0"/>
+                                  <Component id="jLabel17" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="jLabel18" alignment="0" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace type="separate" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
