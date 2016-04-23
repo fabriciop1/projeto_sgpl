@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import javax.swing.JScrollBar;
+import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
 import modelo.dao.DEMEspecificacaoDAO;
 import modelo.dao.DadosEconMensaisDAO;
@@ -46,7 +47,10 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         tabelaEspecificacao.setShowHorizontalLines(true);
         
         tabelaDadosEconomicos.setShowGrid(true);
-            
+        
+        tabelaDadosEconomicos.setDefaultRenderer(Object.class, new ColorRenderer());
+        tabelaEspecificacao.setDefaultRenderer(Object.class, new ColorRenderer());
+        
         DadosEconMensaisDAO demdao = new DadosEconMensaisDAO();
         dems = new ArrayList<>();
         
@@ -351,10 +355,12 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         tabelaEspecificacao.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         if (tabelaEspecificacao.getColumnModel().getColumnCount() > 0) {
             tabelaEspecificacao.getColumnModel().getColumn(0).setResizable(false);
+            tabelaEspecificacao.getColumnModel().getColumn(0).setHeaderValue("Especificação");
         }
 
         jScrollPane3.setPreferredSize(new java.awt.Dimension(800, 1424));
 
+        tabelaDadosEconomicos.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         tabelaDadosEconomicos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},

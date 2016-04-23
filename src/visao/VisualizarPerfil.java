@@ -7,15 +7,20 @@ package visao;
 
 import controle.ControleLogin;
 import controle.ControlePerfil;
+import flex.db.GenericDAO;
+import flex.table.GenericTableModifier;
+import flex.table.GenericTableRowEditor;
+import flex.table.TableModifiedEvent;
+import flex.table.TableModifyListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
-import modelo.dao.PerfilDAO;
 import modelo.dao.RotaDAO;
 import modelo.dao.UsuarioPerfilDAO;
 import modelo.negocio.Perfil;
+import modelo.negocio.Rota;
 import modelo.negocio.Usuario;
+import util.Cast;
 
 /**
  *
@@ -24,10 +29,11 @@ import modelo.negocio.Usuario;
 public class VisualizarPerfil extends javax.swing.JFrame {
     
     UsuarioPerfilDAO usuarioPerfil;
-    PerfilDAO perfilDao;
+    GenericDAO<Perfil> perfilDao;
     ArrayList<Perfil> perfis;
     ArrayList<Integer> idPerfis;
     Usuario usuario;
+    GenericTableRowEditor listaPerfisGTRE;
     
     /**
      * Creates new form VisualizarPerfil
@@ -46,21 +52,26 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         usuarioPerfil = new UsuarioPerfilDAO();
         usuario = ControleLogin.getInstance().getUsuario();
         
+         if (!usuario.getLogin().equals("adm")) {
+            removerPerfilBT.setEnabled(false);
+            addPerfilBT.setEnabled(false);
+        }
+        
         idPerfis = new ArrayList<>();
         try {
             perfis = usuarioPerfil.recuperarPerfisPorUsuario(usuario.getId());
         } catch (SQLException ex) {
             System.out.println("Erro em recuperar Perfis Por Usuário - Visualizar Perfil. " + ex.getMessage());
         }
-        
-        DefaultTableModel model = (DefaultTableModel) listaPerfis.getModel();
-        model.setNumRows(0);
+       
+        listaPerfisGTRE = new GenericTableRowEditor(this, listaPerfis, false);
+        listaPerfisGTRE.getSourceTableModel().setRowCount(0);
                 
         for(int i = 0; i < perfis.size(); i++){
             
             idPerfis.add(perfis.get(i).getId());
             
-            model.addRow(new Object[]{
+            listaPerfisGTRE.addSourceTableRow(new Object[]{
                 perfis.get(i).getNome(),
                 perfis.get(i).getCidade(),
                 perfis.get(i).getRota().getRota(),
@@ -68,9 +79,8 @@ public class VisualizarPerfil extends javax.swing.JFrame {
                 perfis.get(i).getAreaPecLeite(),
                 perfis.get(i).getProdLeiteDiario(),
                 perfis.get(i).getEmpPermanentes(),
-                perfis.get(i).getNumFamiliares()
-            });
-            
+                perfis.get(i).getNumFamiliares(),},
+                perfis.get(i).getId());
         }
         
         //Dimension tamanhoTela = Toolkit.getDefaultToolkit().getScreenSize();
@@ -80,6 +90,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         
         //listaPerfis.setLocation(width / 2, height / 2);
         //listaPerfis.setSize(width / 2, height / 2);
+        definirBDListeners();
     }
 
     /**
@@ -96,6 +107,9 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         btnAcessar = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         listaPerfis = new javax.swing.JTable();
+        removerPerfilBT = new javax.swing.JButton();
+        editPerfilBT = new javax.swing.JButton();
+        addPerfilBT = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -177,17 +191,48 @@ public class VisualizarPerfil extends javax.swing.JFrame {
             listaPerfis.getColumnModel().getColumn(7).setResizable(false);
         }
 
+        removerPerfilBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/delete.png"))); // NOI18N
+        removerPerfilBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removerPerfilBTActionPerformed(evt);
+            }
+        });
+
+        editPerfilBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit.png"))); // NOI18N
+        editPerfilBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editPerfilBTActionPerformed(evt);
+            }
+        });
+
+        addPerfilBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/add.png"))); // NOI18N
+        addPerfilBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addPerfilBTActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(80, 80, 80)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addGap(803, 803, 803)
+                            .addComponent(addPerfilBT, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(editPerfilBT, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(removerPerfilBT, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(80, 80, 80)
+                            .addComponent(jLabel1)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(59, 59, 59)
                         .addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(560, 560, 560)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnAcessar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -206,7 +251,12 @@ public class VisualizarPerfil extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAcessar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(57, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(removerPerfilBT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(addPerfilBT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(editPerfilBT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -261,12 +311,74 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_listaPerfisMouseClicked
 
+    private void removerPerfilBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerPerfilBTActionPerformed
+        if(listaPerfis.getSelectedRowCount() > 0) {
+           int escolha = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir o perfil de nome " 
+                   + listaPerfis.getValueAt(listaPerfis.getSelectedRow(), 0).toString().toUpperCase() + " ?", "Confirmar exclusão", 
+                   JOptionPane.YES_NO_OPTION);
+           if(escolha == 0)  {
+               listaPerfisGTRE.removeSourceTableRow(listaPerfis.getSelectedRow());
+               verificaTabelaVazia();
+           }
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecione uma linha da tabela para remover.", "Remover - Nenhuma linha selecionada", 
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_removerPerfilBTActionPerformed
 
+    private void editPerfilBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editPerfilBTActionPerformed
+        listaPerfisGTRE.setEditorType(GenericTableRowEditor.GTRE_UPDATE);
+        listaPerfisGTRE.showEditor(evt);
+    }//GEN-LAST:event_editPerfilBTActionPerformed
+
+    private void addPerfilBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPerfilBTActionPerformed
+        listaPerfisGTRE.setEditorType(GenericTableRowEditor.GTRE_INSERT);
+        listaPerfisGTRE.showEditor(evt);
+        verificaTabelaVazia();
+    }//GEN-LAST:event_addPerfilBTActionPerformed
+
+    private void verificaTabelaVazia() {
+         if (listaPerfis.getRowCount() == 0) {
+            removerPerfilBT.setEnabled(false);
+            editPerfilBT.setEnabled(false);
+         } else {
+             removerPerfilBT.setEnabled(true);
+             editPerfilBT.setEnabled(true);
+         }
+    }
+    
+    private void definirBDListeners() {
+        listaPerfisGTRE.addTableModifyListener(new TableModifyListener() {
+            @Override
+            public void tableModified(TableModifiedEvent event) {
+                GenericDAO<Perfil> perfilDAO = new GenericDAO<>(Perfil.class);
+                GenericDAO<Rota> rotaDAO = new GenericDAO<>(Rota.class);     
+                
+                Object[] rowData = event.getRowData();
+                Integer rowID = (Integer) event.getCustomRowData();
+                GenericTableModifier modifier = event.getSourceModifier();
+                int modifType = event.getEventType();
+                
+                Rota rota = rotaDAO.retrieveByColumn("rota", rowData[2]).get(0);
+                if (modifType == TableModifyListener.ROW_INSERTED) {
+                    Perfil perfil = new Perfil(Cast.toString(rowData[0]), Cast.toString(rowData[1]),
+                            Cast.toDouble(rowData[3]), Cast.toDouble(rowData[4]), Cast.toDouble(rowData[5]), Cast.toInt(rowData[6]),
+                            Cast.toInt(rowData[7]), rota);
+                    
+                    perfilDAO.insert(perfil);
+                    modifier.setCustomRowData(modifier.getSourceTable().getRowCount() - 1, perfil.getId());
+                }
+            }
+        });
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addPerfilBT;
     private javax.swing.JButton btnAcessar;
     private javax.swing.JButton btnSair;
+    private javax.swing.JButton editPerfilBT;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable listaPerfis;
+    private javax.swing.JButton removerPerfilBT;
     // End of variables declaration//GEN-END:variables
 }

@@ -126,7 +126,7 @@
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                       <TableColumnModel selectionModel="1">
                         <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
-                          <Title/>
+                          <Title value="Especifica&#xe7;&#xe3;o"/>
                           <Editor/>
                           <Renderer/>
                         </Column>
@@ -168,6 +168,11 @@
               <SubComponents>
                 <Component class="javax.swing.JTable" name="tabelaDadosEconomicos">
                   <Properties>
+                    <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                      <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
+                        <BevelBorder/>
+                      </Border>
+                    </Property>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="36" rowCount="90">
                         <Column editable="false" title="Quant." type="java.lang.Object"/>

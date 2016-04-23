@@ -7,6 +7,7 @@ package controle;
 
 import flex.db.GenericDAO;
 import java.sql.SQLException;
+import java.util.List;
 import javax.swing.JOptionPane;
 import modelo.dao.UsuarioDAO;
 import modelo.negocio.Usuario;
@@ -32,11 +33,15 @@ public class ControleLogin {
     
     public boolean fazerLogin(String login, char[] senha){
         
-        Usuario atual = new Usuario();
+        Usuario atual = null;
         
         usuarioDAO = new GenericDAO<>(Usuario.class);
         
-        atual = usuarioDAO.retrieveByColumn("login", login).get(0);
+        List<Usuario> usuarios = usuarioDAO.retrieveByColumn("login", login);
+        
+        if(usuarios != null) {
+            atual = usuarios.get(0); 
+        }
         
         if(atual != null){
             

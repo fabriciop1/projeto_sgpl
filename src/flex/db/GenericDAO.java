@@ -333,7 +333,7 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
             }
             else if(columnsValues.length != tableColumns.length){
                 throw new IllegalArgumentException("GenericDAO.retrieveByColumns(String[],Object[]): Os arrays de colunas e de valores das colunas tem tamanhos diferentes.");
-            }
+            } 
             
             T object = objectClass.newInstance();
             

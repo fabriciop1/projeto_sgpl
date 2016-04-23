@@ -36,51 +36,45 @@ package util;
  * TableDialogEditDemo.java.
  */
 
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
-import javax.swing.JTable;
-import javax.swing.border.Border;
-import javax.swing.table.TableCellRenderer;
 import java.awt.Color;
+import javax.swing.JTable;
 import java.awt.Component;
+import javax.swing.table.DefaultTableCellRenderer;
 
-public class ColorRenderer extends JLabel
-                           implements TableCellRenderer {
-    Border unselectedBorder = null;
-    Border selectedBorder = null;
-    boolean isBordered = true;
+public class ColorRenderer extends DefaultTableCellRenderer {   
 
     public ColorRenderer(boolean isBordered) {
-        this.isBordered = isBordered;
-        setOpaque(true); //MUST do this for background to show up.
+        super.setOpaque(true); //MUST do this for background to show up.
     }
+    
+    public ColorRenderer() {}
 
     @Override
-    public Component getTableCellRendererComponent(
-                            JTable table, Object color,
-                            boolean isSelected, boolean hasFocus,
-                            int row, int column) {
-        Color newColor = (Color)color;
-        setBackground(newColor);
-        if (isBordered) {
-            if (isSelected) {
-                if (selectedBorder == null) {
-                    selectedBorder = BorderFactory.createMatteBorder(2,5,2,5,
-                                              table.getSelectionBackground());
-                }
-                setBorder(selectedBorder);
-            } else {
-                if (unselectedBorder == null) {
-                    unselectedBorder = BorderFactory.createMatteBorder(2,5,2,5,
-                                              table.getBackground());
-                }
-                setBorder(unselectedBorder);
-            }
+    public Component getTableCellRendererComponent(JTable table, Object color, boolean isSelected, boolean hasFocus, int row, int column) {
+        Component comp = super.getTableCellRendererComponent(table, color, isSelected, hasFocus, row, column); 
+       
+        if(column == 2 || column == 5 || column == 8 || column == 11 || column == 14 || column == 17 || 
+           column == 20 || column == 23 || column == 26 || column == 29 || column == 32 || column == 35) {
+            comp.setBackground(Color.LIGHT_GRAY);
+        
+        } else if (row == 0 || row == 7|| row == 8 || row == 20 || row == 21|| row == 33 || row == 34|| row == 45 || 
+                   row == 46 || row == 53 || row == 54 || row == 67 || row == 68 || row == 73 || row == 74 || row == 80 || row == 81 ||
+                   row == 85 || row == 86 || row == 88){
+            comp.setBackground(Color.LIGHT_GRAY);
+        } else {
+            comp.setBackground(table.getBackground());
         }
         
-        setToolTipText("RGB value: " + newColor.getRed() + ", "
-                                     + newColor.getGreen() + ", "
-                                     + newColor.getBlue());
+        if (table == null) {
+            return this;
+        }
+
+        Color bg = null;
+
+        if (isSelected) {
+            super.setBackground(bg == null ? table.getSelectionBackground(): bg);
+        } 
+       
         return this;
-    }
+     }
 }

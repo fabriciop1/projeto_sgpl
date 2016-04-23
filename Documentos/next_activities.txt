@@ -7,6 +7,7 @@ fora o adm, exibir perfis por rota de usuário
 inserir perfil (adm)
 editar perfil  (adm, usuario do perfil)
 remover perfil (adm)
+Rota - Drop down column para editar e add
 
 Permitir o usuario adicionar novo periodo e editar os campos (fora a especificacao)
 
