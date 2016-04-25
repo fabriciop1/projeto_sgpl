@@ -10,9 +10,9 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import util.Pair;
 
 
 /**
@@ -236,7 +236,7 @@ public abstract class GenericTableModifier extends JDialog{
         return data;
     }
     
-    protected javax.swing.JTable getEditTable() {
+    public javax.swing.JTable getEditTable() {
         return editTable;
     }
 
@@ -282,6 +282,7 @@ public abstract class GenericTableModifier extends JDialog{
             }
         ));
         editTable.setRowHeight(25);
+        editTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(editTable);
 
         editLabel.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
@@ -347,14 +348,15 @@ public abstract class GenericTableModifier extends JDialog{
     }//GEN-LAST:event_editLabelAncestorResized
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-                        
         updateSourceTable();
-        clearEditTable();
-        
+        clearEditTable();       
         hideEditor();
     }//GEN-LAST:event_saveButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        if (editTable.isEditing()) {
+            editTable.getCellEditor().cancelCellEditing();
+        }
         hideEditor();
         clearEditTable();
     }//GEN-LAST:event_cancelButtonActionPerformed

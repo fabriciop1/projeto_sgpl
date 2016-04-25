@@ -68,7 +68,7 @@
                   <Component id="btnAcessar" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="removerPerfilBT" alignment="0" max="32767" attributes="0"/>
                   <Component id="addPerfilBT" alignment="0" max="32767" attributes="0"/>
                   <Component id="editPerfilBT" alignment="0" max="32767" attributes="0"/>
@@ -170,7 +170,7 @@
             </Property>
             <Property name="columnSelectionAllowed" type="boolean" value="true"/>
             <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
-              <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
+              <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
             </Property>
           </Properties>
           <Events>

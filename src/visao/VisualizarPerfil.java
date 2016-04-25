@@ -14,6 +14,9 @@ import flex.table.TableModifiedEvent;
 import flex.table.TableModifyListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import modelo.dao.RotaDAO;
 import modelo.dao.UsuarioPerfilDAO;
@@ -28,9 +31,8 @@ import util.Cast;
  */
 public class VisualizarPerfil extends javax.swing.JFrame {
     
-    UsuarioPerfilDAO usuarioPerfil;
     GenericDAO<Perfil> perfilDao;
-    ArrayList<Perfil> perfis;
+    List<Perfil> perfis;
     ArrayList<Integer> idPerfis;
     Usuario usuario;
     GenericTableRowEditor listaPerfisGTRE;
@@ -49,24 +51,26 @@ public class VisualizarPerfil extends javax.swing.JFrame {
       
         listaPerfis.setColumnSelectionAllowed(false);
         
-        usuarioPerfil = new UsuarioPerfilDAO();
+        perfilDao = new GenericDAO<>(Perfil.class);
         usuario = ControleLogin.getInstance().getUsuario();
         
-         if (!usuario.getLogin().equals("adm")) {
+         if (!usuario.getLogin().equals("adm")) { // Sabendo se o usuário é ou não o administrador pelo login
             removerPerfilBT.setEnabled(false);
             addPerfilBT.setEnabled(false);
         }
         
         idPerfis = new ArrayList<>();
-        try {
-            perfis = usuarioPerfil.recuperarPerfisPorUsuario(usuario.getId());
-        } catch (SQLException ex) {
-            System.out.println("Erro em recuperar Perfis Por Usuário - Visualizar Perfil. " + ex.getMessage());
+      
+        if (usuario.getLogin().equals("adm")) {
+            perfis = perfilDao.retrieveAll();
+        } else {
+            perfis = perfilDao.retrieveByColumn("idRotaFK", usuario.getRota().getId());
         }
        
         listaPerfisGTRE = new GenericTableRowEditor(this, listaPerfis, false);
         listaPerfisGTRE.getSourceTableModel().setRowCount(0);
-                
+        setRotasCombo();
+         
         for(int i = 0; i < perfis.size(); i++){
             
             idPerfis.add(perfis.get(i).getId());
@@ -173,6 +177,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
             }
         });
         listaPerfis.setColumnSelectionAllowed(true);
+        listaPerfis.getTableHeader().setReorderingAllowed(false);
         listaPerfis.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 listaPerfisMouseClicked(evt);
@@ -252,7 +257,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
                     .addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAcessar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(removerPerfilBT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(addPerfilBT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(editPerfilBT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -347,6 +352,19 @@ public class VisualizarPerfil extends javax.swing.JFrame {
          }
     }
     
+    private void setRotasCombo() {
+        JComboBox comboRotas = new JComboBox();
+        GenericDAO<Rota> dao = new GenericDAO<>(Rota.class);
+        
+        List<Rota> rotas = dao.retrieveAll();
+        
+        for(int i = 0; i < rotas.size(); i++) {
+            comboRotas.addItem(rotas.get(i).getRota());
+        }
+ 
+        listaPerfisGTRE.getEditTable().getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(comboRotas));
+        
+    }
     private void definirBDListeners() {
         listaPerfisGTRE.addTableModifyListener(new TableModifyListener() {
             @Override
@@ -358,15 +376,33 @@ public class VisualizarPerfil extends javax.swing.JFrame {
                 Integer rowID = (Integer) event.getCustomRowData();
                 GenericTableModifier modifier = event.getSourceModifier();
                 int modifType = event.getEventType();
-                
+         
                 Rota rota = rotaDAO.retrieveByColumn("rota", rowData[2]).get(0);
-                if (modifType == TableModifyListener.ROW_INSERTED) {
-                    Perfil perfil = new Perfil(Cast.toString(rowData[0]), Cast.toString(rowData[1]),
-                            Cast.toDouble(rowData[3]), Cast.toDouble(rowData[4]), Cast.toDouble(rowData[5]), Cast.toInt(rowData[6]),
-                            Cast.toInt(rowData[7]), rota);
-                    
-                    perfilDAO.insert(perfil);
-                    modifier.setCustomRowData(modifier.getSourceTable().getRowCount() - 1, perfil.getId());
+                
+                switch (modifType) {
+                    case TableModifyListener.ROW_INSERTED:
+                        {
+                            Perfil perfil = new Perfil(Cast.toString(rowData[0]), Cast.toString(rowData[1]),
+                                    Cast.toDouble(rowData[3]), Cast.toDouble(rowData[4]), Cast.toDouble(rowData[5]), Cast.toInt(rowData[6]),
+                                    Cast.toInt(rowData[7]), rota);
+                            perfilDAO.insert(perfil);
+                            modifier.setCustomRowData(modifier.getSourceTable().getRowCount() - 1, perfil.getId());
+                            break;
+                        }
+                    case TableModifyListener.ROW_UPDATED:
+                        {
+                            Perfil perfil = new Perfil(Cast.toString(rowData[0]), Cast.toString(rowData[1]),
+                                    Cast.toDouble(rowData[3]), Cast.toDouble(rowData[4]), Cast.toDouble(rowData[5]), Cast.toInt(rowData[6]),
+                                    Cast.toInt(rowData[7]), rota);
+                            perfil.setId(rowID);
+                            perfilDAO.update(perfil);
+                            break;
+                        }
+                    case TableModifyListener.ROW_DELETED:
+                        perfilDAO.remove(rowID);
+                        break;
+                    default:
+                        break;
                 }
             }
         });

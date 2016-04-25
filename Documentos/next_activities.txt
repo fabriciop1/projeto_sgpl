@@ -4,19 +4,18 @@ Colunas obrigatórias na tabela
 Inserção de valor inválido em adição/edição
 
 fora o adm, exibir perfis por rota de usuário
-inserir perfil (adm)
-editar perfil  (adm, usuario do perfil)
-remover perfil (adm)
-Rota - Drop down column para editar e add
+inserir perfil (adm) - Problema caso o usuario insira letras em campos onde só podem números
+editar perfil  (adm, usuario do perfil) - Problema caso o usuario insira letras em campos onde só podem números
 
 Permitir o usuario adicionar novo periodo e editar os campos (fora a especificacao)
 
-inserção, edição e remoção de campos em Dados Econômicos
-selecionar linha de especificação
+inserção, edição de campos em Dados Econômicos
+especificacao - tabela fixa
 
-COR DAS LINHAS DE DEM: TOTAIS E VAZIOS
 
 Adicionar Usuario
+
+
 
 
 
