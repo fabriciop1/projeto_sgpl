@@ -5,11 +5,18 @@
  */
 package modelo.negocio;
 
+import flex.db.DatabaseObject;
+import flex.db.GenericDAO;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+import util.Cast;
+
 /**
  *
  * @author Fabricio
  */
-public class InventarioResumo {
+public class InventarioResumo extends DatabaseObject implements Serializable {
     private int idInventarioResumo;
     private double custoOportunidade;
     private double atividadeLeiteira;
@@ -22,10 +29,11 @@ public class InventarioResumo {
     private Perfil perfil;
 
     public InventarioResumo() {
-        
+        super("inventario_resumo", "idInventarioResumo");
     }
 
     public InventarioResumo(double custoOportunidade, double atividadeLeiteira, double salarioMinimo, int mes, int ano, int vidaUtilReprodutores, int vidaUtilAnimaisServico, double valorGastoCompraAnimais, Perfil perfil) {
+        super("inventario_resumo", "idInventarioResumo");
         this.custoOportunidade = custoOportunidade;
         this.atividadeLeiteira = atividadeLeiteira;
         this.salarioMinimo = salarioMinimo;
@@ -115,6 +123,36 @@ public class InventarioResumo {
 
     public void setPerfil(Perfil perfil) {
         this.perfil = perfil;
+    }
+
+    @Override
+    public Map<String, Object> getObjectTableData() {
+        HashMap<String,Object> m = new HashMap<>();
+        
+        m.put("custoOportunidade", custoOportunidade);
+        m.put("atividadeLeiteira", atividadeLeiteira);
+        m.put("salarioMinimo", salarioMinimo);
+        m.put("mes", mes);
+        m.put("ano", ano);
+        m.put("vidaUtilReprodutores", vidaUtilReprodutores);
+        m.put("vidaUtilAnimaisServico", vidaUtilAnimaisServico);
+        m.put("valorGastoCompraAnimais", valorGastoCompraAnimais);
+        m.put("idPerfilFK", perfil.getId());
+        
+        return m;
+    }
+
+    @Override
+    public void setObjectData(Map<String, Object> data) {
+        custoOportunidade = Cast.toDouble(data.get("custoOportunidade"));
+        atividadeLeiteira = Cast.toDouble(data.get("atividadeLeiteira"));
+        salarioMinimo = Cast.toDouble(data.get("salarioMinimo"));
+        mes = Cast.toInt(data.get("mes"));
+        ano = Cast.toInt(data.get("ano"));
+        vidaUtilReprodutores = Cast.toInt(data.get("vidaUtilReprodutores"));
+        vidaUtilAnimaisServico = Cast.toInt(data.get("vidaUtilAnimaisServico"));
+        valorGastoCompraAnimais = Cast.toDouble(data.get("valorGastoCompraAnimais"));
+        perfil = new GenericDAO<>(Perfil.class).retrieve( Cast.toInt(data.get("idPerfilFK")) );
     }
     
     

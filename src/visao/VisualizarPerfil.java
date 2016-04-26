@@ -19,7 +19,6 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import modelo.dao.RotaDAO;
-import modelo.dao.UsuarioPerfilDAO;
 import modelo.negocio.Perfil;
 import modelo.negocio.Rota;
 import modelo.negocio.Usuario;

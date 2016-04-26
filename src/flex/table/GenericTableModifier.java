@@ -112,7 +112,8 @@ public abstract class GenericTableModifier extends JDialog{
             
             @Override
             public Class getColumnClass(int columnIndex) {
-                return types[columnIndex];
+                //return types[columnIndex];
+                return String.class;
             }
 
             @Override
@@ -309,7 +310,7 @@ public abstract class GenericTableModifier extends JDialog{
                 }
             }
             else {
-                String regex = Regex.getRegexFromType(editTable.getColumnClass(i));
+                String regex = Regex.getRegexFromType(sourceTable.getColumnClass(i));
                 
                 if(regex != null && !columnValue.matches(regex)){
                     invalidColumnIndex = i;
@@ -327,8 +328,6 @@ public abstract class GenericTableModifier extends JDialog{
             
             return false;
         }
-        
-        
         
         return true;
     }

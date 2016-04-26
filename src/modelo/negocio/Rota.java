@@ -6,6 +6,7 @@
 package modelo.negocio;
 
 import flex.db.DatabaseObject;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import util.Cast;
@@ -14,7 +15,7 @@ import util.Cast;
  *
  * @author Fabricio
  */
-public class Rota extends DatabaseObject{
+public class Rota extends DatabaseObject implements Serializable {
     
     private String rota;
 

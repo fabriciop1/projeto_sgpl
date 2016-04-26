@@ -7,6 +7,7 @@ package modelo.negocio;
 
 import flex.db.DatabaseObject;
 import flex.db.GenericDAO;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import util.Cast;
@@ -15,7 +16,7 @@ import util.Cast;
  *
  * @author Jefferson Sales
  */
-public class InventarioBenfeitorias extends DatabaseObject {
+public class InventarioBenfeitorias extends DatabaseObject implements Serializable {
     
     private String especificacao;
     private String unidade;

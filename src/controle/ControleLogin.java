@@ -6,10 +6,8 @@
 package controle;
 
 import flex.db.GenericDAO;
-import java.sql.SQLException;
 import java.util.List;
 import javax.swing.JOptionPane;
-import modelo.dao.UsuarioDAO;
 import modelo.negocio.Usuario;
 
 /**

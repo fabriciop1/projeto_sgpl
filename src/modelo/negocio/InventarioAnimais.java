@@ -7,18 +7,16 @@ package modelo.negocio;
 
 import flex.db.DatabaseObject;
 import flex.db.GenericDAO;
-import java.sql.SQLException;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import util.Cast;
 
 /**
  *
  * @author Jefferson Sales
  */
-public class InventarioAnimais extends DatabaseObject {
+public class InventarioAnimais extends DatabaseObject implements Serializable {
     
     private String categoria;
     private int valorInicio;

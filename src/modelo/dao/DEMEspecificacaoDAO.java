@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import modelo.negocio.Especificacao;
 
 /**
  *
@@ -79,11 +80,11 @@ public class DEMEspecificacaoDAO extends DAO {
         }
     }
 
-    public String recuperar(int id) throws SQLException {
+    public Especificacao recuperar(int id) throws SQLException {
         if (isConnectionOwner()) {
             this.connection = DBConexao.openConnection();
         }
-        String especificacao = null;
+        Especificacao especificacao = null;
 
         String sql = "SELECT * FROM dem_especificacao WHERE idDEM_especificacao=?";
 
@@ -92,7 +93,9 @@ public class DEMEspecificacaoDAO extends DAO {
 
         ResultSet rs = st.executeQuery();
         if (rs.next()) {
-            especificacao = rs.getString("especificacao");
+            especificacao = new Especificacao();
+            especificacao.setId(rs.getInt("idDEM_especificacao"));
+            especificacao.setEspecificacao(rs.getString("especificacao"));
         }
 
         rs.close();

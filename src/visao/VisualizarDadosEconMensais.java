@@ -6,16 +6,15 @@
 package visao;
 
 import controle.ControlePerfil;
+import flex.db.GenericDAO;
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import javax.swing.JScrollBar;
-import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
-import modelo.dao.DEMEspecificacaoDAO;
-import modelo.dao.DadosEconMensaisDAO;
 import modelo.negocio.DadosEconMensais;
+import modelo.negocio.Especificacao;
 import modelo.negocio.Perfil;
 import util.ColorRenderer;
 
@@ -25,8 +24,10 @@ import util.ColorRenderer;
  */
 public class VisualizarDadosEconMensais extends javax.swing.JFrame {
 
-    ArrayList<String> especificacoes;    
-    ArrayList<DadosEconMensais> dems;
+    List<Especificacao> especificacoes;    
+    List<DadosEconMensais> dems;
+    GenericDAO<DadosEconMensais> demdao;
+    GenericDAO<Especificacao> demespdao;        
      
     
     /**
@@ -51,32 +52,23 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         tabelaDadosEconomicos.setDefaultRenderer(Object.class, new ColorRenderer());
         tabelaEspecificacao.setDefaultRenderer(Object.class, new ColorRenderer());
         
-        DadosEconMensaisDAO demdao = new DadosEconMensaisDAO();
-        dems = new ArrayList<>();
-        
-        DEMEspecificacaoDAO demespdao = new DEMEspecificacaoDAO();
-        especificacoes = new ArrayList<>();
-        
-        try{
-            dems = demdao.recuperarPorPerfil(atual.getId());
-        } catch(Exception e){
-            System.out.println("Erro em Construtor Visualizar Dados Economicos Mensais (Recuperar DEMs) " + e.getMessage());
-        }
-        
+        demdao = new GenericDAO<>(DadosEconMensais.class);
+                
+        demespdao = new GenericDAO<>(Especificacao.class);
+         
+        dems = demdao.retrieveByColumn("idPerfilFK", atual.getId());
+       
         tabelaDadosEconomicos.setDefaultRenderer(Color.class, new ColorRenderer(true));
-        
-        try{
-            especificacoes = demespdao.recuperarTodos();
-        } catch(Exception e){
-            System.out.println("Erro em Construtor Visualizar Dados Economicos Mensais (Recuperar Especificacoes) " + e.getMessage());
-        }
-        
+             
+        especificacoes = demespdao.retrieveAll();
+                
         PreencherTabelaESP(especificacoes);
         PreencherTabelaDEM(dems);
     }
     
-    public void PreencherTabelaESP(ArrayList<String> esp){
+    private void PreencherTabelaESP(List<Especificacao> esp){
        
+        
         DefaultTableModel modelEspecificacao = (DefaultTableModel) tabelaEspecificacao.getModel();
         modelEspecificacao.setNumRows(0);
 
@@ -103,11 +95,11 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                           modelEspecificacao.addRow(new Object[]{ "DESPESAS DE EMPRÉSTIMOS" }); }
             if(i == 69) { modelEspecificacao.addRow(new Object[]{ "COE DE ATIVIDADE LEITEIRA" }); }
             
-            modelEspecificacao.addRow( new Object[]{ esp.get(i) });
+            modelEspecificacao.addRow( new Object[]{ esp.get(i).getEspecificacao() });
         }
     }
     
-    public void PreencherTabelaDEM( ArrayList<DadosEconMensais> dem){
+    private void PreencherTabelaDEM( List<DadosEconMensais> dem){
         
         int tipoEsp = 1; //Valor de 1 a 11;
         
@@ -127,7 +119,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
             
             for(int j = 0; j < dem.size(); j++){
                 
-                if( tabelaEspecificacao.getModel().getValueAt(i, 0).equals(dem.get(j).getEspecificacao())
+                if( tabelaEspecificacao.getModel().getValueAt(i, 0).equals(dem.get(j).getEspecificacao().getEspecificacao())
                          ){
                                       
                     temp[(dem.get(j).getMes() - 1) * 3] = dem.get(j).getQuantidade();
