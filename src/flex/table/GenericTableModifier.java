@@ -8,11 +8,16 @@ package flex.table;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
+import util.Cast;
+import util.Regex;
 
 
 /**
@@ -27,14 +32,17 @@ public abstract class GenericTableModifier extends JDialog{
     
     protected JTable sourceTable;
     
-    private boolean forceCellEditing;
     private Frame parent;
-    private boolean columnEditableArray[];
     private List<Object> customRowDataList;
     private List<TableModifyListener> tableModifylisteners;
+    private HashMap<Integer, String> columnRegexMap;
     
     private boolean allowEmptyRows;
     private boolean allowEmptyCells;
+    
+    private boolean forceCellEditing;
+    private boolean columnEditableArray[];
+
     
     public GenericTableModifier(Frame parent, JTable sourceTable, boolean forceCellEditing) {
         super(parent, true);
@@ -44,6 +52,7 @@ public abstract class GenericTableModifier extends JDialog{
         this.forceCellEditing = forceCellEditing;
         this.tableModifylisteners = new ArrayList<>();
         this.customRowDataList = new ArrayList<>();
+        this.columnRegexMap = new HashMap<>();
         this.allowEmptyCells = true;
         this.allowEmptyRows = false;
         
@@ -121,8 +130,11 @@ public abstract class GenericTableModifier extends JDialog{
         
         for(int i=0; i<sourceTable.getColumnCount(); i++){
             
-            editTable.getColumnModel().getColumn(i).setCellRenderer(
-                    sourceTable.getCellRenderer(sourceTable.getSelectedRow(), i));
+            TableCellRenderer sourceCellRenderer = sourceTable.getColumnModel().getColumn(i).getCellRenderer();
+            TableCellEditor sourceCellEditor = sourceTable.getColumnModel().getColumn(i).getCellEditor();
+            
+            editTable.getColumnModel().getColumn(i).setCellEditor(sourceCellEditor);
+            editTable.getColumnModel().getColumn(i).setCellRenderer(sourceCellRenderer);
             
             int sourceColumnWidth = sourceTable.getColumnModel().getColumn(i).getWidth();
             minDialogSize += sourceColumnWidth;
@@ -256,6 +268,71 @@ public abstract class GenericTableModifier extends JDialog{
         this.setVisible(false);
     }
     
+    protected void stopCellEditing(){
+        
+        if(editTable.isEditing()){
+            editTable.getCellEditor().stopCellEditing();
+        }
+    }
+    
+    protected void cancelCellEditing(){
+        
+        if(editTable.isEditing()){
+            editTable.getCellEditor().cancelCellEditing();
+        }
+    }
+    
+    
+    protected boolean validateEditTableValues(){
+        
+        System.out.println("Validating....");
+        
+        Object[] rowData = getEditTableRowData(0);
+        int invalidColumnIndex = -666;
+        
+        for(int i=0; i<editTable.getColumnCount(); i++){
+            
+            if(rowData[i] == null && isAllowedEmptyCells()){
+                continue;
+            }
+            
+            String columnValue = Cast.toString(rowData[i]);
+            
+            if(columnRegexMap.containsKey(i)){
+                
+                String regex = columnRegexMap.get(i);
+                
+                if(!columnValue.matches(regex)){
+                    invalidColumnIndex = i;
+                    System.out.println("Invalid Column at Index: " + i);
+                    break;
+                }
+            }
+            else {
+                String regex = Regex.getRegexFromType(editTable.getColumnClass(i));
+                
+                if(regex != null && !columnValue.matches(regex)){
+                    invalidColumnIndex = i;
+                    System.out.println("Invalid Column at Index: " + i);
+                    break;
+                }
+            }
+            
+            System.out.println("Column Value: " + columnValue);
+        }
+        
+        if(invalidColumnIndex >= 0){
+            JOptionPane.showMessageDialog(this, "O valor da coluna \"" + editTable.getColumnName(invalidColumnIndex) + " é inválido.", 
+                    "Valor de Coluna Inválido", JOptionPane.ERROR_MESSAGE);
+            
+            return false;
+        }
+        
+        
+        
+        return true;
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -348,20 +425,26 @@ public abstract class GenericTableModifier extends JDialog{
     }//GEN-LAST:event_editLabelAncestorResized
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-        updateSourceTable();
-        clearEditTable();       
-        hideEditor();
+        
+        stopCellEditing();
+        
+        if (validateEditTableValues()) {
+            
+            updateSourceTable();
+            clearEditTable();            
+            hideEditor();
+        }
     }//GEN-LAST:event_saveButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        if (editTable.isEditing()) {
-            editTable.getCellEditor().cancelCellEditing();
-        }
+        
+        cancelCellEditing();
         hideEditor();
         clearEditTable();
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        cancelCellEditing();
         hideEditor();
         clearEditTable();
     }//GEN-LAST:event_formWindowClosed

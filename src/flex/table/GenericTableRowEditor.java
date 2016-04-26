@@ -43,10 +43,6 @@ public class GenericTableRowEditor extends GenericTableModifier {
     @Override
     protected void updateSourceTable(){        
         
-        if(editTable.isEditing()){
-            editTable.getCellEditor().stopCellEditing();
-        }
-        
         int numEmptyCells = 0;
         Object[] rowData = getEditTableRowData(0);
         

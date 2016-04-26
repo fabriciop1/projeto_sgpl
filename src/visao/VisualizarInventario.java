@@ -172,7 +172,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
         tabelaForrageirasGTRE.getSourceTableModel().setRowCount(0);
 
-        for (int i = 0; i < terras.size(); i++) {
+        for (int i = 0; i < forrageiras.size(); i++) {
 
             double ha = (terras.get(i).getAreaPropriaInicio() + terras.get(i).getAreaPropriaFinal()) / 2;
             double valorHa = forrageiras.get(i).getCustoFormacaoHectare() * ha;
@@ -1170,7 +1170,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
+                                    .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 225, Short.MAX_VALUE)
                                     .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jPanel2Layout.createSequentialGroup()
@@ -1185,7 +1185,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                         .addComponent(vidaUtilReprodBT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+                            .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 248, Short.MAX_VALUE)
                             .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, Short.MAX_VALUE)
