@@ -18,7 +18,6 @@ import java.util.List;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
-import modelo.dao.RotaDAO;
 import modelo.negocio.Perfil;
 import modelo.negocio.Rota;
 import modelo.negocio.Usuario;
@@ -274,11 +273,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
             atual.setId(idPerfis.get(listaPerfis.getSelectedRow()));
             atual.setNome((String) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 0));
             atual.setCidade((String) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 1));
-            try {
-                atual.setRota((new RotaDAO()).recuperar((String)listaPerfis.getValueAt(listaPerfis.getSelectedRow(), 2)));
-            } catch (SQLException ex) {
-                System.out.println("Erro em VisualizarInventario.class - setRota");
-            }
+            atual.setRota((new GenericDAO<>(Rota.class)).retrieveByColumn("rota", listaPerfis.getValueAt(listaPerfis.getSelectedRow(), 2).toString()).get(0));
             atual.setTamPropriedade((double) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 3));
             atual.setAreaPecLeite((double) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 4));
             atual.setProdLeiteDiario((double) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 5));
@@ -360,7 +355,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         for(int i = 0; i < rotas.size(); i++) {
             comboRotas.addItem(rotas.get(i).getRota());
         }
- 
+
         listaPerfisGTRE.getEditTable().getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(comboRotas));
         
     }

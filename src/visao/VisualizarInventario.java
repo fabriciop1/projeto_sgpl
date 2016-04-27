@@ -5,30 +5,19 @@
  */
 package visao;
 
-import flex.table.GenericTableRowEditor;
 import static flex.table.GenericTableRowEditor.*;
 import controle.ControlePerfil;
 import flex.db.GenericDAO;
-import flex.table.GenericTableModifier;
-import flex.table.TableModifiedEvent;
-import flex.table.TableModifyListener;
+import flex.table.*;
 import java.awt.HeadlessException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import modelo.dao.InventarioAnimaisDAO;
-import modelo.dao.InventarioBenfeitoriasDAO;
-import modelo.dao.InventarioForrageirasDAO;
-import modelo.dao.InventarioMaquinasDAO;
-import modelo.dao.InventarioResumoDAO;
-import modelo.dao.InventarioTerrasDAO;
 import modelo.negocio.InventarioAnimais;
 import modelo.negocio.InventarioBenfeitorias;
 import modelo.negocio.InventarioForrageiras;
@@ -54,14 +43,14 @@ public class VisualizarInventario extends javax.swing.JFrame {
     private GenericTableRowEditor tabelaAnimaisServGTRE;
 
     private InventarioResumo resumo;
-    private Perfil perfilAtual;
+    private final Perfil perfilAtual;
 
-    private InventarioTerrasDAO itdao;
-    private InventarioAnimaisDAO iadao;
-    private InventarioBenfeitoriasDAO ibdao;
-    private InventarioMaquinasDAO imdao;
-    private InventarioResumoDAO irdao;
-    private InventarioForrageirasDAO ifdao;
+    private final GenericDAO<InventarioTerras> itdao;
+    private final GenericDAO<InventarioAnimais> iadao;
+    private final GenericDAO<InventarioBenfeitorias> ibdao;
+    private final GenericDAO<InventarioMaquinas> imdao;
+    private final GenericDAO<InventarioResumo> irdao;
+    private final GenericDAO<InventarioForrageiras> ifdao;
 
     public VisualizarInventario() {
 
@@ -76,11 +65,11 @@ public class VisualizarInventario extends javax.swing.JFrame {
         int anoAtual = cal.get(Calendar.YEAR);
         int mesAtual = cal.get(Calendar.MONTH);
 
-        ArrayList<InventarioTerras> terras = new ArrayList<>();
-        ArrayList<InventarioForrageiras> forrageiras = new ArrayList<>();
-        ArrayList<InventarioAnimais> animais = new ArrayList<>();
-        ArrayList<InventarioBenfeitorias> benfeitorias = new ArrayList<>();
-        ArrayList<InventarioMaquinas> maquinas = new ArrayList<>();
+        List<InventarioTerras> terras;
+        List<InventarioForrageiras> forrageiras;
+        List<InventarioAnimais> animais;
+        List<InventarioBenfeitorias> benfeitorias;
+        List<InventarioMaquinas> maquinas;
 
         inicializarGTRE();
 
@@ -114,25 +103,21 @@ public class VisualizarInventario extends javax.swing.JFrame {
         ArrayList<Double> totalValFinaServ = new ArrayList<>();
         ArrayList<Double> totalValCabeServ = new ArrayList<>();
 
-        itdao = new InventarioTerrasDAO();
-        iadao = new InventarioAnimaisDAO();
-        ibdao = new InventarioBenfeitoriasDAO();
-        imdao = new InventarioMaquinasDAO();
-        irdao = new InventarioResumoDAO();
-        ifdao = new InventarioForrageirasDAO();
+        itdao = new GenericDAO<>(InventarioTerras.class);
+        iadao = new GenericDAO<>(InventarioAnimais.class);
+        ibdao = new GenericDAO<>(InventarioBenfeitorias.class);
+        imdao = new GenericDAO<>(InventarioMaquinas.class);
+        irdao = new GenericDAO<>(InventarioResumo.class);
+        ifdao = new GenericDAO<>(InventarioForrageiras.class);
 
         perfilAtual = ControlePerfil.getInstance().getPerfilSelecionado();
 
-        try {
-            terras = itdao.recuperarPorPerfil(perfilAtual.getId());
-            forrageiras = ifdao.recuperarPorPerfil(perfilAtual.getId());
-            animais = iadao.recuperarPorPerfil(perfilAtual.getId());
-            benfeitorias = ibdao.recuperarPorPerfil(perfilAtual.getId());
-            maquinas = imdao.recuperarPorPerfil(perfilAtual.getId());
-            resumo = irdao.recuperarPorPerfil(perfilAtual.getId());
-        } catch (SQLException ex) {
-            Logger.getLogger(VisualizarInventario.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        terras = itdao.retrieveByColumn("idPerfilFK", perfilAtual.getId());
+        forrageiras = ifdao.retrieveByColumn("idPerfilFK", perfilAtual.getId());
+        animais = iadao.retrieveByColumn("idPerfilFK", perfilAtual.getId());
+        benfeitorias = ibdao.retrieveByColumn("idPerfilFK", perfilAtual.getId());
+        maquinas = imdao.retrieveByColumn("idPerfilFK", perfilAtual.getId());
+        resumo = irdao.retrieveByColumn("idPerfilFK", perfilAtual.getId()).get(0);
 
         if (resumo == null) {
 
@@ -141,11 +126,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             resumo.setMes(mesAtual);
             resumo.setAno(anoAtual);
 
-            try {
-                irdao.cadastrar(resumo);
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Erro ao cadastrar um novo resumo");
-            }
+            irdao.insert(resumo);
 
         }
 
@@ -172,7 +153,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
         tabelaForrageirasGTRE.getSourceTableModel().setRowCount(0);
 
-        for (int i = 0; i < forrageiras.size(); i++) {
+        for (int i = 0; i < terras.size() && i < forrageiras.size(); i++) {
 
             double ha = (terras.get(i).getAreaPropriaInicio() + terras.get(i).getAreaPropriaFinal()) / 2;
             double valorHa = forrageiras.get(i).getCustoFormacaoHectare() * ha;
@@ -2172,7 +2153,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             @Override
             public void tableModified(TableModifiedEvent event) {
 
-                InventarioMaquinasDAO dao = new InventarioMaquinasDAO();
+                GenericDAO<InventarioMaquinas> dao = new GenericDAO<>(InventarioMaquinas.class);
                 Perfil perfil = ControlePerfil.getInstance().getPerfilSelecionado();
 
                 Object[] rowData = event.getRowData();
@@ -2182,198 +2163,152 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
                 if (modifType == TableModifyListener.ROW_INSERTED) {
 
-                    try {
-                        InventarioMaquinas inv = new InventarioMaquinas(Cast.toString(rowData[0]), Cast.toString(rowData[1]), Cast.toDouble(rowData[2]),
-                                Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfil);
-                        dao.cadastrar(inv);
+                    InventarioMaquinas inv = new InventarioMaquinas(Cast.toString(rowData[0]), Cast.toString(rowData[1]), Cast.toDouble(rowData[2]),
+                    Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfil);
+                    dao.insert(inv);
 
-                        modifier.setCustomRowData(modifier.getSourceTable().getRowCount() - 1, inv.getId());
+                    modifier.setCustomRowData(modifier.getSourceTable().getRowCount() - 1, inv.getId());
 
-                    } catch (SQLException ex) {
-                        Logger.getLogger(VisualizarInventario.class.getName()).log(Level.SEVERE, null, ex);
-                    }
                 } else if (modifType == TableModifyListener.ROW_UPDATED) {
 
-                    try {
-                        InventarioMaquinas inv = new InventarioMaquinas(Cast.toString(rowData[0]), Cast.toString(rowData[1]), Cast.toDouble(rowData[2]),
-                                Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfil);
-                        inv.setId(rowID);
+                    InventarioMaquinas inv = new InventarioMaquinas(Cast.toString(rowData[0]), Cast.toString(rowData[1]), Cast.toDouble(rowData[2]),
+                            Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfil);
+                    inv.setId(rowID);
 
-                        dao.atualizar(inv);
-
-                    } catch (SQLException ex) {
-                        Logger.getLogger(VisualizarInventario.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    dao.update(inv);
+                 
                 } else if (modifType == TableModifyListener.ROW_DELETED) {
-                    try {
-                        dao.remover(rowID);
-
-                    } catch (SQLException ex) {
-                        Logger.getLogger(VisualizarInventario.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    dao.remove(rowID);
+                    
                 }
             }
         });
 
-        tabelaBenfeitoriasGTRE.addTableModifyListener(new TableModifyListener() {
-            @Override
-            public void tableModified(TableModifiedEvent event) {
+        tabelaBenfeitoriasGTRE.addTableModifyListener((TableModifiedEvent event) -> {
+            GenericDAO<InventarioBenfeitorias> dao = new GenericDAO<>(InventarioBenfeitorias.class);
+            
+            Perfil perfil = ControlePerfil.getInstance().getPerfilSelecionado();
+            Object[] rowData = event.getRowData();
+            Integer rowID = (Integer) event.getCustomRowData();
+            GenericTableModifier modifier = event.getSourceModifier();
+            int modifType = event.getEventType();
+            
+            if (modifType == TableModifyListener.ROW_INSERTED) {
+   
+                InventarioBenfeitorias inv = new InventarioBenfeitorias(Cast.toString(rowData[0]), Cast.toString(rowData[1]), Cast.toDouble(rowData[2]),
+                        Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfil);
+                dao.insert(inv);
+                    
+                modifier.setCustomRowData(modifier.getSourceTable().getRowCount() - 1, inv.getId());
+                    
+            } else if (modifType == TableModifyListener.ROW_UPDATED) {
+                
+                InventarioBenfeitorias inv = new InventarioBenfeitorias(Cast.toString(rowData[0]), Cast.toString(rowData[1]), Cast.toDouble(rowData[2]),
+                        Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfil);
+                inv.setId(rowID);
+                   
+                dao.update(inv);
+                    
+            } else if (modifType == TableModifyListener.ROW_DELETED) {
+                
+                dao.remove(rowID);    
+            }
+        });
 
-                InventarioBenfeitoriasDAO dao = new InventarioBenfeitoriasDAO();
-
-                Perfil perfil = ControlePerfil.getInstance().getPerfilSelecionado();
-                Object[] rowData = event.getRowData();
-                Integer rowID = (Integer) event.getCustomRowData();
-                GenericTableModifier modifier = event.getSourceModifier();
-                int modifType = event.getEventType();
-
+        tabelaTerrasGTRE.addTableModifyListener((TableModifiedEvent event) -> {
+            GenericDAO<InventarioTerras> dao = new GenericDAO<>(InventarioTerras.class);
+            Perfil perfil = ControlePerfil.getInstance().getPerfilSelecionado();
+            
+            Object[] rowData = event.getRowData();
+            Integer rowID = (Integer) event.getCustomRowData();
+            GenericTableModifier modifier = event.getSourceModifier();
+            int modifType = event.getEventType();
+            int rowIndex = event.getRowIndex();
+            
+            if (modifType == TableModifyListener.ROW_INSERTED || modifType == TableModifyListener.ROW_UPDATED) {
+                
+                InventarioTerras terras = new InventarioTerras(Cast.toString(rowData[0]), Cast.toDouble(rowData[1]), Cast.toDouble(rowData[2]),
+                        Cast.toDouble(rowData[3]), Cast.toDouble(rowData[4]), Cast.toDouble(rowData[5]), perfil);
+                
                 if (modifType == TableModifyListener.ROW_INSERTED) {
-
-                    try {
-                        InventarioBenfeitorias inv = new InventarioBenfeitorias(Cast.toString(rowData[0]), Cast.toString(rowData[1]), Cast.toDouble(rowData[2]),
-                                Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfil);
-                        dao.cadastrar(inv);
-
-                        modifier.setCustomRowData(modifier.getSourceTable().getRowCount() - 1, inv.getId());
-
-                    } catch (SQLException ex) {
-                        Logger.getLogger(VisualizarInventario.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    
+                    tabelaForrageirasGTRE.addSourceTableRow(new Object[]{terras.getEspecificacao()}, null);
+                    dao.insert(terras);
+                    
+                    modifier.setCustomRowData(rowIndex, terras.getId());
+                    tabelaForrageirasGTRE.setCustomRowData(rowIndex, terras.getId());
+                    
                 } else if (modifType == TableModifyListener.ROW_UPDATED) {
-
-                    try {
-                        InventarioBenfeitorias inv = new InventarioBenfeitorias(Cast.toString(rowData[0]), Cast.toString(rowData[1]), Cast.toDouble(rowData[2]),
-                                Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfil);
-                        inv.setId(rowID);
-
-                        dao.atualizar(inv);
-
-                    } catch (SQLException ex) {
-                        Logger.getLogger(VisualizarInventario.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                } else if (modifType == TableModifyListener.ROW_DELETED) {
-
-                    try {
-                        dao.remover(rowID);
-
-                    } catch (SQLException ex) {
-                        Logger.getLogger(VisualizarInventario.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    
+                    Object[] forrageirasRowData = tabelaForrageirasGTRE.getSourceTableRowData(rowIndex);
+                    
+                    terras.setId(rowID);
+                    
+                    calcularValoresInvTerras(rowData, forrageirasRowData, rowIndex);
+                    
+                    dao.update(terras);
                 }
+            } else if (modifType == TableModifyListener.ROW_DELETED) {
+                dao.remove(rowID);
             }
         });
 
-        tabelaTerrasGTRE.addTableModifyListener(new TableModifyListener() {
-            @Override
-            public void tableModified(TableModifiedEvent event) {
-
-                GenericDAO<InventarioTerras> dao = new GenericDAO<>(InventarioTerras.class);
-                Perfil perfil = ControlePerfil.getInstance().getPerfilSelecionado();
-
+        tabelaForrageirasGTRE.addTableModifyListener((TableModifiedEvent event) -> {
+            if (event.getEventType() == TableModifyListener.ROW_UPDATED) {
+                
                 Object[] rowData = event.getRowData();
-                Integer rowID = (Integer) event.getCustomRowData();
-                GenericTableModifier modifier = event.getSourceModifier();
-                int modifType = event.getEventType();
+                
                 int rowIndex = event.getRowIndex();
-
-                if (modifType == TableModifyListener.ROW_INSERTED || modifType == TableModifyListener.ROW_UPDATED) {
-
-                    InventarioTerras terras = new InventarioTerras(Cast.toString(rowData[0]), Cast.toDouble(rowData[1]), Cast.toDouble(rowData[2]),
-                            Cast.toDouble(rowData[3]), Cast.toDouble(rowData[4]), Cast.toDouble(rowData[5]), perfil);
-
-                    if (modifType == TableModifyListener.ROW_INSERTED) {
-
-                        tabelaForrageirasGTRE.addSourceTableRow(new Object[]{terras.getEspecificacao()}, null);
-                        dao.insert(terras);
-
-                        modifier.setCustomRowData(rowIndex, terras.getId());
-                        tabelaForrageirasGTRE.setCustomRowData(rowIndex, terras.getId());
-
-                    } else if (modifType == TableModifyListener.ROW_UPDATED) {
-
-                        Object[] forrageirasRowData = tabelaForrageirasGTRE.getSourceTableRowData(rowIndex);
-
-                        terras.setId(rowID);
-
-                        calcularValoresInvTerras(rowData, forrageirasRowData, rowIndex);
-
-                        dao.update(terras);
-                    }
-                } else if (modifType == TableModifyListener.ROW_DELETED) {
-                    dao.remove(rowID);
-                }
-            }
-        });
-
-        tabelaForrageirasGTRE.addTableModifyListener(new TableModifyListener() {
-            @Override
-            public void tableModified(TableModifiedEvent event) {
-
-                if (event.getEventType() == TableModifyListener.ROW_UPDATED) {
-
-                    GenericDAO<InventarioTerras> dao = new GenericDAO<>(InventarioTerras.class);
-
-                    Object[] rowData = event.getRowData();
-                    GenericTableModifier modifier = event.getSourceModifier();
-                    int rowIndex = event.getRowIndex();
-                    Integer rowID = (Integer) event.getCustomRowData();
-
-                    Object[] terrasRowData = tabelaTerrasGTRE.getSourceTableRowData(rowIndex);
-
-                    calcularValoresInvTerras(terrasRowData, rowData, rowIndex);
-
-                    InventarioForrageiras forrageiras = null;
-                    try {
-                        forrageiras = ifdao.recuperar(rowID);
-                        forrageiras.setVidaUtil(Cast.toInt(rowData[4]));
-                        forrageiras.setCustoFormacaoHectare(Cast.toDouble(rowData[1]));
-                        ifdao.atualizar(forrageiras);
-                    } catch (SQLException ex) {
-                        Logger.getLogger(VisualizarInventario.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-
-            }
-        });
-
-        TableModifyListener animaisTMListener = new TableModifyListener() {
-            @Override
-            public void tableModified(TableModifiedEvent event) {
-
-                GenericDAO<InventarioAnimais> dao = new GenericDAO<>(InventarioAnimais.class);
-
-                Perfil perfil = ControlePerfil.getInstance().getPerfilSelecionado();
-                Object[] rowData = event.getRowData();
                 Integer rowID = (Integer) event.getCustomRowData();
-                GenericTableModifier modifier = event.getSourceModifier();
-                int modifType = event.getEventType();
+                
+                Object[] terrasRowData = tabelaTerrasGTRE.getSourceTableRowData(rowIndex);
+                
+                calcularValoresInvTerras(terrasRowData, rowData, rowIndex);
+                
+                InventarioForrageiras forrageiras;
+                
+                forrageiras = ifdao.retrieve(rowID);
+                forrageiras.setVidaUtil(Cast.toInt(rowData[4]));
+                forrageiras.setCustoFormacaoHectare(Cast.toDouble(rowData[1]));
+                ifdao.update(forrageiras);
+                
+            }
+        });
 
-                int tipoAnimal = 0;
-
-                if (modifier.getSourceTable() == tabelaInveAnimaisProd) {
-                    tipoAnimal = 1;
-                } else if (modifier.getSourceTable() == tabelaInveAnimaisServ) {
-                    tipoAnimal = 2;
+        TableModifyListener animaisTMListener = (TableModifiedEvent event) -> {
+            GenericDAO<InventarioAnimais> dao = new GenericDAO<>(InventarioAnimais.class);
+            
+            Perfil perfil = ControlePerfil.getInstance().getPerfilSelecionado();
+            Object[] rowData = event.getRowData();
+            Integer rowID = (Integer) event.getCustomRowData();
+            GenericTableModifier modifier = event.getSourceModifier();
+            int modifType = event.getEventType();
+            
+            int tipoAnimal = 0;
+            
+            if (modifier.getSourceTable() == tabelaInveAnimaisProd) {
+                tipoAnimal = 1;
+            } else if (modifier.getSourceTable() == tabelaInveAnimaisServ) {
+                tipoAnimal = 2;
+            }
+            
+            if (modifType == TableModifyListener.ROW_INSERTED || modifType == TableModifyListener.ROW_UPDATED) {
+                
+                InventarioAnimais inv = new InventarioAnimais(Cast.toString(rowData[0]), Cast.toInt(rowData[1]), Cast.toInt(rowData[2]),
+                        Cast.toInt(rowData[3]), Cast.toInt(rowData[4]), Cast.toInt(rowData[5]), Cast.toInt(rowData[6]),
+                        Cast.toDouble(rowData[7]), tipoAnimal, perfil);
+                
+                if (modifType == TableModifyListener.ROW_INSERTED) {
+                    dao.insert(inv);
+                    modifier.setCustomRowData(modifier.getSourceTable().getRowCount() - 1, inv.getId());
+                    
+                } else if (modifType == TableModifyListener.ROW_UPDATED) {
+                    inv.setId(rowID);
+                    dao.update(inv);
                 }
-
-                if (modifType == TableModifyListener.ROW_INSERTED || modifType == TableModifyListener.ROW_UPDATED) {
-
-                    InventarioAnimais inv = new InventarioAnimais(Cast.toString(rowData[0]), Cast.toInt(rowData[1]), Cast.toInt(rowData[2]),
-                            Cast.toInt(rowData[3]), Cast.toInt(rowData[4]), Cast.toInt(rowData[5]), Cast.toInt(rowData[6]),
-                            Cast.toDouble(rowData[7]), tipoAnimal, perfil);
-
-                    if (modifType == TableModifyListener.ROW_INSERTED) {
-                        dao.insert(inv);
-                        modifier.setCustomRowData(modifier.getSourceTable().getRowCount() - 1, inv.getId());
-
-                    } else if (modifType == TableModifyListener.ROW_UPDATED) {
-                        inv.setId(rowID);
-                        dao.update(inv);
-                    }
-
-                } else if (modifType == TableModifyListener.ROW_DELETED) {
-                    dao.remove(rowID);
-                }
+                
+            } else if (modifType == TableModifyListener.ROW_DELETED) {
+                dao.remove(rowID);
             }
         };
 
@@ -2414,12 +2349,12 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
                 if (resumo != null) {
                     resumo.setValorGastoCompraAnimais(temp);
-                    irdao.atualizar(resumo);
+                    irdao.update(resumo);
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
             }
-        } catch (IllegalArgumentException | SQLException | NullPointerException e) {
+        } catch (IllegalArgumentException | NullPointerException e) {
             JOptionPane.showMessageDialog(null, "Insira um valor válido!");
         }
     }//GEN-LAST:event_valorGastoAnimaisBTActionPerformed
@@ -2598,7 +2533,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
                 if (resumo != null) {
                     resumo.setAtividadeLeiteira(temp);
-                    irdao.atualizar(resumo);
+                    irdao.update(resumo);
                 }
 
                 atividadeLeite.setText("" + temp);
@@ -2607,7 +2542,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
             }
-        } catch (HeadlessException | NumberFormatException | SQLException | NullPointerException e) {
+        } catch (HeadlessException | NumberFormatException | NullPointerException e) {
             JOptionPane.showMessageDialog(null, "Insira um valor válido!");
         }
     }//GEN-LAST:event_atividadeLeiteBTActionPerformed
@@ -2620,7 +2555,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
                 if (resumo != null) {
                     resumo.setCustoOportunidade(temp);
-                    irdao.atualizar(resumo);
+                    irdao.update(resumo);
                 }
 
                 custoOportunidade.setText("" + temp);
@@ -2628,7 +2563,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
             }
-        } catch (HeadlessException | NumberFormatException | SQLException | NullPointerException e) {
+        } catch (HeadlessException | NumberFormatException | NullPointerException e) {
             JOptionPane.showMessageDialog(null, "Insira um valor válido!");
         }
     }//GEN-LAST:event_custoOportBTActionPerformed
@@ -2644,7 +2579,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
                 if (resumo != null) {
                     resumo.setSalarioMinimo(temp);
-                    irdao.atualizar(resumo);
+                    irdao.update(resumo);
                 }
 
                 total60.setText(String.format("R$ %.2f", (temp * 13 + temp * 0.3) / 12));
@@ -2652,7 +2587,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
             }
-        } catch (HeadlessException | NumberFormatException | SQLException | NullPointerException e) {
+        } catch (HeadlessException | NumberFormatException | NullPointerException e) {
             JOptionPane.showMessageDialog(null, "Insira um valor válido!");
         }
     }//GEN-LAST:event_salarioMinimoBTActionPerformed
@@ -2674,15 +2609,13 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
                 if (resumo != null) {
                     resumo.setVidaUtilReprodutores(temp);
-                    irdao.atualizar(resumo);
+                    irdao.update(resumo);
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
             }
         } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(null, "Insira um valor válido!");
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
         }
     }//GEN-LAST:event_vidaUtilReprodBTActionPerformed
 
@@ -2697,16 +2630,14 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
                 if (resumo != null) {
                     resumo.setVidaUtilAnimaisServico(temp);
-                    irdao.atualizar(resumo);
+                    irdao.update(resumo);
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
             }
         } catch (IllegalArgumentException | NullPointerException e) {
             JOptionPane.showMessageDialog(null, "Insira um valor válido!");
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-        }
+        } 
     }//GEN-LAST:event_vidaUtilServBTActionPerformed
 
     private void verificaTabelaVazia(DefaultTableModel table, JButton editarBtn, JButton removerBtn) {

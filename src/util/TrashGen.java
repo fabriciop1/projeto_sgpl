@@ -9,18 +9,9 @@ import java.sql.SQLException;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import modelo.dao.InventarioAnimaisDAO;
-import modelo.dao.InventarioBenfeitoriasDAO;
-import modelo.dao.InventarioMaquinasDAO;
-import modelo.dao.InventarioTerrasDAO;
-import modelo.dao.PerfilDAO;
-import modelo.dao.RotaDAO;
-import modelo.dao.UsuarioDAO;
-import modelo.dao.UsuarioPerfilDAO;
 import modelo.negocio.InventarioAnimais;
 import modelo.negocio.InventarioBenfeitorias;
 import modelo.negocio.InventarioMaquinas;
-import modelo.negocio.InventarioTerras;
 import modelo.negocio.Perfil;
 import modelo.negocio.Rota;
 import modelo.negocio.Usuario;
@@ -71,7 +62,7 @@ public final class TrashGen {
         return str;
     }
     
-    
+  /*  
     public static void generateGarbageInDatabase(int insertions, String login, String password, boolean createUser) throws SQLException{
         
         Random rand = new Random();
@@ -120,7 +111,7 @@ public final class TrashGen {
                
         }
     }
-    
+   
     public static void main(String[] args){
         
         try {
@@ -130,4 +121,6 @@ public final class TrashGen {
         }
         
     }
+
+*/
 }

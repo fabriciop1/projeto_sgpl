@@ -3,7 +3,6 @@ atualizar tela após alterações
 Colunas obrigatórias na tabela
 Inserção de valor inválido em adição/edição
 
-fora o adm, exibir perfis por rota de usuário
 inserir perfil (adm) - Problema caso o usuario insira letras em campos onde só podem números
 editar perfil  (adm, usuario do perfil) - Problema caso o usuario insira letras em campos onde só podem números
 

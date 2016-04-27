@@ -15,7 +15,7 @@ import modelo.dao.*;
 public class Main {
        public static void main(String[] args) {
            
-           InventarioAnimaisDAO dao = new InventarioAnimaisDAO();
+  /*         InventarioAnimaisDAO dao = new InventarioAnimaisDAO();
            InventarioTerrasDAO dao2 = new InventarioTerrasDAO();
            DadosEconMensaisDAO dao3 = new DadosEconMensaisDAO();
            InventarioResumoDAO dao4 = new InventarioResumoDAO();
@@ -27,7 +27,7 @@ public class Main {
            
            usuario = dao6.retrieveByColumn("login", "adm").get(0);
            System.out.println(usuario.getSenha());
-           
+   */       
            //try {
              //  perfil = (new PerfilDAO()).recuperar(1) ;
               
