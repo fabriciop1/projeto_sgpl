@@ -174,15 +174,16 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
             
             ResultSet rset = st.getResultSet();
             
+            List<T> objects = new ArrayList<>();
+            
+            
             if(rset == null || !rset.first()){
                 
                 st.close();
                 closeConnection(connection);
                 
-                return null;
+                return objects;
             }
-            
-            List<T> objects = new ArrayList<>();
             
             ResultSetMetaData rsetMeta = rset.getMetaData();
             

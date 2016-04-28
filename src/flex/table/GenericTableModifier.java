@@ -218,6 +218,41 @@ public abstract class GenericTableModifier extends JDialog{
     }
     
     
+    protected Object[] convertToSourceTableValues(Object[] rowData){
+        
+        if(rowData == null){
+            throw new NullPointerException("O array de dados da linha da tabela passado é inválido.");
+        } 
+        else if(rowData.length != sourceTable.getColumnCount()){
+            throw new IllegalArgumentException("O número de valores do array passado é diferente no número de colunas da tabela.");
+        }
+        
+        Object[] sourceRowData = new Object[sourceTable.getColumnCount()];
+        
+        for (int i = 0; i < rowData.length; i++) {
+            
+            if (rowData[i] != null) {
+
+                Object sourceValue = Cast.stringToPrimitiveType(rowData[i].toString(), sourceTable.getColumnClass(i));
+                
+                if(sourceValue.getClass() == sourceTable.getColumnClass(i)){
+                    
+                    sourceRowData[i] = sourceValue;
+                }
+                else {
+                    throw new IllegalArgumentException("O valor " + (i + 1) + " do array de valores não é do mesmo tipo da coluna correspondente na tabela.");
+                }
+            } 
+            else {
+                sourceRowData[i] = null;
+            }
+        }
+        
+        return sourceRowData;
+    }
+    
+    
+    
     protected void removeEditTableRow(int row){
         
         getEditTableModel().removeRow(row);
@@ -238,7 +273,7 @@ public abstract class GenericTableModifier extends JDialog{
         getEditTableModel().fireTableRowsInserted(editTable.getRowCount()-1, editTable.getRowCount()-1);
     }
     
-    protected Object[] getEditTableRowData(int row){
+    protected Object[] getEditTableRowStringData(int row){
         
         Object[] data = new Object[editTable.getColumnCount()];
         
@@ -246,7 +281,11 @@ public abstract class GenericTableModifier extends JDialog{
             data[i] = editTable.getValueAt(row, i);
         }
         
-        return data;
+        return (data);
+    }
+    
+    protected Object[] getEditTableRowData(int row){
+        return convertToSourceTableValues( getEditTableRowStringData(row) );
     }
     
     public javax.swing.JTable getEditTable() {
@@ -288,7 +327,8 @@ public abstract class GenericTableModifier extends JDialog{
         
         System.out.println("Validating....");
         
-        Object[] rowData = getEditTableRowData(0);
+        Object[] rowData = getEditTableRowStringData(0);
+        
         int invalidColumnIndex = -666;
         
         for(int i=0; i<editTable.getColumnCount(); i++){
@@ -323,7 +363,7 @@ public abstract class GenericTableModifier extends JDialog{
         }
         
         if(invalidColumnIndex >= 0){
-            JOptionPane.showMessageDialog(this, "O valor da coluna \"" + editTable.getColumnName(invalidColumnIndex) + " é inválido.", 
+            JOptionPane.showMessageDialog(this, "O valor da coluna \"" + editTable.getColumnName(invalidColumnIndex) + "\" é inválido.", 
                     "Valor de Coluna Inválido", JOptionPane.ERROR_MESSAGE);
             
             return false;
