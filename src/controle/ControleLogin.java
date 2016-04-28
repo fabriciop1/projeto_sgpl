@@ -37,7 +37,7 @@ public class ControleLogin {
         
         List<Usuario> usuarios = usuarioDAO.retrieveByColumn("login", login);
         
-        if(usuarios != null) {
+        if(!usuarios.isEmpty()) {
             atual = usuarios.get(0); 
         }
         

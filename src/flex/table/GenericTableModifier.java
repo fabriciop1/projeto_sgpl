@@ -92,21 +92,9 @@ public abstract class GenericTableModifier extends JDialog{
         this.setVisible(true);
     }   
     
-    protected void composeEditTable(){
+    protected DefaultTableModel createEditTableModel(Object[][] dataMatrix, String[] columnNameArray, Class[] columnTypeArray, boolean[] columnEditableArray){
         
-        Class[] columnTypeArray = new Class[sourceTable.getColumnCount()];
-        String[] columnNameArray = new String[sourceTable.getColumnCount()];
-        Object[][] dataMatrix = new Object[sourceTable.getColumnCount()][1];  
-        
-        int minDialogSize = 80;        
-        
-        for(int i=0; i<sourceTable.getColumnCount(); i++){
-            columnTypeArray[i] = sourceTable.getColumnClass(i);
-            columnNameArray[i] = sourceTable.getColumnName(i);
-            columnEditableArray[i] = sourceTable.isCellEditable(0, i);
-        }
-        
-        editTable.setModel(new DefaultTableModel(dataMatrix, columnNameArray){
+        DefaultTableModel model = new DefaultTableModel(dataMatrix, columnNameArray){
             
             Class[] types = columnTypeArray;
             
@@ -125,7 +113,26 @@ public abstract class GenericTableModifier extends JDialog{
                     return true;
                 }
             }
-        });
+        };
+        
+        return model;
+    }
+    
+    protected void composeEditTable(){
+        
+        Class[] columnTypeArray = new Class[sourceTable.getColumnCount()];
+        String[] columnNameArray = new String[sourceTable.getColumnCount()];
+        Object[][] dataMatrix = new Object[sourceTable.getColumnCount()][1];  
+        
+        int minDialogSize = 80;        
+        
+        for(int i=0; i<sourceTable.getColumnCount(); i++){
+            columnTypeArray[i] = sourceTable.getColumnClass(i);
+            columnNameArray[i] = sourceTable.getColumnName(i);
+            columnEditableArray[i] = sourceTable.isCellEditable(0, i);
+        }
+        
+        editTable.setModel( createEditTableModel(dataMatrix, columnNameArray, columnTypeArray, columnEditableArray) );
         
         editTable.createDefaultColumnsFromModel();
         

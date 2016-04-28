@@ -61,9 +61,11 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         tabelaDadosEconomicos.setDefaultRenderer(Color.class, new ColorRenderer(true));
              
         especificacoes = demespdao.retrieveAll();
+        
+        fillItemSelector();
                 
         PreencherTabelaESP(especificacoes);
-        PreencherTabelaDEM(dems);
+        PreencherTabelaDEM(anoAtual, dems);
     }
     
     private void PreencherTabelaESP(List<Especificacao> esp){
@@ -99,7 +101,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         }
     }
     
-    private void PreencherTabelaDEM( List<DadosEconMensais> dem){
+    private void PreencherTabelaDEM(int ano, List<DadosEconMensais> dem){
         
         int tipoEsp = 1; //Valor de 1 a 11;
         
@@ -185,6 +187,8 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         tabelaDadosEconomicos = new javax.swing.JTable();
         jScrollPane4 = new javax.swing.JScrollPane();
         tabelaMeses = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
+        anoCombo = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -556,12 +560,31 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
             tabelaMeses.getColumnModel().getColumn(11).setResizable(false);
         }
 
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit_values.png"))); // NOI18N
+        jButton1.setText("Editar Valores");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        anoCombo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                anoComboActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(anoCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 2400, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -571,7 +594,15 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(anoCombo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 1480, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -665,6 +696,26 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_tabelaDadosEconomicosKeyPressed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        MonthSelector telaMes = new MonthSelector(this, true);
+        
+        telaMes.setVisible(true);
+        int selecionado = telaMes.getIndex();
+        System.out.println(selecionado);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void anoComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_anoComboActionPerformed
+        System.out.println(anoCombo.getItemAt(anoCombo.getSelectedIndex()));
+      //  PreencherTabelaDEM(Integer.parseInt(anoCombo.getItemAt(anoCombo.getSelectedIndex())) , dems);
+    }//GEN-LAST:event_anoComboActionPerformed
+
+    private void fillItemSelector() {
+        List<DadosEconMensais> dados =  demdao.retrieveAll("ano", "ano");
+        
+        for(int i = 0; i < dados.size(); i++) {
+            anoCombo.addItem("" + dados.get(i).getAno());
+        }
+    }
     
     private void moveScrollBar(java.awt.event.MouseWheelEvent evt) {
         JScrollBar bar = jScrollPane1.getVerticalScrollBar();
@@ -676,7 +727,9 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> anoCombo;
     private javax.swing.JButton btnVoltar;
+    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;

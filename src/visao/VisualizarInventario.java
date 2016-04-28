@@ -70,6 +70,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         List<InventarioAnimais> animais;
         List<InventarioBenfeitorias> benfeitorias;
         List<InventarioMaquinas> maquinas;
+        List<InventarioResumo> resumos;
 
         inicializarGTRE();
 
@@ -117,7 +118,12 @@ public class VisualizarInventario extends javax.swing.JFrame {
         animais = iadao.retrieveByColumn("idPerfilFK", perfilAtual.getId());
         benfeitorias = ibdao.retrieveByColumn("idPerfilFK", perfilAtual.getId());
         maquinas = imdao.retrieveByColumn("idPerfilFK", perfilAtual.getId());
-        resumo = irdao.retrieveByColumn("idPerfilFK", perfilAtual.getId()).get(0);
+        resumos = irdao.retrieveByColumn("idPerfilFK", perfilAtual.getId());
+        
+        if(!resumos.isEmpty()) {
+            resumo = resumos.get(0);          
+        }
+        
 
         if (resumo == null) {
 
@@ -266,7 +272,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total28.setText("" + (Double.parseDouble(total13.getText().replace(',', '.'))
                 + Double.parseDouble(total21.getText().replace(',', '.'))));
         total29.setText("" + (Double.parseDouble(total26.getText().replace(',', '.'))
-                + Double.parseDouble(total18.getText().substring(1).replace(',', '.'))));
+                + Double.parseDouble(total18.getText().replace(',', '.'))));
 
         total31.setText(String.format("R$ %.2f", ((Double.parseDouble(total19.getText().substring(2).replace(',', '.'))
                 + Double.parseDouble(total20.getText().substring(2).replace(',', '.'))) / 2)));
@@ -1151,7 +1157,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 225, Short.MAX_VALUE)
+                                    .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
                                     .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jPanel2Layout.createSequentialGroup()
@@ -1165,11 +1171,12 @@ public class VisualizarInventario extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(vidaUtilReprodBT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 248, Short.MAX_VALUE)
-                            .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(18, 18, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+                                .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(total37, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
                             .addComponent(total38, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
