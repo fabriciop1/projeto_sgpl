@@ -98,7 +98,7 @@
                                   <Component id="total6" max="32767" attributes="0"/>
                                   <Group type="102" attributes="0">
                                       <Component id="total3" min="-2" pref="142" max="-2" attributes="0"/>
-                                      <EmptySpace max="32767" attributes="0"/>
+                                      <EmptySpace pref="18" max="32767" attributes="0"/>
                                       <Component id="total4" min="-2" pref="141" max="-2" attributes="0"/>
                                   </Group>
                                   <Component id="total8" max="32767" attributes="0"/>
@@ -109,12 +109,20 @@
                       <EmptySpace min="-2" pref="167" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
-                      <Component id="jLabel14" min="-2" pref="240" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="151" max="-2" attributes="0"/>
-                      <Component id="total10" min="-2" pref="151" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="total11" min="-2" pref="144" max="-2" attributes="0"/>
-                      <EmptySpace pref="111" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="jLabel14" min="-2" pref="240" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="151" max="-2" attributes="0"/>
+                              <Component id="total10" min="-2" pref="151" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="total11" min="-2" pref="144" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="189" max="-2" attributes="0"/>
+                              <Component id="button" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
                               <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
@@ -171,13 +179,18 @@
                           <Component id="total11" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="total12" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="24" max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="adicionarInvTerrasBT" max="32767" attributes="0"/>
-                          <Component id="editarInvTerrasBT" alignment="1" max="32767" attributes="0"/>
-                          <Component id="removerInvTerrasBT" alignment="1" pref="0" max="32767" attributes="0"/>
+                      <EmptySpace pref="23" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="1" attributes="0">
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="adicionarInvTerrasBT" max="32767" attributes="0"/>
+                                  <Component id="editarInvTerrasBT" alignment="1" max="32767" attributes="0"/>
+                                  <Component id="removerInvTerrasBT" alignment="1" pref="0" max="32767" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="button" alignment="1" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -498,6 +511,14 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="removerInvTerrasBTActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="button">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Open that crap"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>

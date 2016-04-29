@@ -92,31 +92,6 @@ public abstract class GenericTableModifier extends JDialog{
         this.setVisible(true);
     }   
     
-    protected DefaultTableModel createEditTableModel(Object[][] dataMatrix, String[] columnNameArray, Class[] columnTypeArray, boolean[] columnEditableArray){
-        
-        DefaultTableModel model = new DefaultTableModel(dataMatrix, columnNameArray){
-            
-            Class[] types = columnTypeArray;
-            
-            @Override
-            public Class getColumnClass(int columnIndex) {
-                //return types[columnIndex];
-                return String.class;
-            }
-
-            @Override
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                
-                if(!isForceCellEditingEnabled()){
-                    return GenericTableModifier.this.columnEditableArray[columnIndex];
-                } else {
-                    return true;
-                }
-            }
-        };
-        
-        return model;
-    }
     
     protected void composeEditTable(){
         
@@ -165,6 +140,8 @@ public abstract class GenericTableModifier extends JDialog{
     protected abstract void refillEditTable();
     
     protected abstract void updateSourceTable();
+    
+    protected abstract DefaultTableModel createEditTableModel(Object[][] sourceDataMatrix, String[] sourceColumnNames, Class[] sourceColumnTypes, boolean[] sourceColumnEditable);
     
     
     
@@ -225,6 +202,23 @@ public abstract class GenericTableModifier extends JDialog{
     }
     
     
+    protected Object convertToSourceTableValue(Object value, int sourceColumn){
+     
+        if (value != null) {
+
+            Object sourceValue = Cast.stringToPrimitiveType(value.toString(), sourceTable.getColumnClass(sourceColumn));
+
+            if (sourceValue.getClass() == sourceTable.getColumnClass(sourceColumn)) {
+
+                return sourceValue;
+            } else {
+                throw new IllegalArgumentException("O valor não é do mesmo tipo da coluna correspondente na tabela.");
+            }
+        } else {
+            return null;
+        }
+    }
+    
     protected Object[] convertToSourceTableValues(Object[] rowData){
         
         if(rowData == null){
@@ -238,26 +232,11 @@ public abstract class GenericTableModifier extends JDialog{
         
         for (int i = 0; i < rowData.length; i++) {
             
-            if (rowData[i] != null) {
-
-                Object sourceValue = Cast.stringToPrimitiveType(rowData[i].toString(), sourceTable.getColumnClass(i));
-                
-                if(sourceValue.getClass() == sourceTable.getColumnClass(i)){
-                    
-                    sourceRowData[i] = sourceValue;
-                }
-                else {
-                    throw new IllegalArgumentException("O valor " + (i + 1) + " do array de valores não é do mesmo tipo da coluna correspondente na tabela.");
-                }
-            } 
-            else {
-                sourceRowData[i] = null;
-            }
+            sourceRowData[i] = convertToSourceTableValue(rowData[i], i);
         }
         
         return sourceRowData;
     }
-    
     
     
     protected void removeEditTableRow(int row){
@@ -306,9 +285,7 @@ public abstract class GenericTableModifier extends JDialog{
     
     protected void clearEditTable(){
         
-        while(editTable.getRowCount() > 0){
-            removeEditTableRow(0);
-        }
+        getEditTableModel().setRowCount(0);
     }
     
     protected void hideEditor(){
