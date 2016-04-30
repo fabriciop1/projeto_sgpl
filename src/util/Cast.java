@@ -46,26 +46,26 @@ public final class Cast {
         }
     }
     
-    public static Object stringToPrimitiveType(String string, Class valueType){
+    public static Object toPrimitiveType(String stringValue, Class valueType){
         
-        if(string != null && valueType != null){
-            
-            if(valueType == Integer.class){ return Integer.parseInt(string); } else 
-            if(valueType == Float.class){ return Float.parseFloat(string); } else 
-            if(valueType == Double.class){ return Double.parseDouble(string); } else
-            if(valueType == String.class){ return string; } else 
-            if(valueType == Boolean.class){ return Boolean.parseBoolean(string); } else 
-            if(valueType == Short.class){ return Short.parseShort(string); } else 
-            if(valueType == Long.class){ return Long.parseLong(string); } else 
-            if(valueType == Byte.class){ return Byte.parseByte(string); } else 
-            if(valueType == Character.class){ return string.charAt(0); } else 
-                
-            throw new ClassCastException("O objeto passado não é de um tipo primitivo.");
-        }   
-        else {
-            return null;
+        if(stringValue == null){
+            throw new NullPointerException("A string contendo o valor a ser convertido é inválida.");
+        }
+        else if(valueType == null){
+            throw new NullPointerException("O tipo de valor passado é inválido");
         }
         
+        if(valueType == Integer.class){ return Integer.parseInt(stringValue); } else 
+        if(valueType == Float.class){ return Float.parseFloat(stringValue); } else 
+        if(valueType == Double.class){ return Double.parseDouble(stringValue); } else
+        if(valueType == String.class){ return stringValue; } else 
+        if(valueType == Boolean.class){ return Boolean.parseBoolean(stringValue); } else 
+        if(valueType == Short.class){ return Short.parseShort(stringValue); } else 
+        if(valueType == Long.class){ return Long.parseLong(stringValue); } else 
+        if(valueType == Byte.class){ return Byte.parseByte(stringValue); } else 
+        if(valueType == Character.class){ return stringValue.charAt(0); }
+
+        else throw new ClassCastException("O objeto passado não é de um tipo primitivo.");
     }
     
     //public static Object toPrimitiveTypeArray(o){ }

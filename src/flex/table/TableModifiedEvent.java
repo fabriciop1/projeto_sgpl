@@ -6,6 +6,7 @@
 package flex.table;
 
 import javax.swing.JTable;
+import util.TrashGen;
 
 /**
  *
@@ -17,32 +18,41 @@ public class TableModifiedEvent {
     private final JTable sourceTable;
     
     private int rowIndex;
-    private Object[][] data;
+    private Object[][] tableData;
     private Object customRowData;
     private int eventType;
     
     public TableModifiedEvent(GenericTableModifier sourceModifier, JTable sourceTable) {
+        
         this.sourceModifier = sourceModifier;
         this.sourceTable = sourceTable;
-        this.data = new Object[1][1];
+        this.tableData = new Object[1][0];
     }
 
     public TableModifiedEvent(GenericTableModifier sourceModifier, JTable sourceTable, int rowIndex, Object[] rowData, Object customRowData, int eventType) {
-        this.sourceModifier = sourceModifier;
-        this.sourceTable = sourceTable;
+        this(sourceModifier,sourceTable);
+        
         this.rowIndex = rowIndex;
-        this.data[0] = rowData;
         this.customRowData = customRowData;
         this.eventType = eventType;
+        
+        if(rowData != null){
+            this.tableData = new Object[1][0];
+            this.tableData[0] = rowData;
+        }       
     }
 
-    public TableModifiedEvent(GenericTableModifier sourceModifier, JTable sourceTable, int rowIndex, Object[][] areaData, Object customRowData, int eventType) {
-        this.sourceModifier = sourceModifier;
-        this.sourceTable = sourceTable;
+    public TableModifiedEvent(GenericTableModifier sourceModifier, JTable sourceTable, int rowIndex, Object[][] tableAreaData, Object customRowData, int eventType) {
+        this(sourceModifier,sourceTable);
+        
         this.rowIndex = rowIndex;
-        this.data = areaData;
         this.customRowData = customRowData;
         this.eventType = eventType;
+        
+        if (tableAreaData != null && tableAreaData.length > 0) {
+            this.tableData = tableAreaData;
+        }
+        
     }
 
     public int getEventType() {
@@ -62,11 +72,16 @@ public class TableModifiedEvent {
     }
 
     public Object[] getTableRowData() {
-        return data[0];
+        return tableData[0];
     }
 
     public void setTableRowData(Object[] rowData) {
-        this.data[0] = rowData;
+        
+        if(tableData == null){
+            this.tableData = new Object[1][0];
+        }
+        
+        this.tableData[0] = rowData;
     }
 
     public Object getCustomRowData() {
@@ -86,12 +101,29 @@ public class TableModifiedEvent {
     }
 
     public Object[][] getTableAreaData() {
-        return data;
+        return tableData;
     }
 
-    public void setTableAreaData(Object[][] data) {
-        this.data = data;
+    public void setTableAreaData(Object[][] tableData) {
+        
+        if(tableData != null){
+            this.tableData = tableData;
+        }
     }
     
-    
+//    public static void main(String[] args) {
+//        
+//        String[][] str = new String[1][0];
+//        String[] d = new String[30];
+//        
+//        for (int i = 0; i < d.length; i++) {
+//            d[i] = TrashGen.generateString(50, false, true, true);
+//        }
+//        
+//        str[0] = d;
+//        
+//        for (int i = 0; i < str[0].length; i++) {
+//            System.out.println(str[0][i]);            
+//        }
+//    }
 }

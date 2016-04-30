@@ -23,7 +23,7 @@ public class GenericTableRowEditor extends GenericTableModifier {
     private int editorType;
     
     public GenericTableRowEditor(Frame parent, JTable sourceTable, boolean forceCellEditing) {
-        super(parent, sourceTable, forceCellEditing);
+        super(parent, sourceTable, forceCellEditing, true);
         
         this.editorType = GTRE_INSERT;
         
