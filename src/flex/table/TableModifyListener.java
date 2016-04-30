@@ -19,5 +19,7 @@ public interface TableModifyListener {
     public static final int COLUMN_UPDATED = 5;
     public static final int COLUMN_DELETED = 6;
     
+    public static final int AREA_CHANGED = 7;
+    
     public abstract void tableModified(TableModifiedEvent event);
 }

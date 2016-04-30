@@ -422,6 +422,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         editarInvTerrasBT = new javax.swing.JButton();
         adicionarInvTerrasBT = new javax.swing.JButton();
         removerInvTerrasBT = new javax.swing.JButton();
+        button = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tabelaInveAnimaisServ = new javax.swing.JTable();
@@ -745,6 +746,13 @@ public class VisualizarInventario extends javax.swing.JFrame {
             }
         });
 
+        button.setText("Open that crap");
+        button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -772,18 +780,23 @@ public class VisualizarInventario extends javax.swing.JFrame {
                             .addComponent(total6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(total3, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                                 .addComponent(total4, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(total8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addComponent(total9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(167, 167, 167))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(151, 151, 151)
-                .addComponent(total10, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(total11, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 111, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(151, 151, 151)
+                        .addComponent(total10, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(total11, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(189, 189, 189)
+                        .addComponent(button)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(29, 29, 29)
@@ -830,12 +843,15 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     .addComponent(total10)
                     .addComponent(total11)
                     .addComponent(total12))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(adicionarInvTerrasBT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(editarInvTerrasBT, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(removerInvTerrasBT, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(adicionarInvTerrasBT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(editarInvTerrasBT, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(removerInvTerrasBT, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addContainerGap())
+                    .addComponent(button, javax.swing.GroupLayout.Alignment.TRAILING)))
         );
 
         jTabbedPane1.addTab("Terras", jPanel1);
@@ -1157,7 +1173,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
+                                    .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 225, Short.MAX_VALUE)
                                     .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jPanel2Layout.createSequentialGroup()
@@ -2163,7 +2179,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 GenericDAO<InventarioMaquinas> dao = new GenericDAO<>(InventarioMaquinas.class);
                 Perfil perfil = ControlePerfil.getInstance().getPerfilSelecionado();
 
-                Object[] rowData = event.getRowData();
+                Object[] rowData = event.getTableRowData();
                 Integer rowID = (Integer) event.getCustomRowData();
                 GenericTableModifier modifier = event.getSourceModifier();
                 int modifType = event.getEventType();
@@ -2195,7 +2211,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             GenericDAO<InventarioBenfeitorias> dao = new GenericDAO<>(InventarioBenfeitorias.class);
             
             Perfil perfil = ControlePerfil.getInstance().getPerfilSelecionado();
-            Object[] rowData = event.getRowData();
+            Object[] rowData = event.getTableRowData();
             Integer rowID = (Integer) event.getCustomRowData();
             GenericTableModifier modifier = event.getSourceModifier();
             int modifType = event.getEventType();
@@ -2226,7 +2242,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             GenericDAO<InventarioTerras> dao = new GenericDAO<>(InventarioTerras.class);
             Perfil perfil = ControlePerfil.getInstance().getPerfilSelecionado();
             
-            Object[] rowData = event.getRowData();
+            Object[] rowData = event.getTableRowData();
             Integer rowID = (Integer) event.getCustomRowData();
             GenericTableModifier modifier = event.getSourceModifier();
             int modifType = event.getEventType();
@@ -2263,7 +2279,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         tabelaForrageirasGTRE.addTableModifyListener((TableModifiedEvent event) -> {
             if (event.getEventType() == TableModifyListener.ROW_UPDATED) {
                 
-                Object[] rowData = event.getRowData();
+                Object[] rowData = event.getTableRowData();
                 
                 int rowIndex = event.getRowIndex();
                 Integer rowID = (Integer) event.getCustomRowData();
@@ -2286,7 +2302,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             GenericDAO<InventarioAnimais> dao = new GenericDAO<>(InventarioAnimais.class);
             
             Perfil perfil = ControlePerfil.getInstance().getPerfilSelecionado();
-            Object[] rowData = event.getRowData();
+            Object[] rowData = event.getTableRowData();
             Integer rowID = (Integer) event.getCustomRowData();
             GenericTableModifier modifier = event.getSourceModifier();
             int modifType = event.getEventType();
@@ -2647,6 +2663,15 @@ public class VisualizarInventario extends javax.swing.JFrame {
         } 
     }//GEN-LAST:event_vidaUtilServBTActionPerformed
 
+    
+    private void buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonActionPerformed
+        
+        GenericTableAreaEditor gtae = new GenericTableAreaEditor(this, tabelaInveTerras, true, 0, tabelaInveTerras.getRowCount()-1, 1, 3);
+        gtae.setAllColumnsEditable(true);
+        
+        gtae.showEditor(evt);
+    }//GEN-LAST:event_buttonActionPerformed
+
     private void verificaTabelaVazia(DefaultTableModel table, JButton editarBtn, JButton removerBtn) {
         if (table.getRowCount() == 0) {
             editarBtn.setEnabled(false);
@@ -2685,6 +2710,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
     private javax.swing.JLabel atividadeLeite;
     private javax.swing.JButton atividadeLeiteBT;
     private javax.swing.JButton btnVoltar;
+    private javax.swing.JButton button;
     private javax.swing.JButton custoOportBT;
     private javax.swing.JLabel custoOportunidade;
     private javax.swing.JButton editarInvAnimaisBT;

@@ -9,6 +9,7 @@ import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -27,6 +28,33 @@ public class GenericTableRowEditor extends GenericTableModifier {
         this.editorType = GTRE_INSERT;
         
         this.setAllColumnsEditable(true);
+    }
+    
+    @Override
+    protected DefaultTableModel createEditTableModel(Object[][] sourceDataMatrix, String[] sourceColumnNames, Class[] sourceColumnTypes, boolean[] sourceColumnEditable){
+        
+        DefaultTableModel model = new DefaultTableModel(sourceDataMatrix, sourceColumnNames){
+            
+            Class[] types = sourceColumnTypes;
+            
+            @Override
+            public Class getColumnClass(int columnIndex) {
+                //return types[columnIndex];
+                return String.class;
+            }
+
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                
+                if(!isForceCellEditingEnabled()){
+                    return GenericTableRowEditor.this.isColumnEditable(columnIndex);
+                } else {
+                    return true;
+                }
+            }
+        };
+        
+        return model;
     }
     
     @Override

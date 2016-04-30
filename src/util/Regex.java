@@ -36,23 +36,18 @@ public final class Regex {
     
     public static String getRegexFromType(Class type){
         
+        if(type == null){
+            throw new NullPointerException("A classe passada é inválida.");
+        }
+        
         if(type == Integer.class){ return INTEGER_VALUE; } 
         else if(type == Long.class){ return LONG_VALUE; }
         else if(type == Double.class || type == Float.class){ return DOUBLE_VALUE; } 
         else if(type == Boolean.class){ return BOOLEAN_VALUE; }
         else if(type == String.class){ return STRING_SINGLE_LINE; }
         
-        return null;
+        throw new IllegalArgumentException("Não existe regex definida para a classe " + type.getName());
     }
     
-//    public static void main(String[] args) {
-//        
-//        if("      -9".matches(DOUBLE_VALUE)){
-//            System.out.println("MATCHES");
-//        }
-//        else {
-//            System.out.println("DOESN'T MATCH");
-//        }
-//        
-//    }
+
 }

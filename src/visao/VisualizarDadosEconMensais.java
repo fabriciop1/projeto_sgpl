@@ -110,57 +110,68 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         modelDadosEconomicos.setNumRows(0);
         
         Object[] temp;
-        double[] tempTotais;
+        double[] tempTotais = new double[36];
         
         for(int i = 0; i < modelEspecificacao.getRowCount(); i++){
             
             temp = new Object[36];
-            tempTotais = new double[] {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,
-                                       0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,
-                                       0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
+            
+            
+            
             
             for(int j = 0; j < dem.size(); j++){
+                
+                int indexCol = (dem.get(j).getMes() - 1) * 3;
                 
                 if( tabelaEspecificacao.getModel().getValueAt(i, 0).equals(dem.get(j).getEspecificacao().getEspecificacao())
                          ){
                                       
-                    temp[(dem.get(j).getMes() - 1) * 3] = dem.get(j).getQuantidade();
-                    temp[(dem.get(j).getMes() - 1) * 3 + 1] = dem.get(j).getValorUnitario();
-                    temp[(dem.get(j).getMes() - 1) * 3 + 2] = dem.get(j).getQuantidade() * dem.get(j).getValorUnitario();
+                    temp[indexCol ] = dem.get(j).getQuantidade();
+                    temp[indexCol + 1] = dem.get(j).getValorUnitario();
+                    temp[indexCol + 2] = dem.get(j).getQuantidade() * dem.get(j).getValorUnitario();
                     
                  //   System.out.println((dem.get(j).getMes() - 1) * 3);
                  //   System.out.println(tempTotais[(dem.get(j).getMes() - 1) * 3]);
                  //   System.out.println(tempTotais[(dem.get(j).getMes() - 1) * 3] + dem.get(j).getQuantidade());
                     
-                    tempTotais[(dem.get(j).getMes() - 1) * 3] = tempTotais[(dem.get(j).getMes() - 1) * 3] + dem.get(j).getQuantidade();
-                    tempTotais[(dem.get(j).getMes() - 1) * 3 + 1] = tempTotais[(dem.get(j).getMes() - 1) * 3 + 1] + dem.get(j).getValorUnitario();
-                    tempTotais[(dem.get(j).getMes() - 1) * 3 + 1] = tempTotais[(dem.get(j).getMes() - 1) * 3 + 1] + dem.get(j).getQuantidade() * dem.get(j).getValorUnitario();
+                    tempTotais[indexCol] += dem.get(j).getQuantidade();
+                    tempTotais[indexCol + 1] += dem.get(j).getValorUnitario();
+                    tempTotais[indexCol + 2] += dem.get(j).getQuantidade() * dem.get(j).getValorUnitario();
                     
                //     System.out.println(tempTotais[(dem.get(j).getMes() - 1) * 3]);
                 }
                 
                 if( tabelaEspecificacao.getModel().getValueAt(i, 0).equals("SUB-TOTAL") || 
-                tabelaEspecificacao.getModel().getValueAt(i, 0).equals("TOTAL DE ENTRADAS")){
-                                        
-                    if (tempTotais[(dem.get(j).getMes() - 1) * 3] != 0.0) { 
-                        temp[(dem.get(j).getMes() - 1) * 3] = tempTotais[(dem.get(j).getMes() - 1) * 3];
-                        tempTotais[(dem.get(j).getMes() - 1) * 3] = 0.0;
+                    tabelaEspecificacao.getModel().getValueAt(i, 0).equals("TOTAL DE ENTRADAS")){
+                    
+                    System.out.println( "mes: " + dem.get(j).getMes() + " coluna: " + indexCol + " valor coluna: " + tempTotais[indexCol] );
+                    System.out.println( "mes: " + dem.get(j).getMes() + " coluna: " + (indexCol + 1) + " valor coluna: " + tempTotais[indexCol + 1] );
+                    System.out.println( "mes: " + dem.get(j).getMes() + " coluna: " + (indexCol + 2) + " valor coluna: " + tempTotais[indexCol + 2] );
+                    
+                    if (tempTotais[indexCol] != 0.0) { 
+                        temp[indexCol] = tempTotais[indexCol];
+                        //tempTotais[indexCol] = 0.0;
                     }
                     
-                    if (tempTotais[(dem.get(j).getMes() - 1) * 3 + 1] != 0.0) {
-                        temp[(dem.get(j).getMes() - 1) * 3 + 1] = tempTotais[(dem.get(j).getMes() - 1) * 3 + 1];
-                        tempTotais[(dem.get(j).getMes() - 1) * 3 + 1] = 0.0;
+                    if (tempTotais[indexCol + 1] != 0.0) {
+                        temp[indexCol + 1] = tempTotais[indexCol + 1];
+                        //tempTotais[indexCol + 1] = 0.0;
                     } 
-                    if (tempTotais[(dem.get(j).getMes() - 1) * 3 + 2] != 0.0) {
-                        temp[(dem.get(j).getMes() - 1) * 3 + 2] = tempTotais[(dem.get(j).getMes() - 1) * 3 + 2];
-                        tempTotais[(dem.get(j).getMes() - 1) * 3 + 2] = 0.0;
+                    if (tempTotais[indexCol + 2] != 0.0) {
+                        temp[indexCol + 2] = tempTotais[indexCol + 2];
+                        //tempTotais[indexCol + 2] = 0.0;
                     } 
                     
-                    tempTotais = new double[36];
+                    //tempTotais = new double[36];
+                    //tempTotais = zerarVetor(tempTotais);
+                    System.out.println("zerou");
+                    //tempTotais = new double[36];
                     tipoEsp++;
                 }
                 
             }
+            
+            
             
             modelDadosEconomicos.addRow(temp);
             
@@ -724,6 +735,16 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         } else { //Down
             bar.setValue(bar.getValue()-25);
         }     
+    }
+    
+    private double[] zerarVetor( double[] vetor){
+        
+        for(int i = 0; i < vetor.length; i++){
+            vetor[i] = 0.0;
+        }
+        
+        return vetor;
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

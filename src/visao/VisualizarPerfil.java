@@ -366,7 +366,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
                 GenericDAO<Perfil> perfilDAO = new GenericDAO<>(Perfil.class);
                 GenericDAO<Rota> rotaDAO = new GenericDAO<>(Rota.class);     
                 
-                Object[] rowData = event.getRowData();
+                Object[] rowData = event.getTableRowData();
                 Integer rowID = (Integer) event.getCustomRowData();
                 GenericTableModifier modifier = event.getSourceModifier();
                 int modifType = event.getEventType();

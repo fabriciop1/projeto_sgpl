@@ -17,21 +17,31 @@ public class TableModifiedEvent {
     private final JTable sourceTable;
     
     private int rowIndex;
-    private Object[] rowData;
+    private Object[][] data;
     private Object customRowData;
     private int eventType;
     
     public TableModifiedEvent(GenericTableModifier sourceModifier, JTable sourceTable) {
         this.sourceModifier = sourceModifier;
         this.sourceTable = sourceTable;
+        this.data = new Object[1][1];
     }
 
-    public TableModifiedEvent(GenericTableModifier sourceModifier, JTable sourceTable, int rowIndex, Object[] rowData, Object customData, int eventType) {
+    public TableModifiedEvent(GenericTableModifier sourceModifier, JTable sourceTable, int rowIndex, Object[] rowData, Object customRowData, int eventType) {
         this.sourceModifier = sourceModifier;
         this.sourceTable = sourceTable;
         this.rowIndex = rowIndex;
-        this.rowData = rowData;
-        this.customRowData = customData;
+        this.data[0] = rowData;
+        this.customRowData = customRowData;
+        this.eventType = eventType;
+    }
+
+    public TableModifiedEvent(GenericTableModifier sourceModifier, JTable sourceTable, int rowIndex, Object[][] areaData, Object customRowData, int eventType) {
+        this.sourceModifier = sourceModifier;
+        this.sourceTable = sourceTable;
+        this.rowIndex = rowIndex;
+        this.data = areaData;
+        this.customRowData = customRowData;
         this.eventType = eventType;
     }
 
@@ -51,12 +61,12 @@ public class TableModifiedEvent {
         this.rowIndex = rowIndex;
     }
 
-    public Object[] getRowData() {
-        return rowData;
+    public Object[] getTableRowData() {
+        return data[0];
     }
 
-    public void setRowData(Object[] rowData) {
-        this.rowData = rowData;
+    public void setTableRowData(Object[] rowData) {
+        this.data[0] = rowData;
     }
 
     public Object getCustomRowData() {
@@ -74,4 +84,14 @@ public class TableModifiedEvent {
     public JTable getSourceTable() {
         return sourceTable;
     }
+
+    public Object[][] getTableAreaData() {
+        return data;
+    }
+
+    public void setTableAreaData(Object[][] data) {
+        this.data = data;
+    }
+    
+    
 }
