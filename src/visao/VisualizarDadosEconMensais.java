@@ -27,11 +27,10 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
     List<Especificacao> especificacoes;    
     List<DadosEconMensais> dems;
     GenericDAO<DadosEconMensais> demdao;
-    GenericDAO<Especificacao> demespdao;        
-     
+    GenericDAO<Especificacao> demespdao;    
     
     /**
-     * Creates new form VisualizarDadosEconMensais
+     * Creates new form VisualizarDadosEconMensaisNew
      */
     public VisualizarDadosEconMensais() {
         initComponents();
@@ -54,6 +53,9 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         tabelaDadosEconomicos.setDefaultRenderer(Object.class, new ColorRenderer());
         tabelaEspecificacao.setDefaultRenderer(Object.class, new ColorRenderer());
         
+        //tabelaDadosEconomicos.setCellSelectionEnabled(false);
+        tabelaDadosEconomicos.setRowSelectionAllowed(true);
+        
         demdao = new GenericDAO<>(DadosEconMensais.class);
                 
         demespdao = new GenericDAO<>(Especificacao.class);
@@ -65,8 +67,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         PreencherTabelaESP(especificacoes);
         
         fillItemSelector();
-                
-        //PreencherTabelaDEM(anoAtual, dems);
+        
     }
     
     private void PreencherTabelaESP(List<Especificacao> esp){
@@ -158,7 +159,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         }
         
     }
-  
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -170,17 +171,19 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
 
         btnVoltar = new javax.swing.JButton();
         textoEntrada = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        anoCombo = new javax.swing.JComboBox<String>();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        tabelaEspecificacao = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
-        tabelaDadosEconomicos = new javax.swing.JTable();
+        tabelaEspecificacao = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jPanel2 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         tabelaMeses = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
-        anoCombo = new javax.swing.JComboBox<String>();
-        jLabel1 = new javax.swing.JLabel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        tabelaDadosEconomicos = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -195,13 +198,28 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         textoEntrada.setForeground(new java.awt.Color(51, 153, 255));
         textoEntrada.setText("DADOS ECONÔMICOS MENSAIS");
 
-        jScrollPane1.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
-            public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
-                jScrollPane1MouseWheelMoved(evt);
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel1.setText("Ano:");
+
+        anoCombo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                anoComboActionPerformed(evt);
             }
         });
 
-        jPanel1.setPreferredSize(new java.awt.Dimension(2700, 1515));
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit_values.png"))); // NOI18N
+        jButton1.setText("Editar Valores");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jScrollPane3.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane3.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 
         tabelaEspecificacao.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -316,7 +334,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
             }
         });
         tabelaEspecificacao.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        tabelaEspecificacao.setPreferredSize(new java.awt.Dimension(270, 1448));
+        tabelaEspecificacao.setPreferredSize(new java.awt.Dimension(270, 1450));
         tabelaEspecificacao.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tabelaEspecificacao.getTableHeader().setReorderingAllowed(false);
         tabelaEspecificacao.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
@@ -339,14 +357,55 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                 tabelaEspecificacaoKeyPressed(evt);
             }
         });
-        jScrollPane2.setViewportView(tabelaEspecificacao);
-        tabelaEspecificacao.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane3.setViewportView(tabelaEspecificacao);
         if (tabelaEspecificacao.getColumnModel().getColumnCount() > 0) {
             tabelaEspecificacao.getColumnModel().getColumn(0).setResizable(false);
-            tabelaEspecificacao.getColumnModel().getColumn(0).setHeaderValue("Especificação");
         }
 
-        jScrollPane3.setPreferredSize(new java.awt.Dimension(800, 1424));
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 21, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 1488, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 28, Short.MAX_VALUE))
+        );
+
+        jScrollPane1.setViewportView(jPanel1);
+
+        tabelaMeses.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tabelaMeses.setPreferredSize(new java.awt.Dimension(800, 0));
+        tabelaMeses.getTableHeader().setReorderingAllowed(false);
+        jScrollPane4.setViewportView(tabelaMeses);
+
+        jScrollPane5.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane5.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+        jScrollPane5.setPreferredSize(new java.awt.Dimension(800, 1424));
 
         tabelaDadosEconomicos.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         tabelaDadosEconomicos.setModel(new javax.swing.table.DefaultTableModel(
@@ -454,7 +513,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tabelaDadosEconomicos.setPreferredSize(new java.awt.Dimension(800, 1448));
+        tabelaDadosEconomicos.setPreferredSize(new java.awt.Dimension(800, 1450));
         tabelaDadosEconomicos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tabelaDadosEconomicos.getTableHeader().setResizingAllowed(false);
         tabelaDadosEconomicos.getTableHeader().setReorderingAllowed(false);
@@ -478,126 +537,28 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                 tabelaDadosEconomicosKeyPressed(evt);
             }
         });
-        jScrollPane3.setViewportView(tabelaDadosEconomicos);
-        if (tabelaDadosEconomicos.getColumnModel().getColumnCount() > 0) {
-            tabelaDadosEconomicos.getColumnModel().getColumn(0).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(1).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(2).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(3).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(4).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(5).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(6).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(7).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(8).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(9).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(10).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(11).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(12).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(13).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(14).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(15).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(16).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(17).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(18).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(19).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(20).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(21).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(22).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(23).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(24).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(25).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(26).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(27).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(28).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(29).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(30).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(31).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(32).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(33).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(34).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(35).setResizable(false);
-        }
+        jScrollPane5.setViewportView(tabelaDadosEconomicos);
 
-        tabelaMeses.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        tabelaMeses.setPreferredSize(new java.awt.Dimension(800, 0));
-        tabelaMeses.getTableHeader().setReorderingAllowed(false);
-        jScrollPane4.setViewportView(tabelaMeses);
-        if (tabelaMeses.getColumnModel().getColumnCount() > 0) {
-            tabelaMeses.getColumnModel().getColumn(0).setResizable(false);
-            tabelaMeses.getColumnModel().getColumn(1).setResizable(false);
-            tabelaMeses.getColumnModel().getColumn(2).setResizable(false);
-            tabelaMeses.getColumnModel().getColumn(3).setResizable(false);
-            tabelaMeses.getColumnModel().getColumn(4).setResizable(false);
-            tabelaMeses.getColumnModel().getColumn(5).setResizable(false);
-            tabelaMeses.getColumnModel().getColumn(6).setResizable(false);
-            tabelaMeses.getColumnModel().getColumn(7).setResizable(false);
-            tabelaMeses.getColumnModel().getColumn(8).setResizable(false);
-            tabelaMeses.getColumnModel().getColumn(9).setResizable(false);
-            tabelaMeses.getColumnModel().getColumn(10).setResizable(false);
-            tabelaMeses.getColumnModel().getColumn(11).setResizable(false);
-        }
-
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit_values.png"))); // NOI18N
-        jButton1.setText("Editar Valores");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 2420, Short.MAX_VALUE)
-                    .addComponent(jScrollPane4))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 2420, Short.MAX_VALUE))
+                .addGap(0, 17, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 1480, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1480, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 1490, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 11, Short.MAX_VALUE))
         );
 
-        jScrollPane1.setViewportView(jPanel1);
-
-        anoCombo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                anoComboActionPerformed(evt);
-            }
-        });
-
-        jLabel1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel1.setText("Ano:");
+        jScrollPane2.setViewportView(jPanel2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -612,8 +573,11 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(anoCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addGap(11, 11, 11))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -625,47 +589,46 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                     .addComponent(anoCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 563, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 567, Short.MAX_VALUE)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
-
+        
         new MenuPrincipal().setVisible(true);
         this.setVisible(false);
         this.dispose();
-
+        
     }//GEN-LAST:event_btnVoltarActionPerformed
 
-    private void jScrollPane1MouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_jScrollPane1MouseWheelMoved
-        moveScrollBar(evt);
-    }//GEN-LAST:event_jScrollPane1MouseWheelMoved
+    private void anoComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_anoComboActionPerformed
+        System.out.println(anoCombo.getItemAt(anoCombo.getSelectedIndex()));
+        //  PreencherTabelaDEM(Integer.parseInt(anoCombo.getItemAt(anoCombo.getSelectedIndex())) , dems);
+    }//GEN-LAST:event_anoComboActionPerformed
 
-    private void tabelaDadosEconomicosMouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_tabelaDadosEconomicosMouseWheelMoved
-        moveScrollBar(evt);
-    }//GEN-LAST:event_tabelaDadosEconomicosMouseWheelMoved
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        MonthSelector telaMes = new MonthSelector(this, true);
+
+        telaMes.setVisible(true);
+        int selecionado = telaMes.getIndex();
+        System.out.println(selecionado);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void tabelaEspecificacaoMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaEspecificacaoMouseDragged
+        tabelaEspecificacaoMousePressed(evt);
+    }//GEN-LAST:event_tabelaEspecificacaoMouseDragged
 
     private void tabelaEspecificacaoMouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_tabelaEspecificacaoMouseWheelMoved
         moveScrollBar(evt);
     }//GEN-LAST:event_tabelaEspecificacaoMouseWheelMoved
 
     private void tabelaEspecificacaoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaEspecificacaoMousePressed
-       tabelaDadosEconomicos.setRowSelectionInterval(tabelaEspecificacao.getSelectedRow(), tabelaEspecificacao.getSelectedRow());
+        tabelaDadosEconomicos.setRowSelectionInterval(tabelaEspecificacao.getSelectedRow(), tabelaEspecificacao.getSelectedRow());
     }//GEN-LAST:event_tabelaEspecificacaoMousePressed
-
-    private void tabelaDadosEconomicosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaDadosEconomicosMousePressed
-        tabelaEspecificacao.setRowSelectionInterval(tabelaDadosEconomicos.getSelectedRow(), tabelaDadosEconomicos.getSelectedRow());
-    }//GEN-LAST:event_tabelaDadosEconomicosMousePressed
-
-    private void tabelaDadosEconomicosMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaDadosEconomicosMouseDragged
-        tabelaDadosEconomicosMousePressed(evt);
-    }//GEN-LAST:event_tabelaDadosEconomicosMouseDragged
-
-    private void tabelaEspecificacaoMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaEspecificacaoMouseDragged
-       tabelaEspecificacaoMousePressed(evt);
-    }//GEN-LAST:event_tabelaEspecificacaoMouseDragged
 
     private void tabelaEspecificacaoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabelaEspecificacaoKeyPressed
         int temp = 0;
@@ -678,30 +641,29 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_tabelaEspecificacaoKeyPressed
 
+    private void tabelaDadosEconomicosMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaDadosEconomicosMouseDragged
+        tabelaDadosEconomicosMousePressed(evt);
+    }//GEN-LAST:event_tabelaDadosEconomicosMouseDragged
+
+    private void tabelaDadosEconomicosMouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_tabelaDadosEconomicosMouseWheelMoved
+        moveScrollBar(evt);
+    }//GEN-LAST:event_tabelaDadosEconomicosMouseWheelMoved
+
+    private void tabelaDadosEconomicosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaDadosEconomicosMousePressed
+        tabelaEspecificacao.setRowSelectionInterval(tabelaDadosEconomicos.getSelectedRow(), tabelaDadosEconomicos.getSelectedRow());
+    }//GEN-LAST:event_tabelaDadosEconomicosMousePressed
+
     private void tabelaDadosEconomicosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabelaDadosEconomicosKeyPressed
         int temp = 0;
         if(evt.getKeyCode() == 40 && tabelaDadosEconomicos.getSelectedRow() != (tabelaDadosEconomicos.getRowCount() - 1)) {
             temp =  tabelaDadosEconomicos.getSelectedRow() + 1;
             tabelaEspecificacao.setRowSelectionInterval(temp, temp);
-            
+
         } else if (evt.getKeyCode() == 38 &&  tabelaDadosEconomicos.getSelectedRow() != 0){
             temp =  tabelaDadosEconomicos.getSelectedRow() - 1;
             tabelaEspecificacao.setRowSelectionInterval(temp, temp);
         }
     }//GEN-LAST:event_tabelaDadosEconomicosKeyPressed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        MonthSelector telaMes = new MonthSelector(this, true);
-        
-        telaMes.setVisible(true);
-        int selecionado = telaMes.getIndex();
-        System.out.println(selecionado);
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void anoComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_anoComboActionPerformed
-        System.out.println(anoCombo.getItemAt(anoCombo.getSelectedIndex()));
-      //  PreencherTabelaDEM(Integer.parseInt(anoCombo.getItemAt(anoCombo.getSelectedIndex())) , dems);
-    }//GEN-LAST:event_anoComboActionPerformed
 
     private void fillItemSelector() {
         Perfil atual = ControlePerfil.getInstance().getPerfilSelecionado();
@@ -719,11 +681,14 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
     }
     
     private void moveScrollBar(java.awt.event.MouseWheelEvent evt) {
-        JScrollBar bar = jScrollPane1.getVerticalScrollBar();
+        JScrollBar barPanel3 = jScrollPane1.getVerticalScrollBar();
+        JScrollBar barPanel5 = jScrollPane2.getVerticalScrollBar();
         if(evt.getWheelRotation() > 0) { //Up
-            bar.setValue(bar.getValue()+25);
+            barPanel3.setValue(barPanel3.getValue()+25);
+            barPanel5.setValue(barPanel5.getValue()+25);
         } else { //Down
-            bar.setValue(bar.getValue()-25);
+            barPanel3.setValue(barPanel3.getValue()-25);
+            barPanel5.setValue(barPanel5.getValue()-25);
         }     
     }
     
@@ -743,10 +708,12 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTable tabelaDadosEconomicos;
     private javax.swing.JTable tabelaEspecificacao;
     private javax.swing.JTable tabelaMeses;
