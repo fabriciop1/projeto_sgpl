@@ -36,6 +36,7 @@ public class ItemSelector< T > extends JDialog {
         
         panel.setLayout(new GridLayout(optionList.size(), 1));
         
+        this.setTitle("SGPL - Selecione:");
         this.setLocationRelativeTo(null);
         
         insertOptions();

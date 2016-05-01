@@ -21,10 +21,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         
         initComponents();
         
+        Perfil atual = ControlePerfil.getInstance().getPerfilSelecionado();
+        
+        this.setTitle("SGPL - " + atual.getNome() + " - Menu Principal");
         setLocationRelativeTo(null);
         this.setResizable(false);
-        
-        Perfil atual = ControlePerfil.getInstance().getPerfilSelecionado();
         
         nomProd.setText(atual.getNome());
         tamProp.setText("" + atual.getTamPropriedade());

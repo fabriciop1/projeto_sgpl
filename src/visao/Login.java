@@ -18,6 +18,7 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
+        this.setTitle("SGPL - Fazer Login");
         this.setSize(520, 330);
         this.setLocationRelativeTo(null);
         this.setResizable(false);

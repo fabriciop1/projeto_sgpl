@@ -12,7 +12,6 @@ import flex.table.GenericTableModifier;
 import flex.table.GenericTableRowEditor;
 import flex.table.TableModifiedEvent;
 import flex.table.TableModifyListener;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultCellEditor;
@@ -44,6 +43,8 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         listaPerfis.getSelectionModel().clearSelection();
         setLocationRelativeTo(null);
         this.setResizable(false);
+        
+        this.setTitle("SGPL - Perfis disponíveis");
         
         listaPerfis.setShowHorizontalLines(true);
       

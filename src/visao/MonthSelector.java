@@ -21,7 +21,7 @@ public class MonthSelector extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        this.setTitle("Seleção de Mês");
+        this.setTitle("SGPL - Seleção de Mês");
         this.setLocationRelativeTo(null);
     }
 

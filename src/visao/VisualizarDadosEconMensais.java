@@ -41,6 +41,8 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
       
         Perfil atual = ControlePerfil.getInstance().getPerfilSelecionado();
         
+        this.setTitle("SGPL - " + atual.getNome() + " - Dados Econômicos Mensais");
+        
         Calendar cal = GregorianCalendar.getInstance();
 	int anoAtual = cal.get(Calendar.YEAR);
         int mesAtual = cal.get(Calendar.MONTH);
@@ -55,17 +57,16 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         demdao = new GenericDAO<>(DadosEconMensais.class);
                 
         demespdao = new GenericDAO<>(Especificacao.class);
-         
-        dems = demdao.retrieveByColumn("idPerfilFK", atual.getId());
-       
+        
         tabelaDadosEconomicos.setDefaultRenderer(Color.class, new ColorRenderer(true));
              
         especificacoes = demespdao.retrieveAll();
         
+        PreencherTabelaESP(especificacoes);
+        
         fillItemSelector();
                 
-        PreencherTabelaESP(especificacoes);
-        PreencherTabelaDEM(anoAtual, dems);
+        //PreencherTabelaDEM(anoAtual, dems);
     }
     
     private void PreencherTabelaESP(List<Especificacao> esp){
@@ -116,62 +117,41 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
             
             temp = new Object[36];
             
-            
-            
-            
             for(int j = 0; j < dem.size(); j++){
                 
                 int indexCol = (dem.get(j).getMes() - 1) * 3;
                 
+                System.out.println(tabelaEspecificacao.getModel().getValueAt(i, 0));
                 if( tabelaEspecificacao.getModel().getValueAt(i, 0).equals(dem.get(j).getEspecificacao().getEspecificacao())
+                        && dem.get(j).getAno() == ano
                          ){
                                       
                     temp[indexCol ] = dem.get(j).getQuantidade();
                     temp[indexCol + 1] = dem.get(j).getValorUnitario();
                     temp[indexCol + 2] = dem.get(j).getQuantidade() * dem.get(j).getValorUnitario();
                     
-                 //   System.out.println((dem.get(j).getMes() - 1) * 3);
-                 //   System.out.println(tempTotais[(dem.get(j).getMes() - 1) * 3]);
-                 //   System.out.println(tempTotais[(dem.get(j).getMes() - 1) * 3] + dem.get(j).getQuantidade());
-                    
                     tempTotais[indexCol] += dem.get(j).getQuantidade();
-                    tempTotais[indexCol + 1] += dem.get(j).getValorUnitario();
                     tempTotais[indexCol + 2] += dem.get(j).getQuantidade() * dem.get(j).getValorUnitario();
                     
-               //     System.out.println(tempTotais[(dem.get(j).getMes() - 1) * 3]);
                 }
                 
                 if( tabelaEspecificacao.getModel().getValueAt(i, 0).equals("SUB-TOTAL") || 
                     tabelaEspecificacao.getModel().getValueAt(i, 0).equals("TOTAL DE ENTRADAS")){
-                    
-                    System.out.println( "mes: " + dem.get(j).getMes() + " coluna: " + indexCol + " valor coluna: " + tempTotais[indexCol] );
-                    System.out.println( "mes: " + dem.get(j).getMes() + " coluna: " + (indexCol + 1) + " valor coluna: " + tempTotais[indexCol + 1] );
-                    System.out.println( "mes: " + dem.get(j).getMes() + " coluna: " + (indexCol + 2) + " valor coluna: " + tempTotais[indexCol + 2] );
-                    
-                    if (tempTotais[indexCol] != 0.0) { 
+                                        
+                    if (tempTotais[indexCol] != 0.0 && tabelaEspecificacao.getModel().getValueAt(i, 0).equals("TOTAL DE ENTRADAS")) { 
                         temp[indexCol] = tempTotais[indexCol];
-                        //tempTotais[indexCol] = 0.0;
+                        tempTotais[indexCol] = 0.0;
                     }
                     
-                    if (tempTotais[indexCol + 1] != 0.0) {
-                        temp[indexCol + 1] = tempTotais[indexCol + 1];
-                        //tempTotais[indexCol + 1] = 0.0;
-                    } 
                     if (tempTotais[indexCol + 2] != 0.0) {
                         temp[indexCol + 2] = tempTotais[indexCol + 2];
-                        //tempTotais[indexCol + 2] = 0.0;
+                        tempTotais[indexCol + 2] = 0.0;
                     } 
                     
-                    //tempTotais = new double[36];
-                    //tempTotais = zerarVetor(tempTotais);
-                    System.out.println("zerou");
-                    //tempTotais = new double[36];
                     tipoEsp++;
                 }
                 
             }
-            
-            
             
             modelDadosEconomicos.addRow(temp);
             
@@ -199,7 +179,8 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         tabelaMeses = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
-        anoCombo = new javax.swing.JComboBox<>();
+        anoCombo = new javax.swing.JComboBox<String>();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -579,27 +560,18 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
             }
         });
 
-        anoCombo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                anoComboActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(anoCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 2400, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 2420, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 2420, Short.MAX_VALUE)
+                    .addComponent(jScrollPane4))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -607,13 +579,9 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(anoCombo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 1480, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -621,6 +589,15 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         );
 
         jScrollPane1.setViewportView(jPanel1);
+
+        anoCombo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                anoComboActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel1.setText("Ano:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -631,7 +608,11 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                 .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(304, 304, 304)
                 .addComponent(textoEntrada)
-                .addContainerGap(312, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 166, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(anoCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
@@ -640,9 +621,11 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnVoltar)
-                    .addComponent(textoEntrada))
+                    .addComponent(textoEntrada)
+                    .addComponent(anoCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 565, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 563, Short.MAX_VALUE))
         );
 
         pack();
@@ -721,11 +704,18 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
     }//GEN-LAST:event_anoComboActionPerformed
 
     private void fillItemSelector() {
+        Perfil atual = ControlePerfil.getInstance().getPerfilSelecionado();
+        
         List<DadosEconMensais> dados =  demdao.retrieveAll("ano", "ano");
+        dems = demdao.retrieveByColumn("idPerfilFK", atual.getId());
         
         for(int i = 0; i < dados.size(); i++) {
             anoCombo.addItem("" + dados.get(i).getAno());
         }
+        
+        anoCombo.setSelectedIndex(anoCombo.getItemCount() - 1);
+        
+        PreencherTabelaDEM(Integer.parseInt( (String) anoCombo.getSelectedItem() ), dems);
     }
     
     private void moveScrollBar(java.awt.event.MouseWheelEvent evt) {
@@ -751,6 +741,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> anoCombo;
     private javax.swing.JButton btnVoltar;
     private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;

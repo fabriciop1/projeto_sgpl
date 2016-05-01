@@ -113,6 +113,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
         perfilAtual = ControlePerfil.getInstance().getPerfilSelecionado();
 
+        this.setTitle("SGPL - " + perfilAtual.getNome() + " - Inventário");
+        
         terras = itdao.retrieveByColumn("idPerfilFK", perfilAtual.getId());
         forrageiras = ifdao.retrieveByColumn("idPerfilFK", perfilAtual.getId());
         animais = iadao.retrieveByColumn("idPerfilFK", perfilAtual.getId());
