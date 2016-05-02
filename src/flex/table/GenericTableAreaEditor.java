@@ -6,6 +6,8 @@
 package flex.table;
 
 import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
@@ -26,8 +28,6 @@ public class GenericTableAreaEditor extends GenericTableModifier {
     
     private int columnOffset;
     
-    private int rowsShown;
-    
     public GenericTableAreaEditor(Frame parent, JTable sourceTable, boolean forceCellEditing){
         super(parent, sourceTable, forceCellEditing, false);
         
@@ -38,7 +38,8 @@ public class GenericTableAreaEditor extends GenericTableModifier {
         this.endColumn = sourceTable.getColumnCount() - 1;
         
         this.columnOffset = 0;
-        this.rowsShown = 0;
+        
+        setLabelText("Editar");
         
         composeEditTable();
     }
@@ -53,60 +54,8 @@ public class GenericTableAreaEditor extends GenericTableModifier {
         this.endColumn = endColumn;
         
         this.columnOffset = 0;
-        this.rowsShown = 0;
         
         composeEditTable();
-    }
-    
-    
-    protected void setEditTableValue(Object value, int row, int column){
-        
-        if(row < 0 || row > editTable.getRowCount()-1){
-            throw new IllegalArgumentException("editTable - Linha inválida: " + row);
-        }
-        else if(column < 0 || column > editTable.getColumnCount()-1){
-            throw new IllegalArgumentException("editTable - Coluna Inválida: " + column);
-        }
-        
-        editTable.setValueAt(value, row, column + columnOffset);
-    }
-    
-    public Object getEditTableValue(int row, int column){
-        
-        if(row < startRow || row > editTable.getRowCount()-1){
-            throw new IllegalArgumentException("editTable - Linha inválida: " + row);
-        }
-        else if(column < 0 || column > editTable.getColumnCount()-1){
-            throw new IllegalArgumentException("editTable - Coluna Inválida: " + column);
-        }
-        
-        return editTable.getValueAt(row, column + columnOffset);
-    }
-    
-    
-    protected void setSourceTableValue(Object value, int row, int column){
-        
-        if(row < 0 || row > sourceTable.getRowCount()-1){
-            throw new IllegalArgumentException("sourceTable - Linha inválida: " + row);
-        }
-        else if(column < 0 || column > sourceTable.getColumnCount()-1){
-            throw new IllegalArgumentException("sourceTable - Coluna Inválida: " + column);
-        }
-        
-        sourceTable.setValueAt(value, row + startRow, column + startColumn);
-    }
-    
-    
-    public Object getSourceTableValue(int row, int column){
-        
-        if(row < 0 || row > sourceTable.getRowCount()-1){
-            throw new IllegalArgumentException("sourceTable - Linha inválida: " + row);
-        }
-        else if(column < 0 || column > sourceTable.getColumnCount()-1){
-            throw new IllegalArgumentException("sourceTable - Coluna Inválida: " + column);
-        }
-        
-        return sourceTable.getValueAt(row + startRow, column + startColumn);
     }
     
     
@@ -119,61 +68,66 @@ public class GenericTableAreaEditor extends GenericTableModifier {
             
             for (int j = 0; j < editTable.getColumnCount() - columnOffset; j++) {
                 
-                setEditTableValue( Cast.toString(getSourceTableValue(i, j)) , i, j);
-                System.out.print(getEditTableValue(i, j) + "|");
+                setEditTableValue( Cast.toString( getSourceTableValue(startRow + i, startColumn + j) ), i, j + columnOffset);
             }
-            System.out.println("");
         }
     }
 
     @Override
     protected void updateSourceTable() {
-        Object[][] tableAreaData = new Object[editTable.getRowCount()][editTable.getColumnCount()];
         
-        for(int i = 0; i < editTable.getRowCount(); i++){
-            
-            for (int j = 0; j < editTable.getColumnCount(); j++) {
+        Object[][] tableAreaData = new Object[editTable.getRowCount()][editTable.getColumnCount() - columnOffset];
+        
+        for (int i = 0; i < editTable.getRowCount(); i++) {
+                        
+            for (int j = 0; j < editTable.getColumnCount() - columnOffset; j++) {
                 
-                tableAreaData[i][j] = getEditTableValue(i, j);
-                setSourceTableValue( convertToSourceTableValue( getEditTableValue(i, j), j),  i, j);
+                tableAreaData[i][j] = getEditTableValue(i, j + columnOffset);
+                
+                setSourceTableValue( convertToSourceTableValue(tableAreaData[i][j], startColumn + j), startRow + i, startColumn + j);
+                
+                //System.out.println("Row: " + i);
+                //System.out.println("Col: " + j);
+                //System.out.println("Src Row: " + (startRow+i));
+                //System.out.println("Src Col: " + (startColumn+j));
             }
-        }        
+        }
         
-        notifyListeners(new TableModifiedEvent(this, sourceTable, -1, tableAreaData, null, TableModifyListener.AREA_CHANGED));
+        notifyListeners(new TableModifiedEvent(this, sourceTable, -1, tableAreaData, null, TableModifiedEvent.AREA_CHANGED));
     }
     
     @Override
-    protected DefaultTableModel createEditTableModel(Object[][] sourceDataMatrix, String[] sourceColumnNames, Class[] sourceColumnTypes, boolean[] sourceColumnEditable){
+    protected boolean validateEditTableContent(){
+        
+        for (int i = 0; i < editTable.getRowCount(); i++) {
+            
+            for (int j = 0; j < editTable.getColumnCount() - columnOffset; j++) {
+                
+                if(!validateEditTableValue(i, j + columnOffset, startColumn + j)){
+                    
+                    JOptionPane.showMessageDialog(this, "O valor da coluna \"" + editTable.getColumnName(j) + "\" na linha " + (i+1) +
+                            " é inválido.", "Valor de Coluna Inválido", JOptionPane.ERROR_MESSAGE);
+                    
+                    return false;
+                }
+            }
+        }
+        
+        return true;
+    }
+    
+    @Override
+    protected DefaultTableModel createEditTableModel(Object[][] dataMatrix, String[] columnNames, Class[] columnTypes){
         
         String[] editColumnNames = new String[(endColumn - startColumn) + columnOffset + 1];
         
-        System.out.println("|");
-        
         for (int i = 0; i < editColumnNames.length; i++) {
             
-            editColumnNames[i] = sourceColumnNames[startColumn + i];
+            editColumnNames[i] = columnNames[startColumn + i];
             System.out.println(editColumnNames[i]);
         }
         
-        DefaultTableModel model = new DefaultTableModel(new Object[][]{ }, editColumnNames){
-            
-            @Override
-            public Class getColumnClass(int columnIndex) {
-                return String.class;
-            }
-
-            @Override
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                
-                if(!isForceCellEditingEnabled()){
-                    return GenericTableAreaEditor.this.isColumnEditable(columnIndex);
-                } else {
-                    return true;
-                }
-            }
-        };
-        
-        return model;
+        return super.createStringEditTableModel(new Object[][]{ }, editColumnNames);
     }
     
     @Override
@@ -197,6 +151,7 @@ public class GenericTableAreaEditor extends GenericTableModifier {
             editTable.getColumnModel().getColumn(i + columnOffset).setCellRenderer(sourceCellRenderer);
         }
     }
+    
     
     public int getStartRow() {
         return startRow;
@@ -329,4 +284,5 @@ public class GenericTableAreaEditor extends GenericTableModifier {
         composeEditTable();
         refillEditTable();
     }
+
 }

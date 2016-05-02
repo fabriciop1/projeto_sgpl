@@ -31,33 +31,6 @@ public class GenericTableRowEditor extends GenericTableModifier {
     }
     
     @Override
-    protected DefaultTableModel createEditTableModel(Object[][] sourceDataMatrix, String[] sourceColumnNames, Class[] sourceColumnTypes, boolean[] sourceColumnEditable){
-        
-        DefaultTableModel model = new DefaultTableModel(sourceDataMatrix, sourceColumnNames){
-            
-            Class[] types = sourceColumnTypes;
-            
-            @Override
-            public Class getColumnClass(int columnIndex) {
-                //return types[columnIndex];
-                return String.class;
-            }
-
-            @Override
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                
-                if(!isForceCellEditingEnabled()){
-                    return GenericTableRowEditor.this.isColumnEditable(columnIndex);
-                } else {
-                    return true;
-                }
-            }
-        };
-        
-        return model;
-    }
-    
-    @Override
     protected void refillEditTable(){
         
         if (editorType == GTRE_UPDATE) {
@@ -95,6 +68,12 @@ public class GenericTableRowEditor extends GenericTableModifier {
         } else if(editorType == GTRE_INSERT) {
             addSourceTableRow(rowData, null);
         }
+    }
+    
+    @Override
+    protected DefaultTableModel createEditTableModel(Object[][] dataMatrix, String[] columnNames, Class[] columnTypes) {
+        
+        return super.createStringEditTableModel(dataMatrix, columnNames); //To change body of generated methods, choose Tools | Templates.
     }
     
     @Override

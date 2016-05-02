@@ -113,8 +113,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
         perfilAtual = ControlePerfil.getInstance().getPerfilSelecionado();
 
-        this.setTitle("SGPL - " + perfilAtual.getNome() + " - Inventário");
-        
         terras = itdao.retrieveByColumn("idPerfilFK", perfilAtual.getId());
         forrageiras = ifdao.retrieveByColumn("idPerfilFK", perfilAtual.getId());
         animais = iadao.retrieveByColumn("idPerfilFK", perfilAtual.getId());
@@ -2182,7 +2180,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 GenericTableModifier modifier = event.getSourceModifier();
                 int modifType = event.getEventType();
 
-                if (modifType == TableModifyListener.ROW_INSERTED) {
+                if (modifType == TableModifiedEvent.ROW_INSERTED) {
 
                     InventarioMaquinas inv = new InventarioMaquinas(Cast.toString(rowData[0]), Cast.toString(rowData[1]), Cast.toDouble(rowData[2]),
                     Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfil);
@@ -2190,7 +2188,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
                     modifier.setCustomRowData(modifier.getSourceTable().getRowCount() - 1, inv.getId());
 
-                } else if (modifType == TableModifyListener.ROW_UPDATED) {
+                } else if (modifType == TableModifiedEvent.ROW_UPDATED) {
 
                     InventarioMaquinas inv = new InventarioMaquinas(Cast.toString(rowData[0]), Cast.toString(rowData[1]), Cast.toDouble(rowData[2]),
                             Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfil);
@@ -2198,7 +2196,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
                     dao.update(inv);
                  
-                } else if (modifType == TableModifyListener.ROW_DELETED) {
+                } else if (modifType == TableModifiedEvent.ROW_DELETED) {
                     dao.remove(rowID);
                     
                 }
@@ -2214,7 +2212,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             GenericTableModifier modifier = event.getSourceModifier();
             int modifType = event.getEventType();
             
-            if (modifType == TableModifyListener.ROW_INSERTED) {
+            if (modifType == TableModifiedEvent.ROW_INSERTED) {
    
                 InventarioBenfeitorias inv = new InventarioBenfeitorias(Cast.toString(rowData[0]), Cast.toString(rowData[1]), Cast.toDouble(rowData[2]),
                         Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfil);
@@ -2222,7 +2220,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     
                 modifier.setCustomRowData(modifier.getSourceTable().getRowCount() - 1, inv.getId());
                     
-            } else if (modifType == TableModifyListener.ROW_UPDATED) {
+            } else if (modifType == TableModifiedEvent.ROW_UPDATED) {
                 
                 InventarioBenfeitorias inv = new InventarioBenfeitorias(Cast.toString(rowData[0]), Cast.toString(rowData[1]), Cast.toDouble(rowData[2]),
                         Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfil);
@@ -2230,7 +2228,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                    
                 dao.update(inv);
                     
-            } else if (modifType == TableModifyListener.ROW_DELETED) {
+            } else if (modifType == TableModifiedEvent.ROW_DELETED) {
                 
                 dao.remove(rowID);    
             }
@@ -2246,12 +2244,12 @@ public class VisualizarInventario extends javax.swing.JFrame {
             int modifType = event.getEventType();
             int rowIndex = event.getRowIndex();
             
-            if (modifType == TableModifyListener.ROW_INSERTED || modifType == TableModifyListener.ROW_UPDATED) {
+            if (modifType == TableModifiedEvent.ROW_INSERTED || modifType == TableModifiedEvent.ROW_UPDATED) {
                 
                 InventarioTerras terras = new InventarioTerras(Cast.toString(rowData[0]), Cast.toDouble(rowData[1]), Cast.toDouble(rowData[2]),
                         Cast.toDouble(rowData[3]), Cast.toDouble(rowData[4]), Cast.toDouble(rowData[5]), perfil);
                 
-                if (modifType == TableModifyListener.ROW_INSERTED) {
+                if (modifType == TableModifiedEvent.ROW_INSERTED) {
                     
                     tabelaForrageirasGTRE.addSourceTableRow(new Object[]{terras.getEspecificacao()}, null);
                     dao.insert(terras);
@@ -2259,7 +2257,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     modifier.setCustomRowData(rowIndex, terras.getId());
                     tabelaForrageirasGTRE.setCustomRowData(rowIndex, terras.getId());
                     
-                } else if (modifType == TableModifyListener.ROW_UPDATED) {
+                } else if (modifType == TableModifiedEvent.ROW_UPDATED) {
                     
                     Object[] forrageirasRowData = tabelaForrageirasGTRE.getSourceTableRowData(rowIndex);
                     
@@ -2269,13 +2267,13 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     
                     dao.update(terras);
                 }
-            } else if (modifType == TableModifyListener.ROW_DELETED) {
+            } else if (modifType == TableModifiedEvent.ROW_DELETED) {
                 dao.remove(rowID);
             }
         });
 
         tabelaForrageirasGTRE.addTableModifyListener((TableModifiedEvent event) -> {
-            if (event.getEventType() == TableModifyListener.ROW_UPDATED) {
+            if (event.getEventType() == TableModifiedEvent.ROW_UPDATED) {
                 
                 Object[] rowData = event.getTableRowData();
                 
@@ -2313,22 +2311,22 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 tipoAnimal = 2;
             }
             
-            if (modifType == TableModifyListener.ROW_INSERTED || modifType == TableModifyListener.ROW_UPDATED) {
+            if (modifType == TableModifiedEvent.ROW_INSERTED || modifType == TableModifiedEvent.ROW_UPDATED) {
                 
                 InventarioAnimais inv = new InventarioAnimais(Cast.toString(rowData[0]), Cast.toInt(rowData[1]), Cast.toInt(rowData[2]),
                         Cast.toInt(rowData[3]), Cast.toInt(rowData[4]), Cast.toInt(rowData[5]), Cast.toInt(rowData[6]),
                         Cast.toDouble(rowData[7]), tipoAnimal, perfil);
                 
-                if (modifType == TableModifyListener.ROW_INSERTED) {
+                if (modifType == TableModifiedEvent.ROW_INSERTED) {
                     dao.insert(inv);
                     modifier.setCustomRowData(modifier.getSourceTable().getRowCount() - 1, inv.getId());
                     
-                } else if (modifType == TableModifyListener.ROW_UPDATED) {
+                } else if (modifType == TableModifiedEvent.ROW_UPDATED) {
                     inv.setId(rowID);
                     dao.update(inv);
                 }
                 
-            } else if (modifType == TableModifyListener.ROW_DELETED) {
+            } else if (modifType == TableModifiedEvent.ROW_DELETED) {
                 dao.remove(rowID);
             }
         };
@@ -2666,7 +2664,9 @@ public class VisualizarInventario extends javax.swing.JFrame {
         
         GenericTableAreaEditor gtae = new GenericTableAreaEditor(this, tabelaMaquinas, false);
         gtae.setAllColumnsEditable(true);
-        gtae.setColumnInterval(0, 2);
+        gtae.setRowsDisplayed(4);
+        gtae.setColumnInterval(2, 4);
+        gtae.setRowInterval(2, 6);
         
         gtae.showEditor(evt);
     }//GEN-LAST:event_buttonActionPerformed

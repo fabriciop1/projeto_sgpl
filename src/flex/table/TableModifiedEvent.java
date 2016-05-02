@@ -14,6 +14,16 @@ import util.TrashGen;
  */
 public class TableModifiedEvent {
     
+    public static final int ROW_INSERTED = 1;
+    public static final int ROW_UPDATED = 2;
+    public static final int ROW_DELETED = 3;
+    
+    public static final int COLUMN_INSERTED = 4;
+    public static final int COLUMN_UPDATED = 5;
+    public static final int COLUMN_DELETED = 6;
+    
+    public static final int AREA_CHANGED = 7;
+    
     private final GenericTableModifier sourceModifier;
     private final JTable sourceTable;
     
