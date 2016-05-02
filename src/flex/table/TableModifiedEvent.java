@@ -6,7 +6,6 @@
 package flex.table;
 
 import javax.swing.JTable;
-import util.TrashGen;
 
 /**
  *

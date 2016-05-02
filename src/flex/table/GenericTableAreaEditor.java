@@ -6,7 +6,6 @@
 package flex.table;
 
 import java.awt.Frame;
-import java.awt.event.ActionEvent;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -26,7 +25,7 @@ public class GenericTableAreaEditor extends GenericTableModifier {
     private int startColumn;
     private int endColumn;
     
-    private int columnOffset;
+    private final int columnOffset;
     
     public GenericTableAreaEditor(Frame parent, JTable sourceTable, boolean forceCellEditing){
         super(parent, sourceTable, forceCellEditing, false);
@@ -39,9 +38,9 @@ public class GenericTableAreaEditor extends GenericTableModifier {
         
         this.columnOffset = 0;
         
-        setLabelText("Editar");
+        super.setLabelText("Editar");
         
-        composeEditTable();
+        super.composeEditTable();
     }
     
     public GenericTableAreaEditor(Frame parent, JTable sourceTable, boolean forceCellEditing, int startRow, int endRow, int startColumn, int endColumn){
@@ -55,7 +54,7 @@ public class GenericTableAreaEditor extends GenericTableModifier {
         
         this.columnOffset = 0;
         
-        composeEditTable();
+        super.composeEditTable();
     }
     
     

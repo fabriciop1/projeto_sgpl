@@ -23,9 +23,6 @@ public class DadosEconMensais extends DatabaseObject implements Serializable {
     private int ano;
     private double quantidade;
     private double valorUnitario;
-    private int tipoCampo; // A qual tabela o campo pertence? 1 - Entradas /2 - Saidas /3 - Despesas com Volumoso 
-                           //4 - Concentrado /5 - Mineralização /6 - Medicamentos /7 - Ordenha /8 - Inseminação Artificial 
-                           //9 - Despesas de Investimentos /10 - Despesas de Empréstimos /11 - COE da atividade leiteira
     private Especificacao especificacao; // especificacao associada à tabela DEM_especificacao
     private Perfil perfil;
     
@@ -33,7 +30,7 @@ public class DadosEconMensais extends DatabaseObject implements Serializable {
         super("dados_economicos_mensais", "idDEM");
     }
 
-    public DadosEconMensais(int mes, int ano, double quantidade, double valorUnitario, int tipoCampo, Especificacao especificacao, Perfil perfil) {
+    public DadosEconMensais(int mes, int ano, double quantidade, double valorUnitario, Especificacao especificacao, Perfil perfil) {
         super("dados_economicos_mensais", "idDEM");
         
         this.mes = mes;
@@ -41,16 +38,7 @@ public class DadosEconMensais extends DatabaseObject implements Serializable {
         this.especificacao = especificacao;
         this.quantidade = quantidade;
         this.valorUnitario = valorUnitario;
-        this.tipoCampo = tipoCampo;
         this.perfil = perfil;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public int getMes() {
@@ -93,14 +81,6 @@ public class DadosEconMensais extends DatabaseObject implements Serializable {
         this.valorUnitario = valorUnitario;
     }
 
-    public int getTipoCampo() {
-        return tipoCampo;
-    }
-
-    public void setTipoCampo(int tipoCampo) {
-        this.tipoCampo = tipoCampo;
-    }
-
     public Perfil getPerfil() {
         return perfil;
     }
@@ -117,7 +97,6 @@ public class DadosEconMensais extends DatabaseObject implements Serializable {
         m.put("ano", ano);
         m.put("quantidade", quantidade);
         m.put("valorUnitario", valorUnitario);
-        m.put("tipoCampo", tipoCampo);
         m.put("idDEM_especificacaoFK", especificacao.getId());
         m.put("idPErfilFK", perfil.getId());
         
@@ -130,7 +109,6 @@ public class DadosEconMensais extends DatabaseObject implements Serializable {
         ano = Cast.toInt(data.get("ano"));
         quantidade = Cast.toDouble(data.get("quantidade"));
         valorUnitario = Cast.toDouble(data.get("valorUnitario"));
-        tipoCampo = Cast.toInt(data.get("tipoCampo"));
         especificacao = new GenericDAO<>(Especificacao.class).retrieve(Cast.toInt(data.get("idDEM_especificacaoFK")));
         perfil =  new GenericDAO<>(Perfil.class).retrieve( Cast.toInt(data.get("idPerfilFK")) );
     }

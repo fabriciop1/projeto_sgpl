@@ -58,13 +58,17 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
         showTableLines();
 
-        setLocationRelativeTo(null);
-        this.setResizable(false);
+        super.setLocationRelativeTo(null);
+        super.setResizable(false);
 
         Calendar cal = GregorianCalendar.getInstance();
         int anoAtual = cal.get(Calendar.YEAR);
         int mesAtual = cal.get(Calendar.MONTH);
 
+        perfilAtual = ControlePerfil.getInstance().getPerfilSelecionado();
+        
+        super.setTitle("SGPL - " + perfilAtual.getNome() + " - Inventário");
+        
         List<InventarioTerras> terras;
         List<InventarioForrageiras> forrageiras;
         List<InventarioAnimais> animais;
@@ -110,8 +114,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
         imdao = new GenericDAO<>(InventarioMaquinas.class);
         irdao = new GenericDAO<>(InventarioResumo.class);
         ifdao = new GenericDAO<>(InventarioForrageiras.class);
-
-        perfilAtual = ControlePerfil.getInstance().getPerfilSelecionado();
 
         terras = itdao.retrieveByColumn("idPerfilFK", perfilAtual.getId());
         forrageiras = ifdao.retrieveByColumn("idPerfilFK", perfilAtual.getId());
@@ -2168,38 +2170,37 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
     private void definirBDListeners() {
 
-        tabelaMaquinasGTRE.addTableModifyListener(new TableModifyListener() {
-            @Override
-            public void tableModified(TableModifiedEvent event) {
-
-                GenericDAO<InventarioMaquinas> dao = new GenericDAO<>(InventarioMaquinas.class);
-                Perfil perfil = ControlePerfil.getInstance().getPerfilSelecionado();
-
-                Object[] rowData = event.getTableRowData();
-                Integer rowID = (Integer) event.getCustomRowData();
-                GenericTableModifier modifier = event.getSourceModifier();
-                int modifType = event.getEventType();
-
-                if (modifType == TableModifiedEvent.ROW_INSERTED) {
-
-                    InventarioMaquinas inv = new InventarioMaquinas(Cast.toString(rowData[0]), Cast.toString(rowData[1]), Cast.toDouble(rowData[2]),
-                    Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfil);
-                    dao.insert(inv);
-
-                    modifier.setCustomRowData(modifier.getSourceTable().getRowCount() - 1, inv.getId());
-
-                } else if (modifType == TableModifiedEvent.ROW_UPDATED) {
-
-                    InventarioMaquinas inv = new InventarioMaquinas(Cast.toString(rowData[0]), Cast.toString(rowData[1]), Cast.toDouble(rowData[2]),
-                            Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfil);
-                    inv.setId(rowID);
-
-                    dao.update(inv);
-                 
-                } else if (modifType == TableModifiedEvent.ROW_DELETED) {
+        tabelaMaquinasGTRE.addTableModifyListener((TableModifiedEvent event) -> {
+            GenericDAO<InventarioMaquinas> dao = new GenericDAO<>(InventarioMaquinas.class);
+            Perfil perfil = ControlePerfil.getInstance().getPerfilSelecionado();
+            
+            Object[] rowData = event.getTableRowData();
+            Integer rowID = (Integer) event.getCustomRowData();
+            GenericTableModifier modifier = event.getSourceModifier();
+            int modifType = event.getEventType();
+            
+            switch (modifType) {
+                case TableModifiedEvent.ROW_INSERTED:
+                    {
+                        InventarioMaquinas inv = new InventarioMaquinas(Cast.toString(rowData[0]), Cast.toString(rowData[1]), Cast.toDouble(rowData[2]),
+                                Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfil);
+                        dao.insert(inv);
+                        modifier.setCustomRowData(modifier.getSourceTable().getRowCount() - 1, inv.getId());
+                        break;
+                    }
+                case TableModifiedEvent.ROW_UPDATED:
+                    {
+                        InventarioMaquinas inv = new InventarioMaquinas(Cast.toString(rowData[0]), Cast.toString(rowData[1]), Cast.toDouble(rowData[2]),
+                                Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfil);
+                        inv.setId(rowID);
+                        dao.update(inv);
+                        break;
+                    }
+                case TableModifiedEvent.ROW_DELETED:
                     dao.remove(rowID);
-                    
-                }
+                    break;
+                default:
+                    break;
             }
         });
 
@@ -2212,25 +2213,28 @@ public class VisualizarInventario extends javax.swing.JFrame {
             GenericTableModifier modifier = event.getSourceModifier();
             int modifType = event.getEventType();
             
-            if (modifType == TableModifiedEvent.ROW_INSERTED) {
-   
-                InventarioBenfeitorias inv = new InventarioBenfeitorias(Cast.toString(rowData[0]), Cast.toString(rowData[1]), Cast.toDouble(rowData[2]),
-                        Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfil);
-                dao.insert(inv);
-                    
-                modifier.setCustomRowData(modifier.getSourceTable().getRowCount() - 1, inv.getId());
-                    
-            } else if (modifType == TableModifiedEvent.ROW_UPDATED) {
-                
-                InventarioBenfeitorias inv = new InventarioBenfeitorias(Cast.toString(rowData[0]), Cast.toString(rowData[1]), Cast.toDouble(rowData[2]),
-                        Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfil);
-                inv.setId(rowID);
-                   
-                dao.update(inv);
-                    
-            } else if (modifType == TableModifiedEvent.ROW_DELETED) {
-                
-                dao.remove(rowID);    
+            switch (modifType) {
+                case TableModifiedEvent.ROW_INSERTED:
+                    {
+                        InventarioBenfeitorias inv = new InventarioBenfeitorias(Cast.toString(rowData[0]), Cast.toString(rowData[1]), Cast.toDouble(rowData[2]),
+                                Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfil);
+                        dao.insert(inv);
+                        modifier.setCustomRowData(modifier.getSourceTable().getRowCount() - 1, inv.getId());
+                        break;
+                    }
+                case TableModifiedEvent.ROW_UPDATED:
+                    {
+                        InventarioBenfeitorias inv = new InventarioBenfeitorias(Cast.toString(rowData[0]), Cast.toString(rowData[1]), Cast.toDouble(rowData[2]),
+                                Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfil);
+                        inv.setId(rowID);
+                        dao.update(inv);
+                        break;
+                    }
+                case TableModifiedEvent.ROW_DELETED:
+                    dao.remove(rowID);    
+                    break;
+                default:
+                    break;
             }
         });
 

@@ -5,6 +5,8 @@
  */
 package visao;
 
+import flex.table.GenericTableAreaEditor;
+
 /**
  *
  * @author Usuário
@@ -21,8 +23,8 @@ public class MonthSelector extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        this.setTitle("SGPL - Seleção de Mês");
-        this.setLocationRelativeTo(null);
+        super.setTitle("SGPL - Seleção de Mês");
+        super.setLocationRelativeTo(null);
     }
 
     /**
@@ -35,8 +37,8 @@ public class MonthSelector extends javax.swing.JDialog {
     private void initComponents() {
 
         mesCombo = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        ConfirmaBT = new javax.swing.JButton();
+        cancelarBT = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -50,17 +52,17 @@ public class MonthSelector extends javax.swing.JDialog {
         mesCombo.setMaximumRowCount(12);
         mesCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro" }));
 
-        jButton1.setText("OK");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        ConfirmaBT.setText("OK");
+        ConfirmaBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                ConfirmaBTActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Cancelar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        cancelarBT.setText("Cancelar");
+        cancelarBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                cancelarBTActionPerformed(evt);
             }
         });
 
@@ -78,9 +80,9 @@ public class MonthSelector extends javax.swing.JDialog {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jLabel1)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cancelarBT, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(ConfirmaBT, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(32, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -92,24 +94,28 @@ public class MonthSelector extends javax.swing.JDialog {
                 .addComponent(mesCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(ConfirmaBT, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
+                    .addComponent(cancelarBT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(48, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void ConfirmaBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConfirmaBTActionPerformed
+    
         this.setVisible(false);   
+        
         selected = mesCombo.getSelectedIndex();
-    }//GEN-LAST:event_jButton1ActionPerformed
+        
+        this.dispose();
+    }//GEN-LAST:event_ConfirmaBTActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void cancelarBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarBTActionPerformed
         selected = -1;
         this.setVisible(false);
         this.dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_cancelarBTActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         selected = -1;
@@ -122,8 +128,8 @@ public class MonthSelector extends javax.swing.JDialog {
    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton ConfirmaBT;
+    private javax.swing.JButton cancelarBT;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JComboBox<String> mesCombo;
     // End of variables declaration//GEN-END:variables

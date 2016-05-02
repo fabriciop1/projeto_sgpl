@@ -18,12 +18,12 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
-        this.setTitle("SGPL - Fazer Login");
-        this.setSize(520, 330);
-        this.setLocationRelativeTo(null);
-        this.setResizable(false);
+        super.setTitle("SGPL - Fazer Login");
+        super.setSize(520, 330);
+        super.setLocationRelativeTo(null);
+        super.setResizable(false);
         
-        getRootPane().setDefaultButton(btnEntrar);
+        super.getRootPane().setDefaultButton(btnEntrar);
         
     }
 
@@ -160,10 +160,8 @@ public class Login extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Login().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new Login().setVisible(true);
         });
     }
 

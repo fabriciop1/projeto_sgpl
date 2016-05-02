@@ -31,13 +31,12 @@ public abstract class GenericTableModifier extends JDialog{
     /**
      * Creates new form GenericTableModifier
      */
-    
+    private final Frame parent;
     protected JTable sourceTable;
     
-    private Frame parent;
-    private List<Object> customRowDataList;
-    private List<TableModifyListener> tableModifylisteners;
-    private HashMap<Integer, String> columnRegexMap;
+    private final List<Object> customRowDataList;
+    private final List<TableModifyListener> tableModifylisteners;
+    private final HashMap<Integer, String> columnRegexMap;
     
     private int rowsDisplayed;
     
@@ -45,7 +44,7 @@ public abstract class GenericTableModifier extends JDialog{
     private boolean allowEmptyCells;
     
     private boolean forceCellEditing;
-    private boolean editorColumnEditable[];
+    private final boolean editorColumnEditable[];
 
     
     protected GenericTableModifier(Frame parent, JTable sourceTable, boolean forceCellEditing, boolean composeEditor) {
@@ -70,15 +69,15 @@ public abstract class GenericTableModifier extends JDialog{
         editTable.setShowHorizontalLines(true);
         editTable.setShowVerticalLines(true);
         
-        this.setMinimumSize(this.getSize());
+        super.setMinimumSize(super.getSize());
         this.setLabelText("");
-        this.setVisible(false);
+        super.setVisible(false);
         
         if (composeEditor) {
-            composeEditTable();
+            this.composeEditTable();
         }
         
-        this.setLocationRelativeTo(null);
+        super.setLocationRelativeTo(null);
     }
     
     public String createLog(){

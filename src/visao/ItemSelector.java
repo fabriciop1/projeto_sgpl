@@ -19,11 +19,12 @@ import util.Pair;
 /**
  *
  * @author Jefferson Sales
+ * @param <T>
  */
 public class ItemSelector< T > extends JDialog {
 
-    private List<Pair<String, T>> optionList;
-    private List<JRadioButton> radioList;
+    private final List<Pair<String, T>> optionList;
+    private final List<JRadioButton> radioList;
     private T selectedOption;
     
     public ItemSelector(Frame parent, List<Pair<String, T>> optionList) {
@@ -36,8 +37,8 @@ public class ItemSelector< T > extends JDialog {
         
         panel.setLayout(new GridLayout(optionList.size(), 1));
         
-        this.setTitle("SGPL - Selecione:");
-        this.setLocationRelativeTo(null);
+        super.setTitle("SGPL - Selecione:");
+        super.setLocationRelativeTo(null);
         
         insertOptions();
     }

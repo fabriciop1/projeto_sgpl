@@ -27,7 +27,7 @@ public class GenericTableRowEditor extends GenericTableModifier {
         
         this.editorType = GTRE_INSERT;
         
-        this.setAllColumnsEditable(true);
+        super.setAllColumnsEditable(true);
     }
     
     @Override

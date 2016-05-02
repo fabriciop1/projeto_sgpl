@@ -11,7 +11,6 @@ import flex.db.GenericDAO;
 import flex.table.GenericTableModifier;
 import flex.table.GenericTableRowEditor;
 import flex.table.TableModifiedEvent;
-import flex.table.TableModifyListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultCellEditor;
@@ -41,10 +40,10 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         
         initComponents();
         listaPerfis.getSelectionModel().clearSelection();
-        setLocationRelativeTo(null);
-        this.setResizable(false);
+        super.setLocationRelativeTo(null);
+        super.setResizable(false);
         
-        this.setTitle("SGPL - Perfis disponíveis");
+        super.setTitle("SGPL - Perfis disponíveis");
         
         listaPerfis.setShowHorizontalLines(true);
       
@@ -361,44 +360,41 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         
     }
     private void definirBDListeners() {
-        listaPerfisGTRE.addTableModifyListener(new TableModifyListener() {
-            @Override
-            public void tableModified(TableModifiedEvent event) {
-                GenericDAO<Perfil> perfilDAO = new GenericDAO<>(Perfil.class);
-                GenericDAO<Rota> rotaDAO = new GenericDAO<>(Rota.class);     
-                
-                Object[] rowData = event.getTableRowData();
-                Integer rowID = (Integer) event.getCustomRowData();
-                GenericTableModifier modifier = event.getSourceModifier();
-                int modifType = event.getEventType();
-         
-                Rota rota = rotaDAO.retrieveByColumn("rota", rowData[2]).get(0);
-                
-                switch (modifType) {
-                    case TableModifyListener.ROW_INSERTED:
-                        {
-                            Perfil perfil = new Perfil(Cast.toString(rowData[0]), Cast.toString(rowData[1]),
-                                    Cast.toDouble(rowData[3]), Cast.toDouble(rowData[4]), Cast.toDouble(rowData[5]), Cast.toInt(rowData[6]),
-                                    Cast.toInt(rowData[7]), rota);
-                            perfilDAO.insert(perfil);
-                            modifier.setCustomRowData(modifier.getSourceTable().getRowCount() - 1, perfil.getId());
-                            break;
-                        }
-                    case TableModifyListener.ROW_UPDATED:
-                        {
-                            Perfil perfil = new Perfil(Cast.toString(rowData[0]), Cast.toString(rowData[1]),
-                                    Cast.toDouble(rowData[3]), Cast.toDouble(rowData[4]), Cast.toDouble(rowData[5]), Cast.toInt(rowData[6]),
-                                    Cast.toInt(rowData[7]), rota);
-                            perfil.setId(rowID);
-                            perfilDAO.update(perfil);
-                            break;
-                        }
-                    case TableModifyListener.ROW_DELETED:
-                        perfilDAO.remove(rowID);
-                        break;
-                    default:
-                        break;
+        listaPerfisGTRE.addTableModifyListener((TableModifiedEvent event) -> {
+            GenericDAO<Perfil> perfilDAO = new GenericDAO<>(Perfil.class);
+            GenericDAO<Rota> rotaDAO = new GenericDAO<>(Rota.class);
+            
+            Object[] rowData = event.getTableRowData();
+            Integer rowID = (Integer) event.getCustomRowData();
+            GenericTableModifier modifier = event.getSourceModifier();
+            int modifType = event.getEventType();
+            
+            Rota rota = rotaDAO.retrieveByColumn("rota", rowData[2]).get(0);
+            
+            switch (modifType) {
+                case TableModifiedEvent.ROW_INSERTED:
+                {
+                    Perfil perfil = new Perfil(Cast.toString(rowData[0]), Cast.toString(rowData[1]),
+                            Cast.toDouble(rowData[3]), Cast.toDouble(rowData[4]), Cast.toDouble(rowData[5]), Cast.toInt(rowData[6]),
+                            Cast.toInt(rowData[7]), rota);
+                    perfilDAO.insert(perfil);
+                    modifier.setCustomRowData(modifier.getSourceTable().getRowCount() - 1, perfil.getId());
+                    break;
                 }
+                case TableModifiedEvent.ROW_UPDATED:
+                {
+                    Perfil perfil = new Perfil(Cast.toString(rowData[0]), Cast.toString(rowData[1]),
+                            Cast.toDouble(rowData[3]), Cast.toDouble(rowData[4]), Cast.toDouble(rowData[5]), Cast.toInt(rowData[6]),
+                            Cast.toInt(rowData[7]), rota);
+                    perfil.setId(rowID);
+                    perfilDAO.update(perfil);
+                    break;
+                }
+                case TableModifiedEvent.ROW_DELETED:
+                    perfilDAO.remove(rowID);
+                    break;
+                default:
+                    break;
             }
         });
     }
