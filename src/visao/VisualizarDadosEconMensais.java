@@ -7,6 +7,7 @@ package visao;
 
 import controle.ControlePerfil;
 import flex.db.GenericDAO;
+import flex.table.GenericTableAreaEditor;
 import java.awt.Color;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -328,7 +329,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
             }
         });
         tabelaEspecificacao.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        tabelaEspecificacao.setPreferredSize(new java.awt.Dimension(270, 1450));
+        tabelaEspecificacao.setPreferredSize(new java.awt.Dimension(270, 1440));
         tabelaEspecificacao.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tabelaEspecificacao.getTableHeader().setReorderingAllowed(false);
         tabelaEspecificacao.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
@@ -396,6 +397,20 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         tabelaMeses.setPreferredSize(new java.awt.Dimension(800, 0));
         tabelaMeses.getTableHeader().setReorderingAllowed(false);
         jScrollPane4.setViewportView(tabelaMeses);
+        if (tabelaMeses.getColumnModel().getColumnCount() > 0) {
+            tabelaMeses.getColumnModel().getColumn(0).setResizable(false);
+            tabelaMeses.getColumnModel().getColumn(1).setResizable(false);
+            tabelaMeses.getColumnModel().getColumn(2).setResizable(false);
+            tabelaMeses.getColumnModel().getColumn(3).setResizable(false);
+            tabelaMeses.getColumnModel().getColumn(4).setResizable(false);
+            tabelaMeses.getColumnModel().getColumn(5).setResizable(false);
+            tabelaMeses.getColumnModel().getColumn(6).setResizable(false);
+            tabelaMeses.getColumnModel().getColumn(7).setResizable(false);
+            tabelaMeses.getColumnModel().getColumn(8).setResizable(false);
+            tabelaMeses.getColumnModel().getColumn(9).setResizable(false);
+            tabelaMeses.getColumnModel().getColumn(10).setResizable(false);
+            tabelaMeses.getColumnModel().getColumn(11).setResizable(false);
+        }
 
         jScrollPane5.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane5.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
@@ -507,7 +522,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tabelaDadosEconomicos.setPreferredSize(new java.awt.Dimension(800, 1450));
+        tabelaDadosEconomicos.setPreferredSize(new java.awt.Dimension(800, 1441));
         tabelaDadosEconomicos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tabelaDadosEconomicos.getTableHeader().setResizingAllowed(false);
         tabelaDadosEconomicos.getTableHeader().setReorderingAllowed(false);
@@ -532,6 +547,44 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
             }
         });
         jScrollPane5.setViewportView(tabelaDadosEconomicos);
+        if (tabelaDadosEconomicos.getColumnModel().getColumnCount() > 0) {
+            tabelaDadosEconomicos.getColumnModel().getColumn(0).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(1).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(2).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(3).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(4).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(5).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(6).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(7).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(8).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(9).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(10).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(11).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(12).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(13).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(14).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(15).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(16).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(17).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(18).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(19).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(20).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(21).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(22).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(23).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(24).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(25).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(26).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(27).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(28).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(29).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(30).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(31).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(32).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(33).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(34).setResizable(false);
+            tabelaDadosEconomicos.getColumnModel().getColumn(35).setResizable(false);
+        }
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -609,7 +662,17 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
 
         telaMes.setVisible(true);
         int selecionado = telaMes.getIndex();
-        System.out.println(selecionado);
+        
+        if (selecionado != 0) {
+            System.out.println(selecionado);
+            GenericTableAreaEditor gtae = new GenericTableAreaEditor(this, tabelaDadosEconomicos, false);
+            
+            gtae.setAllColumnsEditable(true);
+            gtae.setRowsDisplayed(15);
+            gtae.setColumnInterval((selecionado-1) * 3, ((selecionado-1) * 3) + 2);
+        
+            gtae.showEditor(evt);
+        }
     }//GEN-LAST:event_editarValoresBTActionPerformed
 
     private void tabelaEspecificacaoMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaEspecificacaoMouseDragged
@@ -662,7 +725,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
     private void fillItemSelector() {
         Perfil atual = ControlePerfil.getInstance().getPerfilSelecionado();
         
-        List<DadosEconMensais> dados =  demdao.retrieveAll("ano", "ano");
+        List<DadosEconMensais> dados =  demdao.retrieveAll("ano", "ano DESC");
         dems = demdao.retrieveByColumn("idPerfilFK", atual.getId());
         
         for(int i = 0; i < dados.size(); i++) {

@@ -6,6 +6,8 @@
 package visao;
 
 import flex.table.GenericTableAreaEditor;
+import javax.swing.JDialog;
+import javax.swing.WindowConstants;
 
 /**
  *
@@ -25,6 +27,8 @@ public class MonthSelector extends javax.swing.JDialog {
         
         super.setTitle("SGPL - Seleção de Mês");
         super.setLocationRelativeTo(null);
+        super.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        super.setResizable(false);
     }
 
     /**
@@ -49,8 +53,8 @@ public class MonthSelector extends javax.swing.JDialog {
         });
 
         mesCombo.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        mesCombo.setMaximumRowCount(12);
-        mesCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro" }));
+        mesCombo.setMaximumRowCount(13);
+        mesCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione...", "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro" }));
 
         ConfirmaBT.setText("OK");
         ConfirmaBT.addActionListener(new java.awt.event.ActionListener() {
@@ -103,29 +107,23 @@ public class MonthSelector extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void ConfirmaBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConfirmaBTActionPerformed
-    
-        this.setVisible(false);   
-        
-        selected = mesCombo.getSelectedIndex();
-        
-        this.dispose();
+        this.setVisible(false);        
+        this.selected = mesCombo.getSelectedIndex();
     }//GEN-LAST:event_ConfirmaBTActionPerformed
 
     private void cancelarBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarBTActionPerformed
-        selected = -1;
         this.setVisible(false);
-        this.dispose();
     }//GEN-LAST:event_cancelarBTActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        selected = -1;
         this.setVisible(false);
-        this.dispose();
+
     }//GEN-LAST:event_formWindowClosed
 
    public int getIndex() {
-       return selected;
+       return this.selected;
    }
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ConfirmaBT;

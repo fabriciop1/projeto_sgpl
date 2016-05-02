@@ -66,21 +66,22 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Arial" size="12" style="1"/>
         </Property>
-        <Property name="maximumRowCount" type="int" value="12"/>
+        <Property name="maximumRowCount" type="int" value="13"/>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="12">
-            <StringItem index="0" value="Janeiro"/>
-            <StringItem index="1" value="Fevereiro"/>
-            <StringItem index="2" value="Mar&#xe7;o"/>
-            <StringItem index="3" value="Abril"/>
-            <StringItem index="4" value="Maio"/>
-            <StringItem index="5" value="Junho"/>
-            <StringItem index="6" value="Julho"/>
-            <StringItem index="7" value="Agosto"/>
-            <StringItem index="8" value="Setembro"/>
-            <StringItem index="9" value="Outubro"/>
-            <StringItem index="10" value="Novembro"/>
-            <StringItem index="11" value="Dezembro"/>
+          <StringArray count="13">
+            <StringItem index="0" value="Selecione..."/>
+            <StringItem index="1" value="Janeiro"/>
+            <StringItem index="2" value="Fevereiro"/>
+            <StringItem index="3" value="Mar&#xe7;o"/>
+            <StringItem index="4" value="Abril"/>
+            <StringItem index="5" value="Maio"/>
+            <StringItem index="6" value="Junho"/>
+            <StringItem index="7" value="Julho"/>
+            <StringItem index="8" value="Agosto"/>
+            <StringItem index="9" value="Setembro"/>
+            <StringItem index="10" value="Outubro"/>
+            <StringItem index="11" value="Novembro"/>
+            <StringItem index="12" value="Dezembro"/>
           </StringArray>
         </Property>
       </Properties>

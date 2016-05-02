@@ -61,8 +61,11 @@ public abstract class GenericTableModifier extends JDialog{
         this.rowsDisplayed = 1;
         
         this.editorColumnEditable = new boolean[sourceTable.getColumnCount()];
-
+        this.setResizable(false);
+        
         initComponents();
+        
+        editTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         
         editTable.setAutoCreateColumnsFromModel(false);
         editTable.setCellSelectionEnabled(true);
@@ -257,14 +260,13 @@ public abstract class GenericTableModifier extends JDialog{
     
     protected final void repackEditor() {
 
-        int minDialogWidth = 80;
+        int minDialogWidth = 0;
         
         for (int i = 0; i < editTable.getColumnCount(); i++) {
 
-            int sourceColumnWidth = sourceTable.getColumnModel().getColumn(i).getWidth();
-            minDialogWidth += sourceColumnWidth + 1;
+            minDialogWidth += sourceTable.getColumnModel().getColumn(i).getWidth();;
 
-            editTable.getColumnModel().getColumn(i).setMinWidth(sourceColumnWidth);
+            //editTable.getColumnModel().getColumn(i).setWidth(sourceColumnWidth);
         }
         
         int minEditTableHeight = getRowsDisplayed() * (editTable.getRowHeight() + editTable.getRowMargin());
@@ -602,7 +604,6 @@ public abstract class GenericTableModifier extends JDialog{
         cancelButton = new javax.swing.JButton();
 
         setBounds(new java.awt.Rectangle(0, 0, 0, 0));
-        setPreferredSize(new java.awt.Dimension(380, 180));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);
