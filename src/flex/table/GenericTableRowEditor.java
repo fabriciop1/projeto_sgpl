@@ -23,11 +23,14 @@ public class GenericTableRowEditor extends GenericTableModifier {
     private int editorType;
     
     public GenericTableRowEditor(Frame parent, JTable sourceTable, boolean forceCellEditing) {
-        super(parent, sourceTable, forceCellEditing, true);
+        super(parent, sourceTable, forceCellEditing);
         
         this.editorType = GTRE_INSERT;
         
         super.setAllColumnsEditable(true);
+        
+        composeEditTable();
+        setRebuildEditTable(false);
     }
     
     @Override
@@ -44,23 +47,7 @@ public class GenericTableRowEditor extends GenericTableModifier {
     @Override
     protected void updateSourceTable(){        
         
-        int numEmptyCells = 0;
         Object[] rowData = getEditTableRowData(0);
-        
-        for(int i=0; i<rowData.length; i++){
-
-            if(rowData[i] == null){
-
-                if(!isAllowedEmptyCells()){
-                    return;
-                }
-                numEmptyCells++;
-            }
-        }
-        
-        if(!isAllowedEmptyRows() && (numEmptyCells == sourceTable.getColumnCount()) ){
-            return;
-        }
         
         if (editorType == GTRE_UPDATE) {
             updateSourceTableRow(getSourceTable().getSelectedRow(), rowData);

@@ -664,14 +664,18 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         int selecionado = telaMes.getIndex();
         
         if (selecionado != 0) {
-            System.out.println(selecionado);
-            GenericTableAreaEditor gtae = new GenericTableAreaEditor(this, tabelaDadosEconomicos, false);
             
-            gtae.setAllColumnsEditable(true);
-            gtae.setRowsDisplayed(15);
+            //System.out.println(selecionado);
+            GenericTableAreaEditor gtae = new GenericTableAreaEditor(this, tabelaDadosEconomicos, false);
+            gtae.setName("GTAE DadosEconMensais");
             gtae.setColumnInterval((selecionado-1) * 3, ((selecionado-1) * 3) + 2);
-        
+            gtae.setRowsDisplayed(10);
+            gtae.setAllColumnsEditable(true);
+            gtae.setAllowEmptyRows(false);
+            
             gtae.showEditor(evt);
+            
+            //System.out.println(gtae.createLog());
         }
     }//GEN-LAST:event_editarValoresBTActionPerformed
 

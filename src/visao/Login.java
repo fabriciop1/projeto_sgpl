@@ -23,6 +23,9 @@ public class Login extends javax.swing.JFrame {
         super.setLocationRelativeTo(null);
         super.setResizable(false);
         
+        //campoLogin.setText("adm");
+        //campoSenha.setText("adm");
+        
         super.getRootPane().setDefaultButton(btnEntrar);
         
     }

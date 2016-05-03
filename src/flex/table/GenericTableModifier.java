@@ -6,6 +6,7 @@
 package flex.table;
 
 import java.awt.Dimension;
+import java.awt.FontMetrics;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
@@ -46,8 +47,10 @@ public abstract class GenericTableModifier extends JDialog{
     private boolean forceCellEditing;
     private final boolean editorColumnEditable[];
 
+    boolean rebuildEditTable;
     
-    protected GenericTableModifier(Frame parent, JTable sourceTable, boolean forceCellEditing, boolean composeEditor) {
+    
+    protected GenericTableModifier(Frame parent, JTable sourceTable, boolean forceCellEditing) {
         super(parent, true);
         
         this.parent = parent;
@@ -59,35 +62,31 @@ public abstract class GenericTableModifier extends JDialog{
         this.allowEmptyCells = true;
         this.allowEmptyRows = false;
         this.rowsDisplayed = 1;
-        
         this.editorColumnEditable = new boolean[sourceTable.getColumnCount()];
-        this.setResizable(false);
+        this.rebuildEditTable = true;
         
         initComponents();
         
+        editTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         editTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        
         editTable.setAutoCreateColumnsFromModel(false);
         editTable.setCellSelectionEnabled(true);
         editTable.setShowHorizontalLines(true);
         editTable.setShowVerticalLines(true);
         
-        super.setMinimumSize(super.getSize());
         this.setLabelText("");
-        super.setVisible(false);
-        
-        if (composeEditor) {
-            this.composeEditTable();
-        }
-        
-        super.setLocationRelativeTo(null);
+        this.setVisible(false);
+        this.setResizable(false);
     }
     
     public String createLog(){
         
+        final String line = "--------------------------------------------------------------------------------";
+        
         String log = "";
         
-        log += "\n";
+        log += line + "\nModifier Name: " + getName() + "\n";
+        log += "Modifier Class: " + this.getClass().getCanonicalName() + "\n\n";
         
         log += "Number of Registered TableModifyListeners: " + tableModifylisteners.size() + "\n\n";
         
@@ -102,9 +101,18 @@ public abstract class GenericTableModifier extends JDialog{
         log += "Allow Empty Cells: " + allowEmptyCells + "\n";
         log += "Force Cell Editing: " + forceCellEditing + "\n\n";
         
-        log += "Column Editable: ";
+        log += "EditTable Columns Editable: ";
         for (int i = 0; i < editorColumnEditable.length; i++) {
             log += "[" + i + "-" + editorColumnEditable[i] + "] "; 
+        }
+        log += "\n\n";
+        log += "Editor Window Width: " + this.getWidth() + "\n";
+        log += "EditTable Width: " + editTable.getWidth() + "\n";
+        log += "EditTable ScrollPane Width: " + editTableScroll.getWidth() + "\n\n";
+        
+        log += "EditTable Columns Width: ";
+        for (int i = 0; i < editTable.getColumnCount(); i++) {
+            log += "[" + i + "-(" + editTable.getColumnModel().getColumn(i).getWidth() + ")] ";
         }
         log += "\n\n";
         
@@ -114,9 +122,9 @@ public abstract class GenericTableModifier extends JDialog{
         log += "Source Table Row Count: " + sourceTable.getRowCount() + " row(s)" + "\n";
         log += "Source Table Column Count: " + sourceTable.getColumnCount() + " column(s)" + "\n\n";
         
-        log += "Rows Displayed: " + this.rowsDisplayed + "\n";
+        log += "Rows Displayed in EditTable: " + this.rowsDisplayed + "\n";
         
-        return log;
+        return log + "\n";
     }
     
     
@@ -128,14 +136,6 @@ public abstract class GenericTableModifier extends JDialog{
         tableModifylisteners.remove(listener);
     }
     
-    
-    public void showEditor(ActionEvent e){
-        
-        clearEditTable();
-        refillEditTable();
-
-        this.setVisible(true);
-    }   
     
     protected String[] getSourceTableColumnNames(){
         
@@ -185,9 +185,8 @@ public abstract class GenericTableModifier extends JDialog{
         copySourceTableRenderers();
         copySourceTableEditors();
         
-        repackEditor();
-    }
-    
+        getEditTableModel().fireTableStructureChanged();
+    }    
     
     protected final DefaultTableModel createStringEditTableModel(Object[][] dataMatrix, String[] columnNames){
         
@@ -238,6 +237,17 @@ public abstract class GenericTableModifier extends JDialog{
     }
     
     
+    protected void notifyListeners(TableModifiedEvent event){
+        
+        if(event == null){
+            throw new NullPointerException("Evento inválido");
+        }
+        
+        for(TableModifyListener listener : tableModifylisteners){
+            listener.tableModified(event);
+        }
+    }
+    
     protected void copySourceTableRenderers(){
         
         for(int i=0; i<sourceTable.getColumnCount(); i++){
@@ -264,33 +274,19 @@ public abstract class GenericTableModifier extends JDialog{
         
         for (int i = 0; i < editTable.getColumnCount(); i++) {
 
-            minDialogWidth += sourceTable.getColumnModel().getColumn(i).getWidth();;
+            int sourceColumnWidth = getSourceTableColumnWidth(i);
+            editTable.getColumnModel().getColumn(i).setPreferredWidth(sourceColumnWidth);
+            
+            minDialogWidth += sourceColumnWidth + 3;
+        }
 
-            //editTable.getColumnModel().getColumn(i).setWidth(sourceColumnWidth);
-        }
         
-        int minEditTableHeight = getRowsDisplayed() * (editTable.getRowHeight() + editTable.getRowMargin());
+        int minEditTableHeight = rowsDisplayed * editTable.getRowHeight();
         
-        //System.out.println("\nInside repackEditor( ) - Rows Displayed: " + getRowsDisplayed());
-        //System.out.println("Min EditTable Height: " + minEditTableHeight + "\n");
+        editTable.setPreferredScrollableViewportSize((new Dimension(minDialogWidth, minEditTableHeight)));
         
-        editTable.setPreferredScrollableViewportSize((new Dimension(editTable.getWidth(), minEditTableHeight)));
-        
-        this.setMinimumSize(new Dimension(minDialogWidth, 180 + minEditTableHeight));
-        
+        this.setSize(new Dimension(60 + minDialogWidth, 170 + minEditTableHeight));
         this.setLocationRelativeTo(null);
-    }
-    
-    
-    protected void notifyListeners(TableModifiedEvent event){
-        
-        if(event == null){
-            throw new NullPointerException("Evento inválido");
-        }
-        
-        for(TableModifyListener listener : tableModifylisteners){
-            listener.tableModified(event);
-        }
     }
     
     
@@ -379,6 +375,15 @@ public abstract class GenericTableModifier extends JDialog{
 
     public DefaultTableModel getSourceTableModel(){
         return (DefaultTableModel) sourceTable.getModel();
+    }
+    
+    public int getSourceTableColumnWidth(int column){
+        
+        if(column < 0 || column > sourceTable.getColumnCount()-1){
+            throw new IllegalArgumentException("O valor da coluna passado é inválido.");
+        }        
+
+        return sourceTable.getColumnModel().getColumn(column).getWidth();
     }
     
     
@@ -487,6 +492,28 @@ public abstract class GenericTableModifier extends JDialog{
     }
     
     
+    protected void processEditTable(){
+        
+        clearEditTable();
+        
+        if(rebuildEditTable){
+            
+            composeEditTable();
+            
+            rebuildEditTable = false;
+        }
+        
+        refillEditTable();
+        repackEditor();
+    }
+    
+    public void showEditor(ActionEvent e){
+        
+        processEditTable();
+
+        this.setVisible(true);
+    }   
+    
     protected void clearEditTable(){
         
         getEditTableModel().setRowCount(0);
@@ -551,6 +578,7 @@ public abstract class GenericTableModifier extends JDialog{
         Object cellValue = getEditTableValue(editRow, editColumn);
         
         if(!validateValue(cellValue, sourceColumn)){
+            
             return false;
         }
         
@@ -576,11 +604,20 @@ public abstract class GenericTableModifier extends JDialog{
         
         for (int i = 0; i < editTable.getRowCount(); i++) {
             
+            if(checkEmptyRow(i, 0) && !isAllowedEmptyRows()){
+                JOptionPane.showMessageDialog(this, "Não são permitidas linhas vazias.", "Linha Vazia", JOptionPane.ERROR_MESSAGE);
+                    return false;
+            }
+            
             for (int j = 0; j < editTable.getColumnCount(); j++) {
                 
-                if(!validateEditTableValue(i, j, j)){
+                if(checkEmptyValue(i, j) && !isAllowedEmptyCells()){
+                    JOptionPane.showMessageDialog(this, "Não são permitidas células vazias.", "Valor de Coluna Vazio", JOptionPane.ERROR_MESSAGE);
+                    return false;
+                }
+                else if(!validateEditTableValue(i, j, j)){
                     
-                    JOptionPane.showMessageDialog(this, "O valor da coluna \"" + editTable.getColumnName(j) + "\"" +
+                    JOptionPane.showMessageDialog(this, "O valor da coluna \"" + editTable.getColumnName(j) + "\" na linha " + (i+1) +
                             " é inválido.", "Valor de Coluna Inválido", JOptionPane.ERROR_MESSAGE);
                     
                     return false;
@@ -591,6 +628,31 @@ public abstract class GenericTableModifier extends JDialog{
         return true;
     }
     
+    protected boolean checkEmptyValue(int editRow, int editColumn){
+        
+        Object cellValue = getEditTableValue(editRow, editColumn);
+        
+        return Cast.toString(cellValue).isEmpty();
+    }
+    
+    protected boolean checkEmptyRow(int editRow, int columnOffset){
+        
+        int numEmptyCells = 0;
+        
+        for(int i=0; i<editTable.getColumnCount() - columnOffset; i++){
+
+            if(checkEmptyValue(editRow, i + columnOffset)){
+
+                numEmptyCells++;
+            }
+        }
+        
+        if(numEmptyCells == editTable.getColumnCount() - columnOffset){
+            return true;
+        }
+        
+        return false;
+    }
     
     
     @SuppressWarnings("unchecked")
@@ -706,6 +768,7 @@ public abstract class GenericTableModifier extends JDialog{
         stopCellEditing();
 
         if (validateEditTableContent()) {
+            
             updateSourceTable();
             clearEditTable();
             hideEditor();
@@ -720,6 +783,39 @@ public abstract class GenericTableModifier extends JDialog{
     private javax.swing.JButton saveButton;
     // End of variables declaration//GEN-END:variables
 
+    
+    public Object setCustomRowData(int row, Object data){
+        
+        if(row < 0 || row > customRowDataList.size()-1){
+            throw new IllegalArgumentException("GenericTableModifier.setCustomRowData(int,Object): O numero da linha da tabela passado é inválido.");
+        }
+        
+        return customRowDataList.set(row, data);
+    }
+    
+    public Object getCustomRowData(int row){
+        
+        if(row < 0 || row > customRowDataList.size()-1){
+            throw new IllegalArgumentException("GenericTableModifier.setCustomRowData(int,Object): O numero da linha da tabela passado é inválido.");
+        }
+        
+        return customRowDataList.get(row);
+    }
+    
+    public Object removeCustomRowData(int row){
+        
+        if(row < 0 || row > customRowDataList.size()-1){
+            throw new IllegalArgumentException("GenericTableModifier.setCustomRowData(int,Object): O numero da linha da tabela passado é inválido.");
+        }
+        
+        return customRowDataList.remove(row);
+    }
+    
+    public List<Object> getCustomRowDataList(){
+        return customRowDataList;
+    }
+    
+    
     protected javax.swing.JButton getCancelButton() {
         return cancelButton;
     }
@@ -779,37 +875,6 @@ public abstract class GenericTableModifier extends JDialog{
         this.allowEmptyCells = allowEmptyCells;
     }
     
-    public Object setCustomRowData(int row, Object data){
-        
-        if(row < 0 || row > customRowDataList.size()-1){
-            throw new IllegalArgumentException("GenericTableModifier.setCustomRowData(int,Object): O numero da linha da tabela passado é inválido.");
-        }
-        
-        return customRowDataList.set(row, data);
-    }
-    
-    public Object getCustomRowData(int row){
-        
-        if(row < 0 || row > customRowDataList.size()-1){
-            throw new IllegalArgumentException("GenericTableModifier.setCustomRowData(int,Object): O numero da linha da tabela passado é inválido.");
-        }
-        
-        return customRowDataList.get(row);
-    }
-    
-    public Object removeCustomRowData(int row){
-        
-        if(row < 0 || row > customRowDataList.size()-1){
-            throw new IllegalArgumentException("GenericTableModifier.setCustomRowData(int,Object): O numero da linha da tabela passado é inválido.");
-        }
-        
-        return customRowDataList.remove(row);
-    }
-    
-    public List<Object> getCustomRowDataList(){
-        return customRowDataList;
-    }
-
     public int getRowsDisplayed() {
         return rowsDisplayed;
     }
@@ -821,7 +886,13 @@ public abstract class GenericTableModifier extends JDialog{
         }
         
         this.rowsDisplayed = rowsDisplayed;
-        
-        repackEditor();
+    }
+
+    protected boolean isRebuildEditTableNeeded() {
+        return rebuildEditTable;
+    }
+
+    protected void setRebuildEditTable(boolean rebuildEditTable) {
+        this.rebuildEditTable = rebuildEditTable;
     }
 }

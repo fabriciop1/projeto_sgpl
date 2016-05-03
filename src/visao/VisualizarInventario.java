@@ -2667,12 +2667,15 @@ public class VisualizarInventario extends javax.swing.JFrame {
     private void buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonActionPerformed
         
         GenericTableAreaEditor gtae = new GenericTableAreaEditor(this, tabelaMaquinas, false);
+        gtae.setName("GTAE VisualizarInventario");
+        
         gtae.setAllColumnsEditable(true);
         gtae.setRowsDisplayed(4);
         gtae.setColumnInterval(2, 4);
         gtae.setRowInterval(2, 6);
-        
         gtae.showEditor(evt);
+        
+        //System.out.println(gtae.createLog());
     }//GEN-LAST:event_buttonActionPerformed
 
     private void verificaTabelaVazia(DefaultTableModel table, JButton editarBtn, JButton removerBtn) {
