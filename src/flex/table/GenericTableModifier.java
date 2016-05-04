@@ -75,8 +75,8 @@ public abstract class GenericTableModifier extends JDialog{
         editTable.setShowVerticalLines(true);
         
         this.setLabelText("");
-        this.setVisible(false);
-        this.setResizable(false);
+        super.setVisible(false);
+        super.setResizable(false);
     }
     
     public String createLog(){

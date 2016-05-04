@@ -18,7 +18,6 @@ import util.Cast;
  */
 public class DadosEconMensais extends DatabaseObject implements Serializable {
     
-    private int id;
     private int mes;
     private int ano;
     private double quantidade;

@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package modelo.dao;
+package flex.db;
 
 import java.sql.Connection;
+import modelo.dao.DBConexao;
 
 /**
  *
@@ -13,25 +14,32 @@ import java.sql.Connection;
  */
 public class DAO {
 
-    private boolean connectionOwner;
-    protected Connection connection;
+    private final boolean connectionOwner;
+    private Connection connection;
 
-    public DAO(Connection connection) {
+    protected DAO(Connection connection) {
 
         this.connection = connection;
-        this.connectionOwner = false;
-        
-        if(connection == null){
-            throw new NullPointerException("DAO(Connection): The connection is NULL");
-        }
-    }
-
-    public DAO() {
-        this.connectionOwner = true;
+        this.connectionOwner = (connection == null);
     }
 
     public boolean isConnectionOwner() {
         return connectionOwner;
     }
-
+    
+    protected Connection openConnection(){
+        
+        if(isConnectionOwner()){
+            return DBConexao.openConnection();
+        } else {
+            return connection;
+        }
+    }
+    
+    protected void closeConnection(Connection connection){
+        
+        if(isConnectionOwner()){
+            DBConexao.closeConnection(connection);
+        }
+    }
 }

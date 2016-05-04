@@ -2145,6 +2145,22 @@ public class VisualizarInventario extends javax.swing.JFrame {
         }
     }
 
+    private void calcularValoresInvMaquinas(Object[] maquinasRowData, int maquinasRow) {
+        
+    }
+    
+    private void calcularValoresInvBenfeitorias(Object[] benfeitoriasRowData, int benfeitoriasRow) {
+        
+    }
+    
+    private void calcularValoresInvAnimaisServ(Object[] animaisServRowData, int animaisServRow) {
+        
+    }
+    
+    private void calcularValoresInvAnimaisProd(Object[] animaisProdRowData, int animaisProdRow) {
+        
+    }
+    
     private void inicializarGTRE() {
         tabelaMaquinasGTRE = new GenericTableRowEditor(this, tabelaMaquinas, false);
         tabelaBenfeitoriasGTRE = new GenericTableRowEditor(this, tabelaBenfeitorias, false);
@@ -2297,6 +2313,10 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 
             }
         });
+        
+        
+        
+        
 
         TableModifyListener animaisTMListener = (TableModifiedEvent event) -> {
             GenericDAO<InventarioAnimais> dao = new GenericDAO<>(InventarioAnimais.class);
