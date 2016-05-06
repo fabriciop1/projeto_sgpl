@@ -19,6 +19,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 import util.Cast;
 import util.Regex;
 
@@ -77,6 +78,7 @@ public abstract class GenericTableModifier extends JDialog{
         this.setLabelText("");
         super.setVisible(false);
         super.setResizable(false);
+        
     }
     
     public String createLog(){
@@ -269,24 +271,28 @@ public abstract class GenericTableModifier extends JDialog{
     }
     
     protected final void repackEditor() {
-
+        
         int minDialogWidth = 0;
         
         for (int i = 0; i < editTable.getColumnCount(); i++) {
 
             int sourceColumnWidth = getSourceTableColumnWidth(i);
-            editTable.getColumnModel().getColumn(i).setPreferredWidth(sourceColumnWidth);
+            TableColumn column = editTable.getColumnModel().getColumn(i); //
+            
+            column.setPreferredWidth(sourceColumnWidth);
+            column.setMaxWidth(sourceColumnWidth);
+            column.setMinWidth(sourceColumnWidth);
             
             minDialogWidth += sourceColumnWidth + 3;
         }
 
-        
         int minEditTableHeight = rowsDisplayed * editTable.getRowHeight();
         
         editTable.setPreferredScrollableViewportSize((new Dimension(minDialogWidth, minEditTableHeight)));
         
         this.setSize(new Dimension(60 + minDialogWidth, 170 + minEditTableHeight));
         this.setLocationRelativeTo(null);
+    
     }
     
     

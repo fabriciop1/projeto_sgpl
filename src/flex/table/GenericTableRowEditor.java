@@ -29,8 +29,9 @@ public class GenericTableRowEditor extends GenericTableModifier {
         
         super.setAllColumnsEditable(true);
         
-        composeEditTable();
-        setRebuildEditTable(false);
+        super.composeEditTable();
+        super.setRebuildEditTable(false);
+        
     }
     
     @Override

@@ -495,7 +495,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
         editarInvMaquinasBT = new javax.swing.JButton();
         removerInvMaquinasBT = new javax.swing.JButton();
         adicionarInvMaquinasBT = new javax.swing.JButton();
-        button = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jLabel26 = new javax.swing.JLabel();
         jLabel27 = new javax.swing.JLabel();
@@ -1160,7 +1159,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 225, Short.MAX_VALUE)
+                                    .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
                                     .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jPanel2Layout.createSequentialGroup()
@@ -1589,13 +1588,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
             }
         });
 
-        button.setText("Open that crap");
-        button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -1613,9 +1605,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 .addGap(124, 124, 124)
                 .addComponent(total43, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addGap(178, 178, 178)
-                .addComponent(button)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(178, 861, Short.MAX_VALUE)
                 .addComponent(adicionarInvMaquinasBT, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(editarInvMaquinasBT, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1636,13 +1626,11 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     .addComponent(total43)
                     .addComponent(total42)
                     .addComponent(jLabel25))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(removerInvMaquinasBT, javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(editarInvMaquinasBT, javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(adicionarInvMaquinasBT, javax.swing.GroupLayout.Alignment.TRAILING))
-                    .addComponent(button))
+                    .addComponent(removerInvMaquinasBT, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(editarInvMaquinasBT, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(adicionarInvMaquinasBT, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
 
@@ -2132,7 +2120,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void calcularValoresInvTerras(Object[] terrasRowData, Object[] forrageirasRowData, int forrageirasRow) {
+    private void calcularValoresInvForrageiras(Object[] terrasRowData, Object[] forrageirasRowData, int forrageirasRow) {
 
         forrageirasRowData[2] = Calc.dividir(Cast.toDouble(terrasRowData[2]) + Cast.toDouble(terrasRowData[4]), 2.0);
         //R$/Total = (R$/Ha) * Ha
@@ -2146,19 +2134,34 @@ public class VisualizarInventario extends javax.swing.JFrame {
     }
 
     private void calcularValoresInvMaquinas(Object[] maquinasRowData, int maquinasRow) {
+        maquinasRowData[4] = Calc.multiplicar(Cast.toDouble(maquinasRowData[2]), Cast.toDouble(maquinasRowData[3])); // Valor Total
         
+        maquinasRowData[6] = Calc.dividir(Cast.toDouble(maquinasRowData[4]), Cast.toInt(maquinasRowData[5])); // R$/ano
+        
+        for(int i = 0; i < tabelaMaquinas.getColumnCount(); i++) {
+            tabelaMaquinas.setValueAt(maquinasRowData[i], maquinasRow, i); // Atualiza tela com novos cálculos na linha editada
+        }
     }
     
     private void calcularValoresInvBenfeitorias(Object[] benfeitoriasRowData, int benfeitoriasRow) {
+        benfeitoriasRowData[4] = Calc.multiplicar(Cast.toDouble(Cast.toDouble(benfeitoriasRowData[2])), 
+                Cast.toDouble(benfeitoriasRowData[3])); // Valor Total
         
-    }
-    
-    private void calcularValoresInvAnimaisServ(Object[] animaisServRowData, int animaisServRow) {
+        benfeitoriasRowData[6] = Calc.dividir(Cast.toDouble(benfeitoriasRowData[4]), Cast.toInt(benfeitoriasRowData[5])); // R$/ano
         
+        for(int i = 0; i < tabelaBenfeitorias.getColumnCount(); i++) {
+            tabelaBenfeitorias.setValueAt(benfeitoriasRowData[i], benfeitoriasRow, i);
+        }
     }
     
     private void calcularValoresInvAnimaisProd(Object[] animaisProdRowData, int animaisProdRow) {
+        animaisProdRowData[8] = Calc.multiplicar(Cast.toInt(animaisProdRowData[1]), Cast.toDouble(animaisProdRowData[7])); //Valor Inicial
         
+        animaisProdRowData[9] = Calc.multiplicar(Cast.toInt(animaisProdRowData[6]), Cast.toDouble(animaisProdRowData[7])); // Valor Final
+        
+        for(int i = 0; i < tabelaInveAnimaisProd.getColumnCount(); i++) {
+            tabelaInveAnimaisProd.setValueAt(animaisProdRowData[i], animaisProdRow, i);
+        }
     }
     
     private void inicializarGTRE() {
@@ -2194,21 +2197,32 @@ public class VisualizarInventario extends javax.swing.JFrame {
             Integer rowID = (Integer) event.getCustomRowData();
             GenericTableModifier modifier = event.getSourceModifier();
             int modifType = event.getEventType();
+            int rowIndex = event.getRowIndex();
             
             switch (modifType) {
                 case TableModifiedEvent.ROW_INSERTED:
                     {
-                        InventarioMaquinas inv = new InventarioMaquinas(Cast.toString(rowData[0]), Cast.toString(rowData[1]), Cast.toDouble(rowData[2]),
-                                Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfil);
+                        InventarioMaquinas inv = new InventarioMaquinas(Cast.toString(rowData[0]), Cast.toString(rowData[1]), 
+                                Cast.toDouble(rowData[2]), Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfil);
+                        
+                        Object[] maquinasRowData = tabelaMaquinasGTRE.getSourceTableRowData(rowIndex);
+                        
+                        calcularValoresInvMaquinas(maquinasRowData, rowIndex);
                         dao.insert(inv);
+                        
                         modifier.setCustomRowData(modifier.getSourceTable().getRowCount() - 1, inv.getId());
                         break;
                     }
                 case TableModifiedEvent.ROW_UPDATED:
                     {
-                        InventarioMaquinas inv = new InventarioMaquinas(Cast.toString(rowData[0]), Cast.toString(rowData[1]), Cast.toDouble(rowData[2]),
-                                Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfil);
+                        InventarioMaquinas inv = new InventarioMaquinas(Cast.toString(rowData[0]), Cast.toString(rowData[1]), 
+                                Cast.toDouble(rowData[2]), Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfil);
                         inv.setId(rowID);
+                        
+                        Object[] maquinasRowData = tabelaMaquinasGTRE.getSourceTableRowData(rowIndex);
+                        
+                        calcularValoresInvMaquinas(maquinasRowData, rowIndex);        
+                        
                         dao.update(inv);
                         break;
                     }
@@ -2228,13 +2242,19 @@ public class VisualizarInventario extends javax.swing.JFrame {
             Integer rowID = (Integer) event.getCustomRowData();
             GenericTableModifier modifier = event.getSourceModifier();
             int modifType = event.getEventType();
+            int rowIndex = event.getRowIndex();
             
             switch (modifType) {
                 case TableModifiedEvent.ROW_INSERTED:
                     {
                         InventarioBenfeitorias inv = new InventarioBenfeitorias(Cast.toString(rowData[0]), Cast.toString(rowData[1]), Cast.toDouble(rowData[2]),
                                 Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfil);
+                        
+                        Object[] benfeitoriasRowData = tabelaBenfeitoriasGTRE.getSourceTableRowData(rowIndex);
+                        calcularValoresInvBenfeitorias(benfeitoriasRowData, rowIndex);
+                        
                         dao.insert(inv);
+                        
                         modifier.setCustomRowData(modifier.getSourceTable().getRowCount() - 1, inv.getId());
                         break;
                     }
@@ -2243,6 +2263,11 @@ public class VisualizarInventario extends javax.swing.JFrame {
                         InventarioBenfeitorias inv = new InventarioBenfeitorias(Cast.toString(rowData[0]), Cast.toString(rowData[1]), Cast.toDouble(rowData[2]),
                                 Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfil);
                         inv.setId(rowID);
+                        
+                        Object[] benfeitoriasRowData = tabelaBenfeitoriasGTRE.getSourceTableRowData(rowIndex);
+                        
+                        calcularValoresInvBenfeitorias(benfeitoriasRowData, rowIndex);
+                        
                         dao.update(inv);
                         break;
                     }
@@ -2283,7 +2308,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     
                     terras.setId(rowID);
                     
-                    calcularValoresInvTerras(rowData, forrageirasRowData, rowIndex);
+                    calcularValoresInvForrageiras(rowData, forrageirasRowData, rowIndex);
                     
                     dao.update(terras);
                 }
@@ -2292,6 +2317,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             }
         });
 
+        
         tabelaForrageirasGTRE.addTableModifyListener((TableModifiedEvent event) -> {
             if (event.getEventType() == TableModifiedEvent.ROW_UPDATED) {
                 
@@ -2302,7 +2328,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 
                 Object[] terrasRowData = tabelaTerrasGTRE.getSourceTableRowData(rowIndex);
                 
-                calcularValoresInvTerras(terrasRowData, rowData, rowIndex);
+                calcularValoresInvForrageiras(terrasRowData, rowData, rowIndex);
                 
                 InventarioForrageiras forrageiras;
                 
@@ -2314,10 +2340,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
             }
         });
         
-        
-        
-        
-
         TableModifyListener animaisTMListener = (TableModifiedEvent event) -> {
             GenericDAO<InventarioAnimais> dao = new GenericDAO<>(InventarioAnimais.class);
             
@@ -2326,11 +2348,13 @@ public class VisualizarInventario extends javax.swing.JFrame {
             Integer rowID = (Integer) event.getCustomRowData();
             GenericTableModifier modifier = event.getSourceModifier();
             int modifType = event.getEventType();
+            int rowIndex = event.getRowIndex();
             
             int tipoAnimal = 0;
             
             if (modifier.getSourceTable() == tabelaInveAnimaisProd) {
                 tipoAnimal = 1;
+                
             } else if (modifier.getSourceTable() == tabelaInveAnimaisServ) {
                 tipoAnimal = 2;
             }
@@ -2342,11 +2366,23 @@ public class VisualizarInventario extends javax.swing.JFrame {
                         Cast.toDouble(rowData[7]), tipoAnimal, perfil);
                 
                 if (modifType == TableModifiedEvent.ROW_INSERTED) {
+                    
+                    if(tipoAnimal == 1) {
+                        Object[] animaisProdRowData = tabelaAnimaisProdGTRE.getSourceTableRowData(rowIndex);
+                        calcularValoresInvAnimaisProd(animaisProdRowData, rowIndex);
+                    }
+                    
                     dao.insert(inv);
                     modifier.setCustomRowData(modifier.getSourceTable().getRowCount() - 1, inv.getId());
                     
                 } else if (modifType == TableModifiedEvent.ROW_UPDATED) {
                     inv.setId(rowID);
+                    
+                    if (tipoAnimal == 1) {
+                        Object[] animaisProdRowData = tabelaAnimaisProdGTRE.getSourceTableRowData(rowIndex);
+                        calcularValoresInvAnimaisProd(animaisProdRowData, rowIndex);
+                    }
+                    
                     dao.update(inv);
                 }
                 
@@ -2684,20 +2720,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
     }//GEN-LAST:event_vidaUtilServBTActionPerformed
 
     
-    private void buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonActionPerformed
-        
-        GenericTableAreaEditor gtae = new GenericTableAreaEditor(this, tabelaMaquinas, false);
-        gtae.setName("GTAE VisualizarInventario");
-        
-        gtae.setAllColumnsEditable(true);
-        gtae.setRowsDisplayed(4);
-        gtae.setColumnInterval(2, 4);
-        gtae.setRowInterval(2, 6);
-        gtae.showEditor(evt);
-        
-        //System.out.println(gtae.createLog());
-    }//GEN-LAST:event_buttonActionPerformed
-
     private void verificaTabelaVazia(DefaultTableModel table, JButton editarBtn, JButton removerBtn) {
         if (table.getRowCount() == 0) {
             editarBtn.setEnabled(false);
@@ -2736,7 +2758,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
     private javax.swing.JLabel atividadeLeite;
     private javax.swing.JButton atividadeLeiteBT;
     private javax.swing.JButton btnVoltar;
-    private javax.swing.JButton button;
     private javax.swing.JButton custoOportBT;
     private javax.swing.JLabel custoOportunidade;
     private javax.swing.JButton editarInvAnimaisBT;

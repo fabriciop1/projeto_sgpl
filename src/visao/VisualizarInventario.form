@@ -1527,9 +1527,7 @@
                       <Component id="total43" min="-2" pref="125" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="-2" pref="178" max="-2" attributes="0"/>
-                      <Component id="button" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace min="178" pref="861" max="32767" attributes="0"/>
                       <Component id="adicionarInvMaquinasBT" min="-2" pref="37" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="editarInvMaquinasBT" min="-2" pref="38" max="-2" attributes="0"/>
@@ -1554,14 +1552,11 @@
                           <Component id="total42" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel25" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="12" max="32767" attributes="0"/>
+                      <EmptySpace pref="13" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="removerInvMaquinasBT" alignment="1" min="-2" max="-2" attributes="0"/>
-                              <Component id="editarInvMaquinasBT" alignment="1" min="-2" max="-2" attributes="0"/>
-                              <Component id="adicionarInvMaquinasBT" alignment="1" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="button" min="-2" max="-2" attributes="0"/>
+                          <Component id="removerInvMaquinasBT" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="editarInvMaquinasBT" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="adicionarInvMaquinasBT" alignment="1" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -1711,14 +1706,6 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="adicionarInvMaquinasBTActionPerformed"/>
-              </Events>
-            </Component>
-            <Component class="javax.swing.JButton" name="button">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Open that crap"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>
