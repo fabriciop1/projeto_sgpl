@@ -1,15 +1,12 @@
-atualizar tela após alterações
- ------
-Colunas obrigatórias na tabela
-Inserção de valor inválido em adição/edição
+Atualizar campos totais em caso de insercao/remocao e delecao
+Ajeitar tela de edicao para inventario.
 
-inserir perfil (adm) - Problema caso o usuario insira letras em campos onde só podem números
-editar perfil  (adm, usuario do perfil) - Problema caso o usuario insira letras em campos onde só podem números
+Permitir o usuario adicionar novo ano
 
-Permitir o usuario adicionar novo periodo e editar os campos (fora a especificacao)
-
+totais em dados economicos - cor e nao editavel
+aceitar campos vazios em dados economicos
 inserção, edição de campos em Dados Econômicos
-especificacao - tabela fixa
+especificacao em editar - tabela fixa
 
 
 Adicionar Usuario
