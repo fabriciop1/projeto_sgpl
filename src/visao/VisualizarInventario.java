@@ -78,36 +78,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
         inicializarGTRE();
 
-        //Totais
-        double totalAreaArreInic = 0;
-        double totalAreaArreFina = 0;
-        double totalHa = 0;
-        double totalValorHa = 0;
-        double totalDepreciacao = 0;
-        double totalValInicProd = 0;
-        double totalValInicServ = 0;
-        double totalNascProd = 0;
-        double totalMorteProd = 0;
-        double totalVendaProd = 0;
-        double totalCompraProd = 0;
-        double totalNascServ = 0;
-        double totalMorteServ = 0;
-        double totalVendaServ = 0;
-        double totalCompraServ = 0;
-        double totalValFinaProd = 0;
-        double totalValorInicio = 0;
-        double totalValorFinal = 0;
-        double totalValorBenfeit = 0;
-        double totalValorMaquin = 0;
-        double totalDeprecBenfeit = 0;
-        double totalDeprecMaquin = 0;
-
-        ArrayList<Double> totalAreaPropInic = new ArrayList<>();
-        ArrayList<Double> totalAreaPropFina = new ArrayList<>();
-        ArrayList<Double> totalTerraNua = new ArrayList<>();
-        ArrayList<Double> totalValFinaServ = new ArrayList<>();
-        ArrayList<Double> totalValCabeServ = new ArrayList<>();
-
         itdao = new GenericDAO<>(InventarioTerras.class);
         iadao = new GenericDAO<>(InventarioAnimais.class);
         ibdao = new GenericDAO<>(InventarioBenfeitorias.class);
@@ -138,252 +108,20 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
         }
 
-        tabelaTerrasGTRE.getSourceTableModel().setRowCount(0);
+        //Terras
+        calcularAbaTerras(forrageiras, terras);
 
-        for (int i = 0; i < terras.size(); i++) {
-
-            tabelaTerrasGTRE.addSourceTableRow(new Object[]{
-                terras.get(i).getEspecificacao(),
-                terras.get(i).getAreaArrendadaInicio(),
-                terras.get(i).getAreaPropriaInicio(),
-                terras.get(i).getAreaArrendadaFinal(),
-                terras.get(i).getAreaPropriaFinal(),
-                terras.get(i).getValorTerraNuaPropria(),}, terras.get(i).getId());
-
-            totalAreaArreInic += (terras.get(i).getAreaArrendadaInicio());
-            totalAreaPropInic.add(terras.get(i).getAreaPropriaInicio());
-            totalAreaArreFina += (terras.get(i).getAreaArrendadaFinal());
-            totalAreaPropFina.add(terras.get(i).getAreaPropriaFinal());
-            totalTerraNua.add(terras.get(i).getValorTerraNuaPropria());
-
-        }
-        verificaTabelaVazia(tabelaTerrasGTRE.getSourceTableModel(), editarInvTerrasBT, removerInvTerrasBT);
-
-        tabelaForrageirasGTRE.getSourceTableModel().setRowCount(0);
-
-        for (int i = 0; i < terras.size() && i < forrageiras.size(); i++) {
-
-            double ha = (terras.get(i).getAreaPropriaInicio() + terras.get(i).getAreaPropriaFinal()) / 2;
-            double valorHa = forrageiras.get(i).getCustoFormacaoHectare() * ha;
-            double depreciacao = valorHa / forrageiras.get(i).getVidaUtil();
-
-            tabelaForrageirasGTRE.addSourceTableRow(new Object[]{
-                terras.get(i).getEspecificacao(),
-                forrageiras.get(i).getCustoFormacaoHectare(),
-                ha,
-                valorHa,
-                forrageiras.get(i).getVidaUtil(),
-                depreciacao,}, terras.get(i).getId());
-
-            totalHa += (ha);
-            totalValorHa += (valorHa);
-            totalDepreciacao += (depreciacao);
-        }
-        verificaTabelaVazia(tabelaForrageirasGTRE.getSourceTableModel(), editarInvTerrasBT, removerInvTerrasBT);
-
-        total1.setText("" + (totalAreaArreInic));
-        total2.setText("" + Calc.somarLista(totalAreaPropInic));
-        total3.setText("" + (totalAreaArreFina));
-        total4.setText("" + Calc.somarLista(totalAreaPropFina));
-        total5.setText("" + (Double.parseDouble(total1.getText()) + Double.parseDouble(total2.getText())));
-        total6.setText("" + (Double.parseDouble(total3.getText()) + Double.parseDouble(total4.getText())));
-        total7.setText(String.format("R$ %.2f", Calc.somaPonderada(totalAreaPropInic, totalTerraNua)).replace(',', '.'));
-        total8.setText(String.format("R$ %.2f", Calc.somaPonderada(totalAreaPropFina, totalTerraNua)).replace(',', '.'));
-        total9.setText(String.format("R$ %.2f", Calc.mediaAritmetica(Double.parseDouble(total7.getText().substring(2)), Double.parseDouble(total8.getText().substring(2)))).replace(',', '.'));
-        total10.setText("" + (totalHa));
-        total11.setText(String.format("R$ %.2f", totalValorHa));
-        total12.setText(String.format("R$ %.2f", totalDepreciacao));
-
-        tabelaAnimaisProdGTRE.getSourceTableModel().setRowCount(0);
-        tabelaAnimaisServGTRE.getSourceTableModel().setRowCount(0);
-
-        for (int i = 0; i < animais.size(); i++) {
-            if (animais.get(i).getTipoAnimal() == 1) { //Producao
-
-                double valorInicio = animais.get(i).getValorInicio() * animais.get(i).getValorCabeca();
-                double valorFinal = animais.get(i).getValorFinal() * animais.get(i).getValorCabeca();
-
-                if (animais.get(i).getCategoria().equals("Touro")) {
-                    total34.setText(String.format("R$ %.2f", Calc.mediaAritmetica(valorInicio, valorFinal)));
-                }
-
-                tabelaAnimaisProdGTRE.addSourceTableRow(new Object[]{
-                    animais.get(i).getCategoria(),
-                    animais.get(i).getValorInicio(),
-                    animais.get(i).getNascimento(),
-                    animais.get(i).getMorte(),
-                    animais.get(i).getVenda(),
-                    animais.get(i).getCompra(),
-                    animais.get(i).getValorFinal(),
-                    animais.get(i).getValorCabeca(),
-                    valorInicio,
-                    valorFinal,}, animais.get(i).getId());
-
-                totalValInicProd += (animais.get(i).getValorInicio() * 1.0);
-                totalNascProd += (animais.get(i).getNascimento() * 1.0);
-                totalMorteProd += (animais.get(i).getMorte() * 1.0);
-                totalVendaProd += (animais.get(i).getVenda() * 1.0);
-                totalCompraProd += (animais.get(i).getCompra() * 1.0);
-                totalValFinaProd += (animais.get(i).getValorFinal() * 1.0);
-                totalValorInicio += (valorInicio);
-                totalValorFinal += (valorFinal);
-
-            } else if (animais.get(i).getTipoAnimal() == 2) { //servico
-
-                tabelaAnimaisServGTRE.addSourceTableRow(new Object[]{
-                    animais.get(i).getCategoria(),
-                    animais.get(i).getValorInicio(),
-                    animais.get(i).getNascimento(),
-                    animais.get(i).getMorte(),
-                    animais.get(i).getVenda(),
-                    animais.get(i).getCompra(),
-                    animais.get(i).getValorFinal(),
-                    animais.get(i).getValorCabeca(),}, animais.get(i).getId());
-
-                totalValInicServ += (animais.get(i).getValorInicio() * 1.0);
-                totalNascServ += (animais.get(i).getNascimento() * 1.0);
-                totalMorteServ += (animais.get(i).getMorte() * 1.0);
-                totalVendaServ += (animais.get(i).getVenda() * 1.0);
-                totalCompraServ += (animais.get(i).getCompra() * 1.0);
-                totalValFinaServ.add(animais.get(i).getValorFinal() * 1.0);
-                totalValCabeServ.add(animais.get(i).getValorCabeca() * 1.0);
-            }
-
-        }
-        if (tabelaInveAnimaisProd.getRowCount() == 0 && tabelaInveAnimaisServ.getRowCount() == 0) {
-            editarInvAnimaisBT.setEnabled(false);
-            removerInvAnimaisBT.setEnabled(false);
-        }
-
-        total13.setText("" + (totalValInicProd));
-        total14.setText("" + (totalNascProd));
-        total15.setText("" + (totalMorteProd));
-        total16.setText("" + (totalVendaProd));
-        total17.setText("" + (totalCompraProd));
-        total18.setText("" + (totalValFinaProd));
-
-        total19.setText(String.format("R$ %.2f", totalValorInicio));
-        total20.setText(String.format("R$ %.2f", totalValorFinal));
-        total21.setText("" + (totalValInicServ));
-        total22.setText("" + (totalNascServ));
-        total23.setText("" + (totalMorteServ));
-        total24.setText("" + (totalVendaServ));
-        total25.setText("" + (totalCompraServ));
-        total26.setText("" + Calc.somarLista(totalValFinaServ));
-
-        total28.setText("" + (Double.parseDouble(total13.getText().replace(',', '.'))
-                + Double.parseDouble(total21.getText().replace(',', '.'))));
-        total29.setText("" + (Double.parseDouble(total26.getText().replace(',', '.'))
-                + Double.parseDouble(total18.getText().replace(',', '.'))));
-
-        total31.setText(String.format("R$ %.2f", ((Double.parseDouble(total19.getText().substring(2).replace(',', '.'))
-                + Double.parseDouble(total20.getText().substring(2).replace(',', '.'))) / 2)));
-
-        if (resumo != null) {
-            total32.setText(String.format("R$ %.2f", resumo.getValorGastoCompraAnimais()));
-            total35.setText(String.format("%d", resumo.getVidaUtilReprodutores()));
-        }
-
-        total33.setText(String.format("R$ %.2f", (Double.parseDouble(total20.getText().substring(2).replace(',', '.'))
-                - Double.parseDouble(total19.getText().substring(2).replace(',', '.')) - Double.parseDouble(total32.getText().substring(2).replace(',', '.')))));
-
-        total36.setText(String.format("%.2f", Calc.dividir(Double.parseDouble(total34.getText().substring(2).replace(',', '.')),
-                    Double.parseDouble(total35.getText().replace(',', '.')))));
-        
-        total37.setText(String.format("R$ %.2f", Calc.somaPonderada(totalValFinaServ, totalValCabeServ)));
-
-        if (resumo != null) {
-            total38.setText(String.format("%d", resumo.getVidaUtilAnimaisServico()));
-        }
-
-        total39.setText(String.format("%.2f", Calc.dividir(Double.parseDouble(total37.getText().substring(2).replace(',', '.')),
-            Double.parseDouble(total38.getText().replace(',', '.')))));
+        //Animais
+        calcularAbaAnimais(animais);
        
-        tabelaBenfeitoriasGTRE.getSourceTableModel().setRowCount(0);
-
-        for (int i = 0; i < benfeitorias.size(); i++) {
-
-            double total = benfeitorias.get(i).getQuantidade() * benfeitorias.get(i).getValorUnitario();
-            double depreciacao = Calc.dividir(total, benfeitorias.get(i).getVidaUtil());
-
-            tabelaBenfeitoriasGTRE.addSourceTableRow(new Object[]{
-                benfeitorias.get(i).getEspecificacao(),
-                benfeitorias.get(i).getUnidade(),
-                benfeitorias.get(i).getQuantidade(),
-                benfeitorias.get(i).getValorUnitario(),
-                total,
-                benfeitorias.get(i).getVidaUtil(),
-                depreciacao,}, benfeitorias.get(i).getId());
-
-            totalValorBenfeit += (total);
-            totalDeprecBenfeit += (depreciacao);
-        }
-
-        verificaTabelaVazia(tabelaBenfeitoriasGTRE.getSourceTableModel(), editarInvBenfeitoriasBT, removerInvBenfeitoriasBT);
-
-        total40.setText(String.format("R$ %.2f", totalValorBenfeit));
-        total41.setText(String.format("R$ %.2f", totalDeprecBenfeit));
-        tabelaMaquinasGTRE.getSourceTableModel().setRowCount(0);
-
-        for (int i = 0; i < maquinas.size(); i++) {
-
-            double total = maquinas.get(i).getQuantidade() * maquinas.get(i).getValorUnitario();
-            double depreciacao = Calc.dividir(total, maquinas.get(i).getVidaUtil());
-
-            tabelaMaquinasGTRE.addSourceTableRow(new Object[]{
-                maquinas.get(i).getEspecificacao(),
-                maquinas.get(i).getUnidade(),
-                maquinas.get(i).getQuantidade(),
-                maquinas.get(i).getValorUnitario(),
-                total,
-                maquinas.get(i).getVidaUtil(),
-                depreciacao,}, maquinas.get(i).getId());
-
-            totalValorMaquin += (total);
-            totalDeprecMaquin += (depreciacao);
-        }
-        verificaTabelaVazia(tabelaMaquinasGTRE.getSourceTableModel(), editarInvMaquinasBT, removerInvMaquinasBT);
-
-        total42.setText(String.format("R$ %.2f", totalValorMaquin));
-        total43.setText(String.format("R$ %.2f", totalDeprecMaquin));
+        //Benfeitorias
+        calcularAbaBenfeitorias(benfeitorias);
+        
+        //Maquinas
+        calcularAbaMaquinas(maquinas);
 
         //Resumo
-        if (resumo != null) {
-            atividadeLeite.setText(String.format("%.2f", resumo.getAtividadeLeiteira()));
-            custoOportunidade.setText(String.format("%.2f", resumo.getCustoOportunidade()));
-            salarioMinimo.setText(String.format("%.2f", resumo.getSalarioMinimo()));
-        }
-
-        total44.setText(total12.getText().substring(2));
-        total45.setText(total39.getText());
-        total46.setText(total36.getText());
-        total47.setText(String.format("%.2f", (Double.parseDouble(total41.getText().substring(2).replace(',', '.')))));
-        total48.setText(total43.getText().substring(2));
-        total49.setText(String.format("R$ %.2f", (Double.parseDouble(total44.getText().replace(',', '.'))
-                + Double.parseDouble(total45.getText().replace(',', '.'))
-                + Double.parseDouble(total46.getText().replace(',', '.'))
-                + Double.parseDouble(total47.getText().replace(',', '.'))
-                + Double.parseDouble(total48.getText().replace(',', '.')))));
-        total50.setText(String.format("R$ %.2f", ((Double.parseDouble(atividadeLeite.getText().replace(',', '.')) / 100)
-                * Double.parseDouble(total49.getText().substring(2).replace(',', '.')))));
-
-        total51.setText(total9.getText().substring(2));
-        total52.setText(total12.getText().substring(2));
-        total53.setText(total31.getText().substring(2));
-        total54.setText(total40.getText().substring(2));
-        total55.setText(total42.getText().substring(2));
-        total56.setText(String.format("R$ %.2f", (Double.parseDouble(total51.getText())
-                + Double.parseDouble(total52.getText().replace(',', '.'))
-                + Double.parseDouble(total53.getText().replace(',', '.'))
-                + Double.parseDouble(total54.getText().replace(',', '.'))
-                + Double.parseDouble(total55.getText().replace(',', '.')))));
-        total57.setText(String.format("R$ %.2f", ((Double.parseDouble(custoOportunidade.getText().replace(',', '.'))) / 100
-                * Double.parseDouble(total56.getText().substring(2).replace(',', '.')))));
-
-        total58.setText(salarioMinimo.getText());
-        total59.setText(String.format("%.2f", (Double.parseDouble(salarioMinimo.getText().replace(',', '.')) * 0.3)));
-        total60.setText(String.format("R$ %.2f", ((Double.parseDouble(total58.getText().replace(',', '.')) * 13
-                + (Double.parseDouble(total58.getText().replace(',', '.'))) * 0.3)) / 12));
+        calcularAbaResumo();
 
         definirBDListeners();
     }
@@ -1693,7 +1431,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 20, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(2, 20, 0, 10);
         jPanel5.add(jLabel32, gridBagConstraints);
 
         jLabel33.setText("Leite/atividade leiteira (%)");
@@ -1767,7 +1505,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 15;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 20, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(2, 20, 0, 10);
         jPanel5.add(jLabel41, gridBagConstraints);
 
         jLabel42.setText("Salário mínimo (R$)");
@@ -1835,6 +1573,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 15;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(total44, gridBagConstraints);
 
@@ -1845,6 +1584,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 15;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(total45, gridBagConstraints);
 
@@ -1855,6 +1595,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 15;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(total46, gridBagConstraints);
 
@@ -1865,6 +1606,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 15;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(total47, gridBagConstraints);
 
@@ -1875,6 +1617,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 15;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(total48, gridBagConstraints);
 
@@ -1885,6 +1628,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(total49, gridBagConstraints);
 
@@ -1895,6 +1639,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(total50, gridBagConstraints);
 
@@ -1905,6 +1650,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.gridy = 10;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(total51, gridBagConstraints);
 
@@ -1915,6 +1661,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.gridy = 11;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(total52, gridBagConstraints);
 
@@ -1925,6 +1672,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.gridy = 12;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(total53, gridBagConstraints);
 
@@ -1935,6 +1683,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.gridy = 13;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(total54, gridBagConstraints);
 
@@ -1945,6 +1694,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.gridy = 14;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(total55, gridBagConstraints);
 
@@ -1955,6 +1705,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 15;
         gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(total56, gridBagConstraints);
 
@@ -1965,6 +1716,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 17;
         gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(total57, gridBagConstraints);
 
@@ -1975,6 +1727,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.gridy = 20;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 14;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(total58, gridBagConstraints);
 
@@ -1985,6 +1738,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.gridy = 21;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 14;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(total59, gridBagConstraints);
 
@@ -1995,6 +1749,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 22;
         gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(total60, gridBagConstraints);
 
@@ -2060,6 +1815,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(atividadeLeite, gridBagConstraints);
 
@@ -2069,6 +1825,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.gridy = 16;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(custoOportunidade, gridBagConstraints);
 
@@ -2078,6 +1835,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         gridBagConstraints.gridy = 19;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(1, 1, 1, 1);
         jPanel5.add(salarioMinimo, gridBagConstraints);
 
@@ -2162,6 +1920,296 @@ public class VisualizarInventario extends javax.swing.JFrame {
         for(int i = 0; i < tabelaInveAnimaisProd.getColumnCount(); i++) {
             tabelaInveAnimaisProd.setValueAt(animaisProdRowData[i], animaisProdRow, i);
         }
+    }
+    
+    private void calcularAbaResumo(){
+        if (resumo != null) {
+            atividadeLeite.setText(String.format("%.2f", resumo.getAtividadeLeiteira()));
+            custoOportunidade.setText(String.format("%.2f", resumo.getCustoOportunidade()));
+            salarioMinimo.setText(String.format("%.2f", resumo.getSalarioMinimo()));
+        }
+
+        total44.setText(total12.getText().substring(2));
+        total45.setText(total39.getText());
+        total46.setText(total36.getText());
+        total47.setText(String.format("%.2f", (Double.parseDouble(total41.getText().substring(2).replace(',', '.')))));
+        total48.setText(total43.getText().substring(2));
+        total49.setText(String.format("R$ %.2f", (Double.parseDouble(total44.getText().replace(',', '.'))
+                + Double.parseDouble(total45.getText().replace(',', '.'))
+                + Double.parseDouble(total46.getText().replace(',', '.'))
+                + Double.parseDouble(total47.getText().replace(',', '.'))
+                + Double.parseDouble(total48.getText().replace(',', '.')))));
+        total50.setText(String.format("R$ %.2f", ((Double.parseDouble(atividadeLeite.getText().replace(',', '.')) / 100)
+                * Double.parseDouble(total49.getText().substring(2).replace(',', '.')))));
+
+        total51.setText(total9.getText().substring(2));
+        total52.setText(total12.getText().substring(2));
+        total53.setText(total31.getText().substring(2));
+        total54.setText(total40.getText().substring(2));
+        total55.setText(total42.getText().substring(2));
+        total56.setText(String.format("R$ %.2f", (Double.parseDouble(total51.getText())
+                + Double.parseDouble(total52.getText().replace(',', '.'))
+                + Double.parseDouble(total53.getText().replace(',', '.'))
+                + Double.parseDouble(total54.getText().replace(',', '.'))
+                + Double.parseDouble(total55.getText().replace(',', '.')))));
+        total57.setText(String.format("R$ %.2f", ((Double.parseDouble(custoOportunidade.getText().replace(',', '.'))) / 100
+                * Double.parseDouble(total56.getText().substring(2).replace(',', '.')))));
+
+        total58.setText(salarioMinimo.getText());
+        total59.setText(String.format("%.2f", (Double.parseDouble(salarioMinimo.getText().replace(',', '.')) * 0.3)));
+        total60.setText(String.format("R$ %.2f", ((Double.parseDouble(total58.getText().replace(',', '.')) * 13
+                + (Double.parseDouble(total58.getText().replace(',', '.'))) * 0.3)) / 12));
+    }
+    
+    private void calcularAbaMaquinas(List<InventarioMaquinas> maquinas){
+        tabelaMaquinasGTRE.getSourceTableModel().setRowCount(0);
+        
+        double totalValorMaquin = 0;
+        double totalDeprecMaquin = 0;
+
+        for (int i = 0; i < maquinas.size(); i++) {
+
+            double total = maquinas.get(i).getQuantidade() * maquinas.get(i).getValorUnitario();
+            double depreciacao = Calc.dividir(total, maquinas.get(i).getVidaUtil());
+
+            tabelaMaquinasGTRE.addSourceTableRow(new Object[]{
+                maquinas.get(i).getEspecificacao(),
+                maquinas.get(i).getUnidade(),
+                maquinas.get(i).getQuantidade(),
+                maquinas.get(i).getValorUnitario(),
+                total,
+                maquinas.get(i).getVidaUtil(),
+                depreciacao,}, maquinas.get(i).getId());
+
+            totalValorMaquin += (total);
+            totalDeprecMaquin += (depreciacao);
+        }
+        verificaTabelaVazia(tabelaMaquinasGTRE.getSourceTableModel(), editarInvMaquinasBT, removerInvMaquinasBT);
+
+        total42.setText(String.format("R$ %.2f", totalValorMaquin));
+        total43.setText(String.format("R$ %.2f", totalDeprecMaquin));
+    }
+    
+    private void calcularAbaBenfeitorias(List<InventarioBenfeitorias> benfeitorias){
+        tabelaBenfeitoriasGTRE.getSourceTableModel().setRowCount(0);
+        
+        double totalValorBenfeit = 0;
+        double totalDeprecBenfeit = 0;
+
+        for (int i = 0; i < benfeitorias.size(); i++) {
+
+            double total = benfeitorias.get(i).getQuantidade() * benfeitorias.get(i).getValorUnitario();
+            double depreciacao = Calc.dividir(total, benfeitorias.get(i).getVidaUtil());
+
+            tabelaBenfeitoriasGTRE.addSourceTableRow(new Object[]{
+                benfeitorias.get(i).getEspecificacao(),
+                benfeitorias.get(i).getUnidade(),
+                benfeitorias.get(i).getQuantidade(),
+                benfeitorias.get(i).getValorUnitario(),
+                total,
+                benfeitorias.get(i).getVidaUtil(),
+                depreciacao,}, benfeitorias.get(i).getId());
+
+            totalValorBenfeit += (total);
+            totalDeprecBenfeit += (depreciacao);
+        }
+
+        verificaTabelaVazia(tabelaBenfeitoriasGTRE.getSourceTableModel(), editarInvBenfeitoriasBT, removerInvBenfeitoriasBT);
+
+        total40.setText(String.format("R$ %.2f", totalValorBenfeit));
+        total41.setText(String.format("R$ %.2f", totalDeprecBenfeit));
+    }
+    
+    private void calcularAbaAnimais(List<InventarioAnimais> animais){
+        tabelaAnimaisProdGTRE.getSourceTableModel().setRowCount(0);
+        tabelaAnimaisServGTRE.getSourceTableModel().setRowCount(0);
+        
+        double totalValInicProd = 0;
+        double totalValInicServ = 0;
+        double totalNascProd = 0;
+        double totalMorteProd = 0;
+        double totalVendaProd = 0;
+        double totalCompraProd = 0;
+        double totalNascServ = 0;
+        double totalMorteServ = 0;
+        double totalVendaServ = 0;
+        double totalCompraServ = 0;
+        double totalValFinaProd = 0;
+        double totalValorInicio = 0;
+        double totalValorFinal = 0;
+        
+        ArrayList<Double> totalValFinaServ = new ArrayList<>();
+        ArrayList<Double> totalValCabeServ = new ArrayList<>();
+
+        for (int i = 0; i < animais.size(); i++) {
+            if (animais.get(i).getTipoAnimal() == 1) { //Producao
+
+                double valorInicio = animais.get(i).getValorInicio() * animais.get(i).getValorCabeca();
+                double valorFinal = animais.get(i).getValorFinal() * animais.get(i).getValorCabeca();
+
+                if (animais.get(i).getCategoria().equals("Touro")) {
+                    total34.setText(String.format("R$ %.2f", Calc.mediaAritmetica(valorInicio, valorFinal)));
+                }
+
+                tabelaAnimaisProdGTRE.addSourceTableRow(new Object[]{
+                    animais.get(i).getCategoria(),
+                    animais.get(i).getValorInicio(),
+                    animais.get(i).getNascimento(),
+                    animais.get(i).getMorte(),
+                    animais.get(i).getVenda(),
+                    animais.get(i).getCompra(),
+                    animais.get(i).getValorFinal(),
+                    animais.get(i).getValorCabeca(),
+                    valorInicio,
+                    valorFinal,}, animais.get(i).getId());
+
+                totalValInicProd += (animais.get(i).getValorInicio() * 1.0);
+                totalNascProd += (animais.get(i).getNascimento() * 1.0);
+                totalMorteProd += (animais.get(i).getMorte() * 1.0);
+                totalVendaProd += (animais.get(i).getVenda() * 1.0);
+                totalCompraProd += (animais.get(i).getCompra() * 1.0);
+                totalValFinaProd += (animais.get(i).getValorFinal() * 1.0);
+                totalValorInicio += (valorInicio);
+                totalValorFinal += (valorFinal);
+
+            } else if (animais.get(i).getTipoAnimal() == 2) { //servico
+
+                tabelaAnimaisServGTRE.addSourceTableRow(new Object[]{
+                    animais.get(i).getCategoria(),
+                    animais.get(i).getValorInicio(),
+                    animais.get(i).getNascimento(),
+                    animais.get(i).getMorte(),
+                    animais.get(i).getVenda(),
+                    animais.get(i).getCompra(),
+                    animais.get(i).getValorFinal(),
+                    animais.get(i).getValorCabeca(),}, animais.get(i).getId());
+
+                totalValInicServ += (animais.get(i).getValorInicio() * 1.0);
+                totalNascServ += (animais.get(i).getNascimento() * 1.0);
+                totalMorteServ += (animais.get(i).getMorte() * 1.0);
+                totalVendaServ += (animais.get(i).getVenda() * 1.0);
+                totalCompraServ += (animais.get(i).getCompra() * 1.0);
+                totalValFinaServ.add(animais.get(i).getValorFinal() * 1.0);
+                totalValCabeServ.add(animais.get(i).getValorCabeca() * 1.0);
+            }
+
+        }
+        if (tabelaInveAnimaisProd.getRowCount() == 0 && tabelaInveAnimaisServ.getRowCount() == 0) {
+            editarInvAnimaisBT.setEnabled(false);
+            removerInvAnimaisBT.setEnabled(false);
+        }
+
+        total13.setText("" + (totalValInicProd));
+        total14.setText("" + (totalNascProd));
+        total15.setText("" + (totalMorteProd));
+        total16.setText("" + (totalVendaProd));
+        total17.setText("" + (totalCompraProd));
+        total18.setText("" + (totalValFinaProd));
+
+        total19.setText(String.format("R$ %.2f", totalValorInicio));
+        total20.setText(String.format("R$ %.2f", totalValorFinal));
+        total21.setText("" + (totalValInicServ));
+        total22.setText("" + (totalNascServ));
+        total23.setText("" + (totalMorteServ));
+        total24.setText("" + (totalVendaServ));
+        total25.setText("" + (totalCompraServ));
+        total26.setText("" + Calc.somarLista(totalValFinaServ));
+
+        total28.setText("" + (Double.parseDouble(total13.getText().replace(',', '.'))
+                + Double.parseDouble(total21.getText().replace(',', '.'))));
+        total29.setText("" + (Double.parseDouble(total26.getText().replace(',', '.'))
+                + Double.parseDouble(total18.getText().replace(',', '.'))));
+
+        total31.setText(String.format("R$ %.2f", ((Double.parseDouble(total19.getText().substring(2).replace(',', '.'))
+                + Double.parseDouble(total20.getText().substring(2).replace(',', '.'))) / 2)));
+
+        if (resumo != null) {
+            total32.setText(String.format("R$ %.2f", resumo.getValorGastoCompraAnimais()));
+            total35.setText(String.format("%d", resumo.getVidaUtilReprodutores()));
+        }
+
+        total33.setText(String.format("R$ %.2f", (Double.parseDouble(total20.getText().substring(2).replace(',', '.'))
+                - Double.parseDouble(total19.getText().substring(2).replace(',', '.')) - Double.parseDouble(total32.getText().substring(2).replace(',', '.')))));
+
+        total36.setText(String.format("%.2f", Calc.dividir(Double.parseDouble(total34.getText().substring(2).replace(',', '.')),
+                    Double.parseDouble(total35.getText().replace(',', '.')))));
+        
+        total37.setText(String.format("R$ %.2f", Calc.somaPonderada(totalValFinaServ, totalValCabeServ)));
+
+        if (resumo != null) {
+            total38.setText(String.format("%d", resumo.getVidaUtilAnimaisServico()));
+        }
+
+        total39.setText(String.format("%.2f", Calc.dividir(Double.parseDouble(total37.getText().substring(2).replace(',', '.')),
+            Double.parseDouble(total38.getText().replace(',', '.')))));
+    }
+    
+    private void calcularAbaTerras(List<InventarioForrageiras> forrageiras, List<InventarioTerras> terras){
+        tabelaTerrasGTRE.getSourceTableModel().setRowCount(0);
+        
+        double totalAreaArreInic = 0;
+        double totalAreaArreFina = 0;
+        double totalHa = 0;
+        double totalValorHa = 0;
+        double totalDepreciacao = 0;
+
+        ArrayList<Double> totalAreaPropInic = new ArrayList<>();
+        ArrayList<Double> totalAreaPropFina = new ArrayList<>();
+        ArrayList<Double> totalTerraNua = new ArrayList<>();
+
+        for (int i = 0; i < terras.size(); i++) {
+
+            tabelaTerrasGTRE.addSourceTableRow(new Object[]{
+                terras.get(i).getEspecificacao(),
+                terras.get(i).getAreaArrendadaInicio(),
+                terras.get(i).getAreaPropriaInicio(),
+                terras.get(i).getAreaArrendadaFinal(),
+                terras.get(i).getAreaPropriaFinal(),
+                terras.get(i).getValorTerraNuaPropria(),}, terras.get(i).getId());
+
+            totalAreaArreInic += (terras.get(i).getAreaArrendadaInicio());
+            totalAreaPropInic.add(terras.get(i).getAreaPropriaInicio());
+            totalAreaArreFina += (terras.get(i).getAreaArrendadaFinal());
+            totalAreaPropFina.add(terras.get(i).getAreaPropriaFinal());
+            totalTerraNua.add(terras.get(i).getValorTerraNuaPropria());
+
+        }
+        verificaTabelaVazia(tabelaTerrasGTRE.getSourceTableModel(), editarInvTerrasBT, removerInvTerrasBT);
+
+        tabelaForrageirasGTRE.getSourceTableModel().setRowCount(0);
+
+        for (int i = 0; i < terras.size() && i < forrageiras.size(); i++) {
+
+            double ha = (terras.get(i).getAreaPropriaInicio() + terras.get(i).getAreaPropriaFinal()) / 2;
+            double valorHa = forrageiras.get(i).getCustoFormacaoHectare() * ha;
+            double depreciacao = valorHa / forrageiras.get(i).getVidaUtil();
+
+            tabelaForrageirasGTRE.addSourceTableRow(new Object[]{
+                terras.get(i).getEspecificacao(),
+                forrageiras.get(i).getCustoFormacaoHectare(),
+                ha,
+                valorHa,
+                forrageiras.get(i).getVidaUtil(),
+                depreciacao,}, terras.get(i).getId());
+
+            totalHa += (ha);
+            totalValorHa += (valorHa);
+            totalDepreciacao += (depreciacao);
+        }
+        verificaTabelaVazia(tabelaForrageirasGTRE.getSourceTableModel(), editarInvTerrasBT, removerInvTerrasBT);
+
+        total1.setText("" + (totalAreaArreInic));
+        total2.setText("" + Calc.somarLista(totalAreaPropInic));
+        total3.setText("" + (totalAreaArreFina));
+        total4.setText("" + Calc.somarLista(totalAreaPropFina));
+        total5.setText("" + (Double.parseDouble(total1.getText()) + Double.parseDouble(total2.getText())));
+        total6.setText("" + (Double.parseDouble(total3.getText()) + Double.parseDouble(total4.getText())));
+        total7.setText(String.format("R$ %.2f", Calc.somaPonderada(totalAreaPropInic, totalTerraNua)).replace(',', '.'));
+        total8.setText(String.format("R$ %.2f", Calc.somaPonderada(totalAreaPropFina, totalTerraNua)).replace(',', '.'));
+        total9.setText(String.format("R$ %.2f", Calc.mediaAritmetica(Double.parseDouble(total7.getText().substring(2)), Double.parseDouble(total8.getText().substring(2)))).replace(',', '.'));
+        total10.setText("" + (totalHa));
+        total11.setText(String.format("R$ %.2f", totalValorHa));
+        total12.setText(String.format("R$ %.2f", totalDepreciacao));
     }
     
     private void inicializarGTRE() {
@@ -2280,6 +2328,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         });
 
         tabelaTerrasGTRE.addTableModifyListener((TableModifiedEvent event) -> {
+            
             GenericDAO<InventarioTerras> dao = new GenericDAO<>(InventarioTerras.class);
             Perfil perfil = ControlePerfil.getInstance().getPerfilSelecionado();
             

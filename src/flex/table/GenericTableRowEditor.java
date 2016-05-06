@@ -8,6 +8,7 @@ package flex.table;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -31,6 +32,7 @@ public class GenericTableRowEditor extends GenericTableModifier {
         
         super.composeEditTable();
         super.setRebuildEditTable(false);
+        super.getEditTableScroll().setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         
     }
     

@@ -1793,7 +1793,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                  <GridBagConstraints gridX="0" gridY="6" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="20" insetsBottom="0" insetsRight="0" anchor="13" weightX="0.0" weightY="0.0"/>
+                  <GridBagConstraints gridX="0" gridY="6" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="20" insetsBottom="0" insetsRight="10" anchor="13" weightX="0.0" weightY="0.0"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -1889,7 +1889,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                  <GridBagConstraints gridX="0" gridY="15" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="20" insetsBottom="0" insetsRight="0" anchor="13" weightX="0.0" weightY="0.0"/>
+                  <GridBagConstraints gridX="0" gridY="15" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="20" insetsBottom="0" insetsRight="10" anchor="13" weightX="0.0" weightY="0.0"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -1976,7 +1976,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                  <GridBagConstraints gridX="1" gridY="1" gridWidth="2" gridHeight="1" fill="0" ipadX="15" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="10" weightX="0.0" weightY="0.0"/>
+                  <GridBagConstraints gridX="1" gridY="1" gridWidth="2" gridHeight="1" fill="0" ipadX="15" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="13" weightX="0.0" weightY="0.0"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -1987,7 +1987,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                  <GridBagConstraints gridX="1" gridY="2" gridWidth="2" gridHeight="1" fill="0" ipadX="15" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="10" weightX="0.0" weightY="0.0"/>
+                  <GridBagConstraints gridX="1" gridY="2" gridWidth="2" gridHeight="1" fill="0" ipadX="15" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="13" weightX="0.0" weightY="0.0"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -1998,7 +1998,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                  <GridBagConstraints gridX="1" gridY="3" gridWidth="2" gridHeight="1" fill="0" ipadX="15" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="10" weightX="0.0" weightY="0.0"/>
+                  <GridBagConstraints gridX="1" gridY="3" gridWidth="2" gridHeight="1" fill="0" ipadX="15" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="13" weightX="0.0" weightY="0.0"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -2009,7 +2009,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                  <GridBagConstraints gridX="1" gridY="4" gridWidth="2" gridHeight="1" fill="0" ipadX="15" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="10" weightX="0.0" weightY="0.0"/>
+                  <GridBagConstraints gridX="1" gridY="4" gridWidth="2" gridHeight="1" fill="0" ipadX="15" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="13" weightX="0.0" weightY="0.0"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -2020,7 +2020,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                  <GridBagConstraints gridX="1" gridY="5" gridWidth="2" gridHeight="1" fill="0" ipadX="15" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="10" weightX="0.0" weightY="0.0"/>
+                  <GridBagConstraints gridX="1" gridY="5" gridWidth="2" gridHeight="1" fill="0" ipadX="15" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="13" weightX="0.0" weightY="0.0"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -2034,7 +2034,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                  <GridBagConstraints gridX="1" gridY="6" gridWidth="2" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="10" weightX="0.0" weightY="0.0"/>
+                  <GridBagConstraints gridX="1" gridY="6" gridWidth="2" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="13" weightX="0.0" weightY="0.0"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -2045,7 +2045,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                  <GridBagConstraints gridX="1" gridY="8" gridWidth="2" gridHeight="1" fill="0" ipadX="4" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="10" weightX="0.0" weightY="0.0"/>
+                  <GridBagConstraints gridX="1" gridY="8" gridWidth="2" gridHeight="1" fill="0" ipadX="4" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="13" weightX="0.0" weightY="0.0"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -2056,7 +2056,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                  <GridBagConstraints gridX="1" gridY="10" gridWidth="2" gridHeight="1" fill="0" ipadX="8" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="10" weightX="0.0" weightY="0.0"/>
+                  <GridBagConstraints gridX="1" gridY="10" gridWidth="2" gridHeight="1" fill="0" ipadX="8" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="13" weightX="0.0" weightY="0.0"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -2067,7 +2067,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                  <GridBagConstraints gridX="1" gridY="11" gridWidth="2" gridHeight="1" fill="0" ipadX="8" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="10" weightX="0.0" weightY="0.0"/>
+                  <GridBagConstraints gridX="1" gridY="11" gridWidth="2" gridHeight="1" fill="0" ipadX="8" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="13" weightX="0.0" weightY="0.0"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -2078,7 +2078,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                  <GridBagConstraints gridX="1" gridY="12" gridWidth="2" gridHeight="1" fill="0" ipadX="8" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="10" weightX="0.0" weightY="0.0"/>
+                  <GridBagConstraints gridX="1" gridY="12" gridWidth="2" gridHeight="1" fill="0" ipadX="8" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="13" weightX="0.0" weightY="0.0"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -2089,7 +2089,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                  <GridBagConstraints gridX="1" gridY="13" gridWidth="2" gridHeight="1" fill="0" ipadX="8" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="10" weightX="0.0" weightY="0.0"/>
+                  <GridBagConstraints gridX="1" gridY="13" gridWidth="2" gridHeight="1" fill="0" ipadX="8" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="13" weightX="0.0" weightY="0.0"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -2100,7 +2100,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                  <GridBagConstraints gridX="1" gridY="14" gridWidth="2" gridHeight="1" fill="0" ipadX="8" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="10" weightX="0.0" weightY="0.0"/>
+                  <GridBagConstraints gridX="1" gridY="14" gridWidth="2" gridHeight="1" fill="0" ipadX="8" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="13" weightX="0.0" weightY="0.0"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -2114,7 +2114,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                  <GridBagConstraints gridX="1" gridY="15" gridWidth="2" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="10" weightX="0.0" weightY="0.0"/>
+                  <GridBagConstraints gridX="1" gridY="15" gridWidth="2" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="13" weightX="0.0" weightY="0.0"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -2128,7 +2128,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                  <GridBagConstraints gridX="1" gridY="17" gridWidth="2" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="10" weightX="0.0" weightY="0.0"/>
+                  <GridBagConstraints gridX="1" gridY="17" gridWidth="2" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="13" weightX="0.0" weightY="0.0"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -2139,7 +2139,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                  <GridBagConstraints gridX="1" gridY="20" gridWidth="2" gridHeight="1" fill="0" ipadX="14" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="10" weightX="0.0" weightY="0.0"/>
+                  <GridBagConstraints gridX="1" gridY="20" gridWidth="2" gridHeight="1" fill="0" ipadX="14" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="13" weightX="0.0" weightY="0.0"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -2150,7 +2150,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                  <GridBagConstraints gridX="1" gridY="21" gridWidth="2" gridHeight="1" fill="0" ipadX="14" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="10" weightX="0.0" weightY="0.0"/>
+                  <GridBagConstraints gridX="1" gridY="21" gridWidth="2" gridHeight="1" fill="0" ipadX="14" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="13" weightX="0.0" weightY="0.0"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -2164,7 +2164,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                  <GridBagConstraints gridX="1" gridY="22" gridWidth="2" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="10" weightX="0.0" weightY="0.0"/>
+                  <GridBagConstraints gridX="1" gridY="22" gridWidth="2" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="13" weightX="0.0" weightY="0.0"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -2251,7 +2251,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                  <GridBagConstraints gridX="1" gridY="7" gridWidth="2" gridHeight="1" fill="0" ipadX="8" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="10" weightX="0.0" weightY="0.0"/>
+                  <GridBagConstraints gridX="1" gridY="7" gridWidth="2" gridHeight="1" fill="0" ipadX="8" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="13" weightX="0.0" weightY="0.0"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -2261,7 +2261,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                  <GridBagConstraints gridX="1" gridY="16" gridWidth="2" gridHeight="1" fill="0" ipadX="8" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="10" weightX="0.0" weightY="0.0"/>
+                  <GridBagConstraints gridX="1" gridY="16" gridWidth="2" gridHeight="1" fill="0" ipadX="8" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="13" weightX="0.0" weightY="0.0"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -2271,7 +2271,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
-                  <GridBagConstraints gridX="1" gridY="19" gridWidth="2" gridHeight="1" fill="0" ipadX="8" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="10" weightX="0.0" weightY="0.0"/>
+                  <GridBagConstraints gridX="1" gridY="19" gridWidth="2" gridHeight="1" fill="0" ipadX="8" ipadY="0" insetsTop="1" insetsLeft="1" insetsBottom="1" insetsRight="1" anchor="13" weightX="0.0" weightY="0.0"/>
                 </Constraint>
               </Constraints>
             </Component>

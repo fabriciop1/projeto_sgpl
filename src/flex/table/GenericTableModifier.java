@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
@@ -280,8 +281,7 @@ public abstract class GenericTableModifier extends JDialog{
             TableColumn column = editTable.getColumnModel().getColumn(i); //
             
             column.setPreferredWidth(sourceColumnWidth);
-            column.setMaxWidth(sourceColumnWidth);
-            column.setMinWidth(sourceColumnWidth);
+            column.setResizable(false);
             
             minDialogWidth += sourceColumnWidth + 3;
         }
@@ -901,4 +901,14 @@ public abstract class GenericTableModifier extends JDialog{
     protected void setRebuildEditTable(boolean rebuildEditTable) {
         this.rebuildEditTable = rebuildEditTable;
     }
+
+    public JScrollPane getEditTableScroll() {
+        return editTableScroll;
+    }
+
+    public void setEditTableScroll(JScrollPane editTableScroll) {
+        this.editTableScroll = editTableScroll;
+    }
+    
+    
 }
