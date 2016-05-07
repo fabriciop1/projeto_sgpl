@@ -23,18 +23,20 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="btnVoltar" min="-2" pref="120" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="304" max="-2" attributes="0"/>
               <Component id="textoEntrada" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="166" max="32767" attributes="0"/>
+              <EmptySpace pref="121" max="32767" attributes="0"/>
               <Component id="jLabel1" min="-2" pref="32" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="anoCombo" min="-2" pref="94" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="adicionarAnoBT" min="-2" pref="47" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
           </Group>
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" attributes="0">
               <Component id="jScrollPane1" min="-2" pref="275" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jScrollPane2" pref="0" max="32767" attributes="0"/>
@@ -46,10 +48,11 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="btnVoltar" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnVoltar" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                   <Component id="textoEntrada" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="anoCombo" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                  <Component id="anoCombo" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                   <Component id="jLabel1" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                  <Component id="adicionarAnoBT" alignment="1" min="-2" pref="30" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -591,5 +594,12 @@
         </Container>
       </SubComponents>
     </Container>
+    <Component class="javax.swing.JButton" name="adicionarAnoBT">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/visao/images/add.png"/>
+        </Property>
+      </Properties>
+    </Component>
   </SubComponents>
 </Form>
