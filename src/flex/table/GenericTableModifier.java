@@ -331,6 +331,7 @@ public abstract class GenericTableModifier extends JDialog{
         
         getSourceTableModel().addRow(dataArray);
         getSourceTableModel().fireTableRowsInserted(sourceTable.getRowCount()-1, sourceTable.getRowCount()-1);
+        
         customRowDataList.add(customRowData);
         
         notifyListeners(new TableModifiedEvent(this, sourceTable, sourceTable.getRowCount()-1, dataArray, 

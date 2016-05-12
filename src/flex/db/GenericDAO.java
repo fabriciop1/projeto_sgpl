@@ -146,27 +146,26 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
         return sql;
     }
 
-    private static String createSQLUpdate(String tableName, String[] tableColumns, Object[] columnsValues, String idColumn, Object idValue){
-        
-        String sql = "UPDATE " + tableName + " SET ";
-        
-        for(int i=0; i<tableColumns.length && i<columnsValues.length; i++){
-            
-            sql += tableColumns[i] + "=" + Cast.toSQLValue(columnsValues[i]) + ",";
-        }
-        sql = sql.substring(0, sql.length()-1);
-        
-        sql += " WHERE " + idColumn + "=" + Cast.toSQLValue(idValue);
-        
-        return sql;
-    }
-    
+//    private static String createSQLUpdate(String tableName, String[] tableColumns, Object[] columnsValues, String idColumn, Object idValue){
+//        
+//        String sql = "UPDATE " + tableName + " SET ";
+//        
+//        for(int i=0; i<tableColumns.length && i<columnsValues.length; i++){
+//            
+//            sql += tableColumns[i] + "=" + Cast.toSQLValue(columnsValues[i]) + ",";
+//        }
+//        sql = sql.substring(0, sql.length()-1);
+//        
+//        sql += " WHERE " + idColumn + "=" + Cast.toSQLValue(idValue);
+//        
+//        return sql;
+//    }
+//    
     
     
     private List<T> executeSQL(String sql){
         
         try {
-            
             Connection connection = openConnection();
             
             PreparedStatement st = connection.prepareStatement(sql);
@@ -217,7 +216,6 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
             return null;
         }
     }    
-    
     
     
     public int insert(T object){
@@ -327,18 +325,18 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
        
         try {
             if(tableColumns == null || tableColumns.length == 0){
-                throw new IllegalArgumentException("GenericDAO.retrieveByColumns(String[],Object[]): O array de nomes das colunas da tabela passado é invalido.");
+                throw new IllegalArgumentException("GenericDAO.retrieveByColumns(String[],Object[],String,String): O array de nomes das colunas da tabela passado é invalido.");
             }
             else if(columnsValues == null || columnsValues.length == 0){
-                throw new IllegalArgumentException("GenericDAO.retrieveByColumns(String[],Object[]): O array de valores das colunas da tabela passado é inválido.");
+                throw new IllegalArgumentException("GenericDAO.retrieveByColumns(String[],Object[],String,String): O array de valores das colunas da tabela passado é inválido.");
             }
             else if(columnsValues.length != tableColumns.length){
-                throw new IllegalArgumentException("GenericDAO.retrieveByColumns(String[],Object[]): Os arrays de colunas e de valores das colunas tem tamanhos diferentes.");
+                throw new IllegalArgumentException("GenericDAO.retrieveByColumns(String[],Object[],String,String): Os arrays de colunas e de valores das colunas tem tamanhos diferentes.");
             } 
             
             T object = objectClass.newInstance();
             
-            return executeSQL(createSQLSelect(object.getTableName(),tableColumns,columnsValues,null,null));
+            return executeSQL(createSQLSelect(object.getTableName(),tableColumns,columnsValues,groupBy,orderBy));
             
         } catch (InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(GenericDAO.class.getName()).log(Level.SEVERE, null, ex);
