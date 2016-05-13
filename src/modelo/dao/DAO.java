@@ -3,10 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package flex.db;
+package modelo.dao;
 
 import java.sql.Connection;
-import modelo.dao.DBConexao;
 
 /**
  *
@@ -15,7 +14,7 @@ import modelo.dao.DBConexao;
 public class DAO {
 
     private final boolean connectionOwner;
-    private Connection connection;
+    private final Connection connection;
 
     protected DAO(Connection connection) {
 

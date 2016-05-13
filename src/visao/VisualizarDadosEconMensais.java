@@ -12,6 +12,7 @@ import java.awt.Color;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollBar;
 import javax.swing.table.DefaultTableModel;
 import modelo.negocio.DadosEconMensais;
@@ -28,7 +29,8 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
     List<Especificacao> especificacoes;    
     List<DadosEconMensais> dems;
     GenericDAO<DadosEconMensais> demdao;
-    GenericDAO<Especificacao> demespdao;    
+    GenericDAO<Especificacao> demespdao;   
+    Perfil atual;
     
     /**
      * Creates new form VisualizarDadosEconMensaisNew
@@ -39,7 +41,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         super.setLocationRelativeTo(null);
         super.setResizable(false);
       
-        Perfil atual = ControlePerfil.getInstance().getPerfilSelecionado();
+        atual = ControlePerfil.getInstance().getPerfilSelecionado();
         
         super.setTitle("SGPL - " + atual.getNome() + " - Dados Econômicos Mensais");
         
@@ -615,6 +617,11 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         jScrollPane2.setViewportView(jPanel2);
 
         adicionarAnoBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/add.png"))); // NOI18N
+        adicionarAnoBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                adicionarAnoBTActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -641,12 +648,13 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(textoEntrada)
-                    .addComponent(anoCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(adicionarAnoBT, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(adicionarAnoBT, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(textoEntrada)
+                        .addComponent(anoCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
@@ -738,8 +746,27 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_tabelaDadosEconomicosKeyPressed
 
+    private void adicionarAnoBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarAnoBTActionPerformed
+        try {
+            int ano = Integer.parseInt(JOptionPane.showInputDialog(null, "Digite o ano: ", "Inserir Novo Ano",
+                    JOptionPane.INFORMATION_MESSAGE));
+            
+            if (ano > 1900) {
+                DadosEconMensais dado = new DadosEconMensais();
+                dado.setAno(ano);
+                dado.setPerfil(atual);
+                demdao.insert(dado);
+                PreencherTabelaDEM(ano, dems);
+            } else {
+                JOptionPane.showMessageDialog(null, "Digite um ano válido.", "Valor Inválido", JOptionPane.WARNING_MESSAGE);
+            }
+        } catch(IllegalArgumentException ex) {
+            JOptionPane.showMessageDialog(null, "Digite um ano válido.", "Valor Inválido", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_adicionarAnoBTActionPerformed
+
     private void fillItemSelector() {
-        Perfil atual = ControlePerfil.getInstance().getPerfilSelecionado();
+        atual = ControlePerfil.getInstance().getPerfilSelecionado();
         
         List<DadosEconMensais> dados =  demdao.retrieveAll("ano", "ano DESC");
         dems = demdao.retrieveByColumn("idPerfilFK", atual.getId());
