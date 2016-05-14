@@ -11,7 +11,6 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
-import util.Cast;
 
 /**
  *
@@ -39,6 +38,7 @@ public class GenericTableAreaEditor extends GenericTableModifier {
         this.columnOffset = 0;
         
         super.setLabelText("Editar");
+        super.setAllRowsEditable(true);
     }
     
     public GenericTableAreaEditor(Frame parent, JTable sourceTable, boolean forceCellEditing, int startRow, int endRow, int startColumn, int endColumn){

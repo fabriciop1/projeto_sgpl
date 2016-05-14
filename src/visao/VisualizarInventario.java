@@ -2287,8 +2287,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total12.setText(String.format("R$ %.2f", totalDepreciacao));
     }
     
-    
-    
     private void inicializarGTRE() {
         tabelaMaquinasGTRE = new GenericTableRowEditor(this, tabelaMaquinas, false);
         tabelaBenfeitoriasGTRE = new GenericTableRowEditor(this, tabelaBenfeitorias, false);
@@ -2296,7 +2294,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         tabelaTerrasGTRE = new GenericTableRowEditor(this, tabelaInveTerras, false);
         tabelaAnimaisProdGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisProd, false);
         tabelaAnimaisServGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisServ, false);
-
+        
         tabelaForrageirasGTRE.setColumnEditable(2, false);
         tabelaForrageirasGTRE.setColumnEditable(3, false);
         tabelaForrageirasGTRE.setColumnEditable(5, false);

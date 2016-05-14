@@ -684,13 +684,9 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
             
             GenericTableAreaEditor gtae = new GenericTableAreaEditor(this, tabelaDadosEconomicos, false);
             gtae.getEditTable().setDefaultRenderer(Object.class, new ColorRenderer());
-            
-            gtae.setName("GTAE DadosEconMensais");
+           
             gtae.setColumnInterval((selecionado-1) * 3, ((selecionado-1) * 3) + 2);
-            gtae.setRowsDisplayed(10);
-            gtae.setColumnEditable(0, true);
-            gtae.setColumnEditable(1, true);
-            gtae.setAllowEmptyRows(true);
+            configGTAE(gtae);
             
             gtae.showEditor(evt);
            
@@ -800,6 +796,34 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
             barPanel3.setValue(barPanel3.getValue()-25);
             barPanel5.setValue(barPanel5.getValue()-25);
         }     
+    }
+    
+    private void configGTAE(GenericTableAreaEditor gtae) {
+        gtae.setName("GTAE DadosEconMensais");
+        gtae.setRowsDisplayed(10);
+        gtae.setAllowEmptyRows(true);
+        gtae.setColumnEditable(0, true);
+        gtae.setColumnEditable(1, true);
+        gtae.setRowEditable(0, false);
+        gtae.setRowEditable(7, false);
+        gtae.setRowEditable(8, false);
+        gtae.setRowEditable(20, false);
+        gtae.setRowEditable(21, false);
+        gtae.setRowEditable(33, false);
+        gtae.setRowEditable(34, false);
+        gtae.setRowEditable(45, false);
+        gtae.setRowEditable(46, false);
+        gtae.setRowEditable(53, false);
+        gtae.setRowEditable(54, false);
+        gtae.setRowEditable(67, false);
+        gtae.setRowEditable(68, false);
+        gtae.setRowEditable(73, false);
+        gtae.setRowEditable(74, false);
+        gtae.setRowEditable(80, false);
+        gtae.setRowEditable(81, false);
+        gtae.setRowEditable(85, false);
+        gtae.setRowEditable(86, false);
+        gtae.setRowEditable(88, false);
     }
     
 

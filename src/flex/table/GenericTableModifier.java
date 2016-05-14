@@ -6,7 +6,6 @@
 package flex.table;
 
 import java.awt.Dimension;
-import java.awt.FontMetrics;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
@@ -37,9 +36,9 @@ public abstract class GenericTableModifier extends JDialog{
     private final Frame parent;
     protected JTable sourceTable;
     
-    private List<Object> customRowDataList;
-    private List<TableModifyListener> tableModifylisteners;
-    private HashMap<Integer, String> columnRegexMap;
+    private final List<Object> customRowDataList;
+    private final List<TableModifyListener> tableModifylisteners;
+    private final HashMap<Integer, String> columnRegexMap;
     
     private int rowsDisplayed;
     
@@ -47,7 +46,8 @@ public abstract class GenericTableModifier extends JDialog{
     private boolean allowEmptyCells;
     
     private boolean forceCellEditing;
-    private boolean editorColumnEditable[];
+    private final boolean editorColumnEditable[];
+    private final boolean editorRowEditable[];
 
     boolean rebuildEditTable;
     
@@ -65,6 +65,7 @@ public abstract class GenericTableModifier extends JDialog{
         this.allowEmptyRows = false;
         this.rowsDisplayed = 1;
         this.editorColumnEditable = new boolean[sourceTable.getColumnCount()];
+        this.editorRowEditable = new boolean[sourceTable.getRowCount()];
         this.rebuildEditTable = true;
         
         initComponents();
@@ -109,6 +110,13 @@ public abstract class GenericTableModifier extends JDialog{
             log += "[" + i + "-" + editorColumnEditable[i] + "] "; 
         }
         log += "\n\n";
+        
+        log += "EditTable Rows Editable: ";
+        for(int i = 0; i < editorRowEditable.length; i++) {
+            log += "[" + i + "-" + editorRowEditable[i] + "] ";
+        }
+        log += "\n\n";
+        
         log += "Editor Window Width: " + this.getWidth() + "\n";
         log += "EditTable Width: " + editTable.getWidth() + "\n";
         log += "EditTable ScrollPane Width: " + editTableScroll.getWidth() + "\n\n";
@@ -204,7 +212,7 @@ public abstract class GenericTableModifier extends JDialog{
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 
                 if(!isForceCellEditingEnabled()){
-                    return GenericTableModifier.this.editorColumnEditable[columnIndex];
+                    return (GenericTableModifier.this.editorColumnEditable[columnIndex] && GenericTableModifier.this.editorRowEditable[rowIndex]);
                 } else {
                     return true;
                 }
@@ -229,7 +237,7 @@ public abstract class GenericTableModifier extends JDialog{
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 
                 if(!isForceCellEditingEnabled()){
-                    return GenericTableModifier.this.editorColumnEditable[columnIndex];
+                    return (GenericTableModifier.this.editorColumnEditable[columnIndex] && GenericTableModifier.this.editorRowEditable[rowIndex]);
                 } else {
                     return true;
                 }
@@ -873,6 +881,20 @@ public abstract class GenericTableModifier extends JDialog{
         
         for(int i=0; i<this.editorColumnEditable.length; i++){
             this.editorColumnEditable[i] = editable;
+        }
+    }
+    
+    public void setRowEditable(int rowIndex, boolean editable) {
+        editorRowEditable[rowIndex] = editable;
+    }
+    
+    public boolean isRowEditable(int rowIndex) {
+        return editorRowEditable[rowIndex];
+    }
+    
+    public void setAllRowsEditable(boolean editable) {
+        for(int i = 0; i < this.editorRowEditable.length; i++) {
+            this.editorRowEditable[i] = editable;
         }
     }
 
