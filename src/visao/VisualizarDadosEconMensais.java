@@ -32,7 +32,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
     GenericDAO<DadosEconMensais> demdao;
     GenericDAO<Especificacao> demespdao;   
     Perfil atual;
-    Object[] anosDisponiveis;
+    Object[] anosDisponiveis = {"1990", "1991", "1992"};
     
     /**
      * Creates new form VisualizarDadosEconMensaisNew
@@ -46,7 +46,6 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         atual = ControlePerfil.getInstance().getPerfilSelecionado();
         
         super.setTitle("SGPL - " + atual.getNome() + " - Dados Econômicos Mensais");
-        
         
         tabelaEspecificacao.setShowHorizontalLines(true);
         
@@ -679,7 +678,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         MonthSelector telaMes = new MonthSelector(this, true);
 
         telaMes.setVisible(true);
-        int selecionado = telaMes.getIndex();
+        int selecionado = telaMes.getSelected();
         
         if (selecionado != 0) {
             
@@ -746,26 +745,29 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
     }//GEN-LAST:event_tabelaDadosEconomicosKeyPressed
 
     private void adicionarAnoBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarAnoBTActionPerformed
-        try {
-            String mensagem = JOptionPane.showInputDialog(null, "Digite o ano: ", "Inserir Novo Ano",
-                    JOptionPane.INFORMATION_MESSAGE);
-            
-            if (mensagem != null) {
-                int ano = Integer.parseInt(mensagem);
-            
-                if (ano > 1900) {
-                    // DadosEconMensais dado = new DadosEconMensais(1, ano, 0, 0, demespdao.retrieve(1), atual);
-                    // demdao.insert(dado);
-                
-                    anoCombo.addItem(Cast.toString(ano));
-                    anoCombo.setSelectedItem(Cast.toString(ano));
-                    PreencherTabelaDEM(ano, dems);
-                } else {
-                    JOptionPane.showMessageDialog(null, "Digite um ano válido.", "Valor Inválido", JOptionPane.WARNING_MESSAGE);
-                }
+        boolean existe = false;
+        
+        YearSelector telaNovoAno = new YearSelector(this, true);
+        telaNovoAno.setVisible(true);
+        
+        String ano = telaNovoAno.getSelected();
+        int index = telaNovoAno.getIndex();
+        
+        for(int i = 0; i < anoCombo.getItemCount(); i++) {
+            if (anoCombo.getItemAt(i).equals(ano)) {
+                existe = true;
+                break;
             }
-        } catch(IllegalArgumentException ex) {
-            JOptionPane.showMessageDialog(null, "Digite um ano válido.", "Valor Inválido", JOptionPane.WARNING_MESSAGE);
+        }
+        if (existe == true) {
+            JOptionPane.showMessageDialog(this, "Este ano já foi inserido para o perfil de " + atual.getNome()
+                    + ".", "Alerta - Inserção de ano já cadastrado", JOptionPane.WARNING_MESSAGE);
+        }
+        if (index != 0 && existe == false) {
+            anoCombo.addItem(ano);
+            anoCombo.setSelectedItem(ano);
+            telaNovoAno.removeItem(ano);
+            PreencherTabelaDEM(Integer.parseInt(ano), dems);
         }
     }//GEN-LAST:event_adicionarAnoBTActionPerformed
 

@@ -97,7 +97,7 @@ public class DadosEconMensais extends DatabaseObject implements Serializable {
         m.put("quantidade", quantidade);
         m.put("valorUnitario", valorUnitario);
         m.put("idDEM_especificacaoFK", especificacao.getId());
-        m.put("idPErfilFK", perfil.getId());
+        m.put("idPerfilFK", perfil.getId());
         
         return m;
     }
