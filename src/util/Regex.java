@@ -23,9 +23,9 @@ public final class Regex {
     public static final String UNSIGNED_LONG_VALUE = "^\\s*[+]?\\d{1,19}\\s*$";
     
     
-    public static final String DOUBLE_VALUE = "^\\s*[+-]?\\d{1,13}([\\.|\\,]\\d+)?\\s*$";
+    public static final String DOUBLE_VALUE = "^\\s*[+-]?\\d{1,13}(\\.\\d+)?\\s*$";
     
-    public static final String UNSIGNED_DOUBLE_VALUE = "^\\s*[+]?\\d{1,13}([\\.|\\,]\\d+)?\\s*$";
+    public static final String UNSIGNED_DOUBLE_VALUE = "^\\s*[+]?\\d{1,13}(\\.\\d+)?\\s*$";
     
     
     public static final String BOOLEAN_VALUE = "^\\s*(([fF][aA][lL][sS][eE])|([tT][rR][uU][eE])|([0-1]))\\s*$";

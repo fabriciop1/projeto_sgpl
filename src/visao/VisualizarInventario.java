@@ -2011,14 +2011,11 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
     private void calcularValoresInvForrageiras(Object[] terrasRowData, Object[] forrageirasRowData, int forrageirasRow) {
 
-        forrageirasRowData[2] = Double.parseDouble(String.format("%.2f", 
-                Calc.dividir(Cast.toDouble(terrasRowData[2]) + Cast.toDouble(terrasRowData[4]), 2.0)));
+        forrageirasRowData[2] = Calc.dividir(Cast.toDouble(terrasRowData[2]) + Cast.toDouble(terrasRowData[4]), 2.0);
         //R$/Total = (R$/Ha) * Ha
-        forrageirasRowData[3] = Double.parseDouble(String.format("%.2f", 
-                Cast.toDouble(forrageirasRowData[1]) * Cast.toDouble(forrageirasRowData[2])));
+        forrageirasRowData[3] = Cast.toDouble(forrageirasRowData[1]) * Cast.toDouble(forrageirasRowData[2]);
         //Depreciacao (R$/Ano) = (R$/Total) / VidaUtilAnos
-        forrageirasRowData[5] = Double.parseDouble(String.format("%.2f", Calc.dividir(Cast.toDouble(forrageirasRowData[3]),
-                Cast.toInt(forrageirasRowData[4]))));
+        forrageirasRowData[5] = Calc.dividir(Cast.toDouble(forrageirasRowData[3]), Cast.toInt(forrageirasRowData[4]));
 
         for (int i = 0; i < tabelaInveForrageiras.getColumnCount(); i++) {
             tabelaInveForrageiras.setValueAt(forrageirasRowData[i], forrageirasRow, i);
@@ -2027,11 +2024,11 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
     private void calcularValoresInvMaquinas(Object[] maquinasRowData, int maquinasRow) {
        
-        maquinasRowData[4] = Double.parseDouble(String.format("%.2f", Calc.multiplicar(Cast.toDouble(maquinasRowData[2]), 
-                Cast.toDouble(maquinasRowData[3])))); // Valor Total
+        maquinasRowData[4] = Calc.multiplicar(Cast.toDouble(maquinasRowData[2]), 
+                Cast.toDouble(maquinasRowData[3])); // Valor Total
         
-        maquinasRowData[6] =  Double.parseDouble(String.format("%.2f", Calc.dividir(Cast.toDouble(maquinasRowData[4]), 
-                Cast.toInt(maquinasRowData[5])))); // R$/ano
+        maquinasRowData[6] =  Calc.dividir(Cast.toDouble(maquinasRowData[4]), 
+                Cast.toInt(maquinasRowData[5])); // R$/ano
         
         for(int i = 0; i < tabelaMaquinas.getColumnCount(); i++) {
             tabelaMaquinas.setValueAt(maquinasRowData[i], maquinasRow, i); // Atualiza tela com novos cálculos na linha editada
@@ -2039,12 +2036,11 @@ public class VisualizarInventario extends javax.swing.JFrame {
     }
     
     private void calcularValoresInvBenfeitorias(Object[] benfeitoriasRowData, int benfeitoriasRow) {
-        benfeitoriasRowData[4] = Double.parseDouble(String.format("%.2f", 
-                Calc.multiplicar(Cast.toDouble(Cast.toDouble(benfeitoriasRowData[2])), 
-                Cast.toDouble(benfeitoriasRowData[3])))); // Valor Total
+        benfeitoriasRowData[4] = Calc.multiplicar(Cast.toDouble(Cast.toDouble(benfeitoriasRowData[2])), 
+                Cast.toDouble(benfeitoriasRowData[3])); // Valor Total
         
-        benfeitoriasRowData[6] = Double.parseDouble(String.format("%.2f", Calc.dividir(Cast.toDouble(benfeitoriasRowData[4]), 
-                Cast.toInt(benfeitoriasRowData[5])))); // R$/ano
+        benfeitoriasRowData[6] = Calc.dividir(Cast.toDouble(benfeitoriasRowData[4]), 
+                Cast.toInt(benfeitoriasRowData[5])); // R$/ano
         
         for(int i = 0; i < tabelaBenfeitorias.getColumnCount(); i++) {
             tabelaBenfeitorias.setValueAt(benfeitoriasRowData[i], benfeitoriasRow, i);
@@ -2052,18 +2048,16 @@ public class VisualizarInventario extends javax.swing.JFrame {
     }
     
     private void calcularValoresInvAnimaisProd(Object[] animaisProdRowData, int animaisProdRow) {
-        animaisProdRowData[8] = Double.parseDouble(String.format("%.2f", Calc.multiplicar(Cast.toInt(animaisProdRowData[1]),
-                Cast.toDouble(animaisProdRowData[7])))); //Valor Inicial
+        animaisProdRowData[8] = Calc.multiplicar(Cast.toInt(animaisProdRowData[1]),
+                Cast.toDouble(animaisProdRowData[7])); //Valor Inicial
         
-        animaisProdRowData[9] = Double.parseDouble(String.format("%.2f", Calc.multiplicar(Cast.toInt(animaisProdRowData[6]), 
-                Cast.toDouble(animaisProdRowData[7])))); // Valor Final
+        animaisProdRowData[9] = Calc.multiplicar(Cast.toInt(animaisProdRowData[6]), 
+                Cast.toDouble(animaisProdRowData[7])); // Valor Final
         
         for(int i = 0; i < tabelaInveAnimaisProd.getColumnCount(); i++) {
             tabelaInveAnimaisProd.setValueAt(animaisProdRowData[i], animaisProdRow, i);
         }
     }
-    
-    
     
     private void calcularTotaisResumo(){
         
@@ -2167,10 +2161,14 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
                 double valorInicio = animais.get(i).getValorInicio() * animais.get(i).getValorCabeca();
                 double valorFinal = animais.get(i).getValorFinal() * animais.get(i).getValorCabeca();
-
-                if (animais.get(i).getCategoria().equalsIgnoreCase("Touro")) {
-                    total34.setText(String.format("R$ %.2f", Calc.mediaAritmetica(valorInicio, valorFinal)));
+                double capitalReprod = 0.0;
+                
+                if (animais.get(i).getCategoria().equalsIgnoreCase("Touro") ||
+                        animais.get(i).getCategoria().equalsIgnoreCase("Touros")) {
+                    capitalReprod += Calc.mediaAritmetica(valorInicio, valorFinal);
                 }
+                
+                total34.setText(String.format("R$ %.2f", capitalReprod));
 
                 totalValInicProd += (animais.get(i).getValorInicio() * 1.0);
                 totalNascProd += (animais.get(i).getNascimento() * 1.0);
@@ -2227,6 +2225,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total33.setText(String.format("R$ %.2f", (Double.parseDouble(total20.getText().substring(2).replace(',', '.'))
                 - Double.parseDouble(total19.getText().substring(2).replace(',', '.')) - Double.parseDouble(total32.getText().substring(2).replace(',', '.')))));
 
+        
         total36.setText(String.format("%.2f", Calc.dividir(Double.parseDouble(total34.getText().substring(2).replace(',', '.')),
                     Double.parseDouble(total35.getText().replace(',', '.')))));
         
@@ -2267,7 +2266,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
             double ha = (terras.get(i).getAreaPropriaInicio() + terras.get(i).getAreaPropriaFinal()) / 2;
             double valorHa = forrageiras.get(i).getCustoFormacaoHectare() * ha;
-            double depreciacao = valorHa / forrageiras.get(i).getVidaUtil();
+            double depreciacao = Calc.dividir(valorHa, forrageiras.get(i).getVidaUtil());
 
             totalHa += (ha);
             totalValorHa += (valorHa);
@@ -2360,6 +2359,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     break;
             }
             calcularTotaisMaquinas(imdao.retrieveByColumn("idPerfilFK", perfilAtual.getId()));
+            calcularTotaisResumo();
         });
 
         tabelaBenfeitoriasGTRE.addTableModifyListener((TableModifiedEvent event) -> {
@@ -2405,6 +2405,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     break;
             }
             calcularTotaisBenfeitorias(ibdao.retrieveByColumn("idPerfilFK", perfilAtual.getId()));
+            calcularTotaisResumo();
         });
 
         tabelaTerrasGTRE.addTableModifyListener((TableModifiedEvent event) -> {
@@ -2416,7 +2417,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             GenericTableModifier modifier = event.getSourceModifier();
             
             int modifType = event.getEventType();
-            int rowIndex = event.getRowIndex();
+            int rowIndex = event.getRowIndex(); 
             
             if (modifType == TableModifiedEvent.ROW_INSERTED || modifType == TableModifiedEvent.ROW_UPDATED) {
                 
@@ -2427,7 +2428,9 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     
                     itdao.insert(terras);
                     
-                    tabelaForrageirasGTRE.addSourceTableRow(new Object[]{terras.getEspecificacao() }, terras.getId());
+                    double ha = Calc.dividir(Cast.toDouble(terrasRowData[2]) + Cast.toDouble(terrasRowData[4]), 2.0);
+                    
+                    tabelaForrageirasGTRE.addSourceTableRow(new Object[]{terras.getEspecificacao(), null, ha }, terras.getId());
                     
                     ifdao.insert( new InventarioForrageiras(terras.getEspecificacao(), 0, 0, perfil, terras) );
                     
@@ -2435,7 +2438,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     
                 } else if (modifType == TableModifiedEvent.ROW_UPDATED) {
                     
-                    Object[] forrageirasRowData = tabelaForrageirasGTRE.getSourceTableRowData(rowIndex);
+                    Object[] forrageirasRowData = tabelaForrageirasGTRE.getSourceTableRowData(rowIndex); 
                     
                     terras.setId(terrasRowID);
                     
@@ -2459,6 +2462,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             
             calcularTotaisTerras(ifdao.retrieveByColumn("idPerfilFK", perfilAtual.getId()),
                     itdao.retrieveByColumn("idPerfilFK", perfilAtual.getId()));
+            calcularTotaisResumo();
         });
         
         tabelaForrageirasGTRE.addTableModifyListener((TableModifiedEvent event) -> {
@@ -2482,6 +2486,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 
                 calcularTotaisTerras(ifdao.retrieveByColumn("idPerfilFK", perfilAtual.getId()), 
                         itdao.retrieveByColumn("idPerfilFK", perfilAtual.getId()));
+                calcularTotaisResumo();
             }
         });
         
@@ -2534,6 +2539,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 iadao.remove(rowID);
             }
             calcularTotaisAnimais(iadao.retrieveByColumn("idPerfilFK", perfilAtual.getId()));
+            calcularTotaisResumo();
         };
         
         tabelaAnimaisProdGTRE.addTableModifyListener(animaisTMListener);

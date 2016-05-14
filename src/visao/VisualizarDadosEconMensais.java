@@ -18,6 +18,7 @@ import javax.swing.table.DefaultTableModel;
 import modelo.negocio.DadosEconMensais;
 import modelo.negocio.Especificacao;
 import modelo.negocio.Perfil;
+import util.Cast;
 import util.ColorRenderer;
 
 /**
@@ -31,6 +32,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
     GenericDAO<DadosEconMensais> demdao;
     GenericDAO<Especificacao> demespdao;   
     Perfil atual;
+    Object[] anosDisponiveis;
     
     /**
      * Creates new form VisualizarDadosEconMensaisNew
@@ -45,9 +47,6 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         
         super.setTitle("SGPL - " + atual.getNome() + " - Dados Econômicos Mensais");
         
-        Calendar cal = GregorianCalendar.getInstance();
-	int anoAtual = cal.get(Calendar.YEAR);
-        int mesAtual = cal.get(Calendar.MONTH);
         
         tabelaEspecificacao.setShowHorizontalLines(true);
         
@@ -127,7 +126,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                 
                 if( tabelaEspecificacao.getModel().getValueAt(i, 0).equals(dem.get(j).getEspecificacao().getEspecificacao())
                         && dem.get(j).getAno() == ano ){
-                                      
+                                    
                     temp[indexCol ] = dem.get(j).getQuantidade();
                     temp[indexCol + 1] = dem.get(j).getValorUnitario();
                     temp[indexCol + 2] = dem.get(j).getQuantidade() * dem.get(j).getValorUnitario();
@@ -748,17 +747,22 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
 
     private void adicionarAnoBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarAnoBTActionPerformed
         try {
-            int ano = Integer.parseInt(JOptionPane.showInputDialog(null, "Digite o ano: ", "Inserir Novo Ano",
-                    JOptionPane.INFORMATION_MESSAGE));
+            String mensagem = JOptionPane.showInputDialog(null, "Digite o ano: ", "Inserir Novo Ano",
+                    JOptionPane.INFORMATION_MESSAGE);
             
-            if (ano > 1900) {
-                DadosEconMensais dado = new DadosEconMensais();
-                dado.setAno(ano);
-                dado.setPerfil(atual);
-                demdao.insert(dado);
-                PreencherTabelaDEM(ano, dems);
-            } else {
-                JOptionPane.showMessageDialog(null, "Digite um ano válido.", "Valor Inválido", JOptionPane.WARNING_MESSAGE);
+            if (mensagem != null) {
+                int ano = Integer.parseInt(mensagem);
+            
+                if (ano > 1900) {
+                    // DadosEconMensais dado = new DadosEconMensais(1, ano, 0, 0, demespdao.retrieve(1), atual);
+                    // demdao.insert(dado);
+                
+                    anoCombo.addItem(Cast.toString(ano));
+                    anoCombo.setSelectedItem(Cast.toString(ano));
+                    PreencherTabelaDEM(ano, dems);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Digite um ano válido.", "Valor Inválido", JOptionPane.WARNING_MESSAGE);
+                }
             }
         } catch(IllegalArgumentException ex) {
             JOptionPane.showMessageDialog(null, "Digite um ano válido.", "Valor Inválido", JOptionPane.WARNING_MESSAGE);
@@ -766,16 +770,20 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
     }//GEN-LAST:event_adicionarAnoBTActionPerformed
 
     private void fillItemSelector() {
+        
         atual = ControlePerfil.getInstance().getPerfilSelecionado();
         
-        List<DadosEconMensais> dados =  demdao.retrieveAll("ano", "ano DESC");
+        List<DadosEconMensais> dados = demdao.retrieveByColumn("idPerfilFK", atual.getId(), "ano", "ano DESC");
         dems = demdao.retrieveByColumn("idPerfilFK", atual.getId());
         
-        for(int i = 0; i < dados.size(); i++) {
-            anoCombo.addItem("" + dados.get(i).getAno());
+        if (dados.isEmpty()) {
+            Calendar cal = GregorianCalendar.getInstance();
+            anoCombo.addItem(Cast.toString(cal.get(Calendar.YEAR)));
         }
-        
-        //anoCombo.setSelectedIndex(anoCombo.getItemCount() - 1);
+
+        for(int i = 0; i < dados.size(); i++) {
+            anoCombo.addItem(Cast.toString(dados.get(i).getAno()));
+        }
         
         PreencherTabelaDEM(Integer.parseInt( (String) anoCombo.getSelectedItem() ), dems);
     }
@@ -784,7 +792,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         JScrollBar barPanel3 = jScrollPane1.getVerticalScrollBar();
         JScrollBar barPanel5 = jScrollPane2.getVerticalScrollBar();
         if(evt.getWheelRotation() > 0) { //Up
-            barPanel3.setValue(barPanel3.getValue()+25);
+            barPanel3.setValue(barPanel3.getValue()+25); // velocidade de rolagem
             barPanel5.setValue(barPanel5.getValue()+25);
         } else { //Down
             barPanel3.setValue(barPanel3.getValue()-25);

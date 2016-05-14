@@ -37,9 +37,10 @@ public abstract class GenericTableModifier extends JDialog{
     private final Frame parent;
     protected JTable sourceTable;
     
-    private final List<Object> customRowDataList;
-    private final List<TableModifyListener> tableModifylisteners;
-    private final HashMap<Integer, String> columnRegexMap;
+    private List<Object> customRowDataList;
+    private List<TableModifyListener> tableModifylisteners;
+    private HashMap<Integer, String> columnRegexMap;
+    private HashMap<Integer, String> columnMaskMap; 
     
     private int rowsDisplayed;
     
@@ -47,7 +48,7 @@ public abstract class GenericTableModifier extends JDialog{
     private boolean allowEmptyCells;
     
     private boolean forceCellEditing;
-    private final boolean editorColumnEditable[];
+    private boolean editorColumnEditable[];
 
     boolean rebuildEditTable;
     
@@ -61,6 +62,7 @@ public abstract class GenericTableModifier extends JDialog{
         this.tableModifylisteners = new ArrayList<>();
         this.customRowDataList = new ArrayList<>();
         this.columnRegexMap = new HashMap<>();
+        this.columnMaskMap = new HashMap<>();
         this.allowEmptyCells = true;
         this.allowEmptyRows = false;
         this.rowsDisplayed = 1;
@@ -440,6 +442,11 @@ public abstract class GenericTableModifier extends JDialog{
             throw new IllegalArgumentException("editTable - Coluna Inválida: " + column);
         }
         
+        if(value != null && columnMaskMap.containsKey(column)){
+            
+            value = String.format(columnMaskMap.get(column), value);
+        }
+        
         editTable.setValueAt(value, row, column);
     }
     
@@ -471,7 +478,17 @@ public abstract class GenericTableModifier extends JDialog{
     }
     
     protected void addEditTableRow(Object[] dataArray){
-        getEditTableModel().addRow(dataArray);
+        
+        if(dataArray == null){
+            throw new NullPointerException("O vetor de valores passado é inválido.");
+        }
+        
+        getEditTableModel().addRow(new Object[]{});
+        
+        for(int i=0; i<editTable.getColumnCount(); i++){
+            setEditTableValue(dataArray[i], editTable.getRowCount()-1, i);
+        }
+        
         getEditTableModel().fireTableRowsInserted(editTable.getRowCount()-1, editTable.getRowCount()-1);
     }
     
@@ -911,5 +928,23 @@ public abstract class GenericTableModifier extends JDialog{
         this.editTableScroll = editTableScroll;
     }
     
-    
+    public void setColumnValueMask(int columnIndex, String valueMask){
+        
+        if(columnIndex < 0 || columnIndex > editTable.getColumnCount()-1){
+            throw new IllegalArgumentException("editTable - Coluna Inválida: " + columnIndex);
+        }
+        
+        columnMaskMap.put(columnIndex, valueMask);
+    }
+
+    public void removeColumnValueMask(int columnIndex){
+        
+        if(columnIndex < 0 || columnIndex > editTable.getColumnCount()-1){
+            throw new IllegalArgumentException("editTable - Coluna Inválida: " + columnIndex);
+        }
+        
+        if(columnMaskMap.containsKey(columnIndex)){
+            columnMaskMap.remove(columnIndex);
+        }
+    }
 }
