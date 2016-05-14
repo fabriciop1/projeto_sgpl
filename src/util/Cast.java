@@ -46,24 +46,41 @@ public final class Cast {
         }
     }
     
-    public static Object toPrimitiveType(String stringValue, Class valueType){
+    public static Object toPrimitiveType(String value, Class valueType){
         
-        if(stringValue == null){
+        if(value == null){
             throw new NullPointerException("A string contendo o valor a ser convertido é inválida.");
         }
         else if(valueType == null){
             throw new NullPointerException("O tipo de valor passado é inválido");
         }
         
-        if(valueType == Integer.class){ return Integer.parseInt(stringValue); } else 
-        if(valueType == Float.class){ return Float.parseFloat(stringValue); } else 
-        if(valueType == Double.class){ return Double.parseDouble(stringValue); } else
-        if(valueType == String.class){ return stringValue; } else 
-        if(valueType == Boolean.class){ return Boolean.parseBoolean(stringValue); } else 
-        if(valueType == Short.class){ return Short.parseShort(stringValue); } else 
-        if(valueType == Long.class){ return Long.parseLong(stringValue); } else 
-        if(valueType == Byte.class){ return Byte.parseByte(stringValue); } else 
-        if(valueType == Character.class){ return stringValue.charAt(0); }
+        if (valueType == Double.class || valueType == Float.class) {
+            
+            value = value.replaceAll(",", ".");
+            
+            int counter = 0;
+            
+            for (int i = 0; i < value.length(); i++) {
+                if (value.charAt(i) == '.') {
+                    counter++;
+                }
+            }
+            
+            for (int i = 0; i < counter - 1; i++) {
+                value = value.replace(".", "");
+            }
+        }
+        
+        if(valueType == Integer.class){ return Integer.parseInt(value); } else 
+        if(valueType == Float.class){ return Float.parseFloat(value); } else 
+        if(valueType == Double.class){ return Double.parseDouble(value); } else
+        if(valueType == String.class){ return value; } else 
+        if(valueType == Boolean.class){ return Boolean.parseBoolean(value); } else 
+        if(valueType == Short.class){ return Short.parseShort(value); } else 
+        if(valueType == Long.class){ return Long.parseLong(value); } else 
+        if(valueType == Byte.class){ return Byte.parseByte(value); } else 
+        if(valueType == Character.class){ return value.charAt(0); }
 
         else throw new ClassCastException("O objeto passado não é de um tipo primitivo.");
     }

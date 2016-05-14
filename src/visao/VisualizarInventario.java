@@ -2303,13 +2303,12 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
         tabelaAnimaisProdGTRE.setColumnEditable(8, false);
         tabelaAnimaisProdGTRE.setColumnEditable(9, false);
-
+        
         tabelaBenfeitoriasGTRE.setColumnEditable(4, false);
         tabelaBenfeitoriasGTRE.setColumnEditable(6, false);
 
         tabelaMaquinasGTRE.setColumnEditable(4, false);
         tabelaMaquinasGTRE.setColumnEditable(6, false);
-
     }
 
     private void definirBDListeners() {

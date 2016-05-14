@@ -65,7 +65,7 @@ public class GenericTableAreaEditor extends GenericTableModifier {
             
             for (int j = 0; j < editTable.getColumnCount() - columnOffset; j++) {
                 
-                setEditTableValue( Cast.toString( getSourceTableValue(startRow + i, startColumn + j) ), i, j + columnOffset);
+                setEditTableValue( getSourceTableValue(startRow + i, startColumn + j), i, j + columnOffset);
             }
         }
     }
@@ -105,11 +105,18 @@ public class GenericTableAreaEditor extends GenericTableModifier {
             
             for (int j = 0; j < editTable.getColumnCount() - columnOffset; j++) {
                 
-                if(checkEmptyValue(i, j + columnOffset) && !isAllowedEmptyCells()){
-                    JOptionPane.showMessageDialog(this, "Não são permitidas células vazias.", "Valor de Coluna Vazio", JOptionPane.ERROR_MESSAGE);
-                    return false;
+                if (checkEmptyValue(i, j + columnOffset)) {
+                    
+                    if (!isAllowedEmptyCells()) {
+                        
+                        JOptionPane.showMessageDialog(this, "Não são permitidas células vazias.", "Valor de Coluna Vazio", JOptionPane.ERROR_MESSAGE);
+                        return false;
+                    }
+                    
+                    return true;
                 }
-                else if(!validateEditTableValue(i, j + columnOffset, startColumn + j)){
+                
+                if(!validateEditTableValue(i, j + columnOffset, startColumn + j)){
                     
                     JOptionPane.showMessageDialog(this, "O valor da coluna \"" + editTable.getColumnName(j) + "\" na linha " + (i+1) +
                             " é inválido.", "Valor de Coluna Inválido", JOptionPane.ERROR_MESSAGE);

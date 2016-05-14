@@ -40,7 +40,6 @@ public abstract class GenericTableModifier extends JDialog{
     private List<Object> customRowDataList;
     private List<TableModifyListener> tableModifylisteners;
     private HashMap<Integer, String> columnRegexMap;
-    private HashMap<Integer, String> columnMaskMap; 
     
     private int rowsDisplayed;
     
@@ -62,7 +61,6 @@ public abstract class GenericTableModifier extends JDialog{
         this.tableModifylisteners = new ArrayList<>();
         this.customRowDataList = new ArrayList<>();
         this.columnRegexMap = new HashMap<>();
-        this.columnMaskMap = new HashMap<>();
         this.allowEmptyCells = true;
         this.allowEmptyRows = false;
         this.rowsDisplayed = 1;
@@ -442,11 +440,6 @@ public abstract class GenericTableModifier extends JDialog{
             throw new IllegalArgumentException("editTable - Coluna Inválida: " + column);
         }
         
-        if(value != null && columnMaskMap.containsKey(column)){
-            
-            value = String.format(columnMaskMap.get(column), value);
-        }
-        
         editTable.setValueAt(value, row, column);
     }
     
@@ -471,7 +464,7 @@ public abstract class GenericTableModifier extends JDialog{
     protected void updateEditTableRow(int row, Object[] dataArray){
         
         for (int i = 0; i < dataArray.length; i++) {
-            editTable.setValueAt(dataArray[i], row, i);
+            setEditTableValue(dataArray[i], row, i);
         }
         
         getEditTableModel().fireTableRowsUpdated(row, row);
@@ -928,23 +921,4 @@ public abstract class GenericTableModifier extends JDialog{
         this.editTableScroll = editTableScroll;
     }
     
-    public void setColumnValueMask(int columnIndex, String valueMask){
-        
-        if(columnIndex < 0 || columnIndex > editTable.getColumnCount()-1){
-            throw new IllegalArgumentException("editTable - Coluna Inválida: " + columnIndex);
-        }
-        
-        columnMaskMap.put(columnIndex, valueMask);
-    }
-
-    public void removeColumnValueMask(int columnIndex){
-        
-        if(columnIndex < 0 || columnIndex > editTable.getColumnCount()-1){
-            throw new IllegalArgumentException("editTable - Coluna Inválida: " + columnIndex);
-        }
-        
-        if(columnMaskMap.containsKey(columnIndex)){
-            columnMaskMap.remove(columnIndex);
-        }
-    }
 }
