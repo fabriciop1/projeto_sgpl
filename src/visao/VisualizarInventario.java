@@ -2189,10 +2189,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 totalValFinaServ.add(animais.get(i).getValorFinal() * 1.0);
                 totalValCabeServ.add(animais.get(i).getValorCabeca() * 1.0);
             }
-
         }
-        
-
         total13.setText("" + (totalValInicProd));
         total14.setText("" + (totalNascProd));
         total15.setText("" + (totalMorteProd));
@@ -2260,8 +2257,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             totalTerraNua.add(terras.get(i).getValorTerraNuaPropria());
 
         }
-
-
+        
         for (int i = 0; i < forrageiras.size(); i++) {
 
             double ha = (terras.get(i).getAreaPropriaInicio() + terras.get(i).getAreaPropriaFinal()) / 2;
@@ -2572,7 +2568,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
             if (temp >= 0.0) {
                 total32.setText(String.format("R$ %.2f", temp));
                 total33.setText(String.format("R$ %.2f", (Double.parseDouble(total20.getText().substring(2).replace(',', '.'))
-                        - Double.parseDouble(total19.getText().substring(2).replace(',', '.')) - Double.parseDouble(total32.getText().substring(2).replace(',', '.')))));
+                        - Double.parseDouble(total19.getText().substring(2).replace(',', '.')) 
+                        - Double.parseDouble(total32.getText().substring(2).replace(',', '.')))));
 
                 if (resumo != null) {
                     resumo.setValorGastoCompraAnimais(temp);
@@ -2638,16 +2635,16 @@ public class VisualizarInventario extends javax.swing.JFrame {
         
         if (tabelaInveTerras.getSelectedRowCount() > 0) {
             escolha = JOptionPane.showConfirmDialog(null, "A linha será excluída em ambas as tabelas. "
-                    + "\nDeseja realmente excluir '" + tabelaInveTerras.getValueAt(tabelaInveTerras.getSelectedRow(), 0).toString().toUpperCase()
-                    + "'? ", "Confirmar exclusão", JOptionPane.YES_NO_OPTION);
+                    + "\nDeseja realmente excluir '" + tabelaInveTerras.getValueAt(tabelaInveTerras.getSelectedRow(), 0)
+                            .toString().toUpperCase() + "'? ", "Confirmar exclusão", JOptionPane.YES_NO_OPTION);
             if (escolha == 0) {
                 tabelaForrageirasGTRE.removeSourceTableRow(tabelaInveTerras.getSelectedRow());
                 tabelaTerrasGTRE.removeSourceTableRow(tabelaInveTerras.getSelectedRow());
             }
         } else if (tabelaInveForrageiras.getSelectedRowCount() > 0) {
             escolha = JOptionPane.showConfirmDialog(null, "A linha será excluída em ambas as tabelas. "
-                    + "\nDeseja realmente excluir '" + tabelaInveForrageiras.getValueAt(tabelaInveForrageiras.getSelectedRow(), 0).toString().toUpperCase() 
-                    + "'? ", "Confirmar exclusão", JOptionPane.YES_NO_OPTION);
+                    + "\nDeseja realmente excluir '" + tabelaInveForrageiras.getValueAt(tabelaInveForrageiras.getSelectedRow(), 0)
+                            .toString().toUpperCase() + "'? ", "Confirmar exclusão", JOptionPane.YES_NO_OPTION);
             if (escolha == 0) {
                 tabelaTerrasGTRE.removeSourceTableRow(tabelaInveForrageiras.getSelectedRow());
                 tabelaForrageirasGTRE.removeSourceTableRow(tabelaInveForrageiras.getSelectedRow());
@@ -2764,7 +2761,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 }
 
                 atividadeLeite.setText("" + temp);
-                total50.setText(String.format("R$ %.2f", Double.parseDouble(total49.getText().substring(2).replace(',', '.')) * (temp / 100)));
+                total50.setText(String.format("R$ %.2f", Double.parseDouble(total49.getText().substring(2).replace(',', '.'))
+                        * (temp / 100)));
 
             } else {
                 JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
@@ -2786,7 +2784,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 }
 
                 custoOportunidade.setText("" + temp);
-                total57.setText(String.format("R$ %.2f", Double.parseDouble(total56.getText().substring(2).replace(',', '.')) * (temp / 100)));
+                total57.setText(String.format("R$ %.2f", Double.parseDouble(total56.getText().substring(2).replace(',', '.'))
+                        * (temp / 100)));
             } else {
                 JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
             }
@@ -2802,7 +2801,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
             if (temp >= 0.0) {
                 salarioMinimo.setText(String.format("%.2f", temp));
                 total58.setText(String.format("%.2f", temp));
-                total59.setText(String.format("%.2f", Calc.multiplicar(Double.parseDouble(salarioMinimo.getText().replace(',', '.')), 0.3)));
+                total59.setText(String.format("%.2f", Calc.multiplicar(Double.parseDouble(salarioMinimo.getText()
+                        .replace(',', '.')), 0.3)));
 
                 if (resumo != null) {
                     resumo.setSalarioMinimo(temp);

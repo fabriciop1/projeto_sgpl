@@ -404,8 +404,8 @@ public abstract class GenericTableModifier extends JDialog{
     
     protected Object convertToSourceTableValue(Object value, int sourceColumn){
 
-        if (value != null) {
-
+        if (value != null && !value.toString().isEmpty()) {
+            
             Object sourceValue = Cast.toPrimitiveType(value.toString(), sourceTable.getColumnClass(sourceColumn));
 
             if (sourceValue.getClass() == sourceTable.getColumnClass(sourceColumn)) {
