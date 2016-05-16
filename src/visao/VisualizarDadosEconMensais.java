@@ -884,26 +884,28 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         gtae.setAllowEmptyRows(true);
         gtae.setColumnEditable(0, true);
         gtae.setColumnEditable(1, true);
-        gtae.setRowEditable(0, false);
-        gtae.setRowEditable(7, false);
-        gtae.setRowEditable(8, false);
-        gtae.setRowEditable(20, false);
-        gtae.setRowEditable(21, false);
-        gtae.setRowEditable(33, false);
-        gtae.setRowEditable(34, false);
-        gtae.setRowEditable(45, false);
-        gtae.setRowEditable(46, false);
-        gtae.setRowEditable(53, false);
-        gtae.setRowEditable(54, false);
-        gtae.setRowEditable(67, false);
-        gtae.setRowEditable(68, false);
-        gtae.setRowEditable(73, false);
-        gtae.setRowEditable(74, false);
-        gtae.setRowEditable(80, false);
-        gtae.setRowEditable(81, false);
-        gtae.setRowEditable(85, false);
-        gtae.setRowEditable(86, false);
-        gtae.setRowEditable(88, false);
+        gtae.setSourceRowEditable(0, false);
+        gtae.setSourceRowEditable(7, false);
+        gtae.setSourceRowEditable(8, false);
+        gtae.setSourceRowEditable(20, false);
+        gtae.setSourceRowEditable(21, false);
+        gtae.setSourceRowEditable(33, false);
+        gtae.setSourceRowEditable(34, false);
+        gtae.setSourceRowEditable(45, false);
+        gtae.setSourceRowEditable(46, false);
+        gtae.setSourceRowEditable(53, false);
+        gtae.setSourceRowEditable(54, false);
+        gtae.setSourceRowEditable(67, false);
+        gtae.setSourceRowEditable(68, false);
+        gtae.setSourceRowEditable(73, false);
+        gtae.setSourceRowEditable(74, false);
+        gtae.setSourceRowEditable(80, false);
+        gtae.setSourceRowEditable(81, false);
+        gtae.setSourceRowEditable(85, false);
+        gtae.setSourceRowEditable(86, false);
+        gtae.setSourceRowEditable(88, false); 
+        
+        
     }
     
 
