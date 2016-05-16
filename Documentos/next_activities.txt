@@ -1,12 +1,34 @@
-Atualizar campos totais em caso de insercao/remocao e delecao
-Ajeitar tela de edicao para inventario.
 
-Permitir o usuario adicionar novo ano
 
-totais em dados economicos - cor e nao editavel
-aceitar campos vazios em dados economicos
-inserção, edição de campos em Dados Econômicos
+totais em dados economicos - nao editavel (ultima linha)
+
+inserção, edição de campos em Dados Econômicos - Conexao com BD
 especificacao em editar - tabela fixa
+COE && Mao-de obra familiar
+INSEMINACAO ASTIFICIAL
+
+
+iniciar dados tecnicos
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 Adicionar Usuario

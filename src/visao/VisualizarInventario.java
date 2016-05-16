@@ -28,6 +28,7 @@ import modelo.negocio.Perfil;
 import util.Calc;
 import util.Pair;
 import util.Cast;
+import util.DecimalFormatRenderer;
 
 /**
  *
@@ -64,6 +65,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
         Calendar cal = GregorianCalendar.getInstance();
         int anoAtual = cal.get(Calendar.YEAR);
         int mesAtual = cal.get(Calendar.MONTH);
+        
+        setRenderers();
 
         perfilAtual = ControlePerfil.getInstance().getPerfilSelecionado();
         
@@ -2897,6 +2900,15 @@ public class VisualizarInventario extends javax.swing.JFrame {
         tabelaMaquinas.setShowHorizontalLines(true);
         tabelaMaquinas.setShowVerticalLines(true);
     }
+    
+    private void setRenderers() {
+       tabelaMaquinas.getColumnModel().getColumn(6).setCellRenderer(new DecimalFormatRenderer());
+       tabelaBenfeitorias.getColumnModel().getColumn(6).setCellRenderer(new DecimalFormatRenderer());
+       tabelaInveForrageiras.getColumnModel().getColumn(5).setCellRenderer(new DecimalFormatRenderer());
+       tabelaInveForrageiras.getColumnModel().getColumn(2).setCellRenderer(new DecimalFormatRenderer());
+       
+    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton adicionarInvAnimaisBT;

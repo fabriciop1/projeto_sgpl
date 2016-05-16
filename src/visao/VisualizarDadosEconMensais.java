@@ -17,6 +17,7 @@ import javax.swing.JScrollBar;
 import javax.swing.table.DefaultTableModel;
 import modelo.negocio.DadosEconMensais;
 import modelo.negocio.Especificacao;
+import modelo.negocio.InventarioResumo;
 import modelo.negocio.Perfil;
 import util.Cast;
 import util.ColorRenderer;
@@ -31,6 +32,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
     List<DadosEconMensais> dems;
     GenericDAO<DadosEconMensais> demdao;
     GenericDAO<Especificacao> demespdao;
+    GenericDAO<InventarioResumo> irdao;
     Perfil atual;
     Object[] anosDisponiveis = {"1990", "1991", "1992"};
     
@@ -54,7 +56,6 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         tabelaDadosEconomicos.setDefaultRenderer(Object.class, new ColorRenderer());
         tabelaEspecificacao.setDefaultRenderer(Object.class, new ColorRenderer());
         
-        //tabelaDadosEconomicos.setCellSelectionEnabled(false);
         tabelaDadosEconomicos.setRowSelectionAllowed(true);
         
         demdao = new GenericDAO<>(DadosEconMensais.class);
@@ -106,14 +107,13 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
     
     private void PreencherTabelaDEM(int ano, List<DadosEconMensais> dem){
         
-        int tipoEsp = 1; //Valor de 1 a 11;
-        
         DefaultTableModel modelEspecificacao = (DefaultTableModel) tabelaEspecificacao.getModel();
         DefaultTableModel modelDadosEconomicos = (DefaultTableModel) tabelaDadosEconomicos.getModel();
         modelDadosEconomicos.setNumRows(0);
         
         Object[] temp;
         double[] tempTotais = new double[36];
+        double coeAtivLeite = 0.0;
         
         for(int i = 0; i < modelEspecificacao.getRowCount(); i++){
             
@@ -135,10 +135,18 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                     
                 }
                 
-                if( tabelaEspecificacao.getModel().getValueAt(i, 0).equals("SUB-TOTAL") || 
-                    tabelaEspecificacao.getModel().getValueAt(i, 0).equals("TOTAL DE ENTRADAS")){
+                if( tabelaEspecificacao.getModel().getValueAt(i, 0).equals("SUB-TOTAL")) {    
+                    if (tempTotais[indexCol + 2] != 0.0) {
+                        temp[indexCol + 2] = tempTotais[indexCol + 2];
+                        coeAtivLeite += tempTotais[indexCol + 2];
+                        System.out.println(coeAtivLeite);
+                        tempTotais[indexCol + 2] = 0.0;
+                    } 
+                } 
+                
+                if( tabelaEspecificacao.getModel().getValueAt(i, 0).equals("TOTAL DE ENTRADAS")){
                                         
-                    if (tempTotais[indexCol] != 0.0 && tabelaEspecificacao.getModel().getValueAt(i, 0).equals("TOTAL DE ENTRADAS")) { 
+                    if (tempTotais[indexCol] != 0.0) { 
                         temp[indexCol] = tempTotais[indexCol];
                         tempTotais[indexCol] = 0.0;
                     }
@@ -148,8 +156,32 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                         tempTotais[indexCol + 2] = 0.0;
                     } 
                     
-                    tipoEsp++;
-                }       
+                }
+                
+                if( tabelaEspecificacao.getModel().getValueAt(i, 0).equals("COE DE ATIVIDADE LEITEIRA") ){
+                    
+                    if (coeAtivLeite != 0.0) {
+                        temp[indexCol + 2] = coeAtivLeite;
+                        coeAtivLeite = 0.0;
+                    } 
+                    
+                }
+                
+                if( tabelaEspecificacao.getModel().getValueAt(i, 0).equals("Mão-de-obra familiar (não paga)") ){
+                    
+                    double salario = 0;
+                    irdao = new GenericDAO<>(InventarioResumo.class);
+                    List<InventarioResumo> ir = irdao.retrieveByColumn("idPerfilFK", atual.getId());
+                    if (temp != null) {
+                        salario = ir.get(0).getSalarioMinimo();
+                        temp[indexCol + 1] = (salario * 13 + salario * 0.3) / 12;
+                    }
+                    if (dem.get(j).getQuantidade() != 0.0) {
+                        temp[indexCol] = dem.get(j).getQuantidade();
+                        temp[indexCol + 2] = dem.get(j).getQuantidade() * (Double) temp[indexCol + 1];
+                    }
+                    
+                }
             }
             modelDadosEconomicos.addRow(temp);
         }
@@ -382,9 +414,9 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(29, 29, 29)
+                .addGap(31, 31, 31)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 1488, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 80, Short.MAX_VALUE))
+                .addContainerGap(78, Short.MAX_VALUE))
         );
 
         jScrollPane1.setViewportView(jPanel1);
@@ -710,18 +742,21 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                                     .addComponent(adicionarAnoBT, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(layout.createSequentialGroup()
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(btnVoltar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                            .addComponent(anoCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(textoEntrada)))
-                                    .addGap(2, 2, 2))))
+                                        .addComponent(btnVoltar, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                                        .addComponent(textoEntrada))
+                                    .addGap(1, 1, 1))))
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                             .addContainerGap()
                             .addComponent(retornarBT, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(avancarBT, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(avancarBT, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(anoCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 648, Short.MAX_VALUE))
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 649, Short.MAX_VALUE))
         );
 
         pack();
@@ -904,7 +939,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         gtae.setSourceRowEditable(85, false);
         gtae.setSourceRowEditable(86, false);
         gtae.setSourceRowEditable(88, false); 
-        
+       
         
     }
     

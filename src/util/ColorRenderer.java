@@ -42,9 +42,10 @@ import java.awt.Component;
 import java.awt.Font;
 import javax.swing.table.DefaultTableCellRenderer;
 
-public class ColorRenderer extends DefaultTableCellRenderer {   
+public class ColorRenderer extends DecimalFormatRenderer {   
 
     public ColorRenderer(boolean isBordered) {
+        super();
         super.setOpaque(true); //MUST do this for background to show up.
     }
     
