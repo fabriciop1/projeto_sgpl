@@ -26,6 +26,9 @@ public class GenericTableAreaEditor extends GenericTableModifier {
     
     private final int columnOffset;
     
+    private boolean sourceRowEditable[];
+
+    
     public GenericTableAreaEditor(Frame parent, JTable sourceTable, boolean forceCellEditing){
         super(parent, sourceTable, forceCellEditing);
         
@@ -37,8 +40,10 @@ public class GenericTableAreaEditor extends GenericTableModifier {
         
         this.columnOffset = 0;
         
+        this.sourceRowEditable = new boolean[sourceTable.getRowCount()];
+        
         super.setLabelText("Editar");
-        super.setAllRowsEditable(true);
+        setAllSourceRowsEditable(true);
     }
     
     public GenericTableAreaEditor(Frame parent, JTable sourceTable, boolean forceCellEditing, int startRow, int endRow, int startColumn, int endColumn){
@@ -51,6 +56,8 @@ public class GenericTableAreaEditor extends GenericTableModifier {
         this.endColumn = endColumn;
         
         this.columnOffset = 0;
+        
+        this.sourceRowEditable = new boolean[sourceTable.getRowCount()];
         
         super.setLabelText("Editar");
     }
@@ -98,9 +105,15 @@ public class GenericTableAreaEditor extends GenericTableModifier {
         
         for (int i = 0; i < editTable.getRowCount() - columnOffset; i++) {
             
-            if(checkEmptyRow(i, columnOffset) && !isAllowedEmptyRows()){
-                JOptionPane.showMessageDialog(this, "Não são permitidas linhas vazias.", "Linha Vazia", JOptionPane.ERROR_MESSAGE);
+            if(checkEmptyRow(i, columnOffset)){ 
+                
+                if(!isAllowedEmptyRows()){
+                
+                    JOptionPane.showMessageDialog(this, "Não são permitidas linhas vazias.", "Linha Vazia", JOptionPane.ERROR_MESSAGE);
                     return false;
+                }
+                
+                continue;
             }
             
             for (int j = 0; j < editTable.getColumnCount() - columnOffset; j++) {
@@ -112,11 +125,8 @@ public class GenericTableAreaEditor extends GenericTableModifier {
                         JOptionPane.showMessageDialog(this, "Não são permitidas células vazias.", "Valor de Coluna Vazio", JOptionPane.ERROR_MESSAGE);
                         return false;
                     }
-                    
-                    return true;
                 }
-                
-                if(!validateEditTableValue(i, j + columnOffset, startColumn + j)){
+                else if(sourceRowEditable[i + startRow] && !validateEditTableValue(i, j + columnOffset, startColumn + j)){
                     
                     JOptionPane.showMessageDialog(this, "O valor da coluna \"" + editTable.getColumnName(j) + "\" na linha " + (i+1) +
                             " é inválido.", "Valor de Coluna Inválido", JOptionPane.ERROR_MESSAGE);
@@ -141,7 +151,30 @@ public class GenericTableAreaEditor extends GenericTableModifier {
             editColumnNames[i] = columnNames[startColumn + i];
         }
         
-        return super.createStringEditTableModel(new Object[][]{ }, editColumnNames);
+        DefaultTableModel model = new DefaultTableModel(dataMatrix, editColumnNames){
+            
+            @Override
+            public Class getColumnClass(int columnIndex) {
+                return String.class;
+            }
+
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                
+                if(!isForceCellEditingEnabled()){
+                    
+                    int editRowIndex = rowIndex + GenericTableAreaEditor.this.startRow;
+                    
+                    return (GenericTableAreaEditor.this.isColumnEditable(columnIndex) && 
+                            GenericTableAreaEditor.this.sourceRowEditable[editRowIndex]);
+                } else {
+                    
+                    return true;
+                }
+            }
+        };
+        
+        return model;
     }
     
     @Override
@@ -202,7 +235,16 @@ public class GenericTableAreaEditor extends GenericTableModifier {
         return startColumn;
     }
 
-    public void setStartColumn(int startColumn) {
+
+    public int getEndColumn() {
+        return endColumn;
+    }
+
+    public void setColumnInterval(int startColumn, int endColumn){
+        
+        if(startColumn > endColumn){
+            throw new IllegalArgumentException("O indice da coluna inicial deve ser menor ou igual ao indice da coluna final");
+        }
         
         if(startColumn < 0 || startColumn > sourceTable.getColumnCount()-1 || startColumn > endColumn){
             throw new IllegalArgumentException("sourceTable - Coluna Inválida: " + startColumn);
@@ -213,13 +255,6 @@ public class GenericTableAreaEditor extends GenericTableModifier {
             this.startColumn = startColumn;
             setRebuildEditTable(true);
         }
-    }
-
-    public int getEndColumn() {
-        return endColumn;
-    }
-
-    public void setEndColumn(int endColumn) {
         
         if(endColumn < 0 || endColumn > sourceTable.getColumnCount()-1 || endColumn < startColumn){
             throw new IllegalArgumentException("sourceTable - Coluna Inválida: " + endColumn);
@@ -230,16 +265,11 @@ public class GenericTableAreaEditor extends GenericTableModifier {
             this.endColumn = endColumn;
             setRebuildEditTable(true);
         }
-    }
-
-    public void setColumnInterval(int startColumn, int endColumn){
         
-        if(startColumn > endColumn){
-            throw new IllegalArgumentException("O indice da coluna inicial deve ser menor ou igual ao indice da coluna final");
+        if(isRebuildEditTableNeeded()){
+            composeEditTable();
+            
         }
-        
-        setStartColumn(startColumn);
-        setEndColumn(endColumn);
     }
     
     public void setRowInterval(int startRow, int endRow){
@@ -257,5 +287,25 @@ public class GenericTableAreaEditor extends GenericTableModifier {
         setColumnInterval(startColumn, endColumn);
         setRowInterval(startRow, endRow);
     }
-
+    
+    public void setSourceRowEditable(int rowIndex, boolean editable) {
+        
+        if(rowIndex < 0 || rowIndex > sourceTable.getRowCount()-1){
+            throw new IllegalArgumentException("O numero da linha passado é inválido: " + rowIndex);
+        }
+        
+        sourceRowEditable[rowIndex] = editable;
+    }
+    
+    public void setAllSourceRowsEditable(boolean editable) {
+        
+        for (int i = 0; i < this.sourceRowEditable.length; i++) {
+            
+            this.sourceRowEditable[i] = editable;
+        }
+    }
+    
+    public boolean isSourceRowEditable(int rowIndex) {
+        return sourceRowEditable[rowIndex];
+    }
 }

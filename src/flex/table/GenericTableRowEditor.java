@@ -29,12 +29,10 @@ public class GenericTableRowEditor extends GenericTableModifier {
         this.editorType = GTRE_INSERT;
         
         super.setAllColumnsEditable(true);
-        super.setAllRowsEditable(true);
+        super.getEditTableScroll().setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        super.setRebuildEditTable(false);
         
         super.composeEditTable();
-        super.setRebuildEditTable(false);
-        super.getEditTableScroll().setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-        
     }
     
     @Override
@@ -64,7 +62,27 @@ public class GenericTableRowEditor extends GenericTableModifier {
     @Override
     protected DefaultTableModel createEditTableModel(Object[][] dataMatrix, String[] columnNames, Class[] columnTypes) {
         
-        return super.createStringEditTableModel(dataMatrix, columnNames); //To change body of generated methods, choose Tools | Templates.
+        DefaultTableModel model = new DefaultTableModel(dataMatrix, columnNames){
+            
+            @Override
+            public Class getColumnClass(int columnIndex) {
+                return String.class;
+            }
+
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                
+                if(!isForceCellEditingEnabled()){
+                    
+                    return (GenericTableRowEditor.this.isColumnEditable(columnIndex));
+                } else {
+                    
+                    return true;
+                }
+            }
+        };
+        
+        return model;
     }
     
     @Override

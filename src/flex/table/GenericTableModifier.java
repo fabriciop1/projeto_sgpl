@@ -46,8 +46,7 @@ public abstract class GenericTableModifier extends JDialog{
     private boolean allowEmptyCells;
     
     private boolean forceCellEditing;
-    private final boolean editorColumnEditable[];
-    private final boolean editorRowEditable[];
+    private boolean editorColumnEditable[];
 
     boolean rebuildEditTable;
     
@@ -65,7 +64,6 @@ public abstract class GenericTableModifier extends JDialog{
         this.allowEmptyRows = false;
         this.rowsDisplayed = 1;
         this.editorColumnEditable = new boolean[sourceTable.getColumnCount()];
-        this.editorRowEditable = new boolean[sourceTable.getRowCount()];
         this.rebuildEditTable = true;
         
         initComponents();
@@ -111,11 +109,11 @@ public abstract class GenericTableModifier extends JDialog{
         }
         log += "\n\n";
         
-        log += "EditTable Rows Editable: ";
-        for(int i = 0; i < editorRowEditable.length; i++) {
-            log += "[" + i + "-" + editorRowEditable[i] + "] ";
-        }
-        log += "\n\n";
+//        log += "EditTable Rows Editable: ";
+//        for(int i = 0; i < sourceRowEditable.length; i++) {
+//            log += "[" + i + "-" + sourceRowEditable[i] + "] ";
+//        }
+//        log += "\n\n";
         
         log += "Editor Window Width: " + this.getWidth() + "\n";
         log += "EditTable Width: " + editTable.getWidth() + "\n";
@@ -189,7 +187,7 @@ public abstract class GenericTableModifier extends JDialog{
     
     protected void composeEditTable(){
         
-        editTable.setModel( createEditTableModel( getSourceTableDataMatrix(), getSourceTableColumnNames(), getSourceTableColumnTypes() ) );
+        editTable.setModel( GenericTableModifier.this.createEditTableModel( getSourceTableDataMatrix(), getSourceTableColumnNames(), getSourceTableColumnTypes() ) );
         
         editTable.createDefaultColumnsFromModel();
         
@@ -199,53 +197,7 @@ public abstract class GenericTableModifier extends JDialog{
         getEditTableModel().fireTableStructureChanged();
     }    
     
-    protected final DefaultTableModel createStringEditTableModel(Object[][] dataMatrix, String[] columnNames){
-        
-        DefaultTableModel model = new DefaultTableModel(dataMatrix, columnNames){
-            
-            @Override
-            public Class getColumnClass(int columnIndex) {
-                return String.class;
-            }
-
-            @Override
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                
-                if(!isForceCellEditingEnabled()){
-                    return (GenericTableModifier.this.editorColumnEditable[columnIndex] && GenericTableModifier.this.editorRowEditable[rowIndex]);
-                } else {
-                    return true;
-                }
-            }
-        };
-        
-        return model;
-    }
-
-    protected final DefaultTableModel createDefaultEditTableModel(Object[][] dataMatrix, String[] columnNames, Class[] columnTypes){
-        
-        DefaultTableModel model = new DefaultTableModel(dataMatrix, columnNames){
-            
-            private final Class[] types = columnTypes;
-            
-            @Override
-            public Class getColumnClass(int columnIndex) {
-                return types[columnIndex];
-            }
-
-            @Override
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                
-                if(!isForceCellEditingEnabled()){
-                    return (GenericTableModifier.this.editorColumnEditable[columnIndex] && GenericTableModifier.this.editorRowEditable[rowIndex]);
-                } else {
-                    return true;
-                }
-            }
-        };
-        
-        return model;
-    }
+    protected abstract DefaultTableModel createEditTableModel(Object[][] dataMatrix, String[] columnNames, Class[] columnTypes);
     
     
     protected void notifyListeners(TableModifiedEvent event){
@@ -307,9 +259,6 @@ public abstract class GenericTableModifier extends JDialog{
     protected abstract void refillEditTable();
     
     protected abstract void updateSourceTable();
-    
-    protected abstract DefaultTableModel createEditTableModel(Object[][] dataMatrix, String[] columnNames, Class[] columnTypes);
-    
     
     protected void setSourceTableValue(Object value, int row, int column){
         
@@ -402,6 +351,7 @@ public abstract class GenericTableModifier extends JDialog{
     }
     
     
+    
     protected Object convertToSourceTableValue(Object value, int sourceColumn){
 
         if (value != null && !value.toString().isEmpty()) {
@@ -484,12 +434,7 @@ public abstract class GenericTableModifier extends JDialog{
             throw new NullPointerException("O vetor de valores passado é inválido.");
         }
         
-        getEditTableModel().addRow(new Object[]{});
-        
-        for(int i=0; i<editTable.getColumnCount(); i++){
-            setEditTableValue(dataArray[i], editTable.getRowCount()-1, i);
-        }
-        
+        getEditTableModel().addRow(dataArray);
         getEditTableModel().fireTableRowsInserted(editTable.getRowCount()-1, editTable.getRowCount()-1);
     }
     
@@ -516,7 +461,7 @@ public abstract class GenericTableModifier extends JDialog{
         return (DefaultTableModel) editTable.getModel();
     }
     
-    
+
     protected void processEditTable(){
         
         clearEditTable();
@@ -602,7 +547,7 @@ public abstract class GenericTableModifier extends JDialog{
         
         Object cellValue = getEditTableValue(editRow, editColumn);
         
-        if(!validateValue(cellValue, sourceColumn)){
+        if(editorColumnEditable[editColumn] == true && !validateValue(cellValue, sourceColumn)){
             
             return false;
         }
@@ -610,7 +555,11 @@ public abstract class GenericTableModifier extends JDialog{
         return true;
     }
     
-    protected boolean validateEditTableRow(int editRowIndex){
+    protected boolean validateEditTableRow(int editRowIndex, int columnOffset){
+        
+        if(checkEmptyRow(editRowIndex, columnOffset)){
+            return isAllowedEmptyRows();
+        }
         
         Object[] rowData = getEditTableRowStringData(editRowIndex);
         
@@ -629,16 +578,27 @@ public abstract class GenericTableModifier extends JDialog{
         
         for (int i = 0; i < editTable.getRowCount(); i++) {
             
-            if(checkEmptyRow(i, 0) && !isAllowedEmptyRows()){
-                JOptionPane.showMessageDialog(this, "Não são permitidas linhas vazias.", "Linha Vazia", JOptionPane.ERROR_MESSAGE);
+            if(checkEmptyRow(i, 0)){
+                
+                if(!isAllowedEmptyRows()){
+                    
+                    JOptionPane.showMessageDialog(this, "Não são permitidas linhas vazias.", "Linha Vazia", JOptionPane.ERROR_MESSAGE);
                     return false;
+                }
+                
+                continue;
             }
             
             for (int j = 0; j < editTable.getColumnCount(); j++) {
                 
-                if(checkEmptyValue(i, j) && !isAllowedEmptyCells()){
-                    JOptionPane.showMessageDialog(this, "Não são permitidas células vazias.", "Valor de Coluna Vazio", JOptionPane.ERROR_MESSAGE);
-                    return false;
+                if(checkEmptyValue(i, j)){ 
+                    
+                    if(!isAllowedEmptyCells()){
+                    
+                        JOptionPane.showMessageDialog(this, "Não são permitidas células vazias.", "Valor de Coluna Vazio", JOptionPane.ERROR_MESSAGE);
+                        return false;
+                    }
+                    
                 }
                 else if(!validateEditTableValue(i, j, j)){
                     
@@ -884,20 +844,6 @@ public abstract class GenericTableModifier extends JDialog{
         }
     }
     
-    public void setRowEditable(int rowIndex, boolean editable) {
-        editorRowEditable[rowIndex] = editable;
-    }
-    
-    public boolean isRowEditable(int rowIndex) {
-        return editorRowEditable[rowIndex];
-    }
-    
-    public void setAllRowsEditable(boolean editable) {
-        for(int i = 0; i < this.editorRowEditable.length; i++) {
-            this.editorRowEditable[i] = editable;
-        }
-    }
-
     public boolean isAllowedEmptyRows() {
         return allowEmptyRows;
     }
@@ -939,8 +885,4 @@ public abstract class GenericTableModifier extends JDialog{
         return editTableScroll;
     }
 
-    public void setEditTableScroll(JScrollPane editTableScroll) {
-        this.editTableScroll = editTableScroll;
-    }
-    
 }
