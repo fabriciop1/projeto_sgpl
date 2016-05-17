@@ -111,24 +111,26 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         DefaultTableModel modelDadosEconomicos = (DefaultTableModel) tabelaDadosEconomicos.getModel();
         modelDadosEconomicos.setNumRows(0);
         
-        Object[] temp;
+        Object[] linhaTemp;
         double[] tempTotais = new double[36];
-        double coeAtivLeite = 0.0;
+        double[] coeAtivLeite = new double[12];
         
         for(int i = 0; i < modelEspecificacao.getRowCount(); i++){
             
-            temp = new Object[36];
+            linhaTemp = new Object[36];
             
             for(int j = 0; j < dem.size(); j++){
+                
+                
                 
                 int indexCol = (dem.get(j).getMes() - 1) * 3;
                 
                 if( tabelaEspecificacao.getModel().getValueAt(i, 0).equals(dem.get(j).getEspecificacao().getEspecificacao())
                         && dem.get(j).getAno() == ano ){
                                       
-                    temp[indexCol ] = dem.get(j).getQuantidade();
-                    temp[indexCol + 1] = dem.get(j).getValorUnitario();
-                    temp[indexCol + 2] = dem.get(j).getQuantidade() * dem.get(j).getValorUnitario();
+                    linhaTemp[indexCol ] = dem.get(j).getQuantidade();
+                    linhaTemp[indexCol + 1] = dem.get(j).getValorUnitario();
+                    linhaTemp[indexCol + 2] = dem.get(j).getQuantidade() * dem.get(j).getValorUnitario();
                     
                     tempTotais[indexCol] += dem.get(j).getQuantidade();
                     tempTotais[indexCol + 2] += dem.get(j).getQuantidade() * dem.get(j).getValorUnitario();
@@ -137,9 +139,8 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                 
                 if( tabelaEspecificacao.getModel().getValueAt(i, 0).equals("SUB-TOTAL")) {    
                     if (tempTotais[indexCol + 2] != 0.0) {
-                        temp[indexCol + 2] = tempTotais[indexCol + 2];
-                        coeAtivLeite += tempTotais[indexCol + 2];
-                        System.out.println(coeAtivLeite);
+                        linhaTemp[indexCol + 2] = tempTotais[indexCol + 2];
+                        coeAtivLeite[dem.get(j).getMes() - 1] += tempTotais[indexCol + 2];
                         tempTotais[indexCol + 2] = 0.0;
                     } 
                 } 
@@ -147,12 +148,12 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                 if( tabelaEspecificacao.getModel().getValueAt(i, 0).equals("TOTAL DE ENTRADAS")){
                                         
                     if (tempTotais[indexCol] != 0.0) { 
-                        temp[indexCol] = tempTotais[indexCol];
+                        linhaTemp[indexCol] = tempTotais[indexCol];
                         tempTotais[indexCol] = 0.0;
                     }
                     
                     if (tempTotais[indexCol + 2] != 0.0) {
-                        temp[indexCol + 2] = tempTotais[indexCol + 2];
+                        linhaTemp[indexCol + 2] = tempTotais[indexCol + 2];
                         tempTotais[indexCol + 2] = 0.0;
                     } 
                     
@@ -160,30 +161,30 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                 
                 if( tabelaEspecificacao.getModel().getValueAt(i, 0).equals("COE DE ATIVIDADE LEITEIRA") ){
                     
-                    if (coeAtivLeite != 0.0) {
-                        temp[indexCol + 2] = coeAtivLeite;
-                        coeAtivLeite = 0.0;
+                    if (coeAtivLeite[dem.get(j).getMes() - 1] != 0.0) {
+                        linhaTemp[indexCol + 2] = coeAtivLeite[dem.get(j).getMes() - 1];
+                        coeAtivLeite[dem.get(j).getMes() - 1] = 0.0;
                     } 
                     
                 }
                 
                 if( tabelaEspecificacao.getModel().getValueAt(i, 0).equals("Mão-de-obra familiar (não paga)") ){
                     
-                    double salario = 0;
+                    double salario = 0.0;
                     irdao = new GenericDAO<>(InventarioResumo.class);
                     List<InventarioResumo> ir = irdao.retrieveByColumn("idPerfilFK", atual.getId());
-                    if (temp != null) {
+                    if (linhaTemp != null) {
                         salario = ir.get(0).getSalarioMinimo();
-                        temp[indexCol + 1] = (salario * 13 + salario * 0.3) / 12;
+                        linhaTemp[indexCol + 1] = (salario * 13 + salario * 0.3) / 12;
                     }
-                    if (dem.get(j).getQuantidade() != 0.0) {
-                        temp[indexCol] = dem.get(j).getQuantidade();
-                        temp[indexCol + 2] = dem.get(j).getQuantidade() * (Double) temp[indexCol + 1];
+                                                            
+                    if (linhaTemp[indexCol] != null && salario != 0.0) {
+                        linhaTemp[indexCol + 2] = (Double) linhaTemp[indexCol] * (Double) linhaTemp[indexCol + 1];
                     }
                     
                 }
             }
-            modelDadosEconomicos.addRow(temp);
+            modelDadosEconomicos.addRow(linhaTemp);
         }
     }
 

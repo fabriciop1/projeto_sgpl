@@ -1,14 +1,21 @@
+===============================================================
+
+COE && Mao-de obra familiar - OK Alexandre
+
+iniciar dados técnicos - OK Alexandre (Tabelas na tela)
+
+===============================================================
 
 
 totais em dados economicos - nao editavel (ultima linha)
 
 inserção, edição de campos em Dados Econômicos - Conexao com BD
 especificacao em editar - tabela fixa
-COE && Mao-de obra familiar
+
 INSEMINACAO ASTIFICIAL
 
 
-iniciar dados tecnicos
+
 
 
 
