@@ -32,7 +32,7 @@
 package util;
 
 /* 
- * ColorRenderer.java (compiles with releases 1.2, 1.3, and 1.4) is used by 
+ * ColorRendererDadosEcon.java (compiles with releases 1.2, 1.3, and 1.4) is used by 
  * TableDialogEditDemo.java.
  */
 
@@ -42,14 +42,14 @@ import java.awt.Component;
 import java.awt.Font;
 import javax.swing.table.DefaultTableCellRenderer;
 
-public class ColorRenderer extends DecimalFormatRenderer {   
+public class ColorRendererDadosEcon extends DecimalFormatRenderer {   
 
-    public ColorRenderer(boolean isBordered) {
+    public ColorRendererDadosEcon(boolean isBordered) {
         super();
         super.setOpaque(true); //MUST do this for background to show up.
     }
     
-    public ColorRenderer() {}
+    public ColorRendererDadosEcon() {}
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object color, boolean isSelected, boolean hasFocus, int row, int column) {
@@ -72,6 +72,7 @@ public class ColorRenderer extends DecimalFormatRenderer {
         } else if (row == 89 && (column == 1 || column == 4 || column == 7 || column == 10 || column == 13 || column == 16
                 || column == 19 || column == 22 || column == 25 || column == 28 || column == 31 || column == 34)) {
             comp.setBackground(Color.LIGHT_GRAY);
+            comp.setFont(comp.getFont().deriveFont(Font.BOLD));
             
         } else {
             comp.setBackground(table.getBackground());

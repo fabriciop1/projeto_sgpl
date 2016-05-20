@@ -7,10 +7,12 @@ TRUNCATE TABLE projeto_pesquisa.inventario_benfeitorias;
 TRUNCATE TABLE projeto_pesquisa.inventario_maquinas;
 TRUNCATE TABLE projeto_pesquisa.inventario_resumo;
 TRUNCATE TABLE projeto_pesquisa.inventario_terras;
+TRUNCATE TABLE projeto_pesquisa.inventario_forrageiras;
 TRUNCATE TABLE projeto_pesquisa.perfil;
 TRUNCATE TABLE projeto_pesquisa.rota;
 TRUNCATE TABLE projeto_pesquisa.usuario;
-TRUNCATE TABLE projeto_pesquisa.usuario_perfil;
+TRUNCATE TABLE projeto_pesquisa.dtm_indicador;
+TRUNCATE TABLE projeto_pesquisa.dados_tecnicos_mensais;
 SET FOREIGN_KEY_CHECKS = 1;
 
 /*===============================================================================================================================*/
@@ -245,6 +247,49 @@ INSERT INTO projeto_pesquisa.dados_economicos_mensais (mes, ano, quantidade, val
 				idDEM_especificacaoFK, idPerfilFK) VALUES (2, 2015, 1, 15.50, 60, 1);
 
 /*===============================================================================================================================*/
+
+INSERT INTO projeto_pesquisa.dtm_indicador (indicador) VALUES ("Nº V. Lactação");
+INSERT INTO projeto_pesquisa.dtm_indicador (indicador) VALUES ("Nº V. Secas ");
+INSERT INTO projeto_pesquisa.dtm_indicador (indicador) VALUES ("Nº de Novilhas");
+INSERT INTO projeto_pesquisa.dtm_indicador (indicador) VALUES ("Nº de Bezerras");
+INSERT INTO projeto_pesquisa.dtm_indicador (indicador) VALUES ("Nº de Bezerros");
+INSERT INTO projeto_pesquisa.dtm_indicador (indicador) VALUES ("Touros");
+INSERT INTO projeto_pesquisa.dtm_indicador (indicador) VALUES ("Outros");
+INSERT INTO projeto_pesquisa.dtm_indicador (indicador) VALUES ("Nº de Coberturas");
+INSERT INTO projeto_pesquisa.dtm_indicador (indicador) VALUES ("Nº de Partos");
+INSERT INTO projeto_pesquisa.dtm_indicador (indicador) VALUES ("Nº de Animais Comprados");
+
+INSERT INTO projeto_pesquisa.dtm_indicador (indicador) VALUES ("Nº de Abortos");
+INSERT INTO projeto_pesquisa.dtm_indicador (indicador) VALUES ("Nº de Natimortos");
+INSERT INTO projeto_pesquisa.dtm_indicador (indicador) VALUES ("Nº de Retenção de Placenta");
+INSERT INTO projeto_pesquisa.dtm_indicador (indicador) VALUES ("Nº de Mortes de Bezerros");
+INSERT INTO projeto_pesquisa.dtm_indicador (indicador) VALUES ("Nº de Bezerros Doentes");
+INSERT INTO projeto_pesquisa.dtm_indicador (indicador) VALUES ("Nº de Mortes de Novilhas");
+INSERT INTO projeto_pesquisa.dtm_indicador (indicador) VALUES ("Nº de Mortes de Vacas");
+INSERT INTO projeto_pesquisa.dtm_indicador (indicador) VALUES ("Nº de Vacas com Mastite Clínica");
+
+INSERT INTO projeto_pesquisa.dtm_indicador (indicador) VALUES ("Total Litros/Mês (L)");
+
 /*===============================================================================================================================*/
+
+INSERT INTO projeto_pesquisa.dados_tecnicos_mensais (mes, ano, dado, idDTM_indicadorFK, idPerfilFK) 
+		VALUES (1,2015,7,1,1);
+INSERT INTO projeto_pesquisa.dados_tecnicos_mensais (mes, ano, dado, idDTM_indicadorFK, idPerfilFK) 
+		VALUES (1,2015,1,2,1);
+INSERT INTO projeto_pesquisa.dados_tecnicos_mensais (mes, ano, dado, idDTM_indicadorFK, idPerfilFK) 
+		VALUES (1,2015,7,3,1);
+INSERT INTO projeto_pesquisa.dados_tecnicos_mensais (mes, ano, dado, idDTM_indicadorFK, idPerfilFK) 
+		VALUES (1,2015,4,5,1);
+INSERT INTO projeto_pesquisa.dados_tecnicos_mensais (mes, ano, dado, idDTM_indicadorFK, idPerfilFK) 
+		VALUES (1,2015,1,6,1);
+INSERT INTO projeto_pesquisa.dados_tecnicos_mensais (mes, ano, dado, idDTM_indicadorFK, idPerfilFK) 
+		VALUES (1,2015,1,9,1);
+INSERT INTO projeto_pesquisa.dados_tecnicos_mensais (mes, ano, dado, idDTM_indicadorFK, idPerfilFK) 
+		VALUES (1,2015,1662,19,1);
+INSERT INTO projeto_pesquisa.dados_tecnicos_mensais (mes, ano, dado, idDTM_indicadorFK, idPerfilFK) 
+		VALUES (7,2015,7,1,1);
+INSERT INTO projeto_pesquisa.dados_tecnicos_mensais (mes, ano, dado, idDTM_indicadorFK, idPerfilFK) 
+		VALUES (7,2015,1476,19,1);
+        
 /*===============================================================================================================================*/
 

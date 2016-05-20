@@ -6,9 +6,14 @@
 package visao;
 
 import controle.ControlePerfil;
+import flex.db.GenericDAO;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
+import modelo.negocio.DadosTecMensais;
+import modelo.negocio.Indicador;
 import modelo.negocio.Perfil;
+import util.Cast;
 
 /**
  *
@@ -16,6 +21,11 @@ import modelo.negocio.Perfil;
  */
 public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
 
+    private Perfil atual;
+    private GenericDAO<DadosTecMensais> dtmdao; 
+    private GenericDAO<Indicador> dtmindao;
+    private List<DadosTecMensais> dadosTecMen;
+    
     /**
      * Creates new form VisualizarDadosTecnMensais
      */
@@ -25,13 +35,22 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         super.setLocationRelativeTo(null);
         super.setResizable(false);
       
-        Perfil atual = ControlePerfil.getInstance().getPerfilSelecionado();
+        atual = ControlePerfil.getInstance().getPerfilSelecionado();
+        
+        tabelaDadosTecnicos.setShowGrid(true);
+        tabelaIndicadores.setShowHorizontalLines(true);
         
         super.setTitle("SGPL - " + atual.getNome() + " - Dados Técnicos Mensais");
         
-        Calendar cal = GregorianCalendar.getInstance();
-	int anoAtual = cal.get(Calendar.YEAR);
-        int mesAtual = cal.get(Calendar.MONTH);
+        dtmdao = new GenericDAO<>(DadosTecMensais.class);
+        
+        dtmindao = new GenericDAO<>(Indicador.class);
+        
+        
+        
+        
+        
+        fillItemSelector();
     }
 
     /**
@@ -46,17 +65,17 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         btnVoltar = new javax.swing.JButton();
         textoEntrada = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        anoCombo = new javax.swing.JComboBox<String>();
+        anoCombo = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabelaIndicadores = new javax.swing.JTable();
         jScrollPane4 = new javax.swing.JScrollPane();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tabelaDadosTecnicos = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -86,7 +105,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane2.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabelaIndicadores.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null},
                 {null},
@@ -122,7 +141,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
                 {null}
             },
             new String [] {
-                "Especificação"
+                "Indicador"
             }
         ) {
             Class[] types = new Class [] {
@@ -140,10 +159,25 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jTable1.getTableHeader().setReorderingAllowed(false);
-        jScrollPane3.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setResizable(false);
+        tabelaIndicadores.getTableHeader().setReorderingAllowed(false);
+        tabelaIndicadores.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                tabelaIndicadoresMouseDragged(evt);
+            }
+        });
+        tabelaIndicadores.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tabelaIndicadoresMousePressed(evt);
+            }
+        });
+        tabelaIndicadores.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tabelaIndicadoresKeyPressed(evt);
+            }
+        });
+        jScrollPane3.setViewportView(tabelaIndicadores);
+        if (tabelaIndicadores.getColumnModel().getColumnCount() > 0) {
+            tabelaIndicadores.getColumnModel().getColumn(0).setResizable(false);
         }
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -165,7 +199,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
 
         jScrollPane4.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tabelaDadosTecnicos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null, null, null, null, null},
@@ -219,22 +253,37 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jTable2.getTableHeader().setReorderingAllowed(false);
-        jScrollPane5.setViewportView(jTable2);
-        if (jTable2.getColumnModel().getColumnCount() > 0) {
-            jTable2.getColumnModel().getColumn(0).setResizable(false);
-            jTable2.getColumnModel().getColumn(1).setResizable(false);
-            jTable2.getColumnModel().getColumn(2).setResizable(false);
-            jTable2.getColumnModel().getColumn(3).setResizable(false);
-            jTable2.getColumnModel().getColumn(4).setResizable(false);
-            jTable2.getColumnModel().getColumn(5).setResizable(false);
-            jTable2.getColumnModel().getColumn(6).setResizable(false);
-            jTable2.getColumnModel().getColumn(7).setResizable(false);
-            jTable2.getColumnModel().getColumn(8).setResizable(false);
-            jTable2.getColumnModel().getColumn(9).setResizable(false);
-            jTable2.getColumnModel().getColumn(10).setResizable(false);
-            jTable2.getColumnModel().getColumn(11).setResizable(false);
-            jTable2.getColumnModel().getColumn(12).setResizable(false);
+        tabelaDadosTecnicos.getTableHeader().setReorderingAllowed(false);
+        tabelaDadosTecnicos.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                tabelaDadosTecnicosMouseDragged(evt);
+            }
+        });
+        tabelaDadosTecnicos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tabelaDadosTecnicosMousePressed(evt);
+            }
+        });
+        tabelaDadosTecnicos.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tabelaDadosTecnicosKeyPressed(evt);
+            }
+        });
+        jScrollPane5.setViewportView(tabelaDadosTecnicos);
+        if (tabelaDadosTecnicos.getColumnModel().getColumnCount() > 0) {
+            tabelaDadosTecnicos.getColumnModel().getColumn(0).setResizable(false);
+            tabelaDadosTecnicos.getColumnModel().getColumn(1).setResizable(false);
+            tabelaDadosTecnicos.getColumnModel().getColumn(2).setResizable(false);
+            tabelaDadosTecnicos.getColumnModel().getColumn(3).setResizable(false);
+            tabelaDadosTecnicos.getColumnModel().getColumn(4).setResizable(false);
+            tabelaDadosTecnicos.getColumnModel().getColumn(5).setResizable(false);
+            tabelaDadosTecnicos.getColumnModel().getColumn(6).setResizable(false);
+            tabelaDadosTecnicos.getColumnModel().getColumn(7).setResizable(false);
+            tabelaDadosTecnicos.getColumnModel().getColumn(8).setResizable(false);
+            tabelaDadosTecnicos.getColumnModel().getColumn(9).setResizable(false);
+            tabelaDadosTecnicos.getColumnModel().getColumn(10).setResizable(false);
+            tabelaDadosTecnicos.getColumnModel().getColumn(11).setResizable(false);
+            tabelaDadosTecnicos.getColumnModel().getColumn(12).setResizable(false);
         }
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -315,11 +364,64 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVoltarActionPerformed
 
     private void anoComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_anoComboActionPerformed
-        System.out.println(anoCombo.getItemAt(anoCombo.getSelectedIndex()));
-        //  PreencherTabelaDEM(Integer.parseInt(anoCombo.getItemAt(anoCombo.getSelectedIndex())) , dems);
+         //  PreencherTabelaDTM(Integer.parseInt(anoCombo.getItemAt(anoCombo.getSelectedIndex())) , dadosTecMensais);
     }//GEN-LAST:event_anoComboActionPerformed
 
+    private void tabelaIndicadoresKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabelaIndicadoresKeyPressed
+        int temp;
+        if(evt.getKeyCode() == 40 && tabelaIndicadores.getSelectedRow() != (tabelaIndicadores.getRowCount() - 1)) {
+            temp = tabelaIndicadores.getSelectedRow() + 1;
+            tabelaDadosTecnicos.setRowSelectionInterval(temp, temp);
+        } else if (evt.getKeyCode() == 38 && tabelaIndicadores.getSelectedRow() != 0){
+            temp = tabelaIndicadores.getSelectedRow() - 1;
+            tabelaDadosTecnicos.setRowSelectionInterval(temp, temp);
+        }
+    }//GEN-LAST:event_tabelaIndicadoresKeyPressed
 
+    private void tabelaDadosTecnicosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabelaDadosTecnicosKeyPressed
+        int temp;
+        if(evt.getKeyCode() == 40 && tabelaDadosTecnicos.getSelectedRow() != (tabelaDadosTecnicos.getRowCount() - 1)) {
+            temp =  tabelaDadosTecnicos.getSelectedRow() + 1;
+            tabelaIndicadores.setRowSelectionInterval(temp, temp);
+
+        } else if (evt.getKeyCode() == 38 &&  tabelaDadosTecnicos.getSelectedRow() != 0){
+            temp =  tabelaDadosTecnicos.getSelectedRow() - 1;
+            tabelaIndicadores.setRowSelectionInterval(temp, temp);
+        }
+    }//GEN-LAST:event_tabelaDadosTecnicosKeyPressed
+
+    private void tabelaIndicadoresMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaIndicadoresMousePressed
+        tabelaDadosTecnicos.setRowSelectionInterval(tabelaIndicadores.getSelectedRow(), tabelaIndicadores.getSelectedRow());
+    }//GEN-LAST:event_tabelaIndicadoresMousePressed
+
+    private void tabelaDadosTecnicosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaDadosTecnicosMousePressed
+       tabelaIndicadores.setRowSelectionInterval(tabelaDadosTecnicos.getSelectedRow(), tabelaDadosTecnicos.getSelectedRow());
+    }//GEN-LAST:event_tabelaDadosTecnicosMousePressed
+
+    private void tabelaDadosTecnicosMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaDadosTecnicosMouseDragged
+        tabelaDadosTecnicosMousePressed(evt);
+    }//GEN-LAST:event_tabelaDadosTecnicosMouseDragged
+
+    private void tabelaIndicadoresMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaIndicadoresMouseDragged
+        tabelaIndicadoresMousePressed(evt);
+    }//GEN-LAST:event_tabelaIndicadoresMouseDragged
+
+    private void fillItemSelector() {
+        atual = ControlePerfil.getInstance().getPerfilSelecionado();
+        
+        List<DadosTecMensais> dados = dtmdao.retrieveByColumn("idPerfilFK", atual.getId(), "ano", "ano DESC");
+        dadosTecMen = dtmdao.retrieveByColumn("idPerfilFK", atual.getId());
+        
+        if (dados.isEmpty()) {
+            Calendar cal = GregorianCalendar.getInstance();
+            anoCombo.addItem(Cast.toString(cal.get(Calendar.YEAR)));
+        }
+
+        for(int i = 0; i < dados.size(); i++) {
+            anoCombo.addItem(Cast.toString(dados.get(i).getAno()));
+        }    
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> anoCombo;
     private javax.swing.JButton btnVoltar;
@@ -332,8 +434,8 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
+    private javax.swing.JTable tabelaDadosTecnicos;
+    private javax.swing.JTable tabelaIndicadores;
     private javax.swing.JLabel textoEntrada;
     // End of variables declaration//GEN-END:variables
 }

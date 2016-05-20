@@ -20,7 +20,7 @@ import modelo.negocio.Especificacao;
 import modelo.negocio.InventarioResumo;
 import modelo.negocio.Perfil;
 import util.Cast;
-import util.ColorRenderer;
+import util.ColorRendererDadosEcon;
 
 /**
  *
@@ -34,10 +34,9 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
     GenericDAO<Especificacao> demespdao;
     GenericDAO<InventarioResumo> irdao;
     Perfil atual;
-    Object[] anosDisponiveis = {"1990", "1991", "1992"};
     
     /**
-     * Creates new form VisualizarDadosEconMensaisNew
+     * Creates new form VisualizarDadosEconMensais
      */
     public VisualizarDadosEconMensais() {
         initComponents();
@@ -53,8 +52,8 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         
         tabelaDadosEconomicos.setShowGrid(true);
         
-        tabelaDadosEconomicos.setDefaultRenderer(Object.class, new ColorRenderer());
-        tabelaEspecificacao.setDefaultRenderer(Object.class, new ColorRenderer());
+        tabelaDadosEconomicos.setDefaultRenderer(Object.class, new ColorRendererDadosEcon());
+        tabelaEspecificacao.setDefaultRenderer(Object.class, new ColorRendererDadosEcon());
         
         tabelaDadosEconomicos.setRowSelectionAllowed(true);
         
@@ -62,7 +61,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                 
         demespdao = new GenericDAO<>(Especificacao.class);
         
-        tabelaDadosEconomicos.setDefaultRenderer(Color.class, new ColorRenderer(true));
+        tabelaDadosEconomicos.setDefaultRenderer(Color.class, new ColorRendererDadosEcon(true));
              
         especificacoes = demespdao.retrieveAll();
         
@@ -94,7 +93,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
             if(i == 56) { modelEspecificacao.addRow(new Object[]{ "SUB-TOTAL" });
                           modelEspecificacao.addRow(new Object[]{ "ORDENHA" }); }
             if(i == 60) { modelEspecificacao.addRow(new Object[]{ "SUB-TOTAL" });
-                          modelEspecificacao.addRow(new Object[]{ "INSEMINAÇÃO ASTIFICIAL" }); }
+                          modelEspecificacao.addRow(new Object[]{ "INSEMINAÇÃO ARTIFICIAL" }); }
             if(i == 65) { modelEspecificacao.addRow(new Object[]{ "SUB-TOTAL" });
                           modelEspecificacao.addRow(new Object[]{ "DESPESAS DE INVESTIMENTO" }); }
             if(i == 68) { modelEspecificacao.addRow(new Object[]{ "SUB-TOTAL" });
@@ -120,8 +119,6 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
             linhaTemp = new Object[36];
             
             for(int j = 0; j < dem.size(); j++){
-                
-                
                 
                 int indexCol = (dem.get(j).getMes() - 1) * 3;
                 
@@ -784,7 +781,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         if (selecionado != 0) {
             
             GenericTableAreaEditor gtae = new GenericTableAreaEditor(this, tabelaDadosEconomicos, false);
-            gtae.getEditTable().setDefaultRenderer(Object.class, new ColorRenderer());
+            gtae.getEditTable().setDefaultRenderer(Object.class, new ColorRendererDadosEcon());
             
             gtae.setColumnInterval((selecionado-1) * 3, ((selecionado-1) * 3) + 2);
             configGTAE(gtae);

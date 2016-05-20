@@ -43,3 +43,8 @@ Célula J27 multiplica pela J14 ao invés da J26
 #TELAS
 Tabela forrageiras e Tabela terras serão executadas ao mesmo tempo? (Excluir/ADD em 1 == excluir/ADD nas duas ou edição/adição) 
 
+-------------------------------------------------------------------------------------------------
+
+
+DADOS TECNICOS
+Dados inteiros??
