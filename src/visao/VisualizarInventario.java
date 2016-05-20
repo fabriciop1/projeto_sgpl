@@ -255,8 +255,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
         //Resumo
         calcularTotaisResumo();
 
-        
-        
         definirBDListeners();
     }
 
@@ -2312,8 +2310,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
         tabelaMaquinasGTRE.addTableModifyListener((TableModifiedEvent event) -> {
      
-            Perfil perfil = ControlePerfil.getInstance().getPerfilSelecionado();
-            
             Object[] rowData = event.getTableRowData();
             Integer rowID = (Integer) event.getCustomRowData();
             GenericTableModifier modifier = event.getSourceModifier();
@@ -2324,7 +2320,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 case TableModifiedEvent.ROW_INSERTED:
                 {
                     InventarioMaquinas inv = new InventarioMaquinas(Cast.toString(rowData[0]), Cast.toString(rowData[1]),
-                            Cast.toDouble(rowData[2]), Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfil);
+                            Cast.toDouble(rowData[2]), Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfilAtual);
                     
                     Object[] maquinasRowData = tabelaMaquinasGTRE.getSourceTableRowData(rowIndex);
                     
@@ -2337,7 +2333,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 case TableModifiedEvent.ROW_UPDATED:
                 {
                     InventarioMaquinas inv = new InventarioMaquinas(Cast.toString(rowData[0]), Cast.toString(rowData[1]),
-                            Cast.toDouble(rowData[2]), Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfil);
+                            Cast.toDouble(rowData[2]), Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfilAtual);
                     inv.setId(rowID);
                     
                     Object[] maquinasRowData = tabelaMaquinasGTRE.getSourceTableRowData(rowIndex);
@@ -2360,7 +2356,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
         tabelaBenfeitoriasGTRE.addTableModifyListener((TableModifiedEvent event) -> {
             
-            Perfil perfil = ControlePerfil.getInstance().getPerfilSelecionado();
             Object[] rowData = event.getTableRowData();
             Integer rowID = (Integer) event.getCustomRowData();
             GenericTableModifier modifier = event.getSourceModifier();
@@ -2371,7 +2366,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 case TableModifiedEvent.ROW_INSERTED:
                 {
                     InventarioBenfeitorias inv = new InventarioBenfeitorias(Cast.toString(rowData[0]), Cast.toString(rowData[1]), Cast.toDouble(rowData[2]),
-                            Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfil);
+                            Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfilAtual);
                     
                     Object[] benfeitoriasRowData = tabelaBenfeitoriasGTRE.getSourceTableRowData(rowIndex);
                     calcularValoresInvBenfeitorias(benfeitoriasRowData, rowIndex);
@@ -2384,7 +2379,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 case TableModifiedEvent.ROW_UPDATED:
                 {
                     InventarioBenfeitorias inv = new InventarioBenfeitorias(Cast.toString(rowData[0]), Cast.toString(rowData[1]), Cast.toDouble(rowData[2]),
-                            Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfil);
+                            Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfilAtual);
                     inv.setId(rowID);
                     
                     Object[] benfeitoriasRowData = tabelaBenfeitoriasGTRE.getSourceTableRowData(rowIndex);
@@ -2406,8 +2401,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
         tabelaTerrasGTRE.addTableModifyListener((TableModifiedEvent event) -> {
            
-            Perfil perfil = ControlePerfil.getInstance().getPerfilSelecionado();
-            
             Object[] terrasRowData = event.getTableRowData();
             Integer terrasRowID = (Integer) event.getCustomRowData();
             GenericTableModifier modifier = event.getSourceModifier();
@@ -2418,7 +2411,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             if (modifType == TableModifiedEvent.ROW_INSERTED || modifType == TableModifiedEvent.ROW_UPDATED) {
                 
                 InventarioTerras terras = new InventarioTerras(Cast.toString(terrasRowData[0]), Cast.toDouble(terrasRowData[1]), Cast.toDouble(terrasRowData[2]),
-                        Cast.toDouble(terrasRowData[3]), Cast.toDouble(terrasRowData[4]), Cast.toDouble(terrasRowData[5]), perfil);
+                        Cast.toDouble(terrasRowData[3]), Cast.toDouble(terrasRowData[4]), Cast.toDouble(terrasRowData[5]), perfilAtual);
                 
                 if (modifType == TableModifiedEvent.ROW_INSERTED) {
                     
@@ -2428,7 +2421,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     
                     tabelaForrageirasGTRE.addSourceTableRow(new Object[]{terras.getEspecificacao(), null, ha }, terras.getId());
                     
-                    ifdao.insert( new InventarioForrageiras(terras.getEspecificacao(), 0, 0, perfil, terras) );
+                    ifdao.insert( new InventarioForrageiras(terras.getEspecificacao(), 0, 0, perfilAtual, terras) );
                     
                     modifier.setCustomRowData(rowIndex, terras.getId());
                     
@@ -2488,7 +2481,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
         
         TableModifyListener animaisTMListener = (TableModifiedEvent event) -> {
             
-            Perfil perfil = ControlePerfil.getInstance().getPerfilSelecionado();
             Object[] rowData = event.getTableRowData();
             Integer rowID = (Integer) event.getCustomRowData();
             GenericTableModifier modifier = event.getSourceModifier();
@@ -2508,7 +2500,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 
                 InventarioAnimais inv = new InventarioAnimais(Cast.toString(rowData[0]), Cast.toInt(rowData[1]), Cast.toInt(rowData[2]),
                         Cast.toInt(rowData[3]), Cast.toInt(rowData[4]), Cast.toInt(rowData[5]), Cast.toInt(rowData[6]),
-                        Cast.toDouble(rowData[7]), tipoAnimal, perfil);
+                        Cast.toDouble(rowData[7]), tipoAnimal, perfilAtual);
                 
                 if (modifType == TableModifiedEvent.ROW_INSERTED) {
                     

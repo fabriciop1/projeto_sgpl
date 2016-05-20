@@ -14,6 +14,7 @@ import modelo.negocio.DadosTecMensais;
 import modelo.negocio.Indicador;
 import modelo.negocio.Perfil;
 import util.Cast;
+import util.ColorRendererDadosTec;
 
 /**
  *
@@ -42,6 +43,8 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         
         super.setTitle("SGPL - " + atual.getNome() + " - Dados Técnicos Mensais");
         
+        tabelaDadosTecnicos.setDefaultRenderer(Object.class, new ColorRendererDadosTec());
+        
         dtmdao = new GenericDAO<>(DadosTecMensais.class);
         
         dtmindao = new GenericDAO<>(Indicador.class);
@@ -50,7 +53,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         
         
         
-        fillItemSelector();
+        fillComboBox();
     }
 
     /**
@@ -406,7 +409,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         tabelaIndicadoresMousePressed(evt);
     }//GEN-LAST:event_tabelaIndicadoresMouseDragged
 
-    private void fillItemSelector() {
+    private void fillComboBox() {
         atual = ControlePerfil.getInstance().getPerfilSelecionado();
         
         List<DadosTecMensais> dados = dtmdao.retrieveByColumn("idPerfilFK", atual.getId(), "ano", "ano DESC");

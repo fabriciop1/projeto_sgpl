@@ -49,14 +49,4 @@ public final class Regex {
         throw new IllegalArgumentException("Não existe regex definida para a classe " + type.getName());
     }
     
-    public static void main(String[] args) {
-        
-        if("3E7".matches(INTEGER_VALUE)){
-            System.out.println("MATCHES");
-        }
-        else {
-            System.out.println("DOESN'T MATCH");
-        }
-        
-    }
 }

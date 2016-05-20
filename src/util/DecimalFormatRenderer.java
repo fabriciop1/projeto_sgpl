@@ -7,9 +7,7 @@ package util;
 
 import java.awt.Component;
 import java.text.DecimalFormat;
-import javax.swing.JLabel;
 import javax.swing.JTable;
-import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 
 /**
@@ -19,9 +17,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 public class DecimalFormatRenderer extends DefaultTableCellRenderer{
       private static final DecimalFormat formatter = new DecimalFormat( "#.##" );
       
-      public DecimalFormatRenderer() {
-          setHorizontalAlignment(JLabel.RIGHT);
-      }
+      public DecimalFormatRenderer() { }
  
       @Override
       public Component getTableCellRendererComponent(
@@ -34,8 +30,7 @@ public class DecimalFormatRenderer extends DefaultTableCellRenderer{
              value = formatter.format((Number)value);
          }
            
- 
-            // And pass it on to parent class
+        // And pass it on to parent class
  
          return super.getTableCellRendererComponent(
             table, value, isSelected, hasFocus, row, column );

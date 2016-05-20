@@ -46,7 +46,7 @@ public abstract class GenericTableModifier extends JDialog{
     private boolean allowEmptyCells;
     
     private boolean forceCellEditing;
-    private boolean editorColumnEditable[];
+    private final boolean editorColumnEditable[];
 
     boolean rebuildEditTable;
     

@@ -8,7 +8,8 @@ package visao;
 import controle.ControlePerfil;
 import flex.db.GenericDAO;
 import flex.table.GenericTableAreaEditor;
-import java.awt.Color;
+import flex.table.GenericTableModifier;
+import flex.table.TableModifiedEvent;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -21,6 +22,7 @@ import modelo.negocio.InventarioResumo;
 import modelo.negocio.Perfil;
 import util.Cast;
 import util.ColorRendererDadosEcon;
+import util.ColorRendererEspecificacao;
 
 /**
  *
@@ -33,6 +35,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
     GenericDAO<DadosEconMensais> demdao;
     GenericDAO<Especificacao> demespdao;
     GenericDAO<InventarioResumo> irdao;
+    GenericTableAreaEditor gtae;
     Perfil atual;
     
     /**
@@ -53,22 +56,21 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         tabelaDadosEconomicos.setShowGrid(true);
         
         tabelaDadosEconomicos.setDefaultRenderer(Object.class, new ColorRendererDadosEcon());
-        tabelaEspecificacao.setDefaultRenderer(Object.class, new ColorRendererDadosEcon());
-        
-        tabelaDadosEconomicos.setRowSelectionAllowed(true);
+        tabelaEspecificacao.setDefaultRenderer(Object.class, new ColorRendererEspecificacao());
         
         demdao = new GenericDAO<>(DadosEconMensais.class);
                 
         demespdao = new GenericDAO<>(Especificacao.class);
-        
-        tabelaDadosEconomicos.setDefaultRenderer(Color.class, new ColorRendererDadosEcon(true));
              
         especificacoes = demespdao.retrieveAll();
         
+        gtae = new GenericTableAreaEditor(this, tabelaDadosEconomicos, false);
+        
         PreencherTabelaESP(especificacoes);
         
-        fillItemSelector();
+        fillComboBox();
         
+        definirBDListeners();
     }
     
     private void PreencherTabelaESP(List<Especificacao> esp){
@@ -780,11 +782,9 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         
         if (selecionado != 0) {
             
-            GenericTableAreaEditor gtae = new GenericTableAreaEditor(this, tabelaDadosEconomicos, false);
-            gtae.getEditTable().setDefaultRenderer(Object.class, new ColorRendererDadosEcon());
-            
             gtae.setColumnInterval((selecionado-1) * 3, ((selecionado-1) * 3) + 2);
-            configGTAE(gtae);
+            
+            configGTAE();
             
             gtae.showEditor(evt);
            
@@ -883,7 +883,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_adicionarAnoBTActionPerformed
 
-    private void fillItemSelector() {
+    private void fillComboBox() {
         atual = ControlePerfil.getInstance().getPerfilSelecionado();
         
         List<DadosEconMensais> dados = demdao.retrieveByColumn("idPerfilFK", atual.getId(), "ano", "ano DESC");
@@ -911,7 +911,19 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         }     
     }
     
-    private void configGTAE(GenericTableAreaEditor gtae) {
+    private void definirBDListeners() {
+        gtae.addTableModifyListener((TableModifiedEvent evt) -> {
+        
+            Object[][] areaData = evt.getTableAreaData();
+            int modiftype = evt.getEventType();
+            
+            DadosEconMensais dado = new DadosEconMensais();
+        });
+    }
+    
+    private void configGTAE() {
+        
+        gtae.getEditTable().setDefaultRenderer(Object.class, new ColorRendererDadosEcon());
         gtae.setName("GTAE DadosEconMensais");
         gtae.setRowsDisplayed(10);
         gtae.setAllowEmptyRows(true);
@@ -937,8 +949,6 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         gtae.setSourceRowEditable(85, false);
         gtae.setSourceRowEditable(86, false);
         gtae.setSourceRowEditable(88, false); 
-       
-        
     }
     
 
