@@ -28,14 +28,13 @@ public class ColorRendererDadosTec extends DecimalFormatRenderer {
         if(column == 12) {
             comp.setBackground(Color.LIGHT_GRAY);
             comp.setFont(comp.getFont().deriveFont(Font.BOLD));
+        } else if (row == 1 || row == 3 || row == 14){
+            comp.setBackground(Color.LIGHT_GRAY);
+            comp.setFont(comp.getFont().deriveFont(Font.BOLD));
         } else {
             comp.setBackground(table.getBackground());
         }
         
-        if (table == null) {
-            return this;
-        }
-
         Color bg = null;
 
         if (isSelected) {

@@ -43,10 +43,6 @@ public class ColorRendererDadosEcon extends DecimalFormatRenderer {
         } else {
             comp.setBackground(table.getBackground());
         }
-        
-        if (table == null) {
-            return this;
-        }
 
         Color bg = null;
 

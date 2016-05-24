@@ -7,14 +7,18 @@ package visao;
 
 import controle.ControlePerfil;
 import flex.db.GenericDAO;
+import java.time.YearMonth;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import javax.swing.table.DefaultTableModel;
 import modelo.negocio.DadosTecMensais;
 import modelo.negocio.Indicador;
 import modelo.negocio.Perfil;
+import util.Calc;
 import util.Cast;
 import util.ColorRendererDadosTec;
+import util.Data;
 
 /**
  *
@@ -25,7 +29,8 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
     private Perfil atual;
     private GenericDAO<DadosTecMensais> dtmdao; 
     private GenericDAO<Indicador> dtmindao;
-    private List<DadosTecMensais> dadosTecMen;
+    private List<DadosTecMensais> dtms;
+    private List<Indicador> indicadores;
     
     /**
      * Creates new form VisualizarDadosTecnMensais
@@ -44,16 +49,85 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         super.setTitle("SGPL - " + atual.getNome() + " - Dados Técnicos Mensais");
         
         tabelaDadosTecnicos.setDefaultRenderer(Object.class, new ColorRendererDadosTec());
+        tabelaIndicadores.setDefaultRenderer(Object.class, new ColorRendererDadosTec());
         
         dtmdao = new GenericDAO<>(DadosTecMensais.class);
         
         dtmindao = new GenericDAO<>(Indicador.class);
+        indicadores = dtmindao.retrieveAll();
         
-        
-        
-        
+        PreencherTabelaIND(indicadores);
         
         fillComboBox();
+    }
+    
+    private void PreencherTabelaIND(List<Indicador> ind){
+       
+        
+        DefaultTableModel modelIndicadores = (DefaultTableModel) tabelaIndicadores.getModel();
+        modelIndicadores.setNumRows(0);
+
+        for(int i = 0; i < ind.size(); i++){
+            
+            if(i == 1)   { modelIndicadores.addRow(new Object[]{ "MÉDIA Litros/dia (L)" });
+                           modelIndicadores.addRow(new Object[]{ "" });
+                           modelIndicadores.addRow(new Object[]{ "INDICADORES PRODUTIVOS" }); }
+            if(i == 10)  { modelIndicadores.addRow(new Object[]{ "" });
+                           modelIndicadores.addRow(new Object[]{ "INDICADORES SANITÁRIOS" });}
+           
+            modelIndicadores.addRow( new Object[]{ ind.get(i).getIndicador()});
+        }
+    }
+    
+    private void preencherTabelaDTM(int ano, List<DadosTecMensais> dtm){
+        
+        DefaultTableModel modelIndicadores = (DefaultTableModel) tabelaIndicadores.getModel();
+        DefaultTableModel modelDadosTecnicos = (DefaultTableModel) tabelaDadosTecnicos.getModel();
+        modelDadosTecnicos.setNumRows(0);
+        
+        Object[] linhaTemp;
+        Object[] mediaLitros;
+        int contador, soma;
+        
+        for( int i = 0; i < modelIndicadores.getRowCount(); i++){
+            
+            linhaTemp = new Object[13];
+            mediaLitros = new Object[13];
+            soma      = 0;
+            contador  = 0;
+            
+            for( int j = 0; j < dtm.size(); j++){
+                
+                int indexCol = dtm.get(j).getMes() - 1;
+                if( modelIndicadores.getValueAt(i, 0).equals(dtm.get(j).getIndicador().getIndicador())
+                        && dtm.get(j).getAno() == ano ){
+                    
+                    double dadoTemp = dtm.get(j).getDado();
+                    
+                    linhaTemp[indexCol] = dadoTemp;
+                    soma += dadoTemp;
+                                        
+                    if( dadoTemp != 0.0 ){ contador++; } 
+                                                     
+                }
+                
+                if( modelIndicadores.getValueAt(i, 0).equals("Total Litros/ Mês (L)")  ) {
+                //    mediaLitros[indexCol] = Calc.dividir( (Double)linhaTemp[indexCol], Data.diasDoMes(ano, indexCol + 1));
+                }    
+                    
+                if( modelIndicadores.getValueAt(i, 0).equals("MÉDIA Litros/dia (L)")  ) {    
+                    linhaTemp = mediaLitros;
+                } 
+                
+            }
+            
+            double divisao = Calc.dividir(soma, contador);
+            if (divisao != 0.0){ linhaTemp[12] = divisao; } 
+            
+            
+            modelDadosTecnicos.addRow(linhaTemp);
+        }
+        
     }
 
     /**
@@ -79,6 +153,8 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         tabelaDadosTecnicos = new javax.swing.JTable();
+        adicionarAnoBT = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -162,6 +238,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tabelaIndicadores.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tabelaIndicadores.getTableHeader().setReorderingAllowed(false);
         tabelaIndicadores.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
@@ -256,6 +333,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tabelaDadosTecnicos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tabelaDadosTecnicos.getTableHeader().setReorderingAllowed(false);
         tabelaDadosTecnicos.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
@@ -327,6 +405,10 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
 
         jScrollPane1.setViewportView(jPanel1);
 
+        adicionarAnoBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/add.png"))); // NOI18N
+
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit.png"))); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -334,13 +416,17 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(304, 304, 304)
+                .addGap(278, 278, 278)
                 .addComponent(textoEntrada)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 193, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 113, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(anoCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(11, 11, 11))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(adicionarAnoBT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18))
             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
@@ -348,12 +434,14 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnVoltar)
+                    .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(textoEntrada)
-                    .addComponent(anoCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(adicionarAnoBT, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(anoCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 563, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 551, Short.MAX_VALUE))
         );
 
         pack();
@@ -413,7 +501,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         atual = ControlePerfil.getInstance().getPerfilSelecionado();
         
         List<DadosTecMensais> dados = dtmdao.retrieveByColumn("idPerfilFK", atual.getId(), "ano", "ano DESC");
-        dadosTecMen = dtmdao.retrieveByColumn("idPerfilFK", atual.getId());
+        dtms = dtmdao.retrieveByColumn("idPerfilFK", atual.getId());
         
         if (dados.isEmpty()) {
             Calendar cal = GregorianCalendar.getInstance();
@@ -423,11 +511,16 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         for(int i = 0; i < dados.size(); i++) {
             anoCombo.addItem(Cast.toString(dados.get(i).getAno()));
         }    
+        
+        preencherTabelaDTM(Integer.parseInt( (String) anoCombo.getSelectedItem() ), dtms);
     }
     
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton adicionarAnoBT;
     private javax.swing.JComboBox<String> anoCombo;
     private javax.swing.JButton btnVoltar;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

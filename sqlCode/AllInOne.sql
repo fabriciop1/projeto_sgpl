@@ -248,6 +248,8 @@ INSERT INTO projeto_pesquisa.dados_economicos_mensais (mes, ano, quantidade, val
 
 /*===============================================================================================================================*/
 
+INSERT INTO projeto_pesquisa.dtm_indicador (indicador) VALUES ("Total Litros/Mês (L)");
+
 INSERT INTO projeto_pesquisa.dtm_indicador (indicador) VALUES ("Nº V. Lactação");
 INSERT INTO projeto_pesquisa.dtm_indicador (indicador) VALUES ("Nº V. Secas ");
 INSERT INTO projeto_pesquisa.dtm_indicador (indicador) VALUES ("Nº de Novilhas");
@@ -268,28 +270,26 @@ INSERT INTO projeto_pesquisa.dtm_indicador (indicador) VALUES ("Nº de Mortes de
 INSERT INTO projeto_pesquisa.dtm_indicador (indicador) VALUES ("Nº de Mortes de Vacas");
 INSERT INTO projeto_pesquisa.dtm_indicador (indicador) VALUES ("Nº de Vacas com Mastite Clínica");
 
-INSERT INTO projeto_pesquisa.dtm_indicador (indicador) VALUES ("Total Litros/Mês (L)");
-
 /*===============================================================================================================================*/
 
 INSERT INTO projeto_pesquisa.dados_tecnicos_mensais (mes, ano, dado, idDTM_indicadorFK, idPerfilFK) 
-		VALUES (1,2015,7,1,1);
+		VALUES (1,2015,7,2,1);
 INSERT INTO projeto_pesquisa.dados_tecnicos_mensais (mes, ano, dado, idDTM_indicadorFK, idPerfilFK) 
-		VALUES (1,2015,1,2,1);
+		VALUES (1,2015,1,3,1);
 INSERT INTO projeto_pesquisa.dados_tecnicos_mensais (mes, ano, dado, idDTM_indicadorFK, idPerfilFK) 
-		VALUES (1,2015,7,3,1);
+		VALUES (1,2015,7,4,1);
 INSERT INTO projeto_pesquisa.dados_tecnicos_mensais (mes, ano, dado, idDTM_indicadorFK, idPerfilFK) 
-		VALUES (1,2015,4,5,1);
+		VALUES (1,2015,4,6,1);
 INSERT INTO projeto_pesquisa.dados_tecnicos_mensais (mes, ano, dado, idDTM_indicadorFK, idPerfilFK) 
-		VALUES (1,2015,1,6,1);
+		VALUES (1,2015,1,7,1);
 INSERT INTO projeto_pesquisa.dados_tecnicos_mensais (mes, ano, dado, idDTM_indicadorFK, idPerfilFK) 
-		VALUES (1,2015,1,9,1);
+		VALUES (1,2015,1,10,1);
 INSERT INTO projeto_pesquisa.dados_tecnicos_mensais (mes, ano, dado, idDTM_indicadorFK, idPerfilFK) 
-		VALUES (1,2015,1662,19,1);
+		VALUES (1,2015,1662,1,1);
 INSERT INTO projeto_pesquisa.dados_tecnicos_mensais (mes, ano, dado, idDTM_indicadorFK, idPerfilFK) 
-		VALUES (7,2015,7,1,1);
+		VALUES (7,2015,7,2,1);
 INSERT INTO projeto_pesquisa.dados_tecnicos_mensais (mes, ano, dado, idDTM_indicadorFK, idPerfilFK) 
-		VALUES (7,2015,1476,19,1);
+		VALUES (7,2015,1476,1,1);
         
 /*===============================================================================================================================*/
 

@@ -34,11 +34,7 @@ public class ColorRendererEspecificacao extends DefaultTableCellRenderer {
         } else {
             comp.setBackground(table.getBackground());
         }
-        
-        if (table == null) {
-            return this;
-        }
-
+      
         Color bg = null;
 
         if (isSelected) {

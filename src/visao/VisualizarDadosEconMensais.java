@@ -16,6 +16,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollBar;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import modelo.negocio.DadosEconMensais;
 import modelo.negocio.Especificacao;
 import modelo.negocio.InventarioResumo;
@@ -30,13 +31,13 @@ import util.ColorRendererEspecificacao;
  */
 public class VisualizarDadosEconMensais extends javax.swing.JFrame {
 
-    List<Especificacao> especificacoes;    
-    List<DadosEconMensais> dems;
-    GenericDAO<DadosEconMensais> demdao;
-    GenericDAO<Especificacao> demespdao;
-    GenericDAO<InventarioResumo> irdao;
-    GenericTableAreaEditor gtae;
-    Perfil atual;
+    private List<Especificacao> especificacoes;    
+    private List<DadosEconMensais> dems;
+    private GenericDAO<DadosEconMensais> demdao;
+    private GenericDAO<Especificacao> demespdao;
+    private GenericDAO<InventarioResumo> irdao;
+    private GenericTableAreaEditor gtae;
+    private Perfil atual;
     
     /**
      * Creates new form VisualizarDadosEconMensais
@@ -124,7 +125,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                 
                 int indexCol = (dem.get(j).getMes() - 1) * 3;
                 
-                if( tabelaEspecificacao.getModel().getValueAt(i, 0).equals(dem.get(j).getEspecificacao().getEspecificacao())
+                if( modelEspecificacao.getValueAt(i, 0).equals(dem.get(j).getEspecificacao().getEspecificacao())
                         && dem.get(j).getAno() == ano ){
                                       
                     linhaTemp[indexCol ] = dem.get(j).getQuantidade();
@@ -783,7 +784,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         if (selecionado != 0) {
             
             gtae.setColumnInterval((selecionado-1) * 3, ((selecionado-1) * 3) + 2);
-            
+        
             configGTAE();
             
             gtae.showEditor(evt);
