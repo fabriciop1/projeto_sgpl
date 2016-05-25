@@ -772,11 +772,12 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVoltarActionPerformed
 
     private void anoComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_anoComboActionPerformed
-          PreencherTabelaDEM(Integer.parseInt(anoCombo.getSelectedItem().toString()) , dems);
+        PreencherTabelaDEM(Integer.parseInt(anoCombo.getSelectedItem().toString()) , dems);
     }//GEN-LAST:event_anoComboActionPerformed
 
     private void editarValoresBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarValoresBTActionPerformed
         MonthSelector telaMes = new MonthSelector(this, true);
+        telaMes.setTitle("SGPL - DEM - Seleção de Mês");
 
         telaMes.setVisible(true);
         int selecionado = telaMes.getSelected();
@@ -861,6 +862,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         boolean existe = false;
         
         YearSelector telaNovoAno = new YearSelector(this, true);
+        telaNovoAno.setTitle("SGPL - DEM - Seleção de ano");
         telaNovoAno.setVisible(true);
         
         String ano = telaNovoAno.getSelected();

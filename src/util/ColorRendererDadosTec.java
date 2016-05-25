@@ -25,10 +25,7 @@ public class ColorRendererDadosTec extends DecimalFormatRenderer {
     public Component getTableCellRendererComponent(JTable table, Object color, boolean isSelected, boolean hasFocus, int row, int column) {
         Component comp = super.getTableCellRendererComponent(table, color, isSelected, hasFocus, row, column); 
         
-        if(column == 12) {
-            comp.setBackground(Color.LIGHT_GRAY);
-            comp.setFont(comp.getFont().deriveFont(Font.BOLD));
-        } else if (row == 1 || row == 3 || row == 14){
+        if(column == 12 || row == 1 || row == 3 || row == 14) {
             comp.setBackground(Color.LIGHT_GRAY);
             comp.setFont(comp.getFont().deriveFont(Font.BOLD));
         } else {

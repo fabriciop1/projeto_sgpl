@@ -5,9 +5,7 @@
  */
 package visao;
 
-import flex.table.GenericTableAreaEditor;
 import javax.swing.JDialog;
-import javax.swing.WindowConstants;
 
 /**
  *
@@ -25,7 +23,6 @@ public class MonthSelector extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        super.setTitle("SGPL - DEM - Seleção de Mês");
         super.setLocationRelativeTo(null);
         super.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         super.setResizable(false);

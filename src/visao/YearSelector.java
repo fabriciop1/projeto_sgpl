@@ -28,14 +28,13 @@ public class YearSelector extends JDialog {
         super(parent, modal);
         initComponents();
         
-        super.setTitle("SGPL - DEM - Seleção de ano");
         super.setLocationRelativeTo(null);
         super.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         super.setResizable(false);
         
         Calendar cal = GregorianCalendar.getInstance();
         
-        for(int i = 1970; i <= cal.get(Calendar.YEAR); i++) {
+        for(int i = cal.get(Calendar.YEAR); i >= 2010; i--) {
             novoAnoCombo.addItem(Cast.toString(i));
         }
     }
