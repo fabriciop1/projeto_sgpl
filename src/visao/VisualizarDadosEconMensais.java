@@ -8,7 +8,6 @@ package visao;
 import controle.ControlePerfil;
 import flex.db.GenericDAO;
 import flex.table.GenericTableAreaEditor;
-import flex.table.GenericTableModifier;
 import flex.table.TableModifiedEvent;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -16,14 +15,12 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollBar;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import modelo.negocio.DadosEconMensais;
 import modelo.negocio.Especificacao;
 import modelo.negocio.InventarioResumo;
 import modelo.negocio.Perfil;
 import util.Cast;
 import util.ColorRendererDadosEcon;
-import util.ColorRendererEspecificacao;
 
 /**
  *
@@ -31,12 +28,12 @@ import util.ColorRendererEspecificacao;
  */
 public class VisualizarDadosEconMensais extends javax.swing.JFrame {
 
-    private List<Especificacao> especificacoes;    
+    private final List<Especificacao> especificacoes;    
     private List<DadosEconMensais> dems;
-    private GenericDAO<DadosEconMensais> demdao;
-    private GenericDAO<Especificacao> demespdao;
+    private final GenericDAO<DadosEconMensais> demdao;
+    private final GenericDAO<Especificacao> demespdao;
     private GenericDAO<InventarioResumo> irdao;
-    private GenericTableAreaEditor gtae;
+    private final GenericTableAreaEditor gtae;
     private Perfil atual;
     
     /**
@@ -56,8 +53,8 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         
         tabelaDadosEconomicos.setShowGrid(true);
         
-        tabelaDadosEconomicos.setDefaultRenderer(Object.class, new ColorRendererDadosEcon());
-        tabelaEspecificacao.setDefaultRenderer(Object.class, new ColorRendererEspecificacao());
+        tabelaDadosEconomicos.setDefaultRenderer(Object.class, new ColorRendererDadosEcon(true));
+        tabelaEspecificacao.setDefaultRenderer(Object.class, new ColorRendererDadosEcon(false));
         
         demdao = new GenericDAO<>(DadosEconMensais.class);
                 
@@ -920,13 +917,13 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
             Object[][] areaData = evt.getTableAreaData();
             int modiftype = evt.getEventType();
             
-            DadosEconMensais dado = new DadosEconMensais();
+            
         });
     }
     
     private void configGTAE() {
         
-        gtae.getEditTable().setDefaultRenderer(Object.class, new ColorRendererDadosEcon());
+        gtae.getEditTable().setDefaultRenderer(Object.class, new ColorRendererDadosEcon(true));
         gtae.setName("GTAE DadosEconMensais");
         gtae.setRowsDisplayed(10);
         gtae.setAllowEmptyRows(true);

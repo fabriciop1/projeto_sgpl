@@ -26,7 +26,7 @@ public class DecimalFormatRenderer extends DefaultTableCellRenderer{
  
          // First format the cell value as required
       
-         if (value != null && !value.toString().isEmpty() && value.getClass() == Double.class) {
+         if (value != null && !value.toString().isEmpty() && (value.getClass() == Double.class || value.getClass() == Integer.class)) {
              value = formatter.format((Number)value);
          }
            

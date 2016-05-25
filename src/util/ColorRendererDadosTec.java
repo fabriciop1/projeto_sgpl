@@ -8,6 +8,7 @@ package util;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 
 /**
@@ -16,8 +17,11 @@ import javax.swing.JTable;
  */
 public class ColorRendererDadosTec extends DecimalFormatRenderer {
     
-    public ColorRendererDadosTec() {
+    public ColorRendererDadosTec(boolean alignment) {
         super();
+        if (alignment == true) {
+            super.setHorizontalAlignment(JLabel.RIGHT);
+        }
         super.setOpaque(true);
     }
     

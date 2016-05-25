@@ -51,8 +51,8 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         
         super.setTitle("SGPL - " + atual.getNome() + " - Dados Técnicos Mensais");
         
-        tabelaDadosTecnicos.setDefaultRenderer(Object.class, new ColorRendererDadosTec());
-        tabelaIndicadores.setDefaultRenderer(Object.class, new ColorRendererDadosTec());
+        tabelaDadosTecnicos.setDefaultRenderer(Object.class, new ColorRendererDadosTec(true));
+        tabelaIndicadores.setDefaultRenderer(Object.class, new ColorRendererDadosTec(false));
         
         dtmdao = new GenericDAO<>(DadosTecMensais.class);
         

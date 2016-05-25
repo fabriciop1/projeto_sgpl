@@ -20,7 +20,7 @@ public class DadosEconMensais extends DatabaseObject implements Serializable {
     
     private int mes;
     private int ano;
-    private double quantidade;
+    private int quantidade;
     private double valorUnitario;
     private Especificacao especificacao; // especificacao associada à tabela DEM_especificacao
     private Perfil perfil;
@@ -29,7 +29,7 @@ public class DadosEconMensais extends DatabaseObject implements Serializable {
         super("dados_economicos_mensais", "idDEM");
     }
 
-    public DadosEconMensais(int mes, int ano, double quantidade, double valorUnitario, Especificacao especificacao, Perfil perfil) {
+    public DadosEconMensais(int mes, int ano, int quantidade, double valorUnitario, Especificacao especificacao, Perfil perfil) {
         super("dados_economicos_mensais", "idDEM");
         
         this.mes = mes;
@@ -64,11 +64,11 @@ public class DadosEconMensais extends DatabaseObject implements Serializable {
         this.especificacao = especificacao;
     }
 
-    public double getQuantidade() {
+    public int getQuantidade() {
         return quantidade;
     }
 
-    public void setQuantidade(double quantidade) {
+    public void setQuantidade(int quantidade) {
         this.quantidade = quantidade;
     }
 
@@ -106,7 +106,7 @@ public class DadosEconMensais extends DatabaseObject implements Serializable {
     public void setObjectData(Map<String, Object> data) {
         mes = Cast.toInt(data.get("mes"));
         ano = Cast.toInt(data.get("ano"));
-        quantidade = Cast.toDouble(data.get("quantidade"));
+        quantidade = Cast.toInt(data.get("quantidade"));
         valorUnitario = Cast.toDouble(data.get("valorUnitario"));
         especificacao = new GenericDAO<>(Especificacao.class).retrieve(Cast.toInt(data.get("idDEM_especificacaoFK")));
         perfil =  new GenericDAO<>(Perfil.class).retrieve( Cast.toInt(data.get("idPerfilFK")) );

@@ -20,7 +20,7 @@ public class DadosTecMensais extends DatabaseObject implements Serializable {
 
     private int mes;
     private int ano;
-    private double dado;
+    private int dado;
     private Indicador indicador; // indicador associado a cada dado tecnico mensal
     private Perfil perfil;
     
@@ -28,8 +28,7 @@ public class DadosTecMensais extends DatabaseObject implements Serializable {
         super("dados_tecnicos_mensais", "idDTM");
     }
 
-
-    public DadosTecMensais(int mes, int ano, double dado, Indicador indicador, Perfil perfil) {
+    public DadosTecMensais(int mes, int ano, int dado, Indicador indicador, Perfil perfil) {
         super("dados_tecnicos_mensais", "idDTM");
         
         this.mes = mes;
@@ -55,11 +54,11 @@ public class DadosTecMensais extends DatabaseObject implements Serializable {
         this.ano = ano;
     }
 
-    public double getDado() {
+    public int getDado() {
         return dado;
     }
 
-    public void setDado(double dado) {
+    public void setDado(int dado) {
         this.dado = dado;
     }
 
@@ -96,7 +95,7 @@ public class DadosTecMensais extends DatabaseObject implements Serializable {
     public void setObjectData(Map<String, Object> data) {
         mes = Cast.toInt(data.get("mes"));
         ano = Cast.toInt(data.get("ano"));
-        dado = Cast.toDouble(data.get("dado"));
+        dado = Cast.toInt(data.get("dado"));
         indicador = new GenericDAO<>(Indicador.class).retrieve(Cast.toInt(data.get("idDTM_indicadorFK")));
         perfil =  new GenericDAO<>(Perfil.class).retrieve( Cast.toInt(data.get("idPerfilFK")));
     }

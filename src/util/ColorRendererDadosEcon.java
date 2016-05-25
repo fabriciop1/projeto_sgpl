@@ -13,8 +13,10 @@ import javax.swing.JLabel;
 
 public class ColorRendererDadosEcon extends DecimalFormatRenderer {   
 
-    public ColorRendererDadosEcon() {
-        super.setHorizontalAlignment(JLabel.RIGHT);
+    public ColorRendererDadosEcon(boolean alignment) {
+        if (alignment) {
+            super.setHorizontalAlignment(JLabel.RIGHT);
+        }
         super.setOpaque(true); //MUST do this for background to show up.
     }
 
