@@ -11,6 +11,7 @@ import java.time.YearMonth;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import javax.swing.JScrollBar;
 import javax.swing.table.DefaultTableModel;
 import modelo.negocio.DadosTecMensais;
 import modelo.negocio.Indicador;
@@ -110,13 +111,14 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
                     if( dadoTemp != 0.0 ){ contador++; } 
                                                      
                 }
-                
-                if( modelIndicadores.getValueAt(i, 0).equals("Total Litros/ Mês (L)")  ) {
-                //    mediaLitros[indexCol] = Calc.dividir( (Double)linhaTemp[indexCol], Data.diasDoMes(ano, indexCol + 1));
-                }    
+                                 
+                if( i == 1 ) {    
+                    double tempMedia = (Double) modelDadosTecnicos.getValueAt(0, indexCol);
                     
-                if( modelIndicadores.getValueAt(i, 0).equals("MÉDIA Litros/dia (L)")  ) {    
-                    linhaTemp = mediaLitros;
+                    if( tempMedia != 0.0 ) {
+                        linhaTemp[indexCol] = Calc.dividir( tempMedia, Data.diasDoMes(ano, indexCol + 1));
+                    }
+                    
                 } 
                 
             }
@@ -142,7 +144,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         btnVoltar = new javax.swing.JButton();
         textoEntrada = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        anoCombo = new javax.swing.JComboBox<>();
+        anoCombo = new javax.swing.JComboBox<String>();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -155,6 +157,8 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         tabelaDadosTecnicos = new javax.swing.JTable();
         adicionarAnoBT = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        retornarBT = new javax.swing.JButton();
+        avancarBT = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -277,7 +281,10 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
 
         jScrollPane2.setViewportView(jPanel2);
 
+        jScrollPane4.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane4.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+
+        jScrollPane5.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         tabelaDadosTecnicos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -409,6 +416,20 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit.png"))); // NOI18N
 
+        retornarBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/left_arrow.png"))); // NOI18N
+        retornarBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                retornarBTActionPerformed(evt);
+            }
+        });
+
+        avancarBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/right_arrow.png"))); // NOI18N
+        avancarBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                avancarBTActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -416,7 +437,11 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(278, 278, 278)
+                .addGap(128, 128, 128)
+                .addComponent(retornarBT, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(avancarBT, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(54, 54, 54)
                 .addComponent(textoEntrada)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 113, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -433,15 +458,19 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(textoEntrada)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(adicionarAnoBT, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(anoCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(textoEntrada)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(retornarBT, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(avancarBT, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 551, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE))
         );
 
         pack();
@@ -497,6 +526,16 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         tabelaIndicadoresMousePressed(evt);
     }//GEN-LAST:event_tabelaIndicadoresMouseDragged
 
+    private void retornarBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_retornarBTActionPerformed
+        JScrollBar barPanel = jScrollPane4.getHorizontalScrollBar();
+        barPanel.setValue(barPanel.getValue() - 695);
+    }//GEN-LAST:event_retornarBTActionPerformed
+
+    private void avancarBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_avancarBTActionPerformed
+        JScrollBar barPanel = jScrollPane4.getHorizontalScrollBar();
+        barPanel.setValue(barPanel.getValue() + 695);
+    }//GEN-LAST:event_avancarBTActionPerformed
+
     private void fillComboBox() {
         atual = ControlePerfil.getInstance().getPerfilSelecionado();
         
@@ -519,6 +558,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton adicionarAnoBT;
     private javax.swing.JComboBox<String> anoCombo;
+    private javax.swing.JButton avancarBT;
     private javax.swing.JButton btnVoltar;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -530,6 +570,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JButton retornarBT;
     private javax.swing.JTable tabelaDadosTecnicos;
     private javax.swing.JTable tabelaIndicadores;
     private javax.swing.JLabel textoEntrada;

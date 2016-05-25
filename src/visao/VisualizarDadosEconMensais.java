@@ -173,7 +173,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                     double salario = 0.0;
                     irdao = new GenericDAO<>(InventarioResumo.class);
                     List<InventarioResumo> ir = irdao.retrieveByColumn("idPerfilFK", atual.getId());
-                    if (linhaTemp != null) {
+                    if (linhaTemp != null && ir.size() > 0) {
                         salario = ir.get(0).getSalarioMinimo();
                         linhaTemp[indexCol + 1] = (salario * 13 + salario * 0.3) / 12;
                     }
