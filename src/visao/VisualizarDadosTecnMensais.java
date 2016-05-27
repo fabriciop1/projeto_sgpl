@@ -91,13 +91,14 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         
         Object[] linhaTemp;
         Object[] mediaLitros;
-        int contador, soma;
+        int contador;
+        double soma;
         
         for( int i = 0; i < modelIndicadores.getRowCount(); i++){
             
             linhaTemp = new Object[13];
             mediaLitros = new Object[13];
-            soma      = 0;
+            soma      = 0.0;
             contador  = 0;
             
             for( int j = 0; j < dtm.size(); j++){
@@ -109,9 +110,9 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
                     double dadoTemp = dtm.get(j).getDado();
                     
                     linhaTemp[indexCol] = dadoTemp;
-                    soma += dadoTemp;
+                    
                                         
-                    if( dadoTemp != 0.0 ){ contador++; } 
+                    if( dadoTemp != 0.0 ){ soma += dadoTemp; contador++; } 
                                                      
                 }
                                  
@@ -120,7 +121,9 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
                     
                     if( tempMedia != 0.0 ) {
                         linhaTemp[indexCol] = Calc.dividir( tempMedia, Data.diasDoMes(ano, indexCol + 1));
-                        soma += tempMedia;
+                        System.out.println("indexCol = " + indexCol + " Soma = " + soma + " | Contador = " + contador);
+                        soma += (Double) linhaTemp[indexCol];
+                        
                         contador++;
                     }
                     
