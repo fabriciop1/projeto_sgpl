@@ -90,16 +90,10 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         modelDadosTecnicos.setNumRows(0);
         
         Object[] linhaTemp;
-        Object[] mediaLitros;
-        int contador;
-        double soma;
         
         for( int i = 0; i < modelIndicadores.getRowCount(); i++){
             
             linhaTemp = new Object[13];
-            mediaLitros = new Object[13];
-            soma      = 0.0;
-            contador  = 0;
             
             for( int j = 0; j < dtm.size(); j++){
                 
@@ -110,34 +104,42 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
                     double dadoTemp = dtm.get(j).getDado();
                     
                     linhaTemp[indexCol] = dadoTemp;
-                    
-                                        
-                    if( dadoTemp != 0.0 ){ soma += dadoTemp; contador++; } 
                                                      
                 }
                                  
                 if( i == 1 && dtm.get(j).getAno() == ano) {    
                     double tempMedia = (Double) modelDadosTecnicos.getValueAt(0, indexCol);
-                    
+                                        
                     if( tempMedia != 0.0 ) {
                         linhaTemp[indexCol] = Calc.dividir( tempMedia, Data.diasDoMes(ano, indexCol + 1));
-                        System.out.println("indexCol = " + indexCol + " Soma = " + soma + " | Contador = " + contador);
-                        soma += (Double) linhaTemp[indexCol];
-                        
-                        contador++;
                     }
                     
                 } 
                 
             }
             
-            double divisao = Calc.dividir(soma, contador);
+            double divisao = calcularMedia(linhaTemp);
             if (divisao != 0.0){ linhaTemp[12] = divisao; } 
             
             
             modelDadosTecnicos.addRow(linhaTemp);
         }
         
+    }
+    
+    public static double calcularMedia(Object[] vetor){
+        
+        int cont = 0;
+        double soma = 0.0;
+        
+        for (Object vetor1 : vetor) {
+            if (vetor1 != null) {
+                soma += (Double) vetor1;
+                cont++;
+            }
+        }
+                
+        return Calc.dividir(soma, cont);
     }
 
     /**
