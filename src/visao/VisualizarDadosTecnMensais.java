@@ -115,11 +115,13 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
                                                      
                 }
                                  
-                if( i == 1 ) {    
+                if( i == 1 && dtm.get(j).getAno() == ano) {    
                     double tempMedia = (Double) modelDadosTecnicos.getValueAt(0, indexCol);
                     
                     if( tempMedia != 0.0 ) {
                         linhaTemp[indexCol] = Calc.dividir( tempMedia, Data.diasDoMes(ano, indexCol + 1));
+                        soma += tempMedia;
+                        contador++;
                     }
                     
                 } 
@@ -147,7 +149,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         btnVoltar = new javax.swing.JButton();
         textoEntrada = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        anoCombo = new javax.swing.JComboBox<>();
+        anoCombo = new javax.swing.JComboBox<String>();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -193,14 +195,6 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
 
         tabelaIndicadores.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
                 {null},
                 {null},
                 {null},
@@ -291,14 +285,6 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
 
         tabelaDadosTecnicos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null, null, null, null, null},
