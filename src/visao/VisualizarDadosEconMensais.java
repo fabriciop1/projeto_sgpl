@@ -196,7 +196,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
 
         btnVoltar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        anoCombo = new javax.swing.JComboBox<String>();
+        anoCombo = new javax.swing.JComboBox<>();
         adicionarAnoBT = new javax.swing.JButton();
         jScrollPane6 = new javax.swing.JScrollPane();
         jPanel3 = new javax.swing.JPanel();
@@ -780,10 +780,10 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         int selecionado = telaMes.getSelected();
         
         if (selecionado != 0) {
+             
+            gtae.setTitle("Editar Dados Econômicos Mensais - " + telaMes.getMonthSelected().toUpperCase());
             
-            gtae.setColumnInterval((selecionado-1) * 3, ((selecionado-1) * 3) + 2);
-        
-            configGTAE();
+            configGTAE(selecionado);
             
             gtae.showEditor(evt);
            
@@ -917,12 +917,23 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
             Object[][] areaData = evt.getTableAreaData();
             int modiftype = evt.getEventType();
             
-            
+            if (modiftype == TableModifiedEvent.AREA_CHANGED) {
+            for (int i = 0; i < areaData.length; i++) {
+                if (gtae.getEditTable().isCellEditable(i, 0)) {
+                DadosEconMensais dado = new DadosEconMensais();
+                int quant = Cast.toInt(areaData[i][0]);
+                System.out.println(quant);
+                
+               // System.out.println(dado.getQuantidade());
+                }
+            }
+            }
         });
     }
     
-    private void configGTAE() {
+    private void configGTAE(int selected) {
         
+        gtae.setColumnInterval((selected-1) * 3, ((selected-1) * 3) + 2);
         gtae.getEditTable().setDefaultRenderer(Object.class, new ColorRendererDadosEcon(true));
         gtae.setName("GTAE DadosEconMensais");
         gtae.setRowsDisplayed(10);

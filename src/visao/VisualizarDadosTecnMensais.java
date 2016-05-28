@@ -119,28 +119,13 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
             }
             
             double divisao = calcularMedia(linhaTemp);
-            if (divisao != 0.0){ linhaTemp[12] = divisao; } 
-            
+            if (divisao != 0.0){ linhaTemp[12] = divisao; }         
             
             modelDadosTecnicos.addRow(linhaTemp);
         }
-        
     }
+      
     
-    public static double calcularMedia(Object[] vetor){
-        
-        int cont = 0;
-        double soma = 0.0;
-        
-        for (Object vetor1 : vetor) {
-            if (vetor1 != null) {
-                soma += (Double) vetor1;
-                cont++;
-            }
-        }
-                
-        return Calc.dividir(soma, cont);
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -154,7 +139,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         btnVoltar = new javax.swing.JButton();
         textoEntrada = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        anoCombo = new javax.swing.JComboBox<String>();
+        anoCombo = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -577,6 +562,8 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         
          if (selecionado != 0) {
             
+            gtae.setTitle("Editar Dados Técnicos Mensais - " + telaMes.getMonthSelected().toUpperCase());
+            
             configGTAE(selecionado);
             
             gtae.showEditor(evt);
@@ -584,10 +571,15 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
     }//GEN-LAST:event_editarAnoBTActionPerformed
 
     private void configGTAE(int selected) {
-        gtae.setColumnInterval(selected, selected);
+        gtae.getEditTable().setDefaultRenderer(Object.class, new ColorRendererDadosTec(true));
         gtae.setName("GTAE Dados Técnicos Mensais");
+        gtae.setRowsDisplayed(10);
+        gtae.setName("GTAE Dados Técnicos Mensais");
+        
+        gtae.setColumnInterval(selected-1, selected-1);
+        gtae.setColumnEditable(selected-1, true);
+        
         gtae.setAllowEmptyCells(true);
-        gtae.setColumnEditable(12, false);
         gtae.setSourceRowEditable(1, false);
         gtae.setSourceRowEditable(2, false);
         gtae.setSourceRowEditable(3, false);
@@ -611,6 +603,21 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         }    
         
         PreencherTabelaDTM(Integer.parseInt( (String) anoCombo.getSelectedItem() ), dtms);
+    }
+    
+    public static double calcularMedia(Object[] vetor){
+        
+        int cont = 0;
+        double soma = 0.0;
+        
+        for (Object vetor1 : vetor) {
+            if (vetor1 != null) {
+                soma += (Double) vetor1;
+                cont++;
+            }
+        }
+                
+        return Calc.dividir(soma, cont);
     }
     
     

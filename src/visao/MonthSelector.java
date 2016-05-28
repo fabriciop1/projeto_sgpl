@@ -120,6 +120,10 @@ public class MonthSelector extends javax.swing.JDialog {
        return this.selected;
    }
    
+   public String getMonthSelected() {
+       return this.mesCombo.getItemAt(this.selected);
+   }
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelaBT;
