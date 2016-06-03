@@ -1,18 +1,18 @@
 
 SET FOREIGN_KEY_CHECKS = 0;
 TRUNCATE TABLE projeto_pesquisa.dados_economicos_mensais;
+TRUNCATE TABLE projeto_pesquisa.dados_tecnicos_mensais;
 TRUNCATE TABLE projeto_pesquisa.dem_especificacao;
+TRUNCATE TABLE projeto_pesquisa.dtm_indicador;
 TRUNCATE TABLE projeto_pesquisa.inventario_animais;
 TRUNCATE TABLE projeto_pesquisa.inventario_benfeitorias;
+TRUNCATE TABLE projeto_pesquisa.inventario_forrageiras;
 TRUNCATE TABLE projeto_pesquisa.inventario_maquinas;
 TRUNCATE TABLE projeto_pesquisa.inventario_resumo;
 TRUNCATE TABLE projeto_pesquisa.inventario_terras;
-TRUNCATE TABLE projeto_pesquisa.inventario_forrageiras;
 TRUNCATE TABLE projeto_pesquisa.perfil;
 TRUNCATE TABLE projeto_pesquisa.rota;
 TRUNCATE TABLE projeto_pesquisa.usuario;
-TRUNCATE TABLE projeto_pesquisa.dtm_indicador;
-TRUNCATE TABLE projeto_pesquisa.dados_tecnicos_mensais;
 SET FOREIGN_KEY_CHECKS = 1;
 
 /*===============================================================================================================================*/

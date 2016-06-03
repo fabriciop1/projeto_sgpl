@@ -6,6 +6,8 @@
 package flex.table;
 
 import java.awt.Frame;
+import java.util.ArrayList;
+import java.util.Objects;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -24,8 +26,6 @@ public class GenericTableAreaEditor extends GenericTableModifier {
     private int startColumn;
     private int endColumn;
     
-    private final int columnOffset;
-    
     private boolean sourceRowEditable[];
 
     
@@ -37,8 +37,6 @@ public class GenericTableAreaEditor extends GenericTableModifier {
         
         this.startColumn = 0;
         this.endColumn = sourceTable.getColumnCount() - 1;
-        
-        this.columnOffset = 0;
         
         this.sourceRowEditable = new boolean[sourceTable.getRowCount()];
         
@@ -55,8 +53,6 @@ public class GenericTableAreaEditor extends GenericTableModifier {
         this.startColumn = startColumn;
         this.endColumn = endColumn;
         
-        this.columnOffset = 0;
-        
         this.sourceRowEditable = new boolean[sourceTable.getRowCount()];
         
         super.setLabelText("Editar");
@@ -70,9 +66,9 @@ public class GenericTableAreaEditor extends GenericTableModifier {
         
         for(int i = 0; i < editTable.getRowCount(); i++){
             
-            for (int j = 0; j < editTable.getColumnCount() - columnOffset; j++) {
+            for (int j = getColumnOffset(); j < editTable.getColumnCount(); j++) {
                 
-                setEditTableValue( getSourceTableValue(startRow + i, startColumn + j), i, j + columnOffset);
+                setEditTableValue( getSourceTableValue(startRow + i, startColumn + j), i, j);
             }
         }
     }
@@ -80,32 +76,49 @@ public class GenericTableAreaEditor extends GenericTableModifier {
     @Override
     protected void updateSourceTable() {
         
-        Object[][] tableAreaData = new Object[editTable.getRowCount()][editTable.getColumnCount() - columnOffset];
-        
-        for(int i=0; i<editTable.getRowCount(); i++){
-            
-            checkEmptyRow(i, columnOffset);
-        }
+        Object[][] tableAreaData = new Object[editTable.getRowCount()][editTable.getColumnCount() - getColumnOffset()];
+        boolean[][] dataModified = new boolean[editTable.getRowCount()][editTable.getColumnCount() - getColumnOffset()];
+        ArrayList<Integer> rowsModified = new ArrayList<>();
         
         for (int i = 0; i < editTable.getRowCount(); i++) {
                         
-            for (int j = 0; j < editTable.getColumnCount() - columnOffset; j++) {
+            boolean rowModified = false;
+            
+            for (int j = getColumnOffset(); j < editTable.getColumnCount(); j++) {
                 
-                tableAreaData[i][j] = getEditTableValue(i, j + columnOffset);
+                Object editValue = getEditTableValue(i, j);
+                Object sourceValue = getSourceTableValue(startRow + i, startColumn + j);
                 
-                setSourceTableValue( convertToSourceTableValue(tableAreaData[i][j], startColumn + j), startRow + i, startColumn + j);
+                tableAreaData[i][j] = editValue;
+                
+                if( !Objects.equals(editValue, sourceValue) ){
+                    
+                    dataModified[i][j] = true;
+                    
+                    if(!rowModified){
+                        
+                        rowModified = true;
+                        rowsModified.add(i);
+                    }
+                    
+                    setSourceTableValue( convertToSourceTableValue(editValue, startColumn + j), startRow + i, startColumn + j);
+                }
             }
         }
         
-        notifyListeners(new TableModifiedEvent(this, sourceTable, -1, tableAreaData, null, TableModifiedEvent.AREA_CHANGED));
+        if(rowsModified.size() > 0){
+            
+            notifyListeners(new TableModifiedEvent(this, sourceTable, rowsModified, tableAreaData, 
+                    null, TableModifiedEvent.AREA_CHANGED));
+        }
     }
     
     @Override
     protected boolean validateEditTableContent(){
         
-        for (int i = 0; i < editTable.getRowCount() - columnOffset; i++) {
+        for (int i = getColumnOffset(); i < editTable.getRowCount(); i++) {
             
-            if(checkEmptyRow(i, columnOffset)){ 
+            if(checkEmptyRow(i)){ 
                 
                 if(!isAllowedEmptyRows()){
                 
@@ -116,9 +129,9 @@ public class GenericTableAreaEditor extends GenericTableModifier {
                 continue;
             }
             
-            for (int j = 0; j < editTable.getColumnCount() - columnOffset; j++) {
+            for (int j = getColumnOffset(); j < editTable.getColumnCount(); j++) {
                 
-                if (checkEmptyValue(i, j + columnOffset)) {
+                if (checkEmptyValue(i, j)) {
                     
                     if (!isAllowedEmptyCells()) {
                         
@@ -126,7 +139,7 @@ public class GenericTableAreaEditor extends GenericTableModifier {
                         return false;
                     }
                 }
-                else if(sourceRowEditable[i + startRow] && !validateEditTableValue(i, j + columnOffset, startColumn + j)){
+                else if(sourceRowEditable[i + startRow] && !validateEditTableValue(i, j, startColumn + j)){
                     
                     JOptionPane.showMessageDialog(this, "O valor da coluna \"" + editTable.getColumnName(j) + "\" na linha " + (i+1) +
                             " é inválido.", "Valor de Coluna Inválido", JOptionPane.ERROR_MESSAGE);
@@ -142,11 +155,15 @@ public class GenericTableAreaEditor extends GenericTableModifier {
     @Override
     protected DefaultTableModel createEditTableModel(Object[][] dataMatrix, String[] columnNames,  Class[] columnTypes){
         
-        int partialSize = (endColumn - startColumn) + columnOffset + 1;
+        int editTableColumnCount = (endColumn - startColumn) + getColumnOffset() + 1;
         
-        String[] editColumnNames = new String[partialSize];
+        String[] editColumnNames = new String[editTableColumnCount];
         
-        for (int i = 0; i < editColumnNames.length; i++) {
+        for(int i=0; i < getColumnOffset(); i++){
+                        
+        }
+        
+        for (int i = getColumnOffset(); i < editTableColumnCount; i++) {
             
             editColumnNames[i] = columnNames[startColumn + i];
         }
@@ -172,6 +189,7 @@ public class GenericTableAreaEditor extends GenericTableModifier {
                     return true;
                 }
             }
+        
         };
         
         return model;
@@ -180,31 +198,26 @@ public class GenericTableAreaEditor extends GenericTableModifier {
     @Override
     protected void copySourceTableEditors() {
         
-        for(int i = 0; i<editTable.getColumnCount() - columnOffset; i++){
+        for(int i = getColumnOffset(); i<editTable.getColumnCount(); i++){
             
             TableCellEditor sourceCellEditor = sourceTable.getColumnModel().getColumn(startColumn + i).getCellEditor();
             
-            editTable.getColumnModel().getColumn(i + columnOffset).setCellEditor(sourceCellEditor);
+            editTable.getColumnModel().getColumn(i).setCellEditor(sourceCellEditor);
         }
     }
 
     @Override
     protected void copySourceTableRenderers() {
         
-        for(int i = 0; i<editTable.getColumnCount() - columnOffset; i++){
+        for(int i = getColumnOffset(); i<editTable.getColumnCount(); i++){
             
             TableCellRenderer sourceCellRenderer = sourceTable.getColumnModel().getColumn(startColumn + i).getCellRenderer();
             
-            editTable.getColumnModel().getColumn(i + columnOffset).setCellRenderer(sourceCellRenderer);
+            editTable.getColumnModel().getColumn(i).setCellRenderer(sourceCellRenderer);
         }
     }
     
-    @Override
-    public int getSourceTableColumnWidth(int column){
-        
-        return super.getSourceTableColumnWidth(startColumn + column - columnOffset);
-    }
-    
+
     public int getStartRow() {
         return startRow;
     }

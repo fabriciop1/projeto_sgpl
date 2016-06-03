@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package visao;
+package visao.windows;
 
 import static flex.table.GenericTableRowEditor.*;
 import controle.ControlePerfil;
@@ -2314,7 +2314,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             Integer rowID = (Integer) event.getCustomRowData();
             GenericTableModifier modifier = event.getSourceModifier();
             int modifType = event.getEventType();
-            int rowIndex = event.getRowIndex();
+            int rowIndex = event.getRowsModified().get(0);
             
             switch (modifType) {
                 case TableModifiedEvent.ROW_INSERTED:
@@ -2360,7 +2360,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             Integer rowID = (Integer) event.getCustomRowData();
             GenericTableModifier modifier = event.getSourceModifier();
             int modifType = event.getEventType();
-            int rowIndex = event.getRowIndex();
+            int rowIndex = event.getRowsModified().get(0);
             
             switch (modifType) {
                 case TableModifiedEvent.ROW_INSERTED:
@@ -2406,7 +2406,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             GenericTableModifier modifier = event.getSourceModifier();
             
             int modifType = event.getEventType();
-            int rowIndex = event.getRowIndex(); 
+            int rowIndex = event.getRowsModified().get(0);
             
             if (modifType == TableModifiedEvent.ROW_INSERTED || modifType == TableModifiedEvent.ROW_UPDATED) {
                 
@@ -2459,7 +2459,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 
                 Object[] rowData = event.getTableRowData();
                 
-                int rowIndex = event.getRowIndex();
+                int rowIndex = event.getRowsModified().get(0);
                 Integer terrasRowID = (Integer) event.getCustomRowData();
                 
                 Object[] terrasRowData = tabelaTerrasGTRE.getSourceTableRowData(rowIndex);
@@ -2485,7 +2485,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             Integer rowID = (Integer) event.getCustomRowData();
             GenericTableModifier modifier = event.getSourceModifier();
             int modifType = event.getEventType();
-            int rowIndex = event.getRowIndex();
+            int rowIndex = event.getRowsModified().get(0);
             
             int tipoAnimal = 0;
             

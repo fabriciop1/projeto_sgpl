@@ -3,17 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package visao;
+package visao.windows;
 
 import controle.ControlePerfil;
 import flex.db.GenericDAO;
 import flex.table.GenericTableAreaEditor;
+import flex.table.TableModifiedEvent;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollBar;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import modelo.negocio.DadosTecMensais;
 import modelo.negocio.Indicador;
 import modelo.negocio.Perfil;
@@ -63,6 +65,8 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         PreencherTabelaIND(indicadores);
         
         fillComboBox();
+        
+        definirBDListeners();
     }
     
     private void PreencherTabelaIND(List<Indicador> ind){
@@ -90,15 +94,10 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         modelDadosTecnicos.setNumRows(0);
         
         Object[] linhaTemp;
-        Object[] mediaLitros;
-        int contador, soma;
         
         for( int i = 0; i < modelIndicadores.getRowCount(); i++){
             
             linhaTemp = new Object[13];
-            mediaLitros = new Object[13];
-            soma      = 0;
-            contador  = 0;
             
             for( int j = 0; j < dtm.size(); j++){
                 
@@ -109,33 +108,28 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
                     double dadoTemp = dtm.get(j).getDado();
                     
                     linhaTemp[indexCol] = dadoTemp;
-                    soma += dadoTemp;
-                                        
-                    if( dadoTemp != 0.0 ){ contador++; } 
                                                      
                 }
                                  
                 if( i == 1 && dtm.get(j).getAno() == ano) {    
                     double tempMedia = (Double) modelDadosTecnicos.getValueAt(0, indexCol);
-                    
+                                        
                     if( tempMedia != 0.0 ) {
                         linhaTemp[indexCol] = Calc.dividir( tempMedia, Data.diasDoMes(ano, indexCol + 1));
-                        soma += tempMedia;
-                        contador++;
                     }
                     
                 } 
                 
             }
             
-            double divisao = Calc.dividir(soma, contador);
-            if (divisao != 0.0){ linhaTemp[12] = divisao; } 
-            
+            double divisao = calcularMedia(linhaTemp);
+            if (divisao != 0.0){ linhaTemp[12] = divisao; }         
             
             modelDadosTecnicos.addRow(linhaTemp);
         }
-        
     }
+      
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -149,7 +143,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         btnVoltar = new javax.swing.JButton();
         textoEntrada = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        anoCombo = new javax.swing.JComboBox<String>();
+        anoCombo = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -572,6 +566,8 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         
          if (selecionado != 0) {
             
+            gtae.setTitle("Editar Dados Técnicos Mensais - " + telaMes.getMonthSelected().toUpperCase());
+            
             configGTAE(selecionado);
             
             gtae.showEditor(evt);
@@ -579,10 +575,17 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
     }//GEN-LAST:event_editarAnoBTActionPerformed
 
     private void configGTAE(int selected) {
-        gtae.setColumnInterval(selected, selected);
+        gtae.getEditTable().setDefaultRenderer(Object.class, new ColorRendererDadosTec(true));
+    
         gtae.setName("GTAE Dados Técnicos Mensais");
+        gtae.setRowsDisplayed(10);
+        
+        gtae.setAllowEmptyRows(true);
+        
+        gtae.setColumnInterval(selected-1, selected-1);
+        gtae.setColumnEditable(selected-1, true);
+        
         gtae.setAllowEmptyCells(true);
-        gtae.setColumnEditable(12, false);
         gtae.setSourceRowEditable(1, false);
         gtae.setSourceRowEditable(2, false);
         gtae.setSourceRowEditable(3, false);
@@ -590,6 +593,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         gtae.setSourceRowEditable(14, false);
          
     }
+    
     private void fillComboBox() {
         atual = ControlePerfil.getInstance().getPerfilSelecionado();
         
@@ -606,6 +610,56 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         }    
         
         PreencherTabelaDTM(Integer.parseInt( (String) anoCombo.getSelectedItem() ), dtms);
+    }
+    
+    private void definirBDListeners() {
+         gtae.addTableModifyListener((TableModifiedEvent evt) -> {
+             
+            Object[][] areaData = evt.getTableData();
+            List<Integer> linhas = evt.getRowsModified();
+            
+            int ano = Integer.parseInt(anoCombo.getSelectedItem().toString());
+            
+            for (Integer l : linhas) {
+                int mes = gtae.getStartColumn() + 1;
+                Indicador ind = dtmindao.retrieveByColumn("indicador", tabelaIndicadores.getValueAt(l, 0)).get(0);
+                
+                int dado = Integer.valueOf(areaData[l][0].toString());
+                
+                List<DadosTecMensais> dadosTec = dtmdao.retrieveByColumns(new String[]{"mes", "ano", "idDTM_indicadorFK", "idPerfilFK"}, 
+                                                                    new Object[]{mes, ano, ind.getId(), atual.getId()});
+                
+               if (dadosTec.isEmpty()) {
+                   DadosTecMensais dadoTec = new DadosTecMensais(mes, ano, dado, ind, atual);
+                   
+                   dtmdao.insert(dadoTec);
+                   
+               } else {
+                   DadosTecMensais dtm = dadosTec.get(0);
+                   
+                   dtm.setDado(dado);
+                   
+                   dtmdao.update(dtm);
+               }
+            }
+            dtms = dtmdao.retrieveByColumn("idPerfilFK", atual.getId());
+            PreencherTabelaDTM(ano, dtms);
+         });
+    }
+    
+    public static double calcularMedia(Object[] vetor){
+        
+        int cont = 0;
+        double soma = 0.0;
+        
+        for (Object vetor1 : vetor) {
+            if (vetor1 != null) {
+                soma += (Double) vetor1;
+                cont++;
+            }
+        }
+                
+        return Calc.dividir(soma, cont);
     }
     
     

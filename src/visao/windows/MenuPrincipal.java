@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package visao;
+package visao.windows;
 
 import controle.ControlePerfil;
 import modelo.negocio.Perfil;

@@ -5,6 +5,7 @@
  */
 package flex.table;
 
+import java.util.ArrayList;
 import javax.swing.JTable;
 
 /**
@@ -23,11 +24,13 @@ public class TableModifiedEvent {
     
     public static final int AREA_CHANGED = 7;
     
-    private final GenericTableModifier sourceModifier;
-    private final JTable sourceTable;
+    private GenericTableModifier sourceModifier;
+    private JTable sourceTable;
     
-    private int rowIndex;
     private Object[][] tableData;
+    private boolean[][] tableDataModified;
+    private ArrayList<Integer> columnsModified;
+    private ArrayList<Integer> rowsModified;
     private Object customRowData;
     private int eventType;
     
@@ -36,14 +39,17 @@ public class TableModifiedEvent {
         this.sourceModifier = sourceModifier;
         this.sourceTable = sourceTable;
         this.tableData = new Object[1][0];
+        this.columnsModified = new ArrayList<>();
     }
 
-    public TableModifiedEvent(GenericTableModifier sourceModifier, JTable sourceTable, int rowIndex, Object[] rowData, Object customRowData, int eventType) {
+    public TableModifiedEvent(GenericTableModifier sourceModifier, JTable sourceTable, ArrayList<Integer> rowsModified, Object[] rowData, Object customRowData, int eventType) {
         this(sourceModifier,sourceTable);
         
-        this.rowIndex = rowIndex;
         this.customRowData = customRowData;
         this.eventType = eventType;
+        
+        this.columnsModified = new ArrayList<>();
+        this.rowsModified = rowsModified;
         
         if(rowData != null){
             this.tableData = new Object[1][0];
@@ -51,15 +57,18 @@ public class TableModifiedEvent {
         }       
     }
 
-    public TableModifiedEvent(GenericTableModifier sourceModifier, JTable sourceTable, int rowIndex, Object[][] tableAreaData, Object customRowData, int eventType) {
+    public TableModifiedEvent(GenericTableModifier sourceModifier, JTable sourceTable, ArrayList<Integer> rowsModified, Object[][] tableAreaData, Object customRowData, int eventType) {
         this(sourceModifier,sourceTable);
         
-        this.rowIndex = rowIndex;
         this.customRowData = customRowData;
         this.eventType = eventType;
+        this.columnsModified = new ArrayList<>();
+        this.rowsModified = rowsModified;
         
         if (tableAreaData != null && tableAreaData.length > 0) {
             this.tableData = tableAreaData;
+        } else {
+            this.tableData = new Object[1][0];
         }
         
     }
@@ -72,13 +81,6 @@ public class TableModifiedEvent {
         this.eventType = eventType;
     }
 
-    public int getRowIndex() {
-        return rowIndex;
-    }
-
-    public void setRowIndex(int rowIndex) {
-        this.rowIndex = rowIndex;
-    }
 
     public Object[] getTableRowData() {
         return tableData[0];
@@ -109,30 +111,54 @@ public class TableModifiedEvent {
         return sourceTable;
     }
 
-    public Object[][] getTableAreaData() {
-        return tableData;
-    }
-
     public void setTableAreaData(Object[][] tableData) {
         
         if(tableData != null){
             this.tableData = tableData;
         }
     }
-    
-//    public static void main(String[] args) {
-//        
-//        String[][] str = new String[1][0];
-//        String[] d = new String[30];
-//        
-//        for (int i = 0; i < d.length; i++) {
-//            d[i] = TrashGen.generateString(50, false, true, true);
-//        }
-//        
-//        str[0] = d;
-//        
-//        for (int i = 0; i < str[0].length; i++) {
-//            System.out.println(str[0][i]);            
-//        }
-//    }
+
+    public Object[][] getTableData() {
+        return tableData;
+    }
+
+    public void setTableData(Object[][] tableData) {
+        this.tableData = tableData;
+    }
+
+    public boolean isTableDataModified(int row, int column) {
+        
+        if(row < 0 || row > tableDataModified.length-1)
+            throw new ArrayIndexOutOfBoundsException("O indice da linha passado é inválido: " + row);
+        
+        if(column < 0 || column > tableDataModified[0].length-1)
+            throw new ArrayIndexOutOfBoundsException("O indice da coluna passado é inválido: " + column);
+        
+        return tableDataModified[row][column];
+    }
+
+    public void setTableDataModified(boolean[][] tableDataModified) {
+        this.tableDataModified = tableDataModified;
+    }
+
+    public ArrayList<Integer> getColumnsModified() {
+        return columnsModified;
+    }
+
+    public void setColumnsModified(ArrayList<Integer> columnsModified) {
+        this.columnsModified = columnsModified;
+    }
+
+    public ArrayList<Integer> getRowsModified() {
+        return rowsModified;
+    }
+
+    public void setRowsModified(ArrayList<Integer> rowsModified) {
+        this.rowsModified = rowsModified;
+    }
+
+    public boolean[][] getTableDataModified() {
+        return tableDataModified;
+    }
+
 }

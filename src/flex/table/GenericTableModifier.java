@@ -36,19 +36,20 @@ public abstract class GenericTableModifier extends JDialog{
     private final Frame parent;
     protected JTable sourceTable;
     
-    private final List<Object> customRowDataList;
-    private final List<TableModifyListener> tableModifylisteners;
-    private final HashMap<Integer, String> columnRegexMap;
+    private List<Object> customRowDataList;
+    private List<TableModifyListener> tableModifylisteners;
+    private HashMap<Integer, String> columnRegexMap;
     
     private int rowsDisplayed;
+    private int columnOffset;
     
     private boolean allowEmptyRows;
     private boolean allowEmptyCells;
     
     private boolean forceCellEditing;
-    private final boolean editorColumnEditable[];
+    private boolean editorColumnEditable[];
 
-    boolean rebuildEditTable;
+    private boolean rebuildEditTable;
     
     
     protected GenericTableModifier(Frame parent, JTable sourceTable, boolean forceCellEditing) {
@@ -63,6 +64,7 @@ public abstract class GenericTableModifier extends JDialog{
         this.allowEmptyCells = true;
         this.allowEmptyRows = false;
         this.rowsDisplayed = 1;
+        this.columnOffset = 0;
         this.editorColumnEditable = new boolean[sourceTable.getColumnCount()];
         this.rebuildEditTable = true;
         
@@ -291,7 +293,10 @@ public abstract class GenericTableModifier extends JDialog{
         
         customRowDataList.add(customRowData);
         
-        notifyListeners(new TableModifiedEvent(this, sourceTable, sourceTable.getRowCount()-1, dataArray, 
+        ArrayList<Integer> rows = new ArrayList<>();
+        rows.add(sourceTable.getRowCount()-1);
+        
+        notifyListeners(new TableModifiedEvent(this, sourceTable, rows, dataArray, 
                             customRowData, TableModifiedEvent.ROW_INSERTED));
     }
     
@@ -315,12 +320,15 @@ public abstract class GenericTableModifier extends JDialog{
         getSourceTableModel().fireTableRowsDeleted(row, row);
         removeCustomRowData(row);
         
-        notifyListeners(new TableModifiedEvent(this, sourceTable, row, rowData, customRowData, TableModifiedEvent.ROW_DELETED));
+        ArrayList<Integer> rows = new ArrayList<>();
+        rows.add(row);
+        
+        notifyListeners(new TableModifiedEvent(this, sourceTable, rows, rowData, customRowData, TableModifiedEvent.ROW_DELETED));
     }
     
     public void updateSourceTableRow(int row, Object[] dataArray){
         
-        for (int i = 0; i < dataArray.length; i++) {
+        for (int i = columnOffset; i < dataArray.length; i++) {
             sourceTable.setValueAt(dataArray[i], row, i);
         }
         
@@ -329,7 +337,10 @@ public abstract class GenericTableModifier extends JDialog{
         Object[] rowData = getSourceTableRowData(row);
         Object customRowData = getCustomRowData(row);
         
-        notifyListeners(new TableModifiedEvent(this, sourceTable, row, rowData, 
+        ArrayList<Integer> rows = new ArrayList<>();
+        rows.add(row);
+        
+        notifyListeners(new TableModifiedEvent(this, sourceTable, rows, rowData, 
                             customRowData, TableModifiedEvent.ROW_UPDATED));
     }
     
@@ -555,9 +566,9 @@ public abstract class GenericTableModifier extends JDialog{
         return true;
     }
     
-    protected boolean validateEditTableRow(int editRowIndex, int columnOffset){
+    protected boolean validateEditTableRow(int editRowIndex){
         
-        if(checkEmptyRow(editRowIndex, columnOffset)){
+        if(checkEmptyRow(editRowIndex)){
             return isAllowedEmptyRows();
         }
         
@@ -578,7 +589,7 @@ public abstract class GenericTableModifier extends JDialog{
         
         for (int i = 0; i < editTable.getRowCount(); i++) {
             
-            if(checkEmptyRow(i, 0)){
+            if(checkEmptyRow(i)){
                 
                 if(!isAllowedEmptyRows()){
                     
@@ -589,7 +600,7 @@ public abstract class GenericTableModifier extends JDialog{
                 continue;
             }
             
-            for (int j = 0; j < editTable.getColumnCount(); j++) {
+            for (int j = columnOffset; j < editTable.getColumnCount(); j++) {
                 
                 if(checkEmptyValue(i, j)){ 
                     
@@ -620,13 +631,13 @@ public abstract class GenericTableModifier extends JDialog{
         return Cast.toString(cellValue).isEmpty();
     }
     
-    protected boolean checkEmptyRow(int editRow, int columnOffset){
+    protected boolean checkEmptyRow(int editRow){
         
         int numEmptyCells = 0;
         
-        for(int i=0; i<editTable.getColumnCount() - columnOffset; i++){
+        for(int i=columnOffset; i<editTable.getColumnCount(); i++){
 
-            if(checkEmptyValue(editRow, i + columnOffset)){
+            if(checkEmptyValue(editRow, i)){
 
                 numEmptyCells++;
             }
@@ -885,4 +896,7 @@ public abstract class GenericTableModifier extends JDialog{
         return editTableScroll;
     }
 
+    public int getColumnOffset() {
+        return columnOffset;
+    }
 }

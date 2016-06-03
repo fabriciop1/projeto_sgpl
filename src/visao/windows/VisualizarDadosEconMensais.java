@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package visao;
+package visao.windows;
 
 import controle.ControlePerfil;
 import flex.db.GenericDAO;
@@ -196,7 +196,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
 
         btnVoltar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        anoCombo = new javax.swing.JComboBox<String>();
+        anoCombo = new javax.swing.JComboBox<>();
         adicionarAnoBT = new javax.swing.JButton();
         jScrollPane6 = new javax.swing.JScrollPane();
         jPanel3 = new javax.swing.JPanel();
@@ -780,10 +780,10 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         int selecionado = telaMes.getSelected();
         
         if (selecionado != 0) {
+             
+            gtae.setTitle("Editar Dados Econômicos Mensais - " + telaMes.getMonthSelected().toUpperCase());
             
-            gtae.setColumnInterval((selecionado-1) * 3, ((selecionado-1) * 3) + 2);
-        
-            configGTAE();
+            configGTAE(selecionado);
             
             gtae.showEditor(evt);
            
@@ -912,17 +912,57 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
     }
     
     private void definirBDListeners() {
+        
         gtae.addTableModifyListener((TableModifiedEvent evt) -> {
         
-            Object[][] areaData = evt.getTableAreaData();
-            int modiftype = evt.getEventType();
+            Object[][] areaData = evt.getTableData();
+            List<Integer> linhas = evt.getRowsModified();
             
-            
+            for (Integer l : linhas) {
+
+                Especificacao espec = demespdao.retrieveByColumn("especificacao", tabelaEspecificacao.getValueAt(l, 0)).get(0);
+                int ano = Integer.parseInt(anoCombo.getSelectedItem().toString());
+                int mes = ( (gtae.getStartColumn() + 1) / 3 ) + 1;
+                int quantidade = 0;
+                double valorUnitario = 0.0;
+
+                List<DadosEconMensais> dadosEM = demdao.retrieveByColumns(new String[]{"mes", "ano", "idDEM_especificacaoFK", "idPerfilFK"}, 
+                                                                    new Object[]{mes, ano, espec.getId(), atual.getId()});
+
+                if (!Cast.toString(areaData[l][0]).isEmpty()) {
+
+                    quantidade = (Integer.valueOf(areaData[l][0].toString()));
+                } 
+
+                if (!Cast.toString(areaData[l][1]).isEmpty()) {
+
+                    valorUnitario = (Double.parseDouble(areaData[l][1].toString()));
+                } 
+
+                if(dadosEM.isEmpty()){
+
+                    DadosEconMensais dem = new DadosEconMensais(mes, ano, quantidade, valorUnitario, espec, atual);
+
+                    demdao.insert(dem);
+
+                } else {
+
+                    DadosEconMensais dem = dadosEM.get(0);
+
+                    dem.setValorUnitario(valorUnitario);
+                    dem.setQuantidade(quantidade);
+
+                    demdao.update(dem);
+                }
+            }
+            dems = demdao.retrieveByColumn("idPerfilFK", atual.getId());
+            PreencherTabelaDEM(Integer.parseInt(anoCombo.getSelectedItem().toString()), dems);
         });
     }
     
-    private void configGTAE() {
+    private void configGTAE(int selected) {
         
+        gtae.setColumnInterval((selected-1) * 3, ((selected-1) * 3) + 2);
         gtae.getEditTable().setDefaultRenderer(Object.class, new ColorRendererDadosEcon(true));
         gtae.setName("GTAE DadosEconMensais");
         gtae.setRowsDisplayed(10);
