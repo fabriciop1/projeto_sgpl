@@ -915,21 +915,48 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         
         gtae.addTableModifyListener((TableModifiedEvent evt) -> {
         
-<<<<<<< HEAD:src/visao/windows/VisualizarDadosEconMensais.java
             Object[][] areaData = evt.getTableData();
             List<Integer> linhas = evt.getRowsModified();
             
-            if (modiftype == TableModifiedEvent.AREA_CHANGED) {
-            for (int i = 0; i < areaData.length; i++) {
-                if (gtae.getEditTable().isCellEditable(i, 0)) {
-                DadosEconMensais dado = new DadosEconMensais();
-                int quant = Cast.toInt(areaData[i][0]);
-                System.out.println(quant);
-                
-               // System.out.println(dado.getQuantidade());
+            for (Integer l : linhas) {
+
+                Especificacao espec = demespdao.retrieveByColumn("especificacao", tabelaEspecificacao.getValueAt(l, 0)).get(0);
+                int ano = Integer.parseInt(anoCombo.getSelectedItem().toString());
+                int mes = ( (gtae.getStartColumn() + 1) / 3 ) + 1;
+                int quantidade = 0;
+                double valorUnitario = 0.0;
+
+                List<DadosEconMensais> dadosEM = demdao.retrieveByColumns(new String[]{"mes", "ano", "idDEM_especificacaoFK", "idPerfilFK"}, 
+                                                                    new Object[]{mes, ano, espec.getId(), atual.getId()});
+
+                if (!Cast.toString(areaData[l][0]).isEmpty()) {
+
+                    quantidade = (Integer.valueOf(areaData[l][0].toString()));
+                } 
+
+                if (!Cast.toString(areaData[l][1]).isEmpty()) {
+
+                    valorUnitario = (Double.parseDouble(areaData[l][1].toString()));
+                } 
+
+                if(dadosEM.isEmpty()){
+
+                    DadosEconMensais dem = new DadosEconMensais(mes, ano, quantidade, valorUnitario, espec, atual);
+
+                    demdao.insert(dem);
+
+                } else {
+
+                    DadosEconMensais dem = dadosEM.get(0);
+
+                    dem.setValorUnitario(valorUnitario);
+                    dem.setQuantidade(quantidade);
+
+                    demdao.update(dem);
                 }
             }
-            }
+            dems = demdao.retrieveByColumn("idPerfilFK", atual.getId());
+            PreencherTabelaDEM(Integer.parseInt(anoCombo.getSelectedItem().toString()), dems);
         });
     }
     
