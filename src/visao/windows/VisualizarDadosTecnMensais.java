@@ -576,11 +576,15 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
 
     private void configGTAE(int selected) {
         gtae.getEditTable().setDefaultRenderer(Object.class, new ColorRendererDadosTec(true));
-    
         gtae.setName("GTAE Dados Técnicos Mensais");
         gtae.setRowsDisplayed(10);
         
         gtae.setAllowEmptyRows(true);
+=======
+        gtae.setName("GTAE Dados Técnicos Mensais");
+        gtae.setRowsDisplayed(10);
+        gtae.setName("GTAE Dados Técnicos Mensais");
+>>>>>>> b0dc7a6cd09f18a4e6b95a6418d3124874e22798:src/visao/VisualizarDadosTecnMensais.java
         
         gtae.setColumnInterval(selected-1, selected-1);
         gtae.setColumnEditable(selected-1, true);
@@ -612,6 +616,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         PreencherTabelaDTM(Integer.parseInt( (String) anoCombo.getSelectedItem() ), dtms);
     }
     
+<<<<<<< HEAD:src/visao/windows/VisualizarDadosTecnMensais.java
     private void definirBDListeners() {
          gtae.addTableModifyListener((TableModifiedEvent evt) -> {
              
@@ -647,6 +652,8 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
          });
     }
     
+=======
+>>>>>>> b0dc7a6cd09f18a4e6b95a6418d3124874e22798:src/visao/VisualizarDadosTecnMensais.java
     public static double calcularMedia(Object[] vetor){
         
         int cont = 0;
