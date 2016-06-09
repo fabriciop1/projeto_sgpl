@@ -2894,11 +2894,10 @@ public class VisualizarInventario extends javax.swing.JFrame {
     }
     
     private void setRenderers() {
-       tabelaMaquinas.getColumnModel().getColumn(6).setCellRenderer(new DecimalFormatRenderer());
-       tabelaBenfeitorias.getColumnModel().getColumn(6).setCellRenderer(new DecimalFormatRenderer());
-       tabelaInveForrageiras.getColumnModel().getColumn(5).setCellRenderer(new DecimalFormatRenderer());
-       tabelaInveForrageiras.getColumnModel().getColumn(2).setCellRenderer(new DecimalFormatRenderer());
-       
+       tabelaMaquinas.getColumnModel().getColumn(6).setCellRenderer(new DecimalFormatRenderer(true));
+       tabelaBenfeitorias.getColumnModel().getColumn(6).setCellRenderer(new DecimalFormatRenderer(true));
+       tabelaInveForrageiras.getColumnModel().getColumn(5).setCellRenderer(new DecimalFormatRenderer(true));
+       tabelaInveForrageiras.getColumnModel().getColumn(2).setCellRenderer(new DecimalFormatRenderer(true));
     }
     
 

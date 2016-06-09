@@ -117,7 +117,6 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         for(int i = 0; i < modelEspecificacao.getRowCount(); i++){
             
             linhaTemp = new Object[36];
-            
             for(int j = 0; j < dem.size(); j++){
                 
                 int indexCol = (dem.get(j).getMes() - 1) * 3;
@@ -134,7 +133,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                     
                 }
                 
-                if( tabelaEspecificacao.getModel().getValueAt(i, 0).equals("SUB-TOTAL")) {    
+                if( modelEspecificacao.getValueAt(i, 0).equals("SUB-TOTAL")) {    
                     if (tempTotais[indexCol + 2] != 0.0) {
                         linhaTemp[indexCol + 2] = tempTotais[indexCol + 2];
                         coeAtivLeite[dem.get(j).getMes() - 1] += tempTotais[indexCol + 2];
@@ -142,7 +141,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                     } 
                 } 
                 
-                if( tabelaEspecificacao.getModel().getValueAt(i, 0).equals("TOTAL DE ENTRADAS")){
+                if( modelEspecificacao.getValueAt(i, 0).equals("TOTAL DE ENTRADAS")){
                                         
                     if (tempTotais[indexCol] != 0.0) { 
                         linhaTemp[indexCol] = tempTotais[indexCol];
@@ -156,16 +155,16 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                     
                 }
                 
-                if( tabelaEspecificacao.getModel().getValueAt(i, 0).equals("COE DE ATIVIDADE LEITEIRA") ){
+                if( modelEspecificacao.getValueAt(i, 0).equals("COE DE ATIVIDADE LEITEIRA") ){
                     
                     if (coeAtivLeite[dem.get(j).getMes() - 1] != 0.0) {
                         linhaTemp[indexCol + 2] = coeAtivLeite[dem.get(j).getMes() - 1];
                         coeAtivLeite[dem.get(j).getMes() - 1] = 0.0;
                     } 
-                    
+                   
                 }
                 
-                if( tabelaEspecificacao.getModel().getValueAt(i, 0).equals("Mão-de-obra familiar (não paga)") ){
+                if( modelEspecificacao.getValueAt(i, 0).equals("Mão-de-obra familiar (não paga)") ){
                     
                     double salario = 0.0;
                     irdao = new GenericDAO<>(InventarioResumo.class);
@@ -871,7 +870,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                 break;
             }
         }
-        if (existe == true) {
+        if (existe) {
             JOptionPane.showMessageDialog(this, "Este ano já foi inserido para o perfil de " + atual.getNome()
                     + ".", "Alerta - Inserção de ano já cadastrado", JOptionPane.WARNING_MESSAGE);
         }
@@ -880,6 +879,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
             anoCombo.setSelectedItem(ano);
             telaNovoAno.removeItem(ano);
             PreencherTabelaDEM(Integer.parseInt(ano), dems);
+            
         }
     }//GEN-LAST:event_adicionarAnoBTActionPerformed
 

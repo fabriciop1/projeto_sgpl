@@ -7,34 +7,32 @@ package util;
 
 import java.awt.Component;
 import java.text.DecimalFormat;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 /**
- *
+ * Classe necessária para manter apenas duas casas após a vírgula para cada campo double (Aproximação é feita).
  * @author Usuário
  */
 public class DecimalFormatRenderer extends DefaultTableCellRenderer{
-      private static final DecimalFormat formatter = new DecimalFormat( "#.##" );
+    private static final DecimalFormat FORMATTER = new DecimalFormat( "#.##" );
       
-      public DecimalFormatRenderer() { }
+    public DecimalFormatRenderer(boolean alignment) { 
+        if(alignment) {  
+            super.setHorizontalAlignment(JLabel.RIGHT);
+        }
+    }
  
-      @Override
-      public Component getTableCellRendererComponent(
-         JTable table, Object value, boolean isSelected,
-         boolean hasFocus, int row, int column) {
+    @Override
+    public Component getTableCellRendererComponent(
+        JTable table, Object value, boolean isSelected,
+        boolean hasFocus, int row, int column) {
  
-         // First format the cell value as required
-      
-         if (value != null && !value.toString().isEmpty() && (value.getClass() == Double.class || value.getClass() == Integer.class)) {
-             value = formatter.format((Number)value);
-         }
-         
-         
-           
-        // And pass it on to parent class
- 
-         return super.getTableCellRendererComponent(
-            table, value, isSelected, hasFocus, row, column );
-      }
+        if (value != null && !value.toString().isEmpty() && (value.getClass() == Double.class || value.getClass() == Integer.class)) {
+            value = FORMATTER.format((Number)value);
+        }
+       
+        return super.getTableCellRendererComponent( table, value, isSelected, hasFocus, row, column );
+    }
 }

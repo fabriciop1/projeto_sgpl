@@ -8,7 +8,6 @@ package util;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
-import javax.swing.JLabel;
 import javax.swing.JTable;
 
 /**
@@ -17,29 +16,28 @@ import javax.swing.JTable;
  */
 public class ColorRendererDadosTec extends DecimalFormatRenderer {
     
+    private static final Color BG = null;
+    private static final Color COLOR = Color.LIGHT_GRAY;  
+    private static final int FONT = Font.BOLD;
+    
     public ColorRendererDadosTec(boolean alignment) {
-        super();
-        if (alignment == true) {
-            super.setHorizontalAlignment(JLabel.RIGHT);
-        }
+        super(alignment);
         super.setOpaque(true);
     }
     
      @Override
     public Component getTableCellRendererComponent(JTable table, Object color, boolean isSelected, boolean hasFocus, int row, int column) {
-        Component comp = super.getTableCellRendererComponent(table, color, isSelected, hasFocus, row, column); 
+        super.getTableCellRendererComponent(table, color, isSelected, hasFocus, row, column); 
         
         if(column == 12 || row == 1 || row == 3 || row == 14) {
-            comp.setBackground(Color.LIGHT_GRAY);
-            comp.setFont(comp.getFont().deriveFont(Font.BOLD));
+            this.setBackground(COLOR);
+            this.setFont(getFont().deriveFont(FONT));
         } else {
-            comp.setBackground(table.getBackground());
+            this.setBackground(null);
         }
         
-        Color bg = null;
-
         if (isSelected) {
-            super.setBackground(bg == null ? table.getSelectionBackground(): bg);
+            super.setBackground(BG == null ? table.getSelectionBackground(): BG);
         } 
        
         return this;

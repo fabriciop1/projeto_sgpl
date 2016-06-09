@@ -50,25 +50,32 @@
           </Group>
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace pref="92" max="32767" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="btnDadosTecnMensais" max="32767" attributes="0"/>
-                  <Component id="btnAnalises" max="32767" attributes="0"/>
-                  <Component id="btnCalculoRacao" pref="260" max="32767" attributes="0"/>
-                  <Component id="btnPerfil" alignment="0" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="btnDadosTecnMensais" max="32767" attributes="0"/>
+                          <Component id="btnCalculoRacao" pref="260" max="32767" attributes="0"/>
+                          <Component id="btnPerfil" alignment="0" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="btnRetornoMensal" max="32767" attributes="0"/>
+                          <Component id="btnInventario" alignment="0" max="32767" attributes="0"/>
+                          <Component id="btnIndicEconMensais" alignment="0" pref="260" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Component id="btnIndicTecnMensais" min="-2" pref="260" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="btnIndicTecnAnuais" min="-2" pref="260" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="btnRetornoMensal" max="32767" attributes="0"/>
-                  <Component id="btnInventario" alignment="0" max="32767" attributes="0"/>
-                  <Component id="btnIndicEconMensais" alignment="0" max="32767" attributes="0"/>
-                  <Component id="btnIndicTecnMensais" alignment="0" min="-2" pref="260" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="btnCustoImplForra" alignment="0" max="32767" attributes="0"/>
+                  <Component id="btnCustoImplForra" alignment="0" pref="260" max="32767" attributes="0"/>
                   <Component id="btnIndicEconAnuais" alignment="0" max="32767" attributes="0"/>
                   <Component id="btnDadosEconMensais" alignment="0" max="32767" attributes="0"/>
-                  <Component id="btnIndicTecnAnuais" alignment="0" min="-2" pref="260" max="-2" attributes="0"/>
+                  <Component id="btnAnalises" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace pref="92" max="32767" attributes="0"/>
           </Group>
@@ -101,21 +108,23 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="btnDadosTecnMensais" min="-2" pref="50" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="btnAnalises" min="-2" pref="50" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="btnIndicTecnMensais" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
+                          <Component id="btnIndicTecnAnuais" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
+                          <Component id="btnAnalises" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="btnInventario" min="-2" pref="50" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="btnIndicEconMensais" min="-2" pref="50" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="btnIndicTecnMensais" min="-2" pref="50" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="68" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="btnDadosEconMensais" min="-2" pref="50" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="btnIndicEconAnuais" min="-2" pref="50" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="btnIndicTecnAnuais" min="-2" pref="50" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="68" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
