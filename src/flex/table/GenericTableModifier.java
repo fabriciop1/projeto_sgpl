@@ -21,6 +21,7 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import util.Cast;
+import util.Pair;
 import util.Regex;
 
 
@@ -41,7 +42,7 @@ public abstract class GenericTableModifier extends JDialog{
     private HashMap<Integer, String> columnRegexMap;
     
     private int rowsDisplayed;
-    private int columnOffset;
+    private int stringColumnsOffset;
     
     private boolean allowEmptyRows;
     private boolean allowEmptyCells;
@@ -50,6 +51,9 @@ public abstract class GenericTableModifier extends JDialog{
     private boolean editorColumnEditable[];
 
     private boolean rebuildEditTable;
+    
+    private ArrayList<Pair<String,String[]>> stringColumnsData;
+    
     
     
     protected GenericTableModifier(Frame parent, JTable sourceTable, boolean forceCellEditing) {
@@ -64,9 +68,10 @@ public abstract class GenericTableModifier extends JDialog{
         this.allowEmptyCells = true;
         this.allowEmptyRows = false;
         this.rowsDisplayed = 1;
-        this.columnOffset = 0;
+        this.stringColumnsOffset = 0;
         this.editorColumnEditable = new boolean[sourceTable.getColumnCount()];
         this.rebuildEditTable = true;
+        this.stringColumnsData = new ArrayList<>();
         
         initComponents();
         
@@ -189,7 +194,7 @@ public abstract class GenericTableModifier extends JDialog{
     
     protected void composeEditTable(){
         
-        editTable.setModel( GenericTableModifier.this.createEditTableModel( getSourceTableDataMatrix(), getSourceTableColumnNames(), getSourceTableColumnTypes() ) );
+        editTable.setModel( createEditTableModel( getSourceTableDataMatrix(), getSourceTableColumnNames(), getSourceTableColumnTypes() ) );
         
         editTable.createDefaultColumnsFromModel();
         
@@ -328,7 +333,7 @@ public abstract class GenericTableModifier extends JDialog{
     
     public void updateSourceTableRow(int row, Object[] dataArray){
         
-        for (int i = columnOffset; i < dataArray.length; i++) {
+        for (int i = stringColumnsOffset; i < dataArray.length; i++) {
             sourceTable.setValueAt(dataArray[i], row, i);
         }
         
@@ -600,7 +605,7 @@ public abstract class GenericTableModifier extends JDialog{
                 continue;
             }
             
-            for (int j = columnOffset; j < editTable.getColumnCount(); j++) {
+            for (int j = stringColumnsOffset; j < editTable.getColumnCount(); j++) {
                 
                 if(checkEmptyValue(i, j)){ 
                     
@@ -635,7 +640,7 @@ public abstract class GenericTableModifier extends JDialog{
         
         int numEmptyCells = 0;
         
-        for(int i=columnOffset; i<editTable.getColumnCount(); i++){
+        for(int i=stringColumnsOffset; i<editTable.getColumnCount(); i++){
 
             if(checkEmptyValue(editRow, i)){
 
@@ -643,13 +648,42 @@ public abstract class GenericTableModifier extends JDialog{
             }
         }
         
-        if(numEmptyCells == editTable.getColumnCount() - columnOffset){
+        if(numEmptyCells == editTable.getColumnCount() - stringColumnsOffset){
             return true;
         }
         
         return false;
     }
     
+    
+    public void addStringColumn(String columnTitle, String[] columnData){
+        
+        if(columnData == null){
+            throw new NullPointerException("O array de dados da coluna passado é inválido.");
+        }
+        
+        stringColumnsData.add( Pair.create(columnTitle, columnData) );
+        
+        stringColumnsOffset++;
+        
+        clearEditTable();
+        composeEditTable();
+    }
+    
+    protected void fillStringColumns(){
+        
+        for(int i=0; i<stringColumnsOffset; i++){
+            
+            Pair<String,String[]> data = stringColumnsData.get(i);
+            
+            editTable.getColumnModel().getColumn(i).setHeaderValue( Cast.toString(data.first) );
+            
+            for(int j=0; i<editTable.getRowCount(); j++){
+                
+                setEditTableValue(data.second[i], j, i);
+            }
+        }        
+    }
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -896,7 +930,7 @@ public abstract class GenericTableModifier extends JDialog{
         return editTableScroll;
     }
 
-    public int getColumnOffset() {
-        return columnOffset;
+    public int getStringColumnsOffset() {
+        return stringColumnsOffset;
     }
 }

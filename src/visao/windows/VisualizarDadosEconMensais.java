@@ -9,6 +9,7 @@ import controle.ControlePerfil;
 import flex.db.GenericDAO;
 import flex.table.GenericTableAreaEditor;
 import flex.table.TableModifiedEvent;
+import java.awt.event.ItemEvent;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -40,6 +41,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
      * Creates new form VisualizarDadosEconMensais
      */
     public VisualizarDadosEconMensais() {
+    
         initComponents();
         
         super.setLocationRelativeTo(null);
@@ -61,14 +63,15 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         demespdao = new GenericDAO<>(Especificacao.class);
              
         especificacoes = demespdao.retrieveAll();
-        
+         
         gtae = new GenericTableAreaEditor(this, tabelaDadosEconomicos, false);
         
         PreencherTabelaESP(especificacoes);
-        
+      
         fillComboBox();
         
         definirBDListeners();
+        
     }
     
     private void PreencherTabelaESP(List<Especificacao> esp){
@@ -106,83 +109,90 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
     
     private void PreencherTabelaDEM(int ano, List<DadosEconMensais> dem){
         
+        long tempoInicial = System.currentTimeMillis();
+        
         DefaultTableModel modelEspecificacao = (DefaultTableModel) tabelaEspecificacao.getModel();
         DefaultTableModel modelDadosEconomicos = (DefaultTableModel) tabelaDadosEconomicos.getModel();
         modelDadosEconomicos.setNumRows(0);
         
-        Object[] linhaTemp;
+        Object[] linhaTemp = new Object[36];
         double[] tempTotais = new double[36];
         double[] coeAtivLeite = new double[12];
-        
+    
         for(int i = 0; i < modelEspecificacao.getRowCount(); i++){
             
-            linhaTemp = new Object[36];
             for(int j = 0; j < dem.size(); j++){
                 
                 int indexCol = (dem.get(j).getMes() - 1) * 3;
                 
-                if( modelEspecificacao.getValueAt(i, 0).equals(dem.get(j).getEspecificacao().getEspecificacao())
-                        && dem.get(j).getAno() == ano ){
-                                      
-                    linhaTemp[indexCol ] = dem.get(j).getQuantidade();
-                    linhaTemp[indexCol + 1] = dem.get(j).getValorUnitario();
-                    linhaTemp[indexCol + 2] = dem.get(j).getQuantidade() * dem.get(j).getValorUnitario();
-                    
-                    tempTotais[indexCol] += dem.get(j).getQuantidade();
-                    tempTotais[indexCol + 2] += dem.get(j).getQuantidade() * dem.get(j).getValorUnitario();
-                    
-                }
+                if(dem.get(j).getAno() == ano) {
                 
-                if( modelEspecificacao.getValueAt(i, 0).equals("SUB-TOTAL")) {    
-                    if (tempTotais[indexCol + 2] != 0.0) {
-                        linhaTemp[indexCol + 2] = tempTotais[indexCol + 2];
-                        coeAtivLeite[dem.get(j).getMes() - 1] += tempTotais[indexCol + 2];
-                        tempTotais[indexCol + 2] = 0.0;
-                    } 
-                } 
-                
-                if( modelEspecificacao.getValueAt(i, 0).equals("TOTAL DE ENTRADAS")){
-                                        
-                    if (tempTotais[indexCol] != 0.0) { 
-                        linhaTemp[indexCol] = tempTotais[indexCol];
-                        tempTotais[indexCol] = 0.0;
+                    if( modelEspecificacao.getValueAt(i, 0).equals(dem.get(j).getEspecificacao().getEspecificacao())){
+
+                        linhaTemp[indexCol ] = dem.get(j).getQuantidade();
+                        linhaTemp[indexCol + 1] = dem.get(j).getValorUnitario();
+                        linhaTemp[indexCol + 2] = dem.get(j).getQuantidade() * dem.get(j).getValorUnitario();
+
+                        tempTotais[indexCol] += dem.get(j).getQuantidade();
+                        tempTotais[indexCol + 2] += dem.get(j).getQuantidade() * dem.get(j).getValorUnitario();
+
                     }
-                    
-                    if (tempTotais[indexCol + 2] != 0.0) {
-                        linhaTemp[indexCol + 2] = tempTotais[indexCol + 2];
-                        tempTotais[indexCol + 2] = 0.0;
+
+                    if( modelEspecificacao.getValueAt(i, 0).equals("SUB-TOTAL")) {    
+                        if (tempTotais[indexCol + 2] != 0.0) {
+                            linhaTemp[indexCol + 2] = tempTotais[indexCol + 2];
+                            coeAtivLeite[dem.get(j).getMes() - 1] += tempTotais[indexCol + 2];
+                            tempTotais[indexCol + 2] = 0.0;
+                        } 
                     } 
-                    
-                }
-                
-                if( modelEspecificacao.getValueAt(i, 0).equals("COE DE ATIVIDADE LEITEIRA") ){
-                    
-                    if (coeAtivLeite[dem.get(j).getMes() - 1] != 0.0) {
-                        linhaTemp[indexCol + 2] = coeAtivLeite[dem.get(j).getMes() - 1];
-                        coeAtivLeite[dem.get(j).getMes() - 1] = 0.0;
-                    } 
-                   
-                }
-                
-                if( modelEspecificacao.getValueAt(i, 0).equals("Mão-de-obra familiar (não paga)") ){
-                    
-                    double salario = 0.0;
-                    irdao = new GenericDAO<>(InventarioResumo.class);
-                    List<InventarioResumo> ir = irdao.retrieveByColumn("idPerfilFK", atual.getId());
-                    if (linhaTemp != null && ir.size() > 0) {
-                        salario = ir.get(0).getSalarioMinimo();
-                        linhaTemp[indexCol + 1] = (salario * 13 + salario * 0.3) / 12;
+
+                    if(i == 7) {
+
+                        if (tempTotais[indexCol] != 0.0) { 
+                            linhaTemp[indexCol] = tempTotais[indexCol];
+                            tempTotais[indexCol] = 0.0;
+                        }
+
+                        if (tempTotais[indexCol + 2] != 0.0) {
+                            linhaTemp[indexCol + 2] = tempTotais[indexCol + 2];
+                            tempTotais[indexCol + 2] = 0.0;
+                        } 
+
                     }
-                                                            
-                    if (linhaTemp[indexCol] != null && salario != 0.0) {
-                        linhaTemp[indexCol + 2] = (Double) linhaTemp[indexCol] * (Double) linhaTemp[indexCol + 1];
+
+                    if( i == 88 ){
+
+                        if (coeAtivLeite[dem.get(j).getMes() - 1] != 0.0) {
+                            linhaTemp[indexCol + 2] = coeAtivLeite[dem.get(j).getMes() - 1];
+                            coeAtivLeite[dem.get(j).getMes() - 1] = 0.0;
+                        } 
+
                     }
-                    
+
+                    if( i == 89 ){
+
+                        double salario = 0.0;
+                        irdao = new GenericDAO<>(InventarioResumo.class);
+                        List<InventarioResumo> ir = irdao.retrieveByColumn("idPerfilFK", atual.getId());
+                        if (linhaTemp != null && ir.size() > 0) {
+                            salario = ir.get(0).getSalarioMinimo();
+                            linhaTemp[indexCol + 1] = (salario * 13 + salario * 0.3) / 12;
+                        }
+
+                        if (linhaTemp[indexCol] != null && salario != 0.0) {
+                            linhaTemp[indexCol + 2] = Double.parseDouble(linhaTemp[indexCol].toString()) * Double.parseDouble(linhaTemp[indexCol + 1].toString());
+                        }
+                    }
                 }
             }
             modelDadosEconomicos.addRow(linhaTemp);
+            clearVector(linhaTemp);
         }
+        long termino = System.currentTimeMillis() - tempoInicial;
+        System.out.println(termino / 1000);
+         System.out.println("uma vez");
     }
+   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -231,9 +241,9 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel1.setText("Ano:");
 
-        anoCombo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                anoComboActionPerformed(evt);
+        anoCombo.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                anoComboItemStateChanged(evt);
             }
         });
 
@@ -767,10 +777,6 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnVoltarActionPerformed
 
-    private void anoComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_anoComboActionPerformed
-        PreencherTabelaDEM(Integer.parseInt(anoCombo.getSelectedItem().toString()) , dems);
-    }//GEN-LAST:event_anoComboActionPerformed
-
     private void editarValoresBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarValoresBTActionPerformed
         MonthSelector telaMes = new MonthSelector(this, true);
         telaMes.setTitle("SGPL - DEM - Seleção de Mês");
@@ -784,8 +790,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
             
             configGTAE(selecionado);
             
-            gtae.showEditor(evt);
-           
+            gtae.showEditor(evt);          
         }
     }//GEN-LAST:event_editarValoresBTActionPerformed
 
@@ -877,28 +882,31 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         if (index != 0 && existe == false) {
             anoCombo.addItem(ano);
             anoCombo.setSelectedItem(ano);
-            telaNovoAno.removeItem(ano);
-            PreencherTabelaDEM(Integer.parseInt(ano), dems);
-            
         }
     }//GEN-LAST:event_adicionarAnoBTActionPerformed
 
+    private void anoComboItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_anoComboItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+           PreencherTabelaDEM(Integer.parseInt(anoCombo.getSelectedItem().toString()) , dems);
+        }    
+    }//GEN-LAST:event_anoComboItemStateChanged
+
     private void fillComboBox() {
+  
         atual = ControlePerfil.getInstance().getPerfilSelecionado();
         
         List<DadosEconMensais> dados = demdao.retrieveByColumn("idPerfilFK", atual.getId(), "ano", "ano DESC");
-        dems = demdao.retrieveByColumn("idPerfilFK", atual.getId());
         
+        dems = demdao.retrieveByColumn("idPerfilFK", atual.getId());
+ 
         if (dados.isEmpty()) {
             Calendar cal = GregorianCalendar.getInstance();
             anoCombo.addItem(Cast.toString(cal.get(Calendar.YEAR)));
         }
-
+        
         for(int i = 0; i < dados.size(); i++) {
             anoCombo.addItem(Cast.toString(dados.get(i).getAno()));
         }
-        
-        PreencherTabelaDEM(Integer.parseInt( (String) anoCombo.getSelectedItem() ), dems);
     }
     
     private void moveScrollBar(java.awt.event.MouseWheelEvent evt) {
@@ -989,6 +997,14 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         gtae.setSourceRowEditable(85, false);
         gtae.setSourceRowEditable(86, false);
         gtae.setSourceRowEditable(88, false); 
+
+    }
+    
+    public Object[] clearVector(Object[] array) {
+        for (int i = 0; i < array.length; i++) {
+            array[i] = null; 
+        }
+        return array;
     }
     
 

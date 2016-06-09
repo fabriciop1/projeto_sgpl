@@ -552,7 +552,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
          if (index != 0 && existe == false) {
             anoCombo.addItem(ano);
             anoCombo.setSelectedItem(ano);
-            telaNovoAno.removeItem(ano);
+            
             PreencherTabelaDTM(Integer.parseInt(ano), dtms);
         }
     }//GEN-LAST:event_adicionarAnoBTActionPerformed

@@ -66,25 +66,27 @@ public class GenericTableAreaEditor extends GenericTableModifier {
         
         for(int i = 0; i < editTable.getRowCount(); i++){
             
-            for (int j = getColumnOffset(); j < editTable.getColumnCount(); j++) {
+            for (int j = getStringColumnsOffset(); j < editTable.getColumnCount(); j++) {
                 
                 setEditTableValue( getSourceTableValue(startRow + i, startColumn + j), i, j);
             }
         }
+        
+        fillStringColumns();
     }
 
     @Override
     protected void updateSourceTable() {
         
-        Object[][] tableAreaData = new Object[editTable.getRowCount()][editTable.getColumnCount() - getColumnOffset()];
-        boolean[][] dataModified = new boolean[editTable.getRowCount()][editTable.getColumnCount() - getColumnOffset()];
+        Object[][] tableAreaData = new Object[editTable.getRowCount()][editTable.getColumnCount() - getStringColumnsOffset()];
+        boolean[][] dataModified = new boolean[editTable.getRowCount()][editTable.getColumnCount() - getStringColumnsOffset()];
         ArrayList<Integer> rowsModified = new ArrayList<>();
         
         for (int i = 0; i < editTable.getRowCount(); i++) {
                         
             boolean rowModified = false;
             
-            for (int j = getColumnOffset(); j < editTable.getColumnCount(); j++) {
+            for (int j = getStringColumnsOffset(); j < editTable.getColumnCount(); j++) {
                 
                 Object editValue = getEditTableValue(i, j);
                 Object sourceValue = getSourceTableValue(startRow + i, startColumn + j);
@@ -116,7 +118,7 @@ public class GenericTableAreaEditor extends GenericTableModifier {
     @Override
     protected boolean validateEditTableContent(){
         
-        for (int i = getColumnOffset(); i < editTable.getRowCount(); i++) {
+        for (int i = getStringColumnsOffset(); i < editTable.getRowCount(); i++) {
             
             if(checkEmptyRow(i)){ 
                 
@@ -129,7 +131,7 @@ public class GenericTableAreaEditor extends GenericTableModifier {
                 continue;
             }
             
-            for (int j = getColumnOffset(); j < editTable.getColumnCount(); j++) {
+            for (int j = getStringColumnsOffset(); j < editTable.getColumnCount(); j++) {
                 
                 if (checkEmptyValue(i, j)) {
                     
@@ -155,20 +157,17 @@ public class GenericTableAreaEditor extends GenericTableModifier {
     @Override
     protected DefaultTableModel createEditTableModel(Object[][] dataMatrix, String[] columnNames,  Class[] columnTypes){
         
-        int editTableColumnCount = (endColumn - startColumn) + getColumnOffset() + 1;
+        int editTableColumnCount = (endColumn - startColumn) + getStringColumnsOffset() + 1;
         
         String[] editColumnNames = new String[editTableColumnCount];
         
-        for(int i=0; i < getColumnOffset(); i++){
-                        
-        }
         
-        for (int i = getColumnOffset(); i < editTableColumnCount; i++) {
+        for (int i = getStringColumnsOffset(); i < editTableColumnCount; i++) {
             
             editColumnNames[i] = columnNames[startColumn + i];
         }
         
-        DefaultTableModel model = new DefaultTableModel(dataMatrix, editColumnNames){
+        DefaultTableModel model = new DefaultTableModel(new Object[][]{ }, editColumnNames){
             
             @Override
             public Class getColumnClass(int columnIndex) {
@@ -198,7 +197,7 @@ public class GenericTableAreaEditor extends GenericTableModifier {
     @Override
     protected void copySourceTableEditors() {
         
-        for(int i = getColumnOffset(); i<editTable.getColumnCount(); i++){
+        for(int i = getStringColumnsOffset(); i<editTable.getColumnCount(); i++){
             
             TableCellEditor sourceCellEditor = sourceTable.getColumnModel().getColumn(startColumn + i).getCellEditor();
             
@@ -209,7 +208,7 @@ public class GenericTableAreaEditor extends GenericTableModifier {
     @Override
     protected void copySourceTableRenderers() {
         
-        for(int i = getColumnOffset(); i<editTable.getColumnCount(); i++){
+        for(int i = getStringColumnsOffset(); i<editTable.getColumnCount(); i++){
             
             TableCellRenderer sourceCellRenderer = sourceTable.getColumnModel().getColumn(startColumn + i).getCellRenderer();
             

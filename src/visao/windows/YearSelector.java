@@ -140,9 +140,6 @@ public class YearSelector extends JDialog {
         return this.index;
     }
 
-    public void removeItem(String ano) {
-        novoAnoCombo.removeItem(ano);
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelaBT;
     private javax.swing.JButton confirmaBT;
