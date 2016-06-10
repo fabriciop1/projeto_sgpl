@@ -41,7 +41,8 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
      * Creates new form VisualizarDadosEconMensais
      */
     public VisualizarDadosEconMensais() {
-    
+        long tempoInicial = System.currentTimeMillis();
+        
         initComponents();
         
         super.setLocationRelativeTo(null);
@@ -59,7 +60,9 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         tabelaEspecificacao.setDefaultRenderer(Object.class, new ColorRendererDadosEcon(false));
         
         demdao = new GenericDAO<>(DadosEconMensais.class);
-                
+        
+        dems = demdao.retrieveByColumn("idPerfilFK", atual.getId());
+        
         demespdao = new GenericDAO<>(Especificacao.class);
              
         especificacoes = demespdao.retrieveAll();
@@ -71,6 +74,9 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         fillComboBox();
         
         definirBDListeners();
+        
+        long termino = System.currentTimeMillis() - tempoInicial;
+        System.out.println(termino / 1000);
         
     }
     
@@ -109,7 +115,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
     
     private void PreencherTabelaDEM(int ano, List<DadosEconMensais> dem){
         
-        long tempoInicial = System.currentTimeMillis();
+        
         
         DefaultTableModel modelEspecificacao = (DefaultTableModel) tabelaEspecificacao.getModel();
         DefaultTableModel modelDadosEconomicos = (DefaultTableModel) tabelaDadosEconomicos.getModel();
@@ -123,9 +129,9 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
             
             for(int j = 0; j < dem.size(); j++){
                 
-                int indexCol = (dem.get(j).getMes() - 1) * 3;
-                
                 if(dem.get(j).getAno() == ano) {
+                    
+                    int indexCol = (dem.get(j).getMes() - 1) * 3;
                 
                     if( modelEspecificacao.getValueAt(i, 0).equals(dem.get(j).getEspecificacao().getEspecificacao())){
 
@@ -188,9 +194,6 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
             modelDadosEconomicos.addRow(linhaTemp);
             clearVector(linhaTemp);
         }
-        long termino = System.currentTimeMillis() - tempoInicial;
-        System.out.println(termino / 1000);
-         System.out.println("uma vez");
     }
    
 
@@ -896,8 +899,6 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         atual = ControlePerfil.getInstance().getPerfilSelecionado();
         
         List<DadosEconMensais> dados = demdao.retrieveByColumn("idPerfilFK", atual.getId(), "ano", "ano DESC");
-        
-        dems = demdao.retrieveByColumn("idPerfilFK", atual.getId());
  
         if (dados.isEmpty()) {
             Calendar cal = GregorianCalendar.getInstance();

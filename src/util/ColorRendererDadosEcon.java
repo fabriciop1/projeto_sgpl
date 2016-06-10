@@ -50,7 +50,7 @@ public class ColorRendererDadosEcon extends DecimalFormatRenderer {
 
         if (isSelected) {
             super.setBackground(BG == null ? table.getSelectionBackground(): BG);
-        } 
+        }
        
         return this;
      }
