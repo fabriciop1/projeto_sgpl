@@ -49,35 +49,19 @@
               <EmptySpace max="32767" attributes="0"/>
           </Group>
           <Group type="102" alignment="1" attributes="0">
-              <EmptySpace pref="92" max="32767" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="btnDadosTecnMensais" max="32767" attributes="0"/>
-                          <Component id="btnCalculoRacao" pref="260" max="32767" attributes="0"/>
-                          <Component id="btnPerfil" alignment="0" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="btnRetornoMensal" max="32767" attributes="0"/>
-                          <Component id="btnInventario" alignment="0" max="32767" attributes="0"/>
-                          <Component id="btnIndicEconMensais" alignment="0" pref="260" max="32767" attributes="0"/>
-                      </Group>
-                  </Group>
-                  <Group type="102" attributes="0">
-                      <Component id="btnIndicTecnMensais" min="-2" pref="260" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="btnIndicTecnAnuais" min="-2" pref="260" max="-2" attributes="0"/>
-                  </Group>
+              <EmptySpace pref="152" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="btnIndicEconMensais" max="32767" attributes="0"/>
+                  <Component id="btnDadosEconMensais" max="32767" attributes="0"/>
+                  <Component id="btnPerfil" min="-2" pref="340" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="btnCustoImplForra" alignment="0" pref="260" max="32767" attributes="0"/>
-                  <Component id="btnIndicEconAnuais" alignment="0" max="32767" attributes="0"/>
-                  <Component id="btnDadosEconMensais" alignment="0" max="32767" attributes="0"/>
-                  <Component id="btnAnalises" alignment="0" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                  <Component id="btnInventario" max="32767" attributes="0"/>
+                  <Component id="btnDadosTecnMensais" alignment="0" max="32767" attributes="0"/>
+                  <Component id="btnIndicEconAnuais" alignment="0" min="-2" pref="340" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="92" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="150" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -101,39 +85,22 @@
                   <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="nomCida" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
-                      <Component id="btnPerfil" min="-2" pref="50" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="btnDadosTecnMensais" min="-2" pref="50" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="btnIndicTecnMensais" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
-                          <Component id="btnIndicTecnAnuais" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
-                          <Component id="btnAnalises" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <Component id="btnInventario" min="-2" pref="50" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="btnIndicEconMensais" min="-2" pref="50" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="68" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <Component id="btnDadosEconMensais" min="-2" pref="50" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="btnIndicEconAnuais" min="-2" pref="50" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="68" max="-2" attributes="0"/>
-                  </Group>
+              <EmptySpace min="-2" pref="82" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="btnInventario" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
+                  <Component id="btnPerfil" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="btnRetornoMensal" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
-                  <Component id="btnCustoImplForra" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
-                  <Component id="btnCalculoRacao" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
+                  <Component id="btnDadosTecnMensais" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
+                  <Component id="btnDadosEconMensais" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="121" max="32767" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="btnIndicEconAnuais" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
+                  <Component id="btnIndicEconMensais" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace pref="162" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -201,14 +168,6 @@
         <Property name="text" type="java.lang.String" value="nome_cidade"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="btnAnalises">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tahoma" size="14" style="0"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="An&#xe1;lises"/>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JButton" name="btnPerfil">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -231,14 +190,6 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDadosTecnMensaisActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="btnIndicTecnMensais">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tahoma" size="14" style="0"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Indicadores T&#xe9;cnicos Mensais"/>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JButton" name="btnInventario">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -255,16 +206,11 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="14" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Indicadores Econ&#xf4;micos Mensais"/>
+        <Property name="text" type="java.lang.String" value="Relat&#xf3;rios de Indicadores Mensais"/>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="btnIndicTecnAnuais">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tahoma" size="14" style="0"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Indicadores T&#xe9;cnicos Anuais"/>
-      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnIndicEconMensaisActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnDadosEconMensais">
       <Properties>
@@ -282,31 +228,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="14" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Indicadores Econ&#xf4;micos Anuais"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="btnRetornoMensal">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tahoma" size="14" style="0"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Retorno Mensal"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="btnCustoImplForra">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tahoma" size="14" style="0"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Custo de Implanta&#xe7;&#xe3;o de Forrageiras"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="btnCalculoRacao">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tahoma" size="14" style="0"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="C&#xe1;lculo de Ra&#xe7;&#xe3;o"/>
+        <Property name="text" type="java.lang.String" value="Relat&#xf3;rios de Indicadores Anuais"/>
       </Properties>
     </Component>
   </SubComponents>

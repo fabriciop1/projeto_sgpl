@@ -11,15 +11,22 @@ import java.time.YearMonth;
  *
  * @author Fabricio
  */
-public final class Data {
+public final class Util {
     
-    private Data (){ }
+    private Util (){ }
         
     public static int diasDoMes(int ano, int mes){
         
         YearMonth yearmonth = YearMonth.of(ano, mes);
         return yearmonth.lengthOfMonth();
         
+    }
+    
+    public static Object[] clearVector(Object[] vector) {
+        for (int i = 0; i < vector.length; i++) {
+            vector[i] = null; 
+        }
+        return vector;
     }
     
 }

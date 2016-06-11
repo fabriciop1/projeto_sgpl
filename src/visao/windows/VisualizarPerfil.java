@@ -181,6 +181,11 @@ public class VisualizarPerfil extends javax.swing.JFrame {
                 listaPerfisMouseClicked(evt);
             }
         });
+        listaPerfis.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                listaPerfisKeyPressed(evt);
+            }
+        });
         jScrollPane2.setViewportView(listaPerfis);
         listaPerfis.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         if (listaPerfis.getColumnModel().getColumnCount() > 0) {
@@ -335,6 +340,12 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         listaPerfisGTRE.showEditor(evt);
         verificaTabelaVazia();
     }//GEN-LAST:event_addPerfilBTActionPerformed
+
+    private void listaPerfisKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_listaPerfisKeyPressed
+       if (evt.getKeyCode() == 10){
+           btnAcessarActionPerformed(null);
+       }
+    }//GEN-LAST:event_listaPerfisKeyPressed
 
     private void verificaTabelaVazia() {
          if (listaPerfis.getRowCount() == 0) {

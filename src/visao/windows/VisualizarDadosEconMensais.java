@@ -22,6 +22,7 @@ import modelo.negocio.InventarioResumo;
 import modelo.negocio.Perfil;
 import util.Cast;
 import util.ColorRendererDadosEcon;
+import util.Util;
 
 /**
  *
@@ -192,7 +193,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                 }
             }
             modelDadosEconomicos.addRow(linhaTemp);
-            clearVector(linhaTemp);
+            Util.clearVector(linhaTemp);
         }
     }
    
@@ -1000,14 +1001,6 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         gtae.setSourceRowEditable(88, false); 
 
     }
-    
-    public Object[] clearVector(Object[] array) {
-        for (int i = 0; i < array.length; i++) {
-            array[i] = null; 
-        }
-        return array;
-    }
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton adicionarAnoBT;

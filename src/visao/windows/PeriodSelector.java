@@ -5,18 +5,44 @@
  */
 package visao.windows;
 
+import controle.ControlePerfil;
+import flex.db.GenericDAO;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import modelo.negocio.DadosEconMensais;
+import modelo.negocio.DadosTecMensais;
+import modelo.negocio.Perfil;
+import util.Cast;
+
 /**
  *
  * @author Fabricio
  */
 public class PeriodSelector extends javax.swing.JDialog {
 
+    private final Perfil atual;
+    private GenericDAO<DadosTecMensais> dadosTec;
+    private GenericDAO<DadosEconMensais> dadosEcon;
+    
     /**
      * Creates new form PeriodSelector
+     * @param parent
+     * @param modal
      */
     public PeriodSelector(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        super.setTitle("SGPL - Relatórios de Indicadores Mensais");
+        atual = ControlePerfil.getInstance().getPerfilSelecionado();
+        
+        super.setLocationRelativeTo(null);
+        super.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        super.setResizable(false);
+    
     }
 
     /**
@@ -28,101 +54,264 @@ public class PeriodSelector extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jRadioButton1 = new javax.swing.JRadioButton();
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        mesIniCombo = new javax.swing.JComboBox<>();
+        anoIniCombo = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
-        jComboBox3 = new javax.swing.JComboBox<>();
-        jComboBox4 = new javax.swing.JComboBox<>();
+        mesFimCombo = new javax.swing.JComboBox<>();
+        anoFimCombo = new javax.swing.JComboBox<>();
+        confirmaBT = new javax.swing.JButton();
+        cancelaBT = new javax.swing.JButton();
+        tipoTecnico = new javax.swing.JRadioButton();
+        tipoEconomico = new javax.swing.JRadioButton();
+        jLabel4 = new javax.swing.JLabel();
+
+        jRadioButton1.setText("jRadioButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("Período de Início:");
 
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("INDICADORES");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        mesIniCombo.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        mesIniCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione...", "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro" }));
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        anoIniCombo.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        anoIniCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "..." }));
 
         jLabel3.setText("Período de Término:");
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        mesFimCombo.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        mesFimCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione...", "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro" }));
 
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        anoFimCombo.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        anoFimCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "..." }));
+
+        confirmaBT.setText("OK");
+        confirmaBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                confirmaBTActionPerformed(evt);
+            }
+        });
+
+        cancelaBT.setText("Cancelar");
+        cancelaBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelaBTActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(tipoTecnico);
+        tipoTecnico.setText("Técnicos");
+        tipoTecnico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tipoTecnicoActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(tipoEconomico);
+        tipoEconomico.setText("Econômicos");
+        tipoEconomico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tipoEconomicoActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("Tipo de Indicadores:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(39, 39, 39)
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(57, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(18, 18, 18)
+                        .addComponent(tipoTecnico)
+                        .addGap(35, 35, 35)
+                        .addComponent(tipoEconomico)
+                        .addGap(51, 51, 51))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addGroup(layout.createSequentialGroup()
-                            .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addComponent(jLabel3)
+                                    .addGap(18, 18, 18))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel1)
+                                    .addGap(31, 31, 31)))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(mesIniCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(mesFimCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(20, 20, 20)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(anoIniCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(anoFimCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGroup(layout.createSequentialGroup()
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(76, 76, 76)
-                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(132, 132, 132)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(111, Short.MAX_VALUE))
+                            .addComponent(cancelaBT, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(confirmaBT, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(49, 49, 49))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(26, 26, 26)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel1)
+                .addGap(34, 34, 34)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(tipoTecnico)
+                    .addComponent(tipoEconomico))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(jLabel1)
+                    .addComponent(mesIniCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(anoIniCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(99, Short.MAX_VALUE))
+                    .addComponent(mesFimCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(anoFimCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(33, 33, 33)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(confirmaBT, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cancelaBT, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(53, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void confirmaBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmaBTActionPerformed
+     
+        if (getEndYear() < getStartYear()) {
+            JOptionPane.showMessageDialog(this, "Período Inválido. Ano de término menor que Ano de início.\nTente Novamente.",
+                    "Alerta - Período Inválido",  JOptionPane.WARNING_MESSAGE);
+            return;
+        } 
+        
+        if (getEndYear() == getStartYear() && getStartMonth() > getEndMonth()) {
+            JOptionPane.showMessageDialog(this, "Período Inválido. Tente Novamente.", "Alerta - Período Inválido",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        if (getEndMonth() == -1 || getStartMonth() == -1) {
+            JOptionPane.showMessageDialog(this, "Período Inválido. Mês(es) não selecionados.\nTente Novamente.", 
+                    "Alerta - Período Inválido", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+            
+        int mesIni = getStartMonth();
+        int mesFim = getEndMonth();
+        int anoIni = getStartYear();
+        int anoFim = getEndYear();
+        int tipo = 0;
+
+        if (tipoEconomico.isSelected()) {
+            tipo = 1;
+        } else if (tipoTecnico.isSelected()) {
+            tipo = 2;
+        } else {
+            JOptionPane.showMessageDialog(this, "Nenhum Tipo de Indicadores foi selecionado.", "Alerta - Seleção de Tipo",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+  
+        this.setVisible(false);
+    }//GEN-LAST:event_confirmaBTActionPerformed
+
+    private void cancelaBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelaBTActionPerformed
+        this.setVisible(false);
+    }//GEN-LAST:event_cancelaBTActionPerformed
+
+    private void tipoTecnicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tipoTecnicoActionPerformed
+        anoIniCombo.removeAllItems();
+        anoFimCombo.removeAllItems();
+        
+        dadosTec = new GenericDAO(DadosTecMensais.class);
+        List<DadosTecMensais> dados = dadosTec.retrieveByColumn("idPerfilFK", atual.getId(), "ano", "ano DESC");
+            
+        if (dados.isEmpty()) {
+            Calendar cal = GregorianCalendar.getInstance();
+            anoIniCombo.addItem(Cast.toString(cal.get(Calendar.YEAR)));
+            anoFimCombo.addItem(Cast.toString(cal.get(Calendar.YEAR)));
+        
+        }
+
+        for(int i = 0; i < dados.size(); i++) {
+            anoIniCombo.addItem(Cast.toString(dados.get(i).getAno()));
+            anoFimCombo.addItem(Cast.toString(dados.get(i).getAno()));
+        }
+        
+    }//GEN-LAST:event_tipoTecnicoActionPerformed
+
+    private void tipoEconomicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tipoEconomicoActionPerformed
+        anoIniCombo.removeAllItems();
+        anoFimCombo.removeAllItems();
+        
+        dadosEcon = new GenericDAO(DadosEconMensais.class);
+        List<DadosEconMensais> dados = dadosEcon.retrieveByColumn("idPerfilFK", atual.getId(), "ano", "ano DESC");
+
+        if (dados.isEmpty()) {
+            Calendar cal = GregorianCalendar.getInstance();
+            anoIniCombo.addItem(Cast.toString(cal.get(Calendar.YEAR)));
+            anoFimCombo.addItem(Cast.toString(cal.get(Calendar.YEAR)));
+        }
+        for(int i = 0; i < dados.size(); i++) {
+            anoIniCombo.addItem(Cast.toString(dados.get(i).getAno()));
+            anoFimCombo.addItem(Cast.toString(dados.get(i).getAno()));
+        }
+    }//GEN-LAST:event_tipoEconomicoActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
-    private javax.swing.JComboBox<String> jComboBox4;
+    private javax.swing.JComboBox<String> anoFimCombo;
+    private javax.swing.JComboBox<String> anoIniCombo;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JButton cancelaBT;
+    private javax.swing.JButton confirmaBT;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JRadioButton jRadioButton1;
+    private javax.swing.JComboBox<String> mesFimCombo;
+    private javax.swing.JComboBox<String> mesIniCombo;
+    private javax.swing.JRadioButton tipoEconomico;
+    private javax.swing.JRadioButton tipoTecnico;
     // End of variables declaration//GEN-END:variables
 
-    public static int getStartYear() {
-        return 0;
+    public int getStartYear() {
+        if (anoIniCombo.getSelectedItem().toString().equals("...")) {
+            return -1;
+        }
+        return Integer.parseInt(anoIniCombo.getSelectedItem().toString());
     } 
     
-    public static int getStartMonth() {
-        return 0;
+    public int getStartMonth() {   
+        return mesIniCombo.getSelectedIndex() == 0 ? -1 : mesIniCombo.getSelectedIndex();    
     }
     
-    public static int getEndYear() {
-        return 0;
+    public int getEndYear() {
+        if (anoFimCombo.getSelectedItem().toString().equals("...")) {
+            return -1;
+        }
+        return Integer.parseInt(anoFimCombo.getSelectedItem().toString());
     }
     
-    public static int getEndMonth() {
-        return 0;
+    public int getEndMonth() {
+        return mesFimCombo.getSelectedIndex() == 0 ? -1 : mesFimCombo.getSelectedIndex();
     }
 
 }

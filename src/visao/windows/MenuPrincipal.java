@@ -48,18 +48,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         tamProp = new javax.swing.JLabel();
         nomCida = new javax.swing.JLabel();
-        btnAnalises = new javax.swing.JButton();
         btnPerfil = new javax.swing.JButton();
         btnDadosTecnMensais = new javax.swing.JButton();
-        btnIndicTecnMensais = new javax.swing.JButton();
         btnInventario = new javax.swing.JButton();
         btnIndicEconMensais = new javax.swing.JButton();
-        btnIndicTecnAnuais = new javax.swing.JButton();
         btnDadosEconMensais = new javax.swing.JButton();
         btnIndicEconAnuais = new javax.swing.JButton();
-        btnRetornoMensal = new javax.swing.JButton();
-        btnCustoImplForra = new javax.swing.JButton();
-        btnCalculoRacao = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -88,9 +82,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         nomCida.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         nomCida.setText("nome_cidade");
 
-        btnAnalises.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnAnalises.setText("Análises");
-
         btnPerfil.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnPerfil.setText("Visualizar Perfil(s)");
         btnPerfil.addActionListener(new java.awt.event.ActionListener() {
@@ -107,9 +98,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
         });
 
-        btnIndicTecnMensais.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnIndicTecnMensais.setText("Indicadores Técnicos Mensais");
-
         btnInventario.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnInventario.setText("Inventário");
         btnInventario.addActionListener(new java.awt.event.ActionListener() {
@@ -119,10 +107,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
 
         btnIndicEconMensais.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnIndicEconMensais.setText("Indicadores Econômicos Mensais");
-
-        btnIndicTecnAnuais.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnIndicTecnAnuais.setText("Indicadores Técnicos Anuais");
+        btnIndicEconMensais.setText("Relatórios de Indicadores Mensais");
+        btnIndicEconMensais.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIndicEconMensaisActionPerformed(evt);
+            }
+        });
 
         btnDadosEconMensais.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnDadosEconMensais.setText("Dados Econômicos Mensais");
@@ -133,16 +123,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
 
         btnIndicEconAnuais.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnIndicEconAnuais.setText("Indicadores Econômicos Anuais");
-
-        btnRetornoMensal.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnRetornoMensal.setText("Retorno Mensal");
-
-        btnCustoImplForra.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnCustoImplForra.setText("Custo de Implantação de Forrageiras");
-
-        btnCalculoRacao.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnCalculoRacao.setText("Cálculo de Ração");
+        btnIndicEconAnuais.setText("Relatórios de Indicadores Anuais");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -167,29 +148,17 @@ public class MenuPrincipal extends javax.swing.JFrame {
                                 .addComponent(tamProp, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(92, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnDadosTecnMensais, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnCalculoRacao, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
-                            .addComponent(btnPerfil, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnRetornoMensal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnInventario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnIndicEconMensais, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnIndicTecnMensais, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnIndicTecnAnuais, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
+                .addContainerGap(152, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnCustoImplForra, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
-                    .addComponent(btnIndicEconAnuais, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnIndicEconMensais, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnDadosEconMensais, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnAnalises, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(92, Short.MAX_VALUE))
+                    .addComponent(btnPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(btnInventario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnDadosTecnMensais, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnIndicEconAnuais, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(150, 150, 150))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -208,33 +177,19 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(nomCida))
-                .addGap(55, 55, 55)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnDadosTecnMensais, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnIndicTecnMensais, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnIndicTecnAnuais, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnAnalises, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnInventario, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnIndicEconMensais, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(68, 68, 68))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnDadosEconMensais, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnIndicEconAnuais, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(68, 68, 68)))
+                .addGap(82, 82, 82)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnInventario, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnRetornoMensal, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCustoImplForra, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCalculoRacao, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(121, Short.MAX_VALUE))
+                    .addComponent(btnDadosTecnMensais, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDadosEconMensais, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnIndicEconAnuais, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnIndicEconMensais, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(162, Short.MAX_VALUE))
         );
 
         pack();
@@ -253,9 +208,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDadosTecnMensaisActionPerformed
 
     private void btnInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInventarioActionPerformed
-        VisualizarInventario inventario = new VisualizarInventario();
-        inventario.setVisible(true);
+        new VisualizarInventario().setVisible(true);
         this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_btnInventarioActionPerformed
 
     private void btnDadosEconMensaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDadosEconMensaisActionPerformed
@@ -264,21 +219,19 @@ public class MenuPrincipal extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnDadosEconMensaisActionPerformed
 
+    private void btnIndicEconMensaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIndicEconMensaisActionPerformed
+        new PeriodSelector(this, true).setVisible(true);
+    }//GEN-LAST:event_btnIndicEconMensaisActionPerformed
+
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAnalises;
-    private javax.swing.JButton btnCalculoRacao;
-    private javax.swing.JButton btnCustoImplForra;
     private javax.swing.JButton btnDadosEconMensais;
     private javax.swing.JButton btnDadosTecnMensais;
     private javax.swing.JButton btnIndicEconAnuais;
     private javax.swing.JButton btnIndicEconMensais;
-    private javax.swing.JButton btnIndicTecnAnuais;
-    private javax.swing.JButton btnIndicTecnMensais;
     private javax.swing.JButton btnInventario;
     private javax.swing.JButton btnPerfil;
-    private javax.swing.JButton btnRetornoMensal;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
