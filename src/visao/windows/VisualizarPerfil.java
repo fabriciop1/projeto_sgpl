@@ -16,6 +16,7 @@ import java.util.List;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import modelo.negocio.Perfil;
 import modelo.negocio.Rota;
 import modelo.negocio.Usuario;
@@ -52,19 +53,14 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         perfilDao = new GenericDAO<>(Perfil.class);
         usuario = ControleLogin.getInstance().getUsuario();
         
-         if (!usuario.getLogin().equals("adm")) { // Sabendo se o usuário é ou não o administrador pelo login
-            removerPerfilBT.setEnabled(false);
-            addPerfilBT.setEnabled(false);
+        idPerfis = new ArrayList<>();
+        
+        if (!usuario.getLogin().equals("adm")) { // Sabendo se o usuário é ou não o administrador pelo login
+            perfis = perfilDao.retrieveByColumn("idRotaFK", usuario.getRota().getId());
+        } else {
+            perfis = perfilDao.retrieveAll();
         }
         
-        idPerfis = new ArrayList<>();
-      
-        if (usuario.getLogin().equals("adm")) {
-            perfis = perfilDao.retrieveAll();
-        } else {
-            perfis = perfilDao.retrieveByColumn("idRotaFK", usuario.getRota().getId());
-        }
-       
         listaPerfisGTRE = new GenericTableRowEditor(this, listaPerfis, false);
         listaPerfisGTRE.getSourceTableModel().setRowCount(0);
         setRotasCombo();
@@ -84,14 +80,9 @@ public class VisualizarPerfil extends javax.swing.JFrame {
                 perfis.get(i).getNumFamiliares(),},
                 perfis.get(i).getId());
         }
-        
-        //Dimension tamanhoTela = Toolkit.getDefaultToolkit().getScreenSize();
-        
-        //int width = tamanhoTela.width;
-        //int height = tamanhoTela.height;
-        
-        //listaPerfis.setLocation(width / 2, height / 2);
-        //listaPerfis.setSize(width / 2, height / 2);
+       
+       verificaTabelaVazia();
+       
         definirBDListeners();
     }
 
@@ -134,29 +125,10 @@ public class VisualizarPerfil extends javax.swing.JFrame {
 
         listaPerfis.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+
             },
             new String [] {
-                "Nome", "Cidade", "Rota", "Tamanho Propriedade", "Área Pecuária Leiteira", "Produção Leite Diária", "Empregados Permanentes", "Número de Familiares"
+                "Nome", "Cidade", "Rota", "Tam. Propriedade (ha)", "Área Pec. Leiteira (ha)", "Prod. Diária de Leite", "Empregados Permanentes", "Nº de Familiares"
             }
         ) {
             Class[] types = new Class [] {
@@ -246,7 +218,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(41, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 918, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(41, Short.MAX_VALUE))
+                .addGap(41, 41, 41))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -264,7 +236,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
                     .addComponent(removerPerfilBT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(addPerfilBT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(editPerfilBT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -298,7 +270,8 @@ public class VisualizarPerfil extends javax.swing.JFrame {
     private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
         // TODO add your handling code here:
         
-        int escolha = JOptionPane.showConfirmDialog(null, "Deseja realmente sair?", "Confirmar logout", JOptionPane.YES_NO_OPTION);
+        int escolha = JOptionPane.showOptionDialog(null, "Deseja realmente sair?", "Confirmar logout", JOptionPane.YES_NO_OPTION, 
+                JOptionPane.QUESTION_MESSAGE, null, new String[]{"Sim", "Não"}, "Não");
         
         if(escolha == 0){
             ControleLogin.getInstance().fazerLogout();
@@ -317,12 +290,19 @@ public class VisualizarPerfil extends javax.swing.JFrame {
 
     private void removerPerfilBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerPerfilBTActionPerformed
         if(listaPerfis.getSelectedRowCount() > 0) {
-           int escolha = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir o perfil de nome " 
-                   + listaPerfis.getValueAt(listaPerfis.getSelectedRow(), 0).toString().toUpperCase() + " ?", "Confirmar exclusão", 
-                   JOptionPane.YES_NO_OPTION);
+           int escolha = JOptionPane.showOptionDialog(null, "Deseja realmente excluir o perfil de nome " 
+                   + listaPerfis.getValueAt(listaPerfis.getSelectedRow(), 0).toString().toUpperCase() + " ?", "Exclusão de Perfil", 
+                   JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[] {"Sim", "Não"}, "Não");
+           
            if(escolha == 0)  {
-               listaPerfisGTRE.removeSourceTableRow(listaPerfis.getSelectedRow());
-               verificaTabelaVazia();
+               String input = JOptionPane.showInputDialog(this, "Exclusão de perfil de nome " + 
+                       listaPerfis.getValueAt(listaPerfis.getSelectedRow(), 0).toString().toUpperCase() + ".\nDigite seu login para confirmação: ", 
+                       "Confirmar Exclusão de Perfil", JOptionPane.OK_CANCEL_OPTION);
+ 
+               if (usuario.getLogin().equals(input)) {
+                    listaPerfisGTRE.removeSourceTableRow(listaPerfis.getSelectedRow());
+                    verificaTabelaVazia();
+               }
            }
         } else {
             JOptionPane.showMessageDialog(null, "Selecione uma linha da tabela para remover.", "Remover - Nenhuma linha selecionada", 
@@ -348,12 +328,22 @@ public class VisualizarPerfil extends javax.swing.JFrame {
     }//GEN-LAST:event_listaPerfisKeyPressed
 
     private void verificaTabelaVazia() {
-         if (listaPerfis.getRowCount() == 0) {
+         if (listaPerfis.getRowCount() == 0 && usuario.getLogin().equals("adm")) {
+            addPerfilBT.setEnabled(true);
             removerPerfilBT.setEnabled(false);
             editPerfilBT.setEnabled(false);
-         } else {
-             removerPerfilBT.setEnabled(true);
+         } else if (listaPerfis.getRowCount() == 0 && !usuario.getLogin().equals("adm")){
+            addPerfilBT.setEnabled(false);
+            removerPerfilBT.setEnabled(false);
+            editPerfilBT.setEnabled(false);
+         } else if (listaPerfis.getRowCount()!= 0 && usuario.getLogin().equals("adm")){
+            addPerfilBT.setEnabled(true);
+            removerPerfilBT.setEnabled(true);
+            editPerfilBT.setEnabled(true);
+         } else if (listaPerfis.getRowCount() != 0 && !usuario.getLogin().equals("adm")) {
+             addPerfilBT.setEnabled(false);
              editPerfilBT.setEnabled(true);
+             removerPerfilBT.setEnabled(false);
          }
     }
     

@@ -51,7 +51,7 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace pref="41" max="32767" attributes="0"/>
               <Component id="jScrollPane2" min="-2" pref="918" max="-2" attributes="0"/>
-              <EmptySpace pref="41" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -67,13 +67,13 @@
                   <Component id="btnSair" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                   <Component id="btnAcessar" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="removerPerfilBT" alignment="0" max="32767" attributes="0"/>
                   <Component id="addPerfilBT" alignment="0" max="32767" attributes="0"/>
                   <Component id="editPerfilBT" alignment="0" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -113,15 +113,15 @@
         <Component class="javax.swing.JTable" name="listaPerfis">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="8" rowCount="20">
+              <Table columnCount="8" rowCount="0">
                 <Column editable="false" title="Nome" type="java.lang.String"/>
                 <Column editable="false" title="Cidade" type="java.lang.String"/>
                 <Column editable="false" title="Rota" type="java.lang.String"/>
-                <Column editable="false" title="Tamanho Propriedade" type="java.lang.Double"/>
-                <Column editable="false" title="&#xc1;rea Pecu&#xe1;ria Leiteira" type="java.lang.Double"/>
-                <Column editable="false" title="Produ&#xe7;&#xe3;o Leite Di&#xe1;ria" type="java.lang.Double"/>
+                <Column editable="false" title="Tam. Propriedade (ha)" type="java.lang.Double"/>
+                <Column editable="false" title="&#xc1;rea Pec. Leiteira (ha)" type="java.lang.Double"/>
+                <Column editable="false" title="Prod. Di&#xe1;ria de Leite" type="java.lang.Double"/>
                 <Column editable="false" title="Empregados Permanentes" type="java.lang.Integer"/>
-                <Column editable="false" title="N&#xfa;mero de Familiares" type="java.lang.Integer"/>
+                <Column editable="false" title="N&#xba; de Familiares" type="java.lang.Integer"/>
               </Table>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
