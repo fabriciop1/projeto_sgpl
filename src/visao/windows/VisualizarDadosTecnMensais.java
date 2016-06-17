@@ -529,7 +529,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
     private void adicionarAnoBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarAnoBTActionPerformed
         boolean existe = false;
         
-        YearSelector telaNovoAno = new YearSelector(this, true);
+        SingleYearSelector telaNovoAno = new SingleYearSelector(this, true);
         telaNovoAno.setTitle("SGPL - DTM - Seleção de ano");
         telaNovoAno.setVisible(true);
         
@@ -553,15 +553,15 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
     }//GEN-LAST:event_adicionarAnoBTActionPerformed
 
     private void editarAnoBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarAnoBTActionPerformed
-        MonthSelector telaMes = new MonthSelector(this, true);
-        telaMes.setTitle("SGPL - DTM - Seleção de Mês");
+        QuarterSelector telaMes = new QuarterSelector(this, true);
+        telaMes.setTitle("SGPL - DTM - Seleção de Trimestre");
 
         telaMes.setVisible(true);
         int selecionado = telaMes.getSelected(); 
         
          if (selecionado != 0) {
             
-            gtae.setTitle("Editar Dados Técnicos Mensais - " + telaMes.getMonthSelected().toUpperCase());
+            gtae.setTitle("Editar D.T.M. - " + telaMes.getQuarterSelected().toUpperCase());
             
             configGTAE(selecionado);
             
@@ -583,10 +583,17 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         
         gtae.setAllowEmptyRows(true);
         
-        gtae.setColumnInterval(selected-1, selected-1);
-        gtae.setColumnEditable(selected-1, true);
+        int endColumn = (selected * 3) - 1;
+        int startColumn = endColumn - 2;
+        
+        gtae.setColumnInterval(startColumn, endColumn);
+        
+        gtae.setColumnEditable(startColumn, true);
+        gtae.setColumnEditable(startColumn + 1, true);
+        gtae.setColumnEditable(endColumn, true);
         
         gtae.setAllowEmptyCells(true);
+        
         gtae.setSourceRowEditable(1, false);
         gtae.setSourceRowEditable(2, false);
         gtae.setSourceRowEditable(3, false);

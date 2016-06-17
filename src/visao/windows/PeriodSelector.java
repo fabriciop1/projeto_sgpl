@@ -220,8 +220,10 @@ public class PeriodSelector extends javax.swing.JDialog {
 
         if (tipoEconomico.isSelected()) {
             tipo = 1;
+            
         } else if (tipoTecnico.isSelected()) {
             tipo = 2;
+            
         } else {
             JOptionPane.showMessageDialog(this, "Nenhum Tipo de Indicadores foi selecionado.", "Alerta - Seleção de Tipo",
                     JOptionPane.WARNING_MESSAGE);

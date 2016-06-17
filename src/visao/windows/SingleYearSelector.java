@@ -14,7 +14,7 @@ import util.Cast;
  *
  * @author Fabricio
  */
-public class YearSelector extends JDialog {
+public class SingleYearSelector extends JDialog {
     
     String selected;
     int index;
@@ -24,7 +24,7 @@ public class YearSelector extends JDialog {
      * @param parent
      * @param modal
      */
-    public YearSelector(java.awt.Frame parent, boolean modal) {
+    public SingleYearSelector(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         

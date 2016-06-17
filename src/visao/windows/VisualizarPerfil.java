@@ -328,22 +328,26 @@ public class VisualizarPerfil extends javax.swing.JFrame {
     }//GEN-LAST:event_listaPerfisKeyPressed
 
     private void verificaTabelaVazia() {
-         if (listaPerfis.getRowCount() == 0 && usuario.getLogin().equals("adm")) {
-            addPerfilBT.setEnabled(true);
-            removerPerfilBT.setEnabled(false);
-            editPerfilBT.setEnabled(false);
-         } else if (listaPerfis.getRowCount() == 0 && !usuario.getLogin().equals("adm")){
-            addPerfilBT.setEnabled(false);
-            removerPerfilBT.setEnabled(false);
-            editPerfilBT.setEnabled(false);
-         } else if (listaPerfis.getRowCount()!= 0 && usuario.getLogin().equals("adm")){
-            addPerfilBT.setEnabled(true);
-            removerPerfilBT.setEnabled(true);
-            editPerfilBT.setEnabled(true);
-         } else if (listaPerfis.getRowCount() != 0 && !usuario.getLogin().equals("adm")) {
-             addPerfilBT.setEnabled(false);
-             editPerfilBT.setEnabled(true);
-             removerPerfilBT.setEnabled(false);
+        if (listaPerfis.getRowCount() == 0) {
+            if (usuario.getLogin().equals("adm")) {
+                addPerfilBT.setEnabled(true);
+                removerPerfilBT.setEnabled(false);
+                editPerfilBT.setEnabled(false);
+            } else {
+                addPerfilBT.setEnabled(false);
+                removerPerfilBT.setEnabled(false);
+                editPerfilBT.setEnabled(false);
+            }
+        } else {
+            if (usuario.getLogin().equals("adm")) {
+                addPerfilBT.setEnabled(true);
+                removerPerfilBT.setEnabled(true);
+                editPerfilBT.setEnabled(true);
+            } else {
+                addPerfilBT.setEnabled(false);
+                editPerfilBT.setEnabled(true);
+                removerPerfilBT.setEnabled(false);
+            }
          }
     }
     

@@ -42,6 +42,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
      * Creates new form VisualizarDadosEconMensais
      */
     public VisualizarDadosEconMensais() {
+        
         long tempoInicial = System.currentTimeMillis();
         
         initComponents();
@@ -63,7 +64,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         demdao = new GenericDAO<>(DadosEconMensais.class);
         
         dems = demdao.retrieveByColumn("idPerfilFK", atual.getId());
-        
+       
         demespdao = new GenericDAO<>(Especificacao.class);
              
         especificacoes = demespdao.retrieveAll();
@@ -78,7 +79,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         
         long termino = System.currentTimeMillis() - tempoInicial;
         System.out.println(termino / 1000);
-        
+                
     }
     
     private void PreencherTabelaESP(List<Especificacao> esp){
@@ -115,8 +116,6 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
     }
     
     private void PreencherTabelaDEM(int ano, List<DadosEconMensais> dem){
-        
-        
         
         DefaultTableModel modelEspecificacao = (DefaultTableModel) tabelaEspecificacao.getModel();
         DefaultTableModel modelDadosEconomicos = (DefaultTableModel) tabelaDadosEconomicos.getModel();
@@ -866,7 +865,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
     private void adicionarAnoBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarAnoBTActionPerformed
         boolean existe = false;
         
-        YearSelector telaNovoAno = new YearSelector(this, true);
+        SingleYearSelector telaNovoAno = new SingleYearSelector(this, true);
         telaNovoAno.setTitle("SGPL - DEM - Seleção de ano");
         telaNovoAno.setVisible(true);
         
