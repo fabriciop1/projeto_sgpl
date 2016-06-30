@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.SwingConstants;
 import modelo.dao.DAO;
 import util.Cast;
 
@@ -41,6 +42,7 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
         } catch (SQLException | IllegalArgumentException ex) {
             Logger.getLogger(GenericDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
     
     public GenericDAO(Class<T> objectClass){
@@ -143,7 +145,6 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
         if(orderBy != null && orderBy.length() > 0){
             sql += " ORDER BY " + orderBy;
         }
-        
         return sql;
     }
 
@@ -165,8 +166,9 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
     
     
     private List<T> executeSQL(String sql){
-        
+        System.out.println("EXECUTE SQL");   
         try {
+        
             Connection connection = openConnection();
             
             PreparedStatement st = connection.prepareStatement(sql);
@@ -174,8 +176,7 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
             
             ResultSet rset = st.getResultSet();
             
-            List<T> objects = new ArrayList<>();
-            
+            List<T> objects = new ArrayList<>();    
             
             if(rset == null || !rset.first()){
                 
@@ -191,7 +192,7 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
             
             do{
                 Map<String,Object> dataMap = new HashMap<>();
-                
+
                 for(int i=1; i<=columnCount; i++){
                     dataMap.put(rsetMeta.getColumnName(i), rset.getObject(i));
                 }
@@ -202,7 +203,7 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
                 object.setObjectData(dataMap);
                 
                 objects.add(object);
-                
+
             }while(rset.next());
             
             rset.close();
@@ -307,9 +308,10 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
     }
     
     
-    public List<T> retrieveByColumn(String tableColumn, Object columnValue){
-       
-        return retrieveByColumns(new String[]{tableColumn}, new Object[]{columnValue}, null, null);        
+    public List<T> retrieveByColumn(String tableColumn, Object columnValue) {
+        
+        return retrieveByColumns(new String[]{tableColumn}, new Object[]{columnValue}, null, null);
+
     }
     
     public List<T> retrieveByColumn(String tableColumn, Object columnValue, String groupBy, String orderBy){
@@ -323,7 +325,7 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
     }
     
     public List<T> retrieveByColumns(String[] tableColumns, Object[] columnsValues, String groupBy, String orderBy){
-       
+        
         try {
             if(tableColumns == null || tableColumns.length == 0){
                 throw new IllegalArgumentException("GenericDAO.retrieveByColumns(String[],Object[],String,String): O array de nomes das colunas da tabela passado é invalido.");
@@ -334,11 +336,11 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
             else if(columnsValues.length != tableColumns.length){
                 throw new IllegalArgumentException("GenericDAO.retrieveByColumns(String[],Object[],String,String): Os arrays de colunas e de valores das colunas tem tamanhos diferentes.");
             } 
-            
+           
             T object = objectClass.newInstance();
             
             return executeSQL(createSQLSelect(object.getTableName(),tableColumns,columnsValues,groupBy,orderBy));
-            
+               
         } catch (InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(GenericDAO.class.getName()).log(Level.SEVERE, null, ex);
             return null;

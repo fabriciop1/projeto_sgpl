@@ -5,6 +5,7 @@
  */
 package visao.windows;
 
+import com.sun.glass.events.KeyEvent;
 import controle.ControlePerfil;
 import flex.db.GenericDAO;
 import flex.table.GenericTableAreaEditor;
@@ -34,25 +35,24 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
     private List<DadosEconMensais> dems;
     private final GenericDAO<DadosEconMensais> demdao;
     private final GenericDAO<Especificacao> demespdao;
-    private GenericDAO<InventarioResumo> irdao;
     private final GenericTableAreaEditor gtae;
-    private Perfil atual;
+    private final Perfil atual;
+    private double salarioMensal;
     
     /**
      * Creates new form VisualizarDadosEconMensais
      */
     public VisualizarDadosEconMensais() {
         
-        long tempoInicial = System.currentTimeMillis();
-        
         initComponents();
+       
+        atual = ControlePerfil.getInstance().getPerfilSelecionado();
         
         super.setLocationRelativeTo(null);
         super.setResizable(false);
-      
-        atual = ControlePerfil.getInstance().getPerfilSelecionado();
-        
         super.setTitle("SGPL - " + atual.getNome() + " - Dados Econômicos Mensais");
+        
+        this.setSalarioMensal(0.0);
         
         tabelaEspecificacao.setShowHorizontalLines(true);
         
@@ -63,27 +63,21 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         
         demdao = new GenericDAO<>(DadosEconMensais.class);
         
-        dems = demdao.retrieveByColumn("idPerfilFK", atual.getId());
-       
         demespdao = new GenericDAO<>(Especificacao.class);
-             
-        especificacoes = demespdao.retrieveAll();
-         
+        
+        especificacoes = null; //demespdao.retrieveAll();
+       
         gtae = new GenericTableAreaEditor(this, tabelaDadosEconomicos, false);
         
-        PreencherTabelaESP(especificacoes);
-      
-        fillComboBox();
+       // PreencherTabelaESP(especificacoes);
+          
+       // fillComboBox();
         
-        definirBDListeners();
-        
-        long termino = System.currentTimeMillis() - tempoInicial;
-        System.out.println(termino / 1000);
+        definirBDListeners();     
                 
     }
     
     private void PreencherTabelaESP(List<Especificacao> esp){
-       
         
         DefaultTableModel modelEspecificacao = (DefaultTableModel) tabelaEspecificacao.getModel();
         modelEspecificacao.setNumRows(0);
@@ -115,7 +109,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         }
     }
     
-    private void PreencherTabelaDEM(int ano, List<DadosEconMensais> dem){
+    private void PreencherTabelaDEM(List<DadosEconMensais> dem){
         
         DefaultTableModel modelEspecificacao = (DefaultTableModel) tabelaEspecificacao.getModel();
         DefaultTableModel modelDadosEconomicos = (DefaultTableModel) tabelaDadosEconomicos.getModel();
@@ -128,8 +122,6 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         for(int i = 0; i < modelEspecificacao.getRowCount(); i++){
             
             for(int j = 0; j < dem.size(); j++){
-                
-                if(dem.get(j).getAno() == ano) {
                     
                     int indexCol = (dem.get(j).getMes() - 1) * 3;
                 
@@ -176,23 +168,19 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                     }
 
                     if( i == 89 ){
-
-                        double salario = 0.0;
-                        irdao = new GenericDAO<>(InventarioResumo.class);
-                        List<InventarioResumo> ir = irdao.retrieveByColumn("idPerfilFK", atual.getId());
-                        if (linhaTemp != null && ir.size() > 0) {
-                            salario = ir.get(0).getSalarioMinimo();
-                            linhaTemp[indexCol + 1] = (salario * 13 + salario * 0.3) / 12;
+                        if (linhaTemp != null && this.getSalarioMensal() != 0.0) {
+                            linhaTemp[indexCol + 1] = this.getSalarioMensal();
                         }
 
-                        if (linhaTemp[indexCol] != null && salario != 0.0) {
-                            linhaTemp[indexCol + 2] = Double.parseDouble(linhaTemp[indexCol].toString()) * Double.parseDouble(linhaTemp[indexCol + 1].toString());
+                        if (linhaTemp[indexCol] != null && this.getSalarioMensal() != 0.0) {
+                            linhaTemp[indexCol + 2] = Double.parseDouble(linhaTemp[indexCol].toString()) * 
+                                    Double.parseDouble(linhaTemp[indexCol + 1].toString());
                         }
                     }
                 }
-            }
-            modelDadosEconomicos.addRow(linhaTemp);
-            Util.clearVector(linhaTemp);
+        
+                modelDadosEconomicos.addRow(linhaTemp);
+                Util.clearVector(linhaTemp);
         }
     }
    
@@ -587,6 +575,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tabelaDadosEconomicos.setAutoscrolls(false);
         tabelaDadosEconomicos.setPreferredSize(new java.awt.Dimension(800, 1441));
         tabelaDadosEconomicos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tabelaDadosEconomicos.getTableHeader().setResizingAllowed(false);
@@ -797,56 +786,9 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_editarValoresBTActionPerformed
 
-    private void tabelaEspecificacaoMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaEspecificacaoMouseDragged
-        tabelaEspecificacaoMousePressed(evt);
-    }//GEN-LAST:event_tabelaEspecificacaoMouseDragged
-
-    private void tabelaEspecificacaoMouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_tabelaEspecificacaoMouseWheelMoved
-        moveScrollBar(evt);
-    }//GEN-LAST:event_tabelaEspecificacaoMouseWheelMoved
-
-    private void tabelaEspecificacaoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaEspecificacaoMousePressed
-        tabelaDadosEconomicos.setRowSelectionInterval(tabelaEspecificacao.getSelectedRow(), tabelaEspecificacao.getSelectedRow());
-    }//GEN-LAST:event_tabelaEspecificacaoMousePressed
-
-    private void tabelaEspecificacaoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabelaEspecificacaoKeyPressed
-        int temp;
-        if(evt.getKeyCode() == 40 && tabelaEspecificacao.getSelectedRow() != (tabelaEspecificacao.getRowCount() - 1)) {
-            temp = tabelaEspecificacao.getSelectedRow() + 1;
-            tabelaDadosEconomicos.setRowSelectionInterval(temp, temp);
-        } else if (evt.getKeyCode() == 38 && tabelaEspecificacao.getSelectedRow() != 0){
-            temp = tabelaEspecificacao.getSelectedRow() - 1;
-            tabelaDadosEconomicos.setRowSelectionInterval(temp, temp);
-        }
-    }//GEN-LAST:event_tabelaEspecificacaoKeyPressed
-
     private void jPanel3MouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_jPanel3MouseWheelMoved
         moveScrollBar(evt);
     }//GEN-LAST:event_jPanel3MouseWheelMoved
-
-    private void tabelaDadosEconomicosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabelaDadosEconomicosKeyPressed
-        int temp;
-        if(evt.getKeyCode() == 40 && tabelaDadosEconomicos.getSelectedRow() != (tabelaDadosEconomicos.getRowCount() - 1)) {
-            temp =  tabelaDadosEconomicos.getSelectedRow() + 1;
-            tabelaEspecificacao.setRowSelectionInterval(temp, temp);
-
-        } else if (evt.getKeyCode() == 38 &&  tabelaDadosEconomicos.getSelectedRow() != 0){
-            temp =  tabelaDadosEconomicos.getSelectedRow() - 1;
-            tabelaEspecificacao.setRowSelectionInterval(temp, temp);
-        }
-    }//GEN-LAST:event_tabelaDadosEconomicosKeyPressed
-
-    private void tabelaDadosEconomicosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaDadosEconomicosMousePressed
-        tabelaEspecificacao.setRowSelectionInterval(tabelaDadosEconomicos.getSelectedRow(), tabelaDadosEconomicos.getSelectedRow());
-    }//GEN-LAST:event_tabelaDadosEconomicosMousePressed
-
-    private void tabelaDadosEconomicosMouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_tabelaDadosEconomicosMouseWheelMoved
-        moveScrollBar(evt);
-    }//GEN-LAST:event_tabelaDadosEconomicosMouseWheelMoved
-
-    private void tabelaDadosEconomicosMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaDadosEconomicosMouseDragged
-        tabelaDadosEconomicosMousePressed(evt);
-    }//GEN-LAST:event_tabelaDadosEconomicosMouseDragged
 
     private void formMouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_formMouseWheelMoved
         moveScrollBar(evt);
@@ -890,14 +832,63 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
 
     private void anoComboItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_anoComboItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
-           PreencherTabelaDEM(Integer.parseInt(anoCombo.getSelectedItem().toString()) , dems);
+           //long timeIni= System.currentTimeMillis();
+           dems = demdao.retrieveByColumns(new String[]{"idPerfilFK", "ano"}, new Object[]{atual.getId(), 
+                                    Integer.parseInt(anoCombo.getSelectedItem().toString())});
+           //System.out.println((System.currentTimeMillis() - timeIni));           
+           PreencherTabelaDEM(dems);
         }    
     }//GEN-LAST:event_anoComboItemStateChanged
 
+    private void tabelaEspecificacaoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabelaEspecificacaoKeyPressed
+        int temp;
+        if(evt.getKeyCode() == KeyEvent.VK_DOWN && tabelaEspecificacao.getSelectedRow() != (tabelaEspecificacao.getRowCount() - 1)) {
+            temp = tabelaEspecificacao.getSelectedRow() + 1;
+            tabelaDadosEconomicos.setRowSelectionInterval(temp, temp);
+        } else if (evt.getKeyCode() == KeyEvent.VK_UP && tabelaEspecificacao.getSelectedRow() != 0){
+            temp = tabelaEspecificacao.getSelectedRow() - 1;
+            tabelaDadosEconomicos.setRowSelectionInterval(temp, temp);
+        }
+    }//GEN-LAST:event_tabelaEspecificacaoKeyPressed
+
+    private void tabelaEspecificacaoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaEspecificacaoMousePressed
+        tabelaDadosEconomicos.setRowSelectionInterval(tabelaEspecificacao.getSelectedRow(), tabelaEspecificacao.getSelectedRow());
+    }//GEN-LAST:event_tabelaEspecificacaoMousePressed
+
+    private void tabelaEspecificacaoMouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_tabelaEspecificacaoMouseWheelMoved
+        moveScrollBar(evt);
+    }//GEN-LAST:event_tabelaEspecificacaoMouseWheelMoved
+
+    private void tabelaEspecificacaoMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaEspecificacaoMouseDragged
+        tabelaEspecificacaoMousePressed(evt);
+    }//GEN-LAST:event_tabelaEspecificacaoMouseDragged
+
+    private void tabelaDadosEconomicosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabelaDadosEconomicosKeyPressed
+        int temp;
+        if(evt.getKeyCode() == 40 && tabelaDadosEconomicos.getSelectedRow() != (tabelaDadosEconomicos.getRowCount() - 1)) {
+            temp =  tabelaDadosEconomicos.getSelectedRow() + 1;
+            tabelaEspecificacao.setRowSelectionInterval(temp, temp);
+
+        } else if (evt.getKeyCode() == 38 &&  tabelaDadosEconomicos.getSelectedRow() != 0){
+            temp =  tabelaDadosEconomicos.getSelectedRow() - 1;
+            tabelaEspecificacao.setRowSelectionInterval(temp, temp);
+        }
+    }//GEN-LAST:event_tabelaDadosEconomicosKeyPressed
+
+    private void tabelaDadosEconomicosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaDadosEconomicosMousePressed
+        tabelaEspecificacao.setRowSelectionInterval(tabelaDadosEconomicos.getSelectedRow(), tabelaDadosEconomicos.getSelectedRow());
+    }//GEN-LAST:event_tabelaDadosEconomicosMousePressed
+
+    private void tabelaDadosEconomicosMouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_tabelaDadosEconomicosMouseWheelMoved
+        moveScrollBar(evt);
+    }//GEN-LAST:event_tabelaDadosEconomicosMouseWheelMoved
+
+    private void tabelaDadosEconomicosMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaDadosEconomicosMouseDragged
+        tabelaDadosEconomicosMousePressed(evt);
+    }//GEN-LAST:event_tabelaDadosEconomicosMouseDragged
+
     private void fillComboBox() {
-  
-        atual = ControlePerfil.getInstance().getPerfilSelecionado();
-        
+         
         List<DadosEconMensais> dados = demdao.retrieveByColumn("idPerfilFK", atual.getId(), "ano", "ano DESC");
  
         if (dados.isEmpty()) {
@@ -908,6 +899,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         for(int i = 0; i < dados.size(); i++) {
             anoCombo.addItem(Cast.toString(dados.get(i).getAno()));
         }
+        
     }
     
     private void moveScrollBar(java.awt.event.MouseWheelEvent evt) {
@@ -923,7 +915,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
     private void definirBDListeners() {
         
         gtae.addTableModifyListener((TableModifiedEvent evt) -> {
-        
+       
             Object[][] areaData = evt.getTableData();
             List<Integer> linhas = evt.getRowsModified();
             
@@ -934,7 +926,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                 int mes = ( (gtae.getStartColumn() + 1) / 3 ) + 1;
                 int quantidade = 0;
                 double valorUnitario = 0.0;
-
+                
                 List<DadosEconMensais> dadosEM = demdao.retrieveByColumns(new String[]{"mes", "ano", "idDEM_especificacaoFK", "idPerfilFK"}, 
                                                                     new Object[]{mes, ano, espec.getId(), atual.getId()});
 
@@ -964,11 +956,33 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                     demdao.update(dem);
                 }
             }
-            dems = demdao.retrieveByColumn("idPerfilFK", atual.getId());
-            PreencherTabelaDEM(Integer.parseInt(anoCombo.getSelectedItem().toString()), dems);
+            
+            dems = demdao.retrieveByColumns(new String[]{"idPerfilFK", "ano"}, new Object[]{atual.getId(),
+                    Integer.parseInt(anoCombo.getSelectedItem().toString())});
+            PreencherTabelaDEM(dems);
+            
         });
     }
     
+    public double getSalarioMensal() {
+        return salarioMensal;
+    }
+    
+    private void setSalarioMensal(double salarioMensal) {
+        double salarioMin;
+        
+        GenericDAO<InventarioResumo> irdao = new GenericDAO<>(InventarioResumo.class);
+        
+        List<InventarioResumo> ir = irdao.retrieveByColumn("idPerfilFK", atual.getId());
+        
+        if (ir.size() > 0) {
+             salarioMin = ir.get(0).getSalarioMinimo();
+             salarioMensal = (salarioMin * 13 + salarioMin * 0.3) / 12;
+        }
+        
+        this.salarioMensal = salarioMensal;
+    }
+            
     private void configGTAE(int selected) {
         
         gtae.setColumnInterval((selected-1) * 3, ((selected-1) * 3) + 2);

@@ -124,6 +124,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         btnIndicEconAnuais.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnIndicEconAnuais.setText("Relatórios de Indicadores Anuais");
+        btnIndicEconAnuais.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIndicEconAnuaisActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -223,8 +228,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         new PeriodSelector(this, true).setVisible(true);
     }//GEN-LAST:event_btnIndicEconMensaisActionPerformed
 
-   
+    private void btnIndicEconAnuaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIndicEconAnuaisActionPerformed
+        new MultipleYearSelector(this, true).setVisible(true);
+    }//GEN-LAST:event_btnIndicEconAnuaisActionPerformed
 
+   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDadosEconMensais;
     private javax.swing.JButton btnDadosTecnMensais;
