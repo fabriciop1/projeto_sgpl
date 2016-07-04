@@ -14,6 +14,7 @@ import java.awt.event.ItemEvent;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import util.CellEditor;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollBar;
 import javax.swing.table.DefaultTableModel;
@@ -44,6 +45,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
      */
     public VisualizarDadosEconMensais() {
         
+        long tempoIni = System.currentTimeMillis();
         initComponents();
        
         atual = ControlePerfil.getInstance().getPerfilSelecionado();
@@ -52,7 +54,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         super.setResizable(false);
         super.setTitle("SGPL - " + atual.getNome() + " - Dados Econômicos Mensais");
         
-        this.setSalarioMensal(0.0);
+        this.setSalarioMensal();
         
         tabelaEspecificacao.setShowHorizontalLines(true);
         
@@ -65,16 +67,16 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         
         demespdao = new GenericDAO<>(Especificacao.class);
         
-        especificacoes = null; //demespdao.retrieveAll();
+        especificacoes = demespdao.retrieveAll();
        
         gtae = new GenericTableAreaEditor(this, tabelaDadosEconomicos, false);
         
-       // PreencherTabelaESP(especificacoes);
+        PreencherTabelaESP(especificacoes);
           
-       // fillComboBox();
+        fillComboBox();
         
-        definirBDListeners();     
-                
+        definirBDListeners();            
+        System.out.println(System.currentTimeMillis() - tempoIni);
     }
     
     private void PreencherTabelaESP(List<Especificacao> esp){
@@ -109,7 +111,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         }
     }
     
-    private void PreencherTabelaDEM(List<DadosEconMensais> dem){
+    private void PreencherTabelaDEM(List<DadosEconMensais> dem) {
         
         DefaultTableModel modelEspecificacao = (DefaultTableModel) tabelaEspecificacao.getModel();
         DefaultTableModel modelDadosEconomicos = (DefaultTableModel) tabelaDadosEconomicos.getModel();
@@ -124,7 +126,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
             for(int j = 0; j < dem.size(); j++){
                     
                     int indexCol = (dem.get(j).getMes() - 1) * 3;
-                
+                     
                     if( modelEspecificacao.getValueAt(i, 0).equals(dem.get(j).getEspecificacao().getEspecificacao())){
 
                         linhaTemp[indexCol ] = dem.get(j).getQuantidade();
@@ -561,7 +563,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class
+                java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
@@ -942,7 +944,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
 
                 if(dadosEM.isEmpty()){
 
-                    DadosEconMensais dem = new DadosEconMensais(mes, ano, quantidade, valorUnitario, espec, atual);
+                    DadosEconMensais dem = new DadosEconMensais(mes, ano, quantidade, valorUnitario, espec, atual.getId());
 
                     demdao.insert(dem);
 
@@ -968,8 +970,8 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         return salarioMensal;
     }
     
-    private void setSalarioMensal(double salarioMensal) {
-        double salarioMin;
+    private void setSalarioMensal() {
+        double salarioMin, salarioMes = 0.0;
         
         GenericDAO<InventarioResumo> irdao = new GenericDAO<>(InventarioResumo.class);
         
@@ -977,21 +979,25 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         
         if (ir.size() > 0) {
              salarioMin = ir.get(0).getSalarioMinimo();
-             salarioMensal = (salarioMin * 13 + salarioMin * 0.3) / 12;
+             salarioMes = (salarioMin * 13 + salarioMin * 0.3) / 12;
         }
         
-        this.salarioMensal = salarioMensal;
+        this.salarioMensal = salarioMes;
     }
             
     private void configGTAE(int selected) {
         
         gtae.setColumnInterval((selected-1) * 3, ((selected-1) * 3) + 2);
+        
         gtae.getEditTable().setDefaultRenderer(Object.class, new ColorRendererDadosEcon(true));
+        gtae.getEditTable().setDefaultEditor(Object.class, new CellEditor());
+        
         gtae.setName("GTAE DadosEconMensais");
         gtae.setRowsDisplayed(10);
         gtae.setAllowEmptyRows(true);
         gtae.setColumnEditable(0, true);
         gtae.setColumnEditable(1, true);
+        
         gtae.setSourceRowEditable(0, false);
         gtae.setSourceRowEditable(7, false);
         gtae.setSourceRowEditable(8, false);

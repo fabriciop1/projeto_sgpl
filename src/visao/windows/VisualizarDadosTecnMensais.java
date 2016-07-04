@@ -15,12 +15,15 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollBar;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.JTextComponent;
 import modelo.negocio.DadosTecMensais;
 import modelo.negocio.Indicador;
 import modelo.negocio.Perfil;
 import util.Calc;
 import util.Cast;
+import util.CellEditor;
 import util.ColorRendererDadosTec;
 import util.Util;
 
@@ -55,6 +58,8 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         
         tabelaDadosTecnicos.setDefaultRenderer(Object.class, new ColorRendererDadosTec(true));
         tabelaIndicadores.setDefaultRenderer(Object.class, new ColorRendererDadosTec(false));
+        
+        //tabelaDadosTecnicos.setCellEditor(new CellEditor(new JTextField()));
         
         dtmdao = new GenericDAO<>(DadosTecMensais.class);
         
@@ -557,7 +562,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         telaMes.setTitle("SGPL - DTM - Seleção de Trimestre");
 
         telaMes.setVisible(true);
-        int selecionado = telaMes.getSelected(); 
+        int selecionado = telaMes.getSelectedIndex(); 
         
          if (selecionado != 0) {
             
@@ -576,7 +581,8 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
     }//GEN-LAST:event_anoComboItemStateChanged
 
     private void configGTAE(int selected) {
-        gtae.getEditTable().setDefaultRenderer(Object.class, new ColorRendererDadosTec(true));
+        gtae.getEditTable().setDefaultRenderer(Object.class, new ColorRendererDadosTec(true));       
+        gtae.getEditTable().setDefaultEditor(Object.class, new CellEditor());
     
         gtae.setName("GTAE Dados Técnicos Mensais");
         gtae.setRowsDisplayed(10);
@@ -623,30 +629,36 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
              
             Object[][] areaData = evt.getTableData();
             List<Integer> linhas = evt.getRowsModified();
-            
+            boolean[][] dataModified = evt.getTableDataModified();
+           
             int ano = Integer.parseInt(anoCombo.getSelectedItem().toString());
             
             for (Integer l : linhas) {
-                int mes = gtae.getStartColumn() + 1;
-                Indicador ind = dtmindao.retrieveByColumn("indicador", tabelaIndicadores.getValueAt(l, 0)).get(0);
-                
-                int dado = Integer.valueOf(areaData[l][0].toString());
-                
-                List<DadosTecMensais> dadosTec = dtmdao.retrieveByColumns(new String[]{"mes", "ano", "idDTM_indicadorFK", "idPerfilFK"}, 
-                                                                    new Object[]{mes, ano, ind.getId(), atual.getId()});
-                
-               if (dadosTec.isEmpty()) {
-                   DadosTecMensais dadoTec = new DadosTecMensais(mes, ano, dado, ind, atual);
-                   
-                   dtmdao.insert(dadoTec);
-                   
-               } else {
-                   DadosTecMensais dtm = dadosTec.get(0);
-                   
-                   dtm.setDado(dado);
-                   
-                   dtmdao.update(dtm);
-               }
+                for(int c = 0; c < gtae.getEditTable().getColumnCount(); c++) {
+                   // if (dataModified[l][c]) {
+                        int mes = c + 1;
+
+                        Indicador ind = dtmindao.retrieveByColumn("indicador", tabelaIndicadores.getValueAt(l, 0)).get(0);
+
+                        double dado = Double.parseDouble(areaData[l][c].toString());
+
+                        List<DadosTecMensais> dadosTec = dtmdao.retrieveByColumns(new String[]{"mes", "ano", "idDTM_indicadorFK", "idPerfilFK"}, 
+                                                                        new Object[]{mes, ano, ind.getId(), atual.getId()});
+
+                        if (dadosTec.isEmpty()) {
+                            DadosTecMensais dadoTec = new DadosTecMensais(mes, ano, dado, ind, atual.getId());
+
+                            dtmdao.insert(dadoTec);
+
+                        } else {
+                            DadosTecMensais dtm = dadosTec.get(0);
+
+                            dtm.setDado(dado);
+
+                            dtmdao.update(dtm);
+                        }
+                    //}
+                }
             }
             dtms = dtmdao.retrieveByColumn("idPerfilFK", atual.getId());
             PreencherTabelaDTM(ano, dtms);

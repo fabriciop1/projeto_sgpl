@@ -28,6 +28,7 @@ import modelo.negocio.Perfil;
 import util.Calc;
 import util.Pair;
 import util.Cast;
+import util.CellEditor;
 import util.DecimalFormatRenderer;
 
 /**
@@ -95,7 +96,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         if (resumo == null) {
 
             resumo = new InventarioResumo();
-            resumo.setPerfil(perfilAtual);
+            resumo.setIdPerfil(perfilAtual.getId());
             resumo.setMes(mesAtual);
             resumo.setAno(anoAtual);
 
@@ -2292,6 +2293,13 @@ public class VisualizarInventario extends javax.swing.JFrame {
         tabelaAnimaisProdGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisProd, false);
         tabelaAnimaisServGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisServ, false);
         
+        tabelaTerrasGTRE.getEditTable().setDefaultEditor(Object.class, new CellEditor());
+        tabelaForrageirasGTRE.getEditTable().setDefaultEditor(Object.class, new CellEditor());
+        tabelaAnimaisProdGTRE.getEditTable().setDefaultEditor(Object.class, new CellEditor());
+        tabelaAnimaisServGTRE.getEditTable().setDefaultEditor(Object.class, new CellEditor());
+        tabelaBenfeitoriasGTRE.getEditTable().setDefaultEditor(Object.class, new CellEditor());
+        tabelaMaquinasGTRE.getEditTable().setDefaultEditor(Object.class, new CellEditor());
+        
         tabelaForrageirasGTRE.setColumnEditable(2, false);
         tabelaForrageirasGTRE.setColumnEditable(3, false);
         tabelaForrageirasGTRE.setColumnEditable(5, false);
@@ -2320,7 +2328,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 case TableModifiedEvent.ROW_INSERTED:
                 {
                     InventarioMaquinas inv = new InventarioMaquinas(Cast.toString(rowData[0]), Cast.toString(rowData[1]),
-                            Cast.toDouble(rowData[2]), Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfilAtual);
+                            Cast.toDouble(rowData[2]), Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfilAtual.getId());
                     
                     Object[] maquinasRowData = tabelaMaquinasGTRE.getSourceTableRowData(rowIndex);
                     
@@ -2333,7 +2341,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 case TableModifiedEvent.ROW_UPDATED:
                 {
                     InventarioMaquinas inv = new InventarioMaquinas(Cast.toString(rowData[0]), Cast.toString(rowData[1]),
-                            Cast.toDouble(rowData[2]), Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfilAtual);
+                            Cast.toDouble(rowData[2]), Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfilAtual.getId());
                     inv.setId(rowID);
                     
                     Object[] maquinasRowData = tabelaMaquinasGTRE.getSourceTableRowData(rowIndex);
@@ -2366,7 +2374,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 case TableModifiedEvent.ROW_INSERTED:
                 {
                     InventarioBenfeitorias inv = new InventarioBenfeitorias(Cast.toString(rowData[0]), Cast.toString(rowData[1]), Cast.toDouble(rowData[2]),
-                            Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfilAtual);
+                            Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfilAtual.getId());
                     
                     Object[] benfeitoriasRowData = tabelaBenfeitoriasGTRE.getSourceTableRowData(rowIndex);
                     calcularValoresInvBenfeitorias(benfeitoriasRowData, rowIndex);
@@ -2379,7 +2387,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 case TableModifiedEvent.ROW_UPDATED:
                 {
                     InventarioBenfeitorias inv = new InventarioBenfeitorias(Cast.toString(rowData[0]), Cast.toString(rowData[1]), Cast.toDouble(rowData[2]),
-                            Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfilAtual);
+                            Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfilAtual.getId());
                     inv.setId(rowID);
                     
                     Object[] benfeitoriasRowData = tabelaBenfeitoriasGTRE.getSourceTableRowData(rowIndex);
@@ -2411,7 +2419,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             if (modifType == TableModifiedEvent.ROW_INSERTED || modifType == TableModifiedEvent.ROW_UPDATED) {
                 
                 InventarioTerras terras = new InventarioTerras(Cast.toString(terrasRowData[0]), Cast.toDouble(terrasRowData[1]), Cast.toDouble(terrasRowData[2]),
-                        Cast.toDouble(terrasRowData[3]), Cast.toDouble(terrasRowData[4]), Cast.toDouble(terrasRowData[5]), perfilAtual);
+                        Cast.toDouble(terrasRowData[3]), Cast.toDouble(terrasRowData[4]), Cast.toDouble(terrasRowData[5]), perfilAtual.getId());
                 
                 if (modifType == TableModifiedEvent.ROW_INSERTED) {
                     
@@ -2421,7 +2429,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     
                     tabelaForrageirasGTRE.addSourceTableRow(new Object[]{terras.getEspecificacao(), null, ha }, terras.getId());
                     
-                    ifdao.insert( new InventarioForrageiras(terras.getEspecificacao(), 0, 0, perfilAtual, terras) );
+                    ifdao.insert( new InventarioForrageiras(terras.getEspecificacao(), 0, 0, perfilAtual.getId(), terras) );
                     
                     modifier.setCustomRowData(rowIndex, terras.getId());
                     
@@ -2500,7 +2508,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 
                 InventarioAnimais inv = new InventarioAnimais(Cast.toString(rowData[0]), Cast.toInt(rowData[1]), Cast.toInt(rowData[2]),
                         Cast.toInt(rowData[3]), Cast.toInt(rowData[4]), Cast.toInt(rowData[5]), Cast.toInt(rowData[6]),
-                        Cast.toDouble(rowData[7]), tipoAnimal, perfilAtual);
+                        Cast.toDouble(rowData[7]), tipoAnimal, perfilAtual.getId());
                 
                 if (modifType == TableModifiedEvent.ROW_INSERTED) {
                     

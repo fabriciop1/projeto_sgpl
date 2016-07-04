@@ -17,19 +17,21 @@ import util.Cast;
  * @author Fabricio
  */
 public class DadosEconMensais extends DatabaseObject implements Serializable {
-    
+   
     private int mes;
     private int ano;
     private int quantidade;
-    private double valorUnitario;
+    private double valorUnitario; 
     private Especificacao especificacao; // especificacao associada à tabela DEM_especificacao
-    private Perfil perfil;
+    private int idPerfil;
+    
+    private static GenericDAO<Especificacao> espDAO = new GenericDAO<>(Especificacao.class);
     
     public DadosEconMensais() {
         super("dados_economicos_mensais", "idDEM");
     }
 
-    public DadosEconMensais(int mes, int ano, int quantidade, double valorUnitario, Especificacao especificacao, Perfil perfil) {
+    public DadosEconMensais(int mes, int ano, int quantidade, double valorUnitario, Especificacao especificacao, int idPerfil) {
         super("dados_economicos_mensais", "idDEM");
         
         this.mes = mes;
@@ -37,7 +39,7 @@ public class DadosEconMensais extends DatabaseObject implements Serializable {
         this.especificacao = especificacao;
         this.quantidade = quantidade;
         this.valorUnitario = valorUnitario;
-        this.perfil = perfil;
+        this.idPerfil = idPerfil;
     }
 
     public int getMes() {
@@ -80,12 +82,12 @@ public class DadosEconMensais extends DatabaseObject implements Serializable {
         this.valorUnitario = valorUnitario;
     }
 
-    public Perfil getPerfil() {
-        return perfil;
+    public int getIdPerfil() {
+        return idPerfil;
     }
 
-    public void setPerfil(Perfil perfil) {
-        this.perfil = perfil;
+    public void setPerfil(int idPerfil) {
+        this.idPerfil = idPerfil;
     }
 
     @Override
@@ -97,7 +99,7 @@ public class DadosEconMensais extends DatabaseObject implements Serializable {
         m.put("quantidade", quantidade);
         m.put("valorUnitario", valorUnitario);
         m.put("idDEM_especificacaoFK", especificacao.getId());
-        m.put("idPerfilFK", perfil.getId());
+        m.put("idPerfilFK", idPerfil);
         
         return m;
     }
@@ -108,10 +110,8 @@ public class DadosEconMensais extends DatabaseObject implements Serializable {
         ano = Cast.toInt(data.get("ano"));
         quantidade = Cast.toInt(data.get("quantidade"));
         valorUnitario = Cast.toDouble(data.get("valorUnitario"));
-        especificacao = new GenericDAO<>(Especificacao.class).retrieve(Cast.toInt(data.get("idDEM_especificacaoFK")));
-        perfil =  new GenericDAO<>(Perfil.class).retrieve( Cast.toInt(data.get("idPerfilFK")) );
-    }
-    
-    
+        especificacao = espDAO.retrieve(Cast.toInt(data.get("idDEM_especificacaoFK")));
+        idPerfil = Cast.toInt(data.get("idPerfilFK"));
+    }  
     
 }

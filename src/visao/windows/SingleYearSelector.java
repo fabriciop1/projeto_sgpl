@@ -16,8 +16,8 @@ import util.Cast;
  */
 public class SingleYearSelector extends JDialog {
     
-    String selected;
-    int index;
+    private String selected;
+    private int index;
 
     /**
      * Creates new form YearSelector

@@ -138,8 +138,7 @@ public class PeriodSelector extends javax.swing.JDialog {
                         .addGap(18, 18, 18)
                         .addComponent(tipoTecnico)
                         .addGap(35, 35, 35)
-                        .addComponent(tipoEconomico)
-                        .addGap(51, 51, 51))
+                        .addComponent(tipoEconomico))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addGroup(layout.createSequentialGroup()
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -160,7 +159,7 @@ public class PeriodSelector extends javax.swing.JDialog {
                             .addComponent(cancelaBT, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(confirmaBT, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(49, 49, 49))
+                .addGap(53, 53, 53))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -231,10 +230,12 @@ public class PeriodSelector extends javax.swing.JDialog {
         }
   
         this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_confirmaBTActionPerformed
 
     private void cancelaBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelaBTActionPerformed
         this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_cancelaBTActionPerformed
 
     private void tipoTecnicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tipoTecnicoActionPerformed

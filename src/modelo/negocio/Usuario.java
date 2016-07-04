@@ -22,6 +22,8 @@ public class Usuario extends DatabaseObject implements Serializable {
     private String senha;
     private Rota rota;
     
+    private static GenericDAO<Rota> rotaDAO = new GenericDAO<>(Rota.class);
+    
     public Usuario(){
        super("usuario", "idUsuario");
     }
@@ -65,7 +67,7 @@ public class Usuario extends DatabaseObject implements Serializable {
         
         map.put("login", login);
         map.put("senha", senha);
-        map.put("idRotaFK", rota.getId());
+        map.put("idRotaFK", rota);
         
         return map;
     }
@@ -74,6 +76,6 @@ public class Usuario extends DatabaseObject implements Serializable {
     public void setObjectData(Map<String, Object> data) {
             login = Cast.toString(data.get("login"));
             senha = Cast.toString(data.get("senha"));
-            rota = new GenericDAO<>(Rota.class).retrieve( Cast.toInt(data.get("idRotaFK")) );
+            rota = rotaDAO.retrieve(Cast.toInt(data.get("idRotaFK")));
     }  
 }

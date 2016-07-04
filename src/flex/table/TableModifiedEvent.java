@@ -29,7 +29,6 @@ public class TableModifiedEvent {
     
     private Object[][] tableData;
     private boolean[][] tableDataModified;
-    private ArrayList<Integer> columnsModified;
     private ArrayList<Integer> rowsModified;
     private Object customRowData;
     private int eventType;
@@ -39,7 +38,6 @@ public class TableModifiedEvent {
         this.sourceModifier = sourceModifier;
         this.sourceTable = sourceTable;
         this.tableData = new Object[1][0];
-        this.columnsModified = new ArrayList<>();
     }
 
     public TableModifiedEvent(GenericTableModifier sourceModifier, JTable sourceTable, ArrayList<Integer> rowsModified, Object[] rowData, Object customRowData, int eventType) {
@@ -47,8 +45,6 @@ public class TableModifiedEvent {
         
         this.customRowData = customRowData;
         this.eventType = eventType;
-        
-        this.columnsModified = new ArrayList<>();
         this.rowsModified = rowsModified;
         
         if(rowData != null){
@@ -62,7 +58,6 @@ public class TableModifiedEvent {
         
         this.customRowData = customRowData;
         this.eventType = eventType;
-        this.columnsModified = new ArrayList<>();
         this.rowsModified = rowsModified;
         
         if (tableAreaData != null && tableAreaData.length > 0) {
@@ -140,15 +135,7 @@ public class TableModifiedEvent {
     public void setTableDataModified(boolean[][] tableDataModified) {
         this.tableDataModified = tableDataModified;
     }
-
-    public ArrayList<Integer> getColumnsModified() {
-        return columnsModified;
-    }
-
-    public void setColumnsModified(ArrayList<Integer> columnsModified) {
-        this.columnsModified = columnsModified;
-    }
-
+    
     public ArrayList<Integer> getRowsModified() {
         return rowsModified;
     }

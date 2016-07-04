@@ -64,15 +64,15 @@ public class GenericTableAreaEditor extends GenericTableModifier {
         
         getEditTableModel().setRowCount((endRow - startRow) + 1);
         
+        fillStringColumns();
+        
         for(int i = 0; i < editTable.getRowCount(); i++){
             
             for (int j = getStringColumnsOffset(); j < editTable.getColumnCount(); j++) {
                 
-                setEditTableValue( getSourceTableValue(startRow + i, startColumn + j), i, j);
+                setEditTableValue( getSourceTableValue(startRow + i, startColumn + j - getStringColumnsOffset()), i, j);
             }
         }
-        
-        fillStringColumns();
     }
 
     @Override
@@ -86,9 +86,9 @@ public class GenericTableAreaEditor extends GenericTableModifier {
                         
             boolean rowModified = false;
             
-            for (int j = getStringColumnsOffset(); j < editTable.getColumnCount(); j++) {
+            for (int j = 0; j < editTable.getColumnCount() - getStringColumnsOffset(); j++) {
                 
-                Object editValue = getEditTableValue(i, j);
+                Object editValue = getEditTableValue(i, j + getStringColumnsOffset());
                 Object sourceValue = getSourceTableValue(startRow + i, startColumn + j);
                 
                 tableAreaData[i][j] = editValue;
@@ -103,7 +103,7 @@ public class GenericTableAreaEditor extends GenericTableModifier {
                         rowsModified.add(i);
                     }
                     
-                    setSourceTableValue( convertToSourceTableValue(editValue, startColumn + j), startRow + i, startColumn + j);
+                    setSourceTableValue( convertToSourceTableValue(editValue, startColumn + j), startRow + i, startColumn + j + getStringColumnsOffset());
                 }
             }
         }
@@ -118,7 +118,7 @@ public class GenericTableAreaEditor extends GenericTableModifier {
     @Override
     protected boolean validateEditTableContent(){
         
-        for (int i = getStringColumnsOffset(); i < editTable.getRowCount(); i++) {
+        for (int i = 0; i < editTable.getRowCount(); i++) {
             
             if(checkEmptyRow(i)){ 
                 
@@ -161,10 +161,14 @@ public class GenericTableAreaEditor extends GenericTableModifier {
         
         String[] editColumnNames = new String[editTableColumnCount];
         
-        
-        for (int i = getStringColumnsOffset(); i < editTableColumnCount; i++) {
+        for(int i=0; i<getStringColumnsOffset(); i++){
             
-            editColumnNames[i] = columnNames[startColumn + i];
+            editColumnNames[i] = getStringColumnsData().get(i).columnTitle;
+        }
+        
+        for (int i = 0; i < editTableColumnCount - getStringColumnsOffset(); i++) {
+            
+            editColumnNames[i + getStringColumnsOffset()] = columnNames[startColumn + i];
         }
         
         DefaultTableModel model = new DefaultTableModel(new Object[][]{ }, editColumnNames){
@@ -176,12 +180,12 @@ public class GenericTableAreaEditor extends GenericTableModifier {
 
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                
+               
                 if(!isForceCellEditingEnabled()){
                     
-                    int editRowIndex = rowIndex + GenericTableAreaEditor.this.startRow;
+                    int editRowIndex = rowIndex + GenericTableAreaEditor.this.startRow;                    
                     
-                    return (GenericTableAreaEditor.this.isColumnEditable(columnIndex) && 
+                    return (GenericTableAreaEditor.this.isColumnEditable(getStringColumnsOffset() + columnIndex) && 
                             GenericTableAreaEditor.this.sourceRowEditable[editRowIndex]);
                 } else {
                     
@@ -199,9 +203,21 @@ public class GenericTableAreaEditor extends GenericTableModifier {
         
         for(int i = getStringColumnsOffset(); i<editTable.getColumnCount(); i++){
             
-            TableCellEditor sourceCellEditor = sourceTable.getColumnModel().getColumn(startColumn + i).getCellEditor();
+            TableCellEditor sourceCellEditor = sourceTable.getColumnModel().getColumn(startColumn + i - getStringColumnsOffset()).getCellEditor();
             
             editTable.getColumnModel().getColumn(i).setCellEditor(sourceCellEditor);
+        }
+        
+        for(int i=0; i<getStringColumnsOffset(); i++){
+            
+            StringColumnData data = getStringColumnsData().get(i);
+            
+            if(data.columnRenderer != null){
+                editTable.getColumnModel().getColumn(i).setCellRenderer(data.columnRenderer);
+            } 
+            else {
+                editTable.getColumnModel().getColumn(i).setCellRenderer(editTable.getDefaultRenderer(Object.class));
+            }
         }
     }
 
@@ -210,7 +226,7 @@ public class GenericTableAreaEditor extends GenericTableModifier {
         
         for(int i = getStringColumnsOffset(); i<editTable.getColumnCount(); i++){
             
-            TableCellRenderer sourceCellRenderer = sourceTable.getColumnModel().getColumn(startColumn + i).getCellRenderer();
+            TableCellRenderer sourceCellRenderer = sourceTable.getColumnModel().getColumn(startColumn + i - getStringColumnsOffset()).getCellRenderer();
             
             editTable.getColumnModel().getColumn(i).setCellRenderer(sourceCellRenderer);
         }

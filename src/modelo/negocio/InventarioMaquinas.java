@@ -7,6 +7,7 @@ package modelo.negocio;
 
 import flex.db.DatabaseObject;
 import flex.db.GenericDAO;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import util.Cast;
@@ -15,20 +16,20 @@ import util.Cast;
  *
  * @author Jefferson Sales
  */
-public class InventarioMaquinas extends DatabaseObject {
+public class InventarioMaquinas extends DatabaseObject implements Serializable {
     
     private String especificacao;
     private String unidade;
     private double quantidade;
     private double valorUnitario;
     private int vidaUtil;
-    private Perfil perfil;
+    private int idPerfil;
     
     public InventarioMaquinas() {
         super("inventario_maquinas", "idInventarioMaquinas");
     }
 
-    public InventarioMaquinas(String especificacao, String unidade, double quantidade, double valorUnitario, int vidaUtil, Perfil perfil) {
+    public InventarioMaquinas(String especificacao, String unidade, double quantidade, double valorUnitario, int vidaUtil, int idPerfil) {
         super("inventario_maquinas", "idInventarioMaquinas");
         
         this.especificacao = especificacao;
@@ -36,7 +37,7 @@ public class InventarioMaquinas extends DatabaseObject {
         this.quantidade = quantidade;
         this.valorUnitario = valorUnitario;
         this.vidaUtil = vidaUtil;
-        this.perfil = perfil;
+        this.idPerfil = idPerfil;
     }
 
     public String getEspecificacao() {
@@ -79,12 +80,12 @@ public class InventarioMaquinas extends DatabaseObject {
         this.vidaUtil = vidaUtil;
     }
 
-    public Perfil getPerfil() {
-        return perfil;
+    public int getIdPerfil() {
+        return idPerfil;
     }
 
-    public void setPerfil(Perfil perfil) {
-        this.perfil = perfil;
+    public void setIdPerfil(int idPerfil) {
+        this.idPerfil = idPerfil;
     }
 
     @Override
@@ -97,7 +98,7 @@ public class InventarioMaquinas extends DatabaseObject {
         m.put("quantidade", quantidade);
         m.put("valorUnitario", valorUnitario);
         m.put("vidaUtil", vidaUtil);
-        m.put("idPerfilFK", perfil.getId());
+        m.put("idPerfilFK", idPerfil);
         
         return m;
     }
@@ -109,7 +110,6 @@ public class InventarioMaquinas extends DatabaseObject {
             quantidade = Cast.toDouble(data.get("quantidade"));
             valorUnitario = Cast.toDouble(data.get("valorUnitario"));
             vidaUtil = Cast.toInt(data.get("vidaUtil"));
-            perfil = new GenericDAO<>(Perfil.class).retrieve( Cast.toInt(data.get("idPerfilFK")) );
+            idPerfil = Cast.toInt(data.get("idPerfilFK"));
     }
-
 }

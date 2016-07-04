@@ -27,6 +27,8 @@ public class Perfil extends DatabaseObject implements Serializable {
     private int numFamiliares;
     private Rota rota;
     
+    private static GenericDAO<Rota> rotaDAO = new GenericDAO<>(Rota.class);
+    
     public Perfil() {
         super("perfil", "idPerfil");
     }
@@ -135,7 +137,7 @@ public class Perfil extends DatabaseObject implements Serializable {
             prodLeiteDiario = Cast.toDouble(data.get("prodLeiteDiario"));
             empPermanentes = Cast.toInt(data.get("empPermanentes"));
             numFamiliares = Cast.toInt(data.get("numFamiliares"));
-            rota = new GenericDAO<>(Rota.class).retrieve( Cast.toInt(data.get("idRotaFK")) );
+            rota = rotaDAO.retrieve( Cast.toInt(data.get("idRotaFK")) );
     }
     
     

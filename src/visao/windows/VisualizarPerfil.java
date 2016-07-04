@@ -16,11 +16,12 @@ import java.util.List;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
-import javax.swing.JPasswordField;
+import javax.swing.table.DefaultTableModel;
 import modelo.negocio.Perfil;
 import modelo.negocio.Rota;
 import modelo.negocio.Usuario;
 import util.Cast;
+import util.CellEditor;
 
 /**
  *
@@ -28,11 +29,13 @@ import util.Cast;
  */
 public class VisualizarPerfil extends javax.swing.JFrame {
     
-    GenericDAO<Perfil> perfilDao;
+    GenericDAO<Perfil> perfilDAO;
+    GenericDAO<Rota> rotaDAO;
     List<Perfil> perfis;
     ArrayList<Integer> idPerfis;
     Usuario usuario;
     GenericTableRowEditor listaPerfisGTRE;
+    
     
     /**
      * Creates new form VisualizarPerfil
@@ -50,18 +53,21 @@ public class VisualizarPerfil extends javax.swing.JFrame {
       
         listaPerfis.setColumnSelectionAllowed(false);
         
-        perfilDao = new GenericDAO<>(Perfil.class);
+        rotaDAO = new GenericDAO<>(Rota.class);
+        perfilDAO = new GenericDAO<>(Perfil.class);
+        
         usuario = ControleLogin.getInstance().getUsuario();
         
         idPerfis = new ArrayList<>();
         
         if (!usuario.getLogin().equals("adm")) { // Sabendo se o usuário é ou não o administrador pelo login
-            perfis = perfilDao.retrieveByColumn("idRotaFK", usuario.getRota().getId());
+            perfis = perfilDAO.retrieveByColumn("idRotaFK", usuario.getRota());
         } else {
-            perfis = perfilDao.retrieveAll();
+            perfis = perfilDAO.retrieveAll();
         }
         
         listaPerfisGTRE = new GenericTableRowEditor(this, listaPerfis, false);
+        listaPerfisGTRE.getEditTable().setDefaultEditor(Object.class, new CellEditor());
         listaPerfisGTRE.getSourceTableModel().setRowCount(0);
         setRotasCombo();
          
@@ -72,7 +78,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
             listaPerfisGTRE.addSourceTableRow(new Object[]{
                 perfis.get(i).getNome(),
                 perfis.get(i).getCidade(),
-                perfis.get(i).getRota().getRota(),
+                perfis.get(i).getRota().getRota(), 
                 perfis.get(i).getTamPropriedade(),
                 perfis.get(i).getAreaPecLeite(),
                 perfis.get(i).getProdLeiteDiario(),
@@ -83,7 +89,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
        
        verificaTabelaVazia();
        
-        definirBDListeners();
+       definirBDListeners();
     }
 
     /**
@@ -250,7 +256,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
             atual.setId(idPerfis.get(listaPerfis.getSelectedRow()));
             atual.setNome((String) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 0));
             atual.setCidade((String) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 1));
-            atual.setRota((new GenericDAO<>(Rota.class)).retrieveByColumn("rota", listaPerfis.getValueAt(listaPerfis.getSelectedRow(), 2).toString()).get(0));
+            atual.setRota(rotaDAO.retrieveByColumn("rota", listaPerfis.getValueAt(listaPerfis.getSelectedRow(), 2).toString()).get(0));
             atual.setTamPropriedade((double) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 3));
             atual.setAreaPecLeite((double) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 4));
             atual.setProdLeiteDiario((double) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 5));
@@ -302,6 +308,8 @@ public class VisualizarPerfil extends javax.swing.JFrame {
                if (usuario.getLogin().equals(input)) {
                     listaPerfisGTRE.removeSourceTableRow(listaPerfis.getSelectedRow());
                     verificaTabelaVazia();
+               } else if (!usuario.getLogin().equals(input) && input != null){
+                   JOptionPane.showMessageDialog(this, "Login incorreto.", "Login inválido", JOptionPane.INFORMATION_MESSAGE);
                }
            }
         } else {
@@ -353,9 +361,8 @@ public class VisualizarPerfil extends javax.swing.JFrame {
     
     private void setRotasCombo() {
         JComboBox comboRotas = new JComboBox();
-        GenericDAO<Rota> dao = new GenericDAO<>(Rota.class);
         
-        List<Rota> rotas = dao.retrieveAll();
+        List<Rota> rotas = rotaDAO.retrieveAll();
         
         for(int i = 0; i < rotas.size(); i++) {
             comboRotas.addItem(rotas.get(i).getRota());
@@ -365,17 +372,21 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         
     }
     private void definirBDListeners() {
+        
         listaPerfisGTRE.addTableModifyListener((TableModifiedEvent event) -> {
-            GenericDAO<Perfil> perfilDAO = new GenericDAO<>(Perfil.class);
-            GenericDAO<Rota> rotaDAO = new GenericDAO<>(Rota.class);
             
             Object[] rowData = event.getTableRowData();
             Integer rowID = (Integer) event.getCustomRowData();
             GenericTableModifier modifier = event.getSourceModifier();
             int modifType = event.getEventType();
             
-            Rota rota = rotaDAO.retrieveByColumn("rota", rowData[2]).get(0);
+            if(rowData[2] == null) {
+                
+                return;
+            }
             
+            Rota rota = rotaDAO.retrieveByColumn("rota", rowData[2]).get(0);
+
             switch (modifType) {
                 case TableModifiedEvent.ROW_INSERTED:
                 {
@@ -401,6 +412,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
                 default:
                     break;
             }
+
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables

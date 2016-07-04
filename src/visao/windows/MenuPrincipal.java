@@ -219,7 +219,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnInventarioActionPerformed
 
     private void btnDadosEconMensaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDadosEconMensaisActionPerformed
-        new VisualizarDadosEconMensais().setVisible(true);
+        new VisualizarDadosEconMensais().setVisible(true); 
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnDadosEconMensaisActionPerformed

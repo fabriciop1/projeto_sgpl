@@ -23,13 +23,15 @@ public class InventarioBenfeitorias extends DatabaseObject implements Serializab
     private double quantidade;
     private double valorUnitario;
     private int vidaUtil;
-    private Perfil perfil;
+    private int idPerfil;
+    
+    private static GenericDAO<Perfil> perfilDAO = new GenericDAO<>(Perfil.class);
     
     public InventarioBenfeitorias() {
         super("inventario_benfeitorias", "idInventarioBenfeitorias");
     }
 
-    public InventarioBenfeitorias(String especificacao, String unidade, double quantidade, double valorUnitario, int vidaUtil, Perfil perfil) {
+    public InventarioBenfeitorias(String especificacao, String unidade, double quantidade, double valorUnitario, int vidaUtil, int idPerfil) {
         super("inventario_benfeitorias", "idInventarioBenfeitorias");
         
         this.especificacao = especificacao;
@@ -37,15 +39,15 @@ public class InventarioBenfeitorias extends DatabaseObject implements Serializab
         this.quantidade = quantidade;
         this.valorUnitario = valorUnitario;
         this.vidaUtil = vidaUtil;
-        this.perfil = perfil;
+        this.idPerfil = idPerfil;
     }
 
-    public Perfil getPerfil() {
-        return perfil;
+    public int getIdPerfil() {
+        return idPerfil;
     }
 
-    public void setPerfil(Perfil perfil) {
-        this.perfil = perfil;
+    public void setIdPerfil(int idPerfil) {
+        this.idPerfil = idPerfil;
     }
 
     public String getEspecificacao() {
@@ -98,7 +100,7 @@ public class InventarioBenfeitorias extends DatabaseObject implements Serializab
         m.put("quantidade", quantidade);
         m.put("valorUnitario", valorUnitario);
         m.put("vidaUtil", vidaUtil);
-        m.put("idPerfilFK", perfil.getId());
+        m.put("idPerfilFK", idPerfil);
         
         return m;
     }
@@ -110,6 +112,6 @@ public class InventarioBenfeitorias extends DatabaseObject implements Serializab
             quantidade = Cast.toDouble(data.get("quantidade"));
             valorUnitario = Cast.toDouble(data.get("valorUnitario"));
             vidaUtil = Cast.toInt(data.get("vidaUtil"));
-            perfil = new GenericDAO<>(Perfil.class).retrieve( Cast.toInt(data.get("idPerfilFK")) );
+            idPerfil = Cast.toInt(data.get("idPerfilFK"));
     }
 }

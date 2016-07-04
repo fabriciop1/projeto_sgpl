@@ -20,22 +20,24 @@ public class DadosTecMensais extends DatabaseObject implements Serializable {
 
     private int mes;
     private int ano;
-    private int dado;
+    private double dado;
     private Indicador indicador; // indicador associado a cada dado tecnico mensal
-    private Perfil perfil;
+    private int idPerfil;
+    
+    private static GenericDAO<Indicador> indDAO = new GenericDAO<>(Indicador.class);
     
     public DadosTecMensais() {
         super("dados_tecnicos_mensais", "idDTM");
     }
 
-    public DadosTecMensais(int mes, int ano, int dado, Indicador indicador, Perfil perfil) {
+    public DadosTecMensais(int mes, int ano, double dado, Indicador indicador, int idPerfil) {
         super("dados_tecnicos_mensais", "idDTM");
         
         this.mes = mes;
         this.ano = ano;
         this.dado = dado;
         this.indicador = indicador;
-        this.perfil = perfil;
+        this.idPerfil = idPerfil;
     }
 
     public int getMes() {
@@ -54,11 +56,11 @@ public class DadosTecMensais extends DatabaseObject implements Serializable {
         this.ano = ano;
     }
 
-    public int getDado() {
+    public double getDado() {
         return dado;
     }
 
-    public void setDado(int dado) {
+    public void setDado(double dado) {
         this.dado = dado;
     }
 
@@ -70,12 +72,12 @@ public class DadosTecMensais extends DatabaseObject implements Serializable {
         this.indicador = indicador;
     }
 
-    public Perfil getPerfil() {
-        return perfil;
+    public int getIdPerfil() {
+        return idPerfil;
     }
 
-    public void setPerfil(Perfil perfil) {
-        this.perfil = perfil;
+    public void setPerfil(int idPerfil) {
+        this.idPerfil = idPerfil;
     }
         
     @Override
@@ -86,7 +88,7 @@ public class DadosTecMensais extends DatabaseObject implements Serializable {
         m.put("ano", ano);
         m.put("dado", dado);
         m.put("idDTM_indicadorFK", indicador.getId());
-        m.put("idPerfilFK", perfil.getId());
+        m.put("idPerfilFK", idPerfil);
         
         return m;
     }
@@ -95,9 +97,9 @@ public class DadosTecMensais extends DatabaseObject implements Serializable {
     public void setObjectData(Map<String, Object> data) {
         mes = Cast.toInt(data.get("mes"));
         ano = Cast.toInt(data.get("ano"));
-        dado = Cast.toInt(data.get("dado"));
-        indicador = new GenericDAO<>(Indicador.class).retrieve(Cast.toInt(data.get("idDTM_indicadorFK")));
-        perfil =  new GenericDAO<>(Perfil.class).retrieve( Cast.toInt(data.get("idPerfilFK")));
+        dado = Cast.toDouble(data.get("dado"));
+        indicador = indDAO.retrieve(Cast.toInt(data.get("idDTM_indicadorFK")));
+        idPerfil =  Cast.toInt(data.get("idPerfilFK"));
     }
     
 }

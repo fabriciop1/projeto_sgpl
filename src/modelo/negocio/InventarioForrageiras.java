@@ -20,20 +20,22 @@ public class InventarioForrageiras extends DatabaseObject implements Serializabl
     private String forrageirasNaoAnuais;
     private int vidaUtil;
     private double custoFormacaoHectare;
-    private Perfil perfil;
+    private int idPerfil;
     private InventarioTerras inventarioTerras;
+    
+    private static GenericDAO<InventarioTerras> invTerrasDAO = new GenericDAO<>(InventarioTerras.class);
     
     public InventarioForrageiras() {
         super("inventario_forrageiras", "idInventarioForrageiras");
     }
 
-    public InventarioForrageiras(String forrageirasNaoAnuais, int vidaUtil, double custoFormacaoHectare, Perfil perfil, InventarioTerras inventarioTerras) {
+    public InventarioForrageiras(String forrageirasNaoAnuais, int vidaUtil, double custoFormacaoHectare, int idPerfil, InventarioTerras inventarioTerras) {
         super("inventario_forrageiras", "idInventarioForrageiras");
         
         this.forrageirasNaoAnuais = forrageirasNaoAnuais;
         this.vidaUtil = vidaUtil;
         this.custoFormacaoHectare = custoFormacaoHectare;
-        this.perfil = perfil;
+        this.idPerfil = idPerfil;
         this.inventarioTerras = inventarioTerras;
     }
 
@@ -61,12 +63,12 @@ public class InventarioForrageiras extends DatabaseObject implements Serializabl
         this.custoFormacaoHectare = custoFormacaoHectare;
     }
 
-    public Perfil getPerfil() {
-        return perfil;
+    public int getIdPerfil() {
+        return idPerfil;
     }
 
-    public void setPerfil(Perfil perfil) {
-        this.perfil = perfil;
+    public void setIdPerfil(int idPerfil) {
+        this.idPerfil = idPerfil;
     }
 
     public InventarioTerras getInventarioTerras() {
@@ -84,7 +86,7 @@ public class InventarioForrageiras extends DatabaseObject implements Serializabl
          m.put("forrageirasNaoAnuais", forrageirasNaoAnuais);
          m.put("custoFormacaoHectare", custoFormacaoHectare);
          m.put("vidaUtil", vidaUtil);
-         m.put("idPerfilFK", perfil.getId());
+         m.put("idPerfilFK", idPerfil);
          m.put("idInventarioTerrasFK", inventarioTerras.getId());
          
          return m;
@@ -95,8 +97,8 @@ public class InventarioForrageiras extends DatabaseObject implements Serializabl
         forrageirasNaoAnuais = Cast.toString(data.get("forrageirasNaoAnuais"));
         custoFormacaoHectare = Cast.toDouble(data.get("custoFormacaoHectare"));
         vidaUtil = Cast.toInt(data.get("vidaUtil"));
-        perfil = new GenericDAO<>(Perfil.class).retrieve(Cast.toInt(data.get("idPerfilFK")));
-        inventarioTerras = new GenericDAO<>(InventarioTerras.class).retrieve(Cast.toInt(data.get("idInventarioTerrasFK")));
+        idPerfil = Cast.toInt(data.get("idPerfilFK"));
+        inventarioTerras = invTerrasDAO.retrieve(Cast.toInt(data.get("idInventarioTerrasFK")));
     }
     
     

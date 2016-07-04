@@ -27,14 +27,14 @@ public class InventarioAnimais extends DatabaseObject implements Serializable {
     private int valorFinal;
     private double valorCabeca;
     private int tipoAnimal; // 1 - Produção ; 2 - Em Serviço
-    private Perfil perfil;
+    private int idPerfil;
 
     public InventarioAnimais() {
         super("inventario_animais", "idInventarioAnimais");
     }
         
     public InventarioAnimais(String categoria, int valorInicio, int nascimento, int morte, int venda, int compra, int valorFinal, 
-            double valorCabeca, int tipoAnimal, Perfil perfil) {
+            double valorCabeca, int tipoAnimal, int idPerfil) {
         super("inventario_animais", "idInventarioAnimais");
         
         this.categoria = categoria;
@@ -46,7 +46,7 @@ public class InventarioAnimais extends DatabaseObject implements Serializable {
         this.valorFinal = valorFinal;
         this.valorCabeca = valorCabeca;
         this.tipoAnimal = tipoAnimal;
-        this.perfil = perfil;
+        this.idPerfil = idPerfil;
     }
 
     public String getCategoria() {
@@ -122,12 +122,12 @@ public class InventarioAnimais extends DatabaseObject implements Serializable {
         this.tipoAnimal = tipoAnimal;
     }
 
-    public Perfil getPerfil() {
-        return perfil;
+    public int getIdPerfil() {
+        return idPerfil;
     }
 
-    public void setPerfil(Perfil perfil) {
-        this.perfil = perfil;
+    public void setIdPerfil(int idPerfil) {
+        this.idPerfil = idPerfil;
     }
 
     @Override
@@ -144,7 +144,7 @@ public class InventarioAnimais extends DatabaseObject implements Serializable {
         m.put("final", valorFinal);
         m.put("valorCabeca", valorCabeca);
         m.put("tipoAnimal", tipoAnimal);
-        m.put("idPerfilFK", perfil.getId());
+        m.put("idPerfilFK", idPerfil);
         
         return m;
     }
@@ -161,7 +161,7 @@ public class InventarioAnimais extends DatabaseObject implements Serializable {
             valorFinal = Cast.toInt(data.get("final"));
             valorCabeca = Cast.toDouble(data.get("valorCabeca"));
             tipoAnimal = Cast.toInt(data.get("tipoAnimal"));
-            perfil = new GenericDAO<>(Perfil.class).retrieve( Cast.toInt(data.get("idPerfilFK")) );
+            idPerfil = Cast.toInt(data.get("idPerfilFK"));
     }
 
     

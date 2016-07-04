@@ -26,13 +26,14 @@ public class InventarioResumo extends DatabaseObject implements Serializable {
     private int vidaUtilReprodutores;
     private int vidaUtilAnimaisServico;
     private double valorGastoCompraAnimais;
-    private Perfil perfil;
-
+    private int idPerfil;
+    
     public InventarioResumo() {
         super("inventario_resumo", "idInventarioResumo");
     }
 
-    public InventarioResumo(double custoOportunidade, double atividadeLeiteira, double salarioMinimo, int mes, int ano, int vidaUtilReprodutores, int vidaUtilAnimaisServico, double valorGastoCompraAnimais, Perfil perfil) {
+    public InventarioResumo(double custoOportunidade, double atividadeLeiteira, double salarioMinimo, int mes, int ano,
+                int vidaUtilReprodutores, int vidaUtilAnimaisServico, double valorGastoCompraAnimais, int idPerfil) {
         super("inventario_resumo", "idInventarioResumo");
         this.custoOportunidade = custoOportunidade;
         this.atividadeLeiteira = atividadeLeiteira;
@@ -42,7 +43,7 @@ public class InventarioResumo extends DatabaseObject implements Serializable {
         this.vidaUtilReprodutores = vidaUtilReprodutores;
         this.vidaUtilAnimaisServico = vidaUtilAnimaisServico;
         this.valorGastoCompraAnimais = valorGastoCompraAnimais;
-        this.perfil = perfil;
+        this.idPerfil = idPerfil;
     }
     
     public int getIdInventarioResumo() {
@@ -117,12 +118,12 @@ public class InventarioResumo extends DatabaseObject implements Serializable {
         this.valorGastoCompraAnimais = valorGastoCompraAnimais;
     }
 
-    public Perfil getPerfil() {
-        return perfil;
+    public int getIdPerfil() {
+        return idPerfil;
     }
 
-    public void setPerfil(Perfil perfil) {
-        this.perfil = perfil;
+    public void setIdPerfil(int idPerfil) {
+        this.idPerfil = idPerfil;
     }
 
     @Override
@@ -137,7 +138,7 @@ public class InventarioResumo extends DatabaseObject implements Serializable {
         m.put("vidaUtilReprodutores", vidaUtilReprodutores);
         m.put("vidaUtilAnimaisServico", vidaUtilAnimaisServico);
         m.put("valorGastoCompraAnimais", valorGastoCompraAnimais);
-        m.put("idPerfilFK", perfil.getId());
+        m.put("idPerfilFK", idPerfil);
         
         return m;
     }
@@ -152,10 +153,7 @@ public class InventarioResumo extends DatabaseObject implements Serializable {
         vidaUtilReprodutores = Cast.toInt(data.get("vidaUtilReprodutores"));
         vidaUtilAnimaisServico = Cast.toInt(data.get("vidaUtilAnimaisServico"));
         valorGastoCompraAnimais = Cast.toDouble(data.get("valorGastoCompraAnimais"));
-        perfil = new GenericDAO<>(Perfil.class).retrieve( Cast.toInt(data.get("idPerfilFK")) );
+        idPerfil = Cast.toInt(data.get("idPerfilFK"));
     }
-    
-    
-    
     
 }

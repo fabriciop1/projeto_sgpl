@@ -121,12 +121,12 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntrarActionPerformed
-
+        
         ControleLogin controleLogin = ControleLogin.getInstance();
         boolean logado;
-
+         
         logado = controleLogin.fazerLogin(campoLogin.getText(), campoSenha.getPassword());
-
+        
         if(logado == true){
             new VisualizarPerfil().setVisible(true);
             this.setVisible(false);

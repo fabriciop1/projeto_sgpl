@@ -104,16 +104,19 @@ public class QuarterSelector extends javax.swing.JDialog {
 
     private void confirmaBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmaBTActionPerformed
         this.setVisible(false);
-        this.selected = mesCombo.getSelectedIndex();
+        setSelectedIndex(mesCombo.getSelectedIndex());
     }//GEN-LAST:event_confirmaBTActionPerformed
 
-  public int getSelected() {
-       return this.selected;
-   }
+    public void setSelectedIndex(int selected) {
+        this.selected = selected;
+    }
+    public int getSelectedIndex() {
+        return this.selected;
+    }
    
-  public String getQuarterSelected() {
-      return this.mesCombo.getItemAt(this.selected);
-  }
+    public String getQuarterSelected() {
+        return this.mesCombo.getItemAt(this.selected);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelaBT;

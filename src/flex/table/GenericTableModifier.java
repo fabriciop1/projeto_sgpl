@@ -52,8 +52,34 @@ public abstract class GenericTableModifier extends JDialog{
 
     private boolean rebuildEditTable;
     
-    private ArrayList<Pair<String,String[]>> stringColumnsData;
+    private List<StringColumnData> stringColumnsData;
     
+    
+    protected class StringColumnData{
+        
+        public String columnTitle;
+        public int columnWidth;
+        public List<String> columnData; 
+        public TableCellRenderer columnRenderer;
+        
+        public StringColumnData() {
+            this.columnTitle = "";
+            this.columnWidth = 150;
+            this.columnData = new ArrayList<>();
+            this.columnRenderer = null;
+        }
+        
+        public StringColumnData(int columnWidth, String columnTitle, List<String> columnData) {
+            this.columnTitle = columnTitle;
+            this.columnWidth = columnWidth;
+            this.columnData = columnData;
+        }
+        
+        public StringColumnData(int columnWidth, String columnTitle, List<String> columnData, TableCellRenderer columnRenderer){
+            this(columnWidth,columnTitle,columnData);
+            this.columnRenderer = columnRenderer;
+        }
+    }
     
     
     protected GenericTableModifier(Frame parent, JTable sourceTable, boolean forceCellEditing) {
@@ -201,6 +227,8 @@ public abstract class GenericTableModifier extends JDialog{
         copySourceTableRenderers();
         copySourceTableEditors();
         
+        copyStringColumnRenders();
+        
         getEditTableModel().fireTableStructureChanged();
     }    
     
@@ -220,7 +248,7 @@ public abstract class GenericTableModifier extends JDialog{
     
     protected void copySourceTableRenderers(){
         
-        for(int i=0; i<sourceTable.getColumnCount(); i++){
+        for(int i=getStringColumnsOffset(); i<sourceTable.getColumnCount(); i++){
             
             TableCellRenderer sourceCellRenderer = sourceTable.getColumnModel().getColumn(i).getCellRenderer();
             
@@ -242,7 +270,16 @@ public abstract class GenericTableModifier extends JDialog{
         
         int minDialogWidth = 0;
         
-        for (int i = 0; i < editTable.getColumnCount(); i++) {
+        for (int i = 0; i < getStringColumnsOffset(); i++) {
+            
+            StringColumnData data = getStringColumnsData().get(i);
+            
+            editTable.getColumnModel().getColumn(i).setPreferredWidth(data.columnWidth);
+            
+            minDialogWidth += data.columnWidth;
+        }
+        
+        for (int i = getStringColumnsOffset(); i < editTable.getColumnCount(); i++) {
 
             int sourceColumnWidth = getSourceTableColumnWidth(i);
             TableColumn column = editTable.getColumnModel().getColumn(i); //
@@ -260,6 +297,21 @@ public abstract class GenericTableModifier extends JDialog{
         this.setSize(new Dimension(60 + minDialogWidth, 170 + minEditTableHeight));
         this.setLocationRelativeTo(null);
     
+    }
+    
+    protected void copyStringColumnRenders(){
+        
+        for(int i=0; i<getStringColumnsOffset(); i++){
+            
+            StringColumnData data = getStringColumnsData().get(i);
+            
+            if(data.columnRenderer != null){
+                editTable.getColumnModel().getColumn(i).setCellRenderer(data.columnRenderer);
+            } 
+            else {
+                editTable.getColumnModel().getColumn(i).setCellRenderer(editTable.getDefaultRenderer(Object.class));
+            }
+        }
     }
     
     
@@ -490,6 +542,7 @@ public abstract class GenericTableModifier extends JDialog{
         }
         
         refillEditTable();
+        
         repackEditor();
     }
     
@@ -656,13 +709,20 @@ public abstract class GenericTableModifier extends JDialog{
     }
     
     
-    public void addStringColumn(String columnTitle, String[] columnData){
+    public void addStringColumn(int columnWidth, String columnTitle, List<String> columnData, TableCellRenderer columnRenderer){
         
         if(columnData == null){
             throw new NullPointerException("O array de dados da coluna passado é inválido.");
         }
+        else if(columnWidth <= 0){
+            throw new IllegalArgumentException("O tamanho da coluna passado é inválido (tamanho <= 0).");
+        }
         
-        stringColumnsData.add( Pair.create(columnTitle, columnData) );
+        if(columnData == null){
+            columnData = new ArrayList<>();
+        }
+        
+        stringColumnsData.add( new StringColumnData(columnWidth, columnTitle, columnData, columnRenderer) );
         
         stringColumnsOffset++;
         
@@ -674,13 +734,15 @@ public abstract class GenericTableModifier extends JDialog{
         
         for(int i=0; i<stringColumnsOffset; i++){
             
-            Pair<String,String[]> data = stringColumnsData.get(i);
+            StringColumnData data = stringColumnsData.get(i);
             
-            editTable.getColumnModel().getColumn(i).setHeaderValue( Cast.toString(data.first) );
+            editTable.getColumnModel().getColumn(i).setHeaderValue( data.columnTitle );
             
-            for(int j=0; i<editTable.getRowCount(); j++){
+            for(int j=0; j<editTable.getRowCount(); j++){
                 
-                setEditTableValue(data.second[i], j, i);
+                setEditTableValue(data.columnData.get(j), j, i);
+                
+                System.out.println(data.columnData.get(j));
             }
         }        
     }
@@ -932,5 +994,27 @@ public abstract class GenericTableModifier extends JDialog{
 
     public int getStringColumnsOffset() {
         return stringColumnsOffset;
+    }
+
+    protected List<StringColumnData> getStringColumnsData() {
+        return stringColumnsData;
+    }
+
+    public void setDefaultRenderer(TableCellRenderer render){
+        
+        if(render == null){
+            throw new NullPointerException("O renderer passado é inválido.");
+        }
+        
+        editTable.setDefaultRenderer(Object.class, render);
+    }
+    
+    public void setDefaultEditor(TableCellEditor editor){
+        
+        if(editor == null){
+            throw new NullPointerException("O editor passado é inválido.");
+        }
+        
+        editTable.setDefaultEditor(Object.class, editor);
     }
 }

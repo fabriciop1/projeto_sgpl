@@ -24,14 +24,14 @@ public class InventarioTerras extends DatabaseObject implements Serializable {
     private double areaArrendadaFinal;
     private double areaPropriaFinal;
     private double valorTerraNuaPropria;
-    private Perfil perfil;
+    private int idPerfil;
     
     public InventarioTerras() {
         super("inventario_terras","idInventarioTerras");
     }
 
     public InventarioTerras(String especificacao, double areaArrendadaInicio, double areaPropriaInicio, double areaArrendadaFinal, 
-            double areaPropriaFinal, double valorTerraNuaPropria, Perfil perfil) {
+            double areaPropriaFinal, double valorTerraNuaPropria, int idPerfil) {
         super("inventario_terras","idInventarioTerras");
         
         this.especificacao = especificacao;
@@ -40,7 +40,7 @@ public class InventarioTerras extends DatabaseObject implements Serializable {
         this.areaArrendadaFinal = areaArrendadaFinal;
         this.areaPropriaFinal = areaPropriaFinal;
         this.valorTerraNuaPropria = valorTerraNuaPropria;
-        this.perfil = perfil;
+        this.idPerfil = idPerfil;
     }
 
     public String getEspecificacao() {
@@ -91,12 +91,12 @@ public class InventarioTerras extends DatabaseObject implements Serializable {
         this.valorTerraNuaPropria = valorTerraNuaPropria;
     }
 
-    public Perfil getPerfil() {
-        return perfil;
+    public int getIdPerfil() {
+        return idPerfil;
     }
 
-    public void setPerfil(Perfil perfil) {
-        this.perfil = perfil;
+    public void setIdPerfil(int idPerfil) {
+        this.idPerfil = idPerfil;
     } 
 
     @Override
@@ -110,7 +110,7 @@ public class InventarioTerras extends DatabaseObject implements Serializable {
         m.put("areaArrendadaFinal", areaArrendadaFinal);
         m.put("areaPropriaFinal", areaPropriaFinal);
         m.put("valorTerraNuaPropria", valorTerraNuaPropria);
-        m.put("idPerfilFK", perfil.getId());
+        m.put("idPerfilFK", idPerfil);
         
         return m;
     }
@@ -123,6 +123,6 @@ public class InventarioTerras extends DatabaseObject implements Serializable {
             areaArrendadaFinal = Cast.toDouble(data.get("areaArrendadaFinal"));
             areaPropriaFinal = Cast.toDouble(data.get("areaPropriaFinal"));
             valorTerraNuaPropria = Cast.toDouble(data.get("valorTerraNuaPropria"));
-            perfil = new GenericDAO<>(Perfil.class).retrieve( Cast.toInt(data.get("idPerfilFK")) );
+            idPerfil = Cast.toInt(data.get("idPerfilFK"));
     }
 }
