@@ -69,6 +69,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         listaPerfisGTRE = new GenericTableRowEditor(this, listaPerfis, false);
         listaPerfisGTRE.getEditTable().setDefaultEditor(Object.class, new CellEditor());
         listaPerfisGTRE.getSourceTableModel().setRowCount(0);
+        listaPerfisGTRE.setAllowEmptyCells(false);
         setRotasCombo();
          
         for(int i = 0; i < perfis.size(); i++){
@@ -249,7 +250,6 @@ public class VisualizarPerfil extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAcessarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcessarActionPerformed
-        // TODO add your handling code here:
         
         if(listaPerfis.getSelectedRow() != -1){
             Perfil atual = new Perfil();
@@ -268,13 +268,12 @@ public class VisualizarPerfil extends javax.swing.JFrame {
             new MenuPrincipal().setVisible(true);
             this.setVisible(false);
         } else {
-            JOptionPane.showMessageDialog(null, "Selecione um perfil na tabela!");
+            JOptionPane.showMessageDialog(this, "Selecione um perfil na tabela.", "Perfil Não Selecionado.", JOptionPane.INFORMATION_MESSAGE);
         }
         
     }//GEN-LAST:event_btnAcessarActionPerformed
 
     private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
-        // TODO add your handling code here:
         
         int escolha = JOptionPane.showOptionDialog(null, "Deseja realmente sair?", "Confirmar logout", JOptionPane.YES_NO_OPTION, 
                 JOptionPane.QUESTION_MESSAGE, null, new String[]{"Sim", "Não"}, "Não");
@@ -309,7 +308,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
                     listaPerfisGTRE.removeSourceTableRow(listaPerfis.getSelectedRow());
                     verificaTabelaVazia();
                } else if (!usuario.getLogin().equals(input) && input != null){
-                   JOptionPane.showMessageDialog(this, "Login incorreto.", "Login inválido", JOptionPane.INFORMATION_MESSAGE);
+                   JOptionPane.showMessageDialog(this, "Login Incorreto.", "Login inválido", JOptionPane.ERROR_MESSAGE);
                }
            }
         } else {
@@ -394,6 +393,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
                             Cast.toDouble(rowData[3]), Cast.toDouble(rowData[4]), Cast.toDouble(rowData[5]), Cast.toInt(rowData[6]),
                             Cast.toInt(rowData[7]), rota);
                     perfilDAO.insert(perfil);
+                    idPerfis.add(perfil.getId());
                     modifier.setCustomRowData(modifier.getSourceTable().getRowCount() - 1, perfil.getId());
                     break;
                 }

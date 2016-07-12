@@ -59,8 +59,6 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         tabelaDadosTecnicos.setDefaultRenderer(Object.class, new ColorRendererDadosTec(true));
         tabelaIndicadores.setDefaultRenderer(Object.class, new ColorRendererDadosTec(false));
         
-        //tabelaDadosTecnicos.setCellEditor(new CellEditor(new JTextField()));
-        
         dtmdao = new GenericDAO<>(DadosTecMensais.class);
         
         dtmindao = new GenericDAO<>(Indicador.class);

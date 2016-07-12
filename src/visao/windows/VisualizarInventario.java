@@ -9,7 +9,6 @@ import static flex.table.GenericTableRowEditor.*;
 import controle.ControlePerfil;
 import flex.db.GenericDAO;
 import flex.table.*;
-import java.awt.HeadlessException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -2293,6 +2292,11 @@ public class VisualizarInventario extends javax.swing.JFrame {
         tabelaAnimaisProdGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisProd, false);
         tabelaAnimaisServGTRE = new GenericTableRowEditor(this, tabelaInveAnimaisServ, false);
         
+        tabelaMaquinasGTRE.getEditTable().getColumnModel().getColumn(6).setCellRenderer(new DecimalFormatRenderer(false));
+        tabelaBenfeitoriasGTRE.getEditTable().getColumnModel().getColumn(6).setCellRenderer(new DecimalFormatRenderer(false));
+        tabelaForrageirasGTRE.getEditTable().getColumnModel().getColumn(5).setCellRenderer(new DecimalFormatRenderer(false));
+        tabelaForrageirasGTRE.getEditTable().getColumnModel().getColumn(2).setCellRenderer(new DecimalFormatRenderer(false));
+        
         tabelaTerrasGTRE.getEditTable().setDefaultEditor(Object.class, new CellEditor());
         tabelaForrageirasGTRE.getEditTable().setDefaultEditor(Object.class, new CellEditor());
         tabelaAnimaisProdGTRE.getEditTable().setDefaultEditor(Object.class, new CellEditor());
@@ -2559,15 +2563,28 @@ public class VisualizarInventario extends javax.swing.JFrame {
             tabelaAnimaisServGTRE.setEditorType(GTRE_UPDATE);
             tabelaAnimaisServGTRE.showEditor(evt);
         } else {
-            JOptionPane.showMessageDialog(rootPane, "Selecione uma linha da tabela para editar",
+            JOptionPane.showMessageDialog(this, "Selecione uma linha da tabela para editar",
                     "Editar - Nenhuma linha selecionada", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_editarInvAnimaisBTActionPerformed
 
     private void valorGastoAnimaisBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_valorGastoAnimaisBTActionPerformed
-        try {
-            Double temp = Double.parseDouble(JOptionPane.showInputDialog("Valor Gasto com Compra de Animais: "));
-
+            double temp; 
+     
+            String input = JOptionPane.showInputDialog(this, "Valor Gasto com Compra de Animais: ", "Inserir Valor", 
+                    JOptionPane.INFORMATION_MESSAGE);
+           
+            if(input == null) {
+                return;
+            }
+  
+            try {
+                temp = Double.parseDouble(input);
+            } catch(NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Insira um valor válido!", "Valor Inválido", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
             if (temp >= 0.0) {
                 total32.setText(String.format("R$ %.2f", temp));
                 total33.setText(String.format("R$ %.2f", (Double.parseDouble(total20.getText().substring(2).replace(',', '.'))
@@ -2579,11 +2596,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     irdao.update(resumo);
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
-            }
-        } catch (IllegalArgumentException | NullPointerException e) {
-            JOptionPane.showMessageDialog(null, "Insira um valor válido!");
-        }
+                JOptionPane.showMessageDialog(this, "Insira um valor válido!", "Valor Inválido", JOptionPane.ERROR_MESSAGE);
+            }      
     }//GEN-LAST:event_valorGastoAnimaisBTActionPerformed
 
     private void editarInvTerrasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarInvTerrasBTActionPerformed
@@ -2637,17 +2651,21 @@ public class VisualizarInventario extends javax.swing.JFrame {
         int escolha;
         
         if (tabelaInveTerras.getSelectedRowCount() > 0) {
-            escolha = JOptionPane.showConfirmDialog(null, "A linha será excluída em ambas as tabelas. "
+            escolha = JOptionPane.showOptionDialog(this, "A linha será excluída em ambas as tabelas. "
                     + "\nDeseja realmente excluir '" + tabelaInveTerras.getValueAt(tabelaInveTerras.getSelectedRow(), 0)
-                            .toString().toUpperCase() + "'? ", "Confirmar exclusão", JOptionPane.YES_NO_OPTION);
+                            .toString().toUpperCase() + "'? ", "Confirmar exclusão", JOptionPane.YES_NO_OPTION, 
+                            JOptionPane.QUESTION_MESSAGE, null, new String[] {"Sim", "Não"}, "Não");
+            
             if (escolha == 0) {
                 tabelaForrageirasGTRE.removeSourceTableRow(tabelaInveTerras.getSelectedRow());
                 tabelaTerrasGTRE.removeSourceTableRow(tabelaInveTerras.getSelectedRow());
             }
         } else if (tabelaInveForrageiras.getSelectedRowCount() > 0) {
-            escolha = JOptionPane.showConfirmDialog(null, "A linha será excluída em ambas as tabelas. "
+            escolha = JOptionPane.showOptionDialog(null, "A linha será excluída em ambas as tabelas. "
                     + "\nDeseja realmente excluir '" + tabelaInveForrageiras.getValueAt(tabelaInveForrageiras.getSelectedRow(), 0)
-                            .toString().toUpperCase() + "'? ", "Confirmar exclusão", JOptionPane.YES_NO_OPTION);
+                            .toString().toUpperCase() + "'? ", "Confirmar exclusão", JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE, null, new String[] {"Sim", "Não"}, "Não");
+            
             if (escolha == 0) {
                 tabelaTerrasGTRE.removeSourceTableRow(tabelaInveForrageiras.getSelectedRow());
                 tabelaForrageirasGTRE.removeSourceTableRow(tabelaInveForrageiras.getSelectedRow());
@@ -2696,9 +2714,11 @@ public class VisualizarInventario extends javax.swing.JFrame {
     private void removerInvBenfeitoriasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerInvBenfeitoriasBTActionPerformed
         int escolha;
         if (tabelaBenfeitorias.getSelectedRowCount() > 0) {
-            escolha = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir '" 
+            escolha = JOptionPane.showOptionDialog(null, "Deseja realmente excluir '" 
                     + tabelaBenfeitorias.getValueAt(tabelaBenfeitorias.getSelectedRow(), 0).toString().toUpperCase()
-                    + "'? ", "Confirmar exclusão", JOptionPane.YES_NO_OPTION);
+                    + "'? ", "Confirmar exclusão", JOptionPane.YES_NO_OPTION, 
+                    JOptionPane.QUESTION_MESSAGE, null, new String[] {"Sim", "Não"}, "Não");
+            
             if (escolha == 0) {
                 tabelaBenfeitoriasGTRE.removeSourceTableRow(tabelaBenfeitorias.getSelectedRow());
             }
@@ -2712,9 +2732,10 @@ public class VisualizarInventario extends javax.swing.JFrame {
     private void removerInvMaquinasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerInvMaquinasBTActionPerformed
         int escolha;
         if (tabelaMaquinas.getSelectedRowCount() > 0) {
-             escolha = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir '" 
+             escolha = JOptionPane.showOptionDialog(null, "Deseja realmente excluir '" 
                     + tabelaMaquinas.getValueAt(tabelaMaquinas.getSelectedRow(), 0).toString().toUpperCase()
-                    + "'? ", "Confirmar exclusão", JOptionPane.YES_NO_OPTION);
+                    + "'? ", "Confirmar exclusão", JOptionPane.YES_NO_OPTION, 
+                    JOptionPane.QUESTION_MESSAGE, null, new String[] {"Sim", "Não"}, "Não");
             if (escolha == 0) {
                 tabelaMaquinasGTRE.removeSourceTableRow(tabelaMaquinas.getSelectedRow());
             }
@@ -2729,16 +2750,20 @@ public class VisualizarInventario extends javax.swing.JFrame {
         int escolha;
         if (tabelaInveAnimaisProd.getSelectedRowCount() > 0) {
             
-            escolha = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir '" 
+            escolha = JOptionPane.showOptionDialog(null, "Deseja realmente excluir '" 
                     + tabelaInveAnimaisProd.getValueAt(tabelaInveAnimaisProd.getSelectedRow(), 0).toString().toUpperCase()
-                    + "'? ", "Confirmar exclusão", JOptionPane.YES_NO_OPTION);
+                    + "'? ", "Confirmar exclusão", JOptionPane.YES_NO_OPTION, 
+                    JOptionPane.QUESTION_MESSAGE, null, new String[] {"Sim", "Não"}, "Não");
+            
             if (escolha == 0) {
                 tabelaAnimaisProdGTRE.removeSourceTableRow(tabelaInveAnimaisProd.getSelectedRow());
             }
         } else if (tabelaInveAnimaisServ.getSelectedRowCount() > 0) {
-            escolha = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir '"
+            escolha = JOptionPane.showOptionDialog(null, "Deseja realmente excluir '"
                     + tabelaInveAnimaisServ.getValueAt(tabelaInveAnimaisServ.getSelectedRow(), 0).toString().toUpperCase()
-                    + "'? ", "Confirmar exclusão", JOptionPane.YES_NO_OPTION);
+                    + "'? ", "Confirmar exclusão", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+                    null, new String[] {"Sim", "Não"}, "Não");
+            
             if (escolha == 0) {
                 tabelaAnimaisServGTRE.removeSourceTableRow(tabelaInveAnimaisServ.getSelectedRow());
             }
@@ -2753,72 +2778,94 @@ public class VisualizarInventario extends javax.swing.JFrame {
     }//GEN-LAST:event_removerInvAnimaisBTActionPerformed
 
     private void atividadeLeiteBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atividadeLeiteBTActionPerformed
+        double temp;
+        
+        String input = JOptionPane.showInputDialog(this, "Inserir atividade leiteira (%): ", "Valor Inválido", JOptionPane.INFORMATION_MESSAGE);
+        
+        if (input == null) {
+            return;
+        }
         try {
-            Double temp = Double.parseDouble(JOptionPane.showInputDialog("Inserir atividade leiteira (%): "));
+            temp = Double.parseDouble(input);
+        } catch(NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Insira um valor válido.", "Valor Inválido", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        if (temp >= 0.0) {
 
-            if (temp >= 0.0) {
-
-                if (resumo != null) {
-                    resumo.setAtividadeLeiteira(temp);
-                    irdao.update(resumo);
-                }
-
-                atividadeLeite.setText("" + temp);
-                total50.setText(String.format("R$ %.2f", Double.parseDouble(total49.getText().substring(2).replace(',', '.'))
-                        * (temp / 100)));
-
-            } else {
-                JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
+            if (resumo != null) {
+                resumo.setAtividadeLeiteira(temp);
+                irdao.update(resumo);
             }
-        } catch (HeadlessException | NumberFormatException | NullPointerException e) {
-            JOptionPane.showMessageDialog(null, "Insira um valor válido!");
+
+            atividadeLeite.setText("" + temp);
+            total50.setText(String.format("R$ %.2f", Double.parseDouble(total49.getText().substring(2).replace(',', '.'))
+                    * (temp / 100)));
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Insira um valor válido.", "Valor Inválido", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_atividadeLeiteBTActionPerformed
 
     private void custoOportBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_custoOportBTActionPerformed
+        double temp;
+        
+        String input = JOptionPane.showInputDialog(this, "Inserir custo de oportunidade (%): ", "Inserir Valor", JOptionPane.INFORMATION_MESSAGE);
+        
+        if (input == null) {
+            return;
+        }
+        
         try {
-            Double temp = Double.parseDouble(JOptionPane.showInputDialog("Inserir custo de oportunidade (%): "));
+            temp = Double.parseDouble(input);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Insira um valor válido.", "Valor Inválido", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (temp >= 0.0) {
 
-            if (temp >= 0.0) {
-
-                if (resumo != null) {
-                    resumo.setCustoOportunidade(temp);
-                    irdao.update(resumo);
-                }
-
-                custoOportunidade.setText("" + temp);
-                total57.setText(String.format("R$ %.2f", Double.parseDouble(total56.getText().substring(2).replace(',', '.'))
-                        * (temp / 100)));
-            } else {
-                JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
+            if (resumo != null) {
+                resumo.setCustoOportunidade(temp);
+                irdao.update(resumo);
             }
-        } catch (HeadlessException | NumberFormatException | NullPointerException e) {
-            JOptionPane.showMessageDialog(null, "Insira um valor válido!");
+
+            custoOportunidade.setText("" + temp);
+            total57.setText(String.format("R$ %.2f", Double.parseDouble(total56.getText().substring(2).replace(',', '.'))
+                    * (temp / 100)));
+        } else {
+            JOptionPane.showMessageDialog(this, "Insira um valor válido.", "Valor Inválido", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_custoOportBTActionPerformed
 
     private void salarioMinimoBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salarioMinimoBTActionPerformed
+        double temp;
+        String input = JOptionPane.showInputDialog(this, "Inserir salário mínimo: ", "Inserir Valor", JOptionPane.INFORMATION_MESSAGE);
+                
+        if(input == null) {
+            return;
+        } 
         try {
-            Double temp = Double.parseDouble(JOptionPane.showInputDialog("Inserir salário mínimo: ").replace(",", "."));
+            temp = Double.parseDouble(input.replace(",", "."));
+        } catch(NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Insira um valor válido.", "Valor Inválido", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (temp >= 0.0) {
+            salarioMinimo.setText(String.format("%.2f", temp));
+            total58.setText(String.format("%.2f", temp));
+            total59.setText(String.format("%.2f", Calc.multiplicar(Double.parseDouble(salarioMinimo.getText()
+                    .replace(',', '.')), 0.3)));
 
-            if (temp >= 0.0) {
-                salarioMinimo.setText(String.format("%.2f", temp));
-                total58.setText(String.format("%.2f", temp));
-                total59.setText(String.format("%.2f", Calc.multiplicar(Double.parseDouble(salarioMinimo.getText()
-                        .replace(',', '.')), 0.3)));
-
-                if (resumo != null) {
-                    resumo.setSalarioMinimo(temp);
-                    irdao.update(resumo);
-                }
-
-                total60.setText(String.format("R$ %.2f", (temp * 13 + temp * 0.3) / 12));
-
-            } else {
-                JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
+            if (resumo != null) {
+                resumo.setSalarioMinimo(temp);
+                irdao.update(resumo);
             }
-        } catch (HeadlessException | NumberFormatException | NullPointerException e) {
-            JOptionPane.showMessageDialog(null, "Insira um valor válido!");
+
+            total60.setText(String.format("R$ %.2f", (temp * 13 + temp * 0.3) / 12));
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Insira um valor válido.", "Valor Inválido", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_salarioMinimoBTActionPerformed
 
@@ -2829,45 +2876,62 @@ public class VisualizarInventario extends javax.swing.JFrame {
     }//GEN-LAST:event_adicionarInvBenfeitoriasBTActionPerformed
 
     private void vidaUtilReprodBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vidaUtilReprodBTActionPerformed
+        int temp;
+        String input = JOptionPane.showInputDialog(this, "Vida útil dos reprodutores: ", "Inserir Valor", JOptionPane.INFORMATION_MESSAGE);
+        
+        if (input == null) {
+            return;
+        } 
+        
         try {
-            Integer temp = Integer.parseInt(JOptionPane.showInputDialog("Vida útil dos reprodutores: "));
+            temp = Integer.parseInt(input);
+        } catch(NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Insira um valor válido.", "Valor Inválido.", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (temp >= 0) {
+            total35.setText("" + temp);
+            total36.setText(String.format("%.2f", Calc.dividir(Double.parseDouble(total34.getText().substring(2).replace(',', '.')),
+                    Double.parseDouble(total35.getText().replace(',', '.')))));
 
-            if (temp >= 0) {
-                total35.setText("" + temp);
-                total36.setText(String.format("%.2f", Calc.dividir(Double.parseDouble(total34.getText().substring(2).replace(',', '.')),
-                        Double.parseDouble(total35.getText().replace(',', '.')))));
-
-                if (resumo != null) {
-                    resumo.setVidaUtilReprodutores(temp);
-                    irdao.update(resumo);
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
+            if (resumo != null) {
+                resumo.setVidaUtilReprodutores(temp);
+                irdao.update(resumo);
             }
-        } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(null, "Insira um valor válido!");
+        } else {
+            JOptionPane.showMessageDialog(this, "Insira um valor válido.", "Valor Inválido", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_vidaUtilReprodBTActionPerformed
 
     private void vidaUtilServBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vidaUtilServBTActionPerformed
+        int temp;
+        
+        String input = JOptionPane.showInputDialog(this, "Capital Investido em Animais de Serviço: ", 
+                "Inserir Valor", JOptionPane.INFORMATION_MESSAGE);
+        
+        if (input == null) {
+            return;
+        }
+        
         try {
-            Integer temp = Integer.parseInt(JOptionPane.showInputDialog("Capital Investido em Animais de Serviço: "));
+            temp = Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Insira um valor válido!", "Valor Inválido", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        if (temp >= 0) {
+            total38.setText("" + temp);
+            total39.setText(String.format("%.2f", Calc.dividir(Double.parseDouble(total37.getText().substring(2).replace(',', '.')),
+                    Double.parseDouble(total38.getText().replace(',', '.')))));
 
-            if (temp >= 0) {
-                total38.setText("" + temp);
-                total39.setText(String.format("%.2f", Calc.dividir(Double.parseDouble(total37.getText().substring(2).replace(',', '.')),
-                        Double.parseDouble(total38.getText().replace(',', '.')))));
-
-                if (resumo != null) {
-                    resumo.setVidaUtilAnimaisServico(temp);
-                    irdao.update(resumo);
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "Insira um valor maior que zero!");
+            if (resumo != null) {
+                resumo.setVidaUtilAnimaisServico(temp);
+                irdao.update(resumo);
             }
-        } catch (IllegalArgumentException | NullPointerException e) {
-            JOptionPane.showMessageDialog(null, "Insira um valor válido!");
-        } 
+        } else {
+            JOptionPane.showMessageDialog(this, "Insira um valor válido!", "Valor Inválido", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_vidaUtilServBTActionPerformed
 
     

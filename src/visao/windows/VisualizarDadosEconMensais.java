@@ -11,6 +11,7 @@ import flex.db.GenericDAO;
 import flex.table.GenericTableAreaEditor;
 import flex.table.TableModifiedEvent;
 import java.awt.event.ItemEvent;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -784,6 +785,8 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
             
             configGTAE(selecionado);
             
+            
+            
             gtae.showEditor(evt);          
         }
     }//GEN-LAST:event_editarValoresBTActionPerformed
@@ -834,10 +837,8 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
 
     private void anoComboItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_anoComboItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
-           //long timeIni= System.currentTimeMillis();
            dems = demdao.retrieveByColumns(new String[]{"idPerfilFK", "ano"}, new Object[]{atual.getId(), 
-                                    Integer.parseInt(anoCombo.getSelectedItem().toString())});
-           //System.out.println((System.currentTimeMillis() - timeIni));           
+                                    Integer.parseInt(anoCombo.getSelectedItem().toString())});    
            PreencherTabelaDEM(dems);
         }    
     }//GEN-LAST:event_anoComboItemStateChanged
@@ -987,16 +988,27 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
             
     private void configGTAE(int selected) {
         
-        gtae.setColumnInterval((selected-1) * 3, ((selected-1) * 3) + 2);
+        List<String> especificacoesStr = new ArrayList<>();
         
-        gtae.getEditTable().setDefaultRenderer(Object.class, new ColorRendererDadosEcon(true));
+        for(int i = 0; i < tabelaEspecificacao.getRowCount(); i++) {
+            especificacoesStr.add(tabelaEspecificacao.getValueAt(i, 0).toString());
+        }
+        
+        //gtae.addStringColumn(tabelaEspecificacao.getColumnModel().getColumn(0).getWidth(), "Especificação",
+        //        especificacoesStr, tabelaEspecificacao.getDefaultRenderer(Object.class));
+        
+        gtae.getEditTable().setDefaultRenderer(Object.class, tabelaDadosEconomicos.getDefaultRenderer(Object.class));
         gtae.getEditTable().setDefaultEditor(Object.class, new CellEditor());
+        
+        gtae.setColumnInterval((selected-1) * 3, ((selected-1) * 3) + 2);
         
         gtae.setName("GTAE DadosEconMensais");
         gtae.setRowsDisplayed(10);
         gtae.setAllowEmptyRows(true);
-        gtae.setColumnEditable(0, true);
+        gtae.setColumnEditable(0, false);
         gtae.setColumnEditable(1, true);
+        gtae.setColumnEditable(2, true);
+        gtae.setColumnEditable(3, false);
         
         gtae.setSourceRowEditable(0, false);
         gtae.setSourceRowEditable(7, false);

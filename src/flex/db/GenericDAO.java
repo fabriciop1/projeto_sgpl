@@ -375,16 +375,6 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
         }
     }
 
-    public static void main(String[] args) {
-        
-        GenericDAO<Rota> dao = new GenericDAO<>(Rota.class);
-        
-        List<Rota> asRotaTudo = dao.retrieveByColumn("rota", "Lajedo");
-        
-        for(Rota r : asRotaTudo){
-            System.out.println(r.getRota());
-        }
-    }
 }
 
 
