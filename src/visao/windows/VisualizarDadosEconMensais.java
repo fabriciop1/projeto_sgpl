@@ -199,7 +199,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
 
         btnVoltar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        anoCombo = new javax.swing.JComboBox<>();
+        anoCombo = new javax.swing.JComboBox<String>();
         adicionarAnoBT = new javax.swing.JButton();
         jScrollPane6 = new javax.swing.JScrollPane();
         jPanel3 = new javax.swing.JPanel();
@@ -683,7 +683,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         jScrollPane6.setViewportView(jPanel3);
 
         textoEntrada.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        textoEntrada.setForeground(new java.awt.Color(51, 153, 255));
+        textoEntrada.setForeground(new java.awt.Color(0, 38, 255));
         textoEntrada.setText("DADOS ECONÔMICOS MENSAIS");
 
         avancarBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/right_arrow.png"))); // NOI18N

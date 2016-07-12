@@ -58,7 +58,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         textoEntrada.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        textoEntrada.setForeground(new java.awt.Color(51, 153, 255));
+        textoEntrada.setForeground(new java.awt.Color(0, 38, 255));
         textoEntrada.setText("Grupo de Estudo em Gestão Rural Pecuária Leiteira");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N

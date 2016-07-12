@@ -48,6 +48,9 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="18" style="0"/>
         </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ff" green="26" red="0" type="rgb"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Bem vindo ao SGPL"/>
       </Properties>
       <Constraints>

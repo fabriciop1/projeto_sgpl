@@ -147,7 +147,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         btnVoltar = new javax.swing.JButton();
         textoEntrada = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        anoCombo = new javax.swing.JComboBox<>();
+        anoCombo = new javax.swing.JComboBox<String>();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -173,7 +173,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         });
 
         textoEntrada.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        textoEntrada.setForeground(new java.awt.Color(51, 153, 255));
+        textoEntrada.setForeground(new java.awt.Color(0, 38, 255));
         textoEntrada.setText("DADOS TÉCNICOS MENSAIS");
 
         jLabel1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N

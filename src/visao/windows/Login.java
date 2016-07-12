@@ -70,6 +70,7 @@ public class Login extends javax.swing.JFrame {
         getContentPane().add(btnEntrar, gridBagConstraints);
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 38, 255));
         jLabel3.setText("Bem vindo ao SGPL");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;

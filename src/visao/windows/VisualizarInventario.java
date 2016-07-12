@@ -1981,7 +1981,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         });
 
         textoEntrada.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        textoEntrada.setForeground(new java.awt.Color(51, 153, 255));
+        textoEntrada.setForeground(new java.awt.Color(0, 38, 255));
         textoEntrada.setText("INVENTÁRIO");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
