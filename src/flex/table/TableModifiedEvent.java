@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import javax.swing.JTable;
 
 /**
- *
+ * @version 1.7.13
  * @author Jefferson Sales
  */
 public class TableModifiedEvent {
@@ -27,9 +27,10 @@ public class TableModifiedEvent {
     private GenericTableModifier sourceModifier;
     private JTable sourceTable;
     
-    private Object[][] tableData;
-    private boolean[][] tableDataModified;
+    private Object[][] tableAreaData;
+    private boolean[][] tableCellModified;
     private ArrayList<Integer> rowsModified;
+    private ArrayList<Integer> columnsModified;
     private Object customRowData;
     private int eventType;
     
@@ -37,7 +38,7 @@ public class TableModifiedEvent {
         
         this.sourceModifier = sourceModifier;
         this.sourceTable = sourceTable;
-        this.tableData = new Object[1][0];
+        this.tableAreaData = new Object[1][0];
     }
 
     public TableModifiedEvent(GenericTableModifier sourceModifier, JTable sourceTable, ArrayList<Integer> rowsModified, Object[] rowData, Object customRowData, int eventType) {
@@ -48,46 +49,79 @@ public class TableModifiedEvent {
         this.rowsModified = rowsModified;
         
         if(rowData != null){
-            this.tableData = new Object[1][0];
-            this.tableData[0] = rowData;
+            this.tableAreaData = new Object[1][0];
+            this.tableAreaData[0] = rowData;
         }       
     }
 
-    public TableModifiedEvent(GenericTableModifier sourceModifier, JTable sourceTable, ArrayList<Integer> rowsModified, Object[][] tableAreaData, Object customRowData, int eventType) {
+    public TableModifiedEvent(GenericTableModifier sourceModifier, JTable sourceTable, ArrayList<Integer> rowsModified, ArrayList<Integer> columnsModified, 
+            Object[][] tableAreaData, boolean[][] tableCellModified,  int eventType) {
         this(sourceModifier,sourceTable);
         
         this.customRowData = customRowData;
         this.eventType = eventType;
         this.rowsModified = rowsModified;
+        this.columnsModified = columnsModified;
+        this.tableCellModified = tableCellModified;
         
         if (tableAreaData != null && tableAreaData.length > 0) {
-            this.tableData = tableAreaData;
+            this.tableAreaData = tableAreaData;
         } else {
-            this.tableData = new Object[1][0];
+            this.tableAreaData = new Object[1][0];
         }
         
     }
 
-    public int getEventType() {
-        return eventType;
+    public GenericTableModifier getSourceModifier() {
+        return sourceModifier;
     }
 
-    public void setEventType(int eventType) {
-        this.eventType = eventType;
+    public void setSourceModifier(GenericTableModifier sourceModifier) {
+        this.sourceModifier = sourceModifier;
     }
 
-
-    public Object[] getTableRowData() {
-        return tableData[0];
+    public JTable getSourceTable() {
+        return sourceTable;
     }
 
-    public void setTableRowData(Object[] rowData) {
-        
-        if(tableData == null){
-            this.tableData = new Object[1][0];
-        }
-        
-        this.tableData[0] = rowData;
+    public void setSourceTable(JTable sourceTable) {
+        this.sourceTable = sourceTable;
+    }
+
+    public Object[][] getTableAreaData() {
+        return tableAreaData;
+    }
+
+    public Object[] getTableRowData(){
+        return tableAreaData[0];
+    }
+    
+    public void setTableAreaData(Object[][] tableAreaData) {
+        this.tableAreaData = tableAreaData;
+    }
+
+    public boolean[][] getTableCellModified() {
+        return tableCellModified;
+    }
+
+    public void setTableCellModified(boolean[][] tableCellModified) {
+        this.tableCellModified = tableCellModified;
+    }
+
+    public ArrayList<Integer> getRowsModified() {
+        return rowsModified;
+    }
+
+    public void setRowsModified(ArrayList<Integer> rowsModified) {
+        this.rowsModified = rowsModified;
+    }
+
+    public ArrayList<Integer> getColumnsModified() {
+        return columnsModified;
+    }
+
+    public void setColumnsModified(ArrayList<Integer> columnsModified) {
+        this.columnsModified = columnsModified;
     }
 
     public Object getCustomRowData() {
@@ -98,54 +132,14 @@ public class TableModifiedEvent {
         this.customRowData = customRowData;
     }
 
-    public GenericTableModifier getSourceModifier() {
-        return sourceModifier;
+    public int getEventType() {
+        return eventType;
     }
 
-    public JTable getSourceTable() {
-        return sourceTable;
+    public void setEventType(int eventType) {
+        this.eventType = eventType;
     }
 
-    public void setTableAreaData(Object[][] tableData) {
-        
-        if(tableData != null){
-            this.tableData = tableData;
-        }
-    }
-
-    public Object[][] getTableData() {
-        return tableData;
-    }
-
-    public void setTableData(Object[][] tableData) {
-        this.tableData = tableData;
-    }
-
-    public boolean isTableDataModified(int row, int column) {
-        
-        if(row < 0 || row > tableDataModified.length-1)
-            throw new ArrayIndexOutOfBoundsException("O indice da linha passado é inválido: " + row);
-        
-        if(column < 0 || column > tableDataModified[0].length-1)
-            throw new ArrayIndexOutOfBoundsException("O indice da coluna passado é inválido: " + column);
-        
-        return tableDataModified[row][column];
-    }
-
-    public void setTableDataModified(boolean[][] tableDataModified) {
-        this.tableDataModified = tableDataModified;
-    }
     
-    public ArrayList<Integer> getRowsModified() {
-        return rowsModified;
-    }
-
-    public void setRowsModified(ArrayList<Integer> rowsModified) {
-        this.rowsModified = rowsModified;
-    }
-
-    public boolean[][] getTableDataModified() {
-        return tableDataModified;
-    }
 
 }

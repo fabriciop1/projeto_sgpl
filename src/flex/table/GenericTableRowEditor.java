@@ -13,7 +13,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
+ * @version 1.7.13
  * @author Jefferson Sales
  */
 public class GenericTableRowEditor extends GenericTableModifier {
@@ -36,7 +36,7 @@ public class GenericTableRowEditor extends GenericTableModifier {
     }
     
     @Override
-    protected void refillEditTable(){
+    public void refillEditTable(){
         
         if (editorType == GTRE_UPDATE) {
             addEditTableRow( getSourceTableSelectedRowData() );

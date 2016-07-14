@@ -5,12 +5,6 @@
  */
 package controle;
 
-import flex.db.GenericDAO;
-import java.util.ArrayList;
-import modelo.dao.DAO;
-import modelo.negocio.DadosEconMensais;
-import modelo.negocio.DadosTecMensais;
-
 /**
  *
  * @author Alexandre

@@ -628,7 +628,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
             Object[][] areaData = evt.getTableData();
             List<Integer> linhas = evt.getRowsModified();
             boolean[][] dataModified = evt.getTableDataModified();
-           
+         
             int ano = Integer.parseInt(anoCombo.getSelectedItem().toString());
             
             for (Integer l : linhas) {
@@ -650,6 +650,11 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
 
                         } else {
                             DadosTecMensais dtm = dadosTec.get(0);
+                            
+                            if (Cast.toString(areaData[l][c]).isEmpty()) {
+                                dtmdao.remove(dtm.getId());
+                                continue;
+                            }
 
                             dtm.setDado(dado);
 

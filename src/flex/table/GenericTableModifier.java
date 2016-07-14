@@ -9,6 +9,7 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,12 +22,11 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import util.Cast;
-import util.Pair;
 import util.Regex;
 
 
 /**
- *
+ * @version 1.7.13
  * @author Jefferson Sales
  */
 public abstract class GenericTableModifier extends JDialog{
@@ -48,7 +48,9 @@ public abstract class GenericTableModifier extends JDialog{
     private boolean allowEmptyCells;
     
     private boolean forceCellEditing;
-    private boolean editorColumnEditable[];
+    
+    private boolean columnEditable[];
+    private List<boolean[]> cellEditable; 
 
     private boolean rebuildEditTable;
     
@@ -91,13 +93,18 @@ public abstract class GenericTableModifier extends JDialog{
         this.tableModifylisteners = new ArrayList<>();
         this.customRowDataList = new ArrayList<>();
         this.columnRegexMap = new HashMap<>();
+        
         this.allowEmptyCells = true;
         this.allowEmptyRows = false;
+        
         this.rowsDisplayed = 1;
         this.stringColumnsOffset = 0;
-        this.editorColumnEditable = new boolean[sourceTable.getColumnCount()];
-        this.rebuildEditTable = true;
         this.stringColumnsData = new ArrayList<>();
+        
+        this.columnEditable = new boolean[0];
+        this.cellEditable = new ArrayList<>();
+        
+        this.rebuildEditTable = true;
         
         initComponents();
         
@@ -137,8 +144,8 @@ public abstract class GenericTableModifier extends JDialog{
         log += "Force Cell Editing: " + forceCellEditing + "\n\n";
         
         log += "EditTable Columns Editable: ";
-        for (int i = 0; i < editorColumnEditable.length; i++) {
-            log += "[" + i + "-" + editorColumnEditable[i] + "] "; 
+        for (int i = 0; i < columnEditable.length; i++) {
+            log += "[" + i + "-" + columnEditable[i] + "] "; 
         }
         log += "\n\n";
         
@@ -217,7 +224,6 @@ public abstract class GenericTableModifier extends JDialog{
         return sourceDataMatrix;
     }
     
-    
     protected void composeEditTable(){
         
         editTable.setModel( createEditTableModel( getSourceTableDataMatrix(), getSourceTableColumnNames(), getSourceTableColumnTypes() ) );
@@ -234,6 +240,60 @@ public abstract class GenericTableModifier extends JDialog{
     
     protected abstract DefaultTableModel createEditTableModel(Object[][] dataMatrix, String[] columnNames, Class[] columnTypes);
     
+    protected void resizeCellEditableMatrix(int startRow, int endRow){
+        
+        final int realRowCount = (endRow - startRow) + 1;
+        
+        if(realRowCount!= cellEditable.size()){
+            
+            List<boolean[]> newCellEditable = new ArrayList<>(realRowCount);
+            
+            for(int i=0; i<cellEditable.size() && i<realRowCount; i++){
+                
+                newCellEditable.add(getCellEditableMatrix().get(i));
+            }
+            
+            if (realRowCount > cellEditable.size()) {
+                
+                for (int i = cellEditable.size(); i < realRowCount; i++) {
+                    
+                    newCellEditable.add(columnEditable);
+                }
+            }
+            
+            setCellEditableMatrix(newCellEditable);
+        }
+    }
+    
+    protected void resizeColumnEditableArray(){
+        
+        System.out.println("resizeColumnEditableArray()");
+        
+        final int realColumnCount = editTable.getColumnCount() - getStringColumnsOffset();
+        
+        System.out.println("RealColumnCount: " + realColumnCount + " - Column EditableArray Length: " + columnEditable.length);
+        
+        if(realColumnCount != columnEditable.length){
+            
+            boolean[] newColumnEditable = new boolean[realColumnCount];
+            
+            for(int i=0; i<columnEditable.length && i<realColumnCount; i++){
+                
+                newColumnEditable[i] = columnEditable[i];
+                System.out.print("COL: " + i + " [" + columnEditable[i] + "]");
+            }   
+            
+            if(realColumnCount > columnEditable.length){
+                
+                for(int i=columnEditable.length; i<realColumnCount; i++){
+                    
+                    newColumnEditable[i] = true;
+                }
+            }
+            setColumnEditableArray(newColumnEditable);
+        }
+        
+    }
     
     protected void notifyListeners(TableModifiedEvent event){
         
@@ -474,7 +534,7 @@ public abstract class GenericTableModifier extends JDialog{
         if(row < 0 || row > editTable.getRowCount()-1){
             throw new IllegalArgumentException("editTable - Linha inválida: " + row);
         }
-        else if(column < 0 || column > editTable.getColumnCount()-1){
+        else if(column < 0 || column > editTable.getColumnCount() - 1){
             throw new IllegalArgumentException("editTable - Coluna Inválida: " + column);
         }
         
@@ -508,9 +568,9 @@ public abstract class GenericTableModifier extends JDialog{
     
     protected Object[] getEditTableRowStringData(int row){
         
-        Object[] data = new Object[editTable.getColumnCount()];
+        Object[] data = new Object[editTable.getColumnCount() - getStringColumnsOffset()];
         
-        for (int i = 0; i < data.length; i++) {
+        for (int i = getStringColumnsOffset(); i < data.length; i++) {
             data[i] = editTable.getValueAt(row, i);
         }
         
@@ -529,7 +589,15 @@ public abstract class GenericTableModifier extends JDialog{
         return (DefaultTableModel) editTable.getModel();
     }
     
-
+    
+    public void processEditor(){
+        
+        composeEditTable();
+        refillEditTable();
+        
+        setRebuildEditTable(false);
+    }
+    
     protected void processEditTable(){
         
         clearEditTable();
@@ -616,7 +684,7 @@ public abstract class GenericTableModifier extends JDialog{
         
         Object cellValue = getEditTableValue(editRow, editColumn);
         
-        if(editorColumnEditable[editColumn] == true && !validateValue(cellValue, sourceColumn)){
+        if(cellEditable.get(editRow)[editColumn] == true && !validateValue(cellValue, sourceColumn)){
             
             return false;
         }
@@ -738,11 +806,9 @@ public abstract class GenericTableModifier extends JDialog{
             
             editTable.getColumnModel().getColumn(i).setHeaderValue( data.columnTitle );
             
-            for(int j=0; j<editTable.getRowCount(); j++){
+            for(int j=0; j<editTable.getRowCount() && j<data.columnData.size(); j++){
                 
                 setEditTableValue(data.columnData.get(j), j, i);
-                
-                System.out.println(data.columnData.get(j));
             }
         }        
     }
@@ -933,22 +999,76 @@ public abstract class GenericTableModifier extends JDialog{
     }
 
     public void setForceCellEditing(boolean forceCellEditing) {
-        this.forceCellEditing = forceCellEditing;
+        this.forceCellEditing = forceCellEditing; 
     }
     
-    public void setColumnEditable(int columnIndex, boolean editable){
-        editorColumnEditable[columnIndex] = editable;
+    public void setColumnEditable(int columnIndex, boolean isEditable){
+        
+        if(columnIndex < 0 || columnIndex > editTable.getColumnCount() - getStringColumnsOffset() - 1){
+            throw new IllegalArgumentException("O índice da coluna passado é inválido. Coluna: " + columnIndex);
+        }
+        
+        columnEditable[columnIndex] = isEditable;
+        
+        if(editTable.getRowCount() > 0){
+            
+            for (boolean[] columns : cellEditable) {
+                columns[columnIndex] = isEditable;
+            }
+        }
     }
     
     public boolean isColumnEditable(int columnIndex){
-        return editorColumnEditable[columnIndex];
+        
+        if(columnIndex < 0 || columnIndex > editTable.getColumnCount() - getStringColumnsOffset() - 1){
+            throw new IllegalArgumentException("O índice da coluna passado é inválido. Coluna: " + columnIndex);
+        }
+        
+        return columnEditable[columnIndex];
     }
     
-    public void setAllColumnsEditable(boolean editable){
+    public void setAllColumnsEditable(boolean isEditable){
         
-        for(int i=0; i<this.editorColumnEditable.length; i++){
-            this.editorColumnEditable[i] = editable;
+        for(int i=0; i<this.columnEditable.length; i++){
+            this.columnEditable[i] = isEditable;
         }
+    }
+    
+    public void setCellEditable(boolean isEditable, int rowIndex, int columnIndex){
+        
+        if(rowIndex < 0 || rowIndex > editTable.getRowCount() - 1){
+            throw new IllegalArgumentException("O índice da linha passado é inválido. Linha: " + rowIndex);
+        }
+        else if(columnIndex < 0 || columnIndex > editTable.getColumnCount() - getStringColumnsOffset() - 1){
+            throw new IllegalArgumentException("O índice da coluna passado é inválido. Coluna: " + columnIndex);
+        }
+        
+        cellEditable.get(rowIndex)[columnIndex] = isEditable;
+    }
+    
+    public boolean isCellEditable(int rowIndex, int columnIndex){
+        
+       if(rowIndex < 0 || rowIndex > editTable.getRowCount() - 1){
+            throw new IllegalArgumentException("O índice da linha passado é inválido. Linha: " + rowIndex);
+        }
+        else if(columnIndex < 0 || columnIndex > editTable.getColumnCount() - 1){
+            throw new IllegalArgumentException("O índice da coluna passado é inválido. Coluna: " + columnIndex);
+        }
+       
+        if(columnIndex < getStringColumnsOffset()){
+            return false;
+        } 
+        else{
+            return cellEditable.get(rowIndex)[columnIndex - getStringColumnsOffset()];
+        }
+    }
+    
+    public List<boolean[]> getCellEditableMatrix(){
+        return cellEditable;
+    }
+    
+    protected void setCellEditableMatrix(List<boolean[]> cellEditable){
+        this.cellEditable = cellEditable;
     }
     
     public boolean isAllowedEmptyRows() {
@@ -987,7 +1107,7 @@ public abstract class GenericTableModifier extends JDialog{
     protected void setRebuildEditTable(boolean rebuildEditTable) {
         this.rebuildEditTable = rebuildEditTable;
     }
-
+    
     public JScrollPane getEditTableScroll() {
         return editTableScroll;
     }
@@ -1016,5 +1136,39 @@ public abstract class GenericTableModifier extends JDialog{
         }
         
         editTable.setDefaultEditor(Object.class, editor);
+    }
+
+    public boolean[] getColumnEditableArray(){
+        return columnEditable;
+    }
+    
+    protected void setColumnEditableArray(boolean[] columnEditable){
+        this.columnEditable = columnEditable;
+    }
+    
+    public void setRowEditable(int rowIndex, boolean isEditable){
+        
+        if(rowIndex < 0 || rowIndex > cellEditable.size()-1){
+            throw new IllegalArgumentException("O índice da linha passado é inválido. Linha: " + rowIndex);
+        }
+        
+        for(int i=0; i< cellEditable.get(rowIndex).length; i++){
+            
+            cellEditable.get(rowIndex)[i] = isEditable;
+        }
+    } 
+    
+    public void setAllRowsEditable(boolean isEditable){
+        
+        
+        
+        for (int i = 0; i < cellEditable.size(); i++) {
+            
+            for(int j=getStringColumnsOffset(); j<cellEditable.get(0).length; j++){
+                
+                
+            }
+        }
+        
     }
 }

@@ -22,7 +22,7 @@ import modelo.negocio.Rota;
 import util.Cast;
 
 /**
- *
+ * @version 1.7.13
  * @author Jefferson Sales
  * @param <T> 
  */
@@ -165,9 +165,7 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
 //    
     protected static int counter = 0;
     
-    private List<T> executeSQL(String sql){
-        
-        System.out.println(">>> executeSQL(String) was called " + (++counter) + "x. DAO Class: " + objectClass.getName());
+    public List<T> executeSQL(String sql){
         
         try {
             Connection connection = openConnection();
@@ -375,6 +373,16 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
         }
     }
 
+    public static void main(String[] args) {
+        
+        GenericDAO<Rota> dao = new GenericDAO<>(Rota.class);
+        
+        List<Rota> asRotaTudo = dao.retrieveByColumn("rota", "Lajedo");
+        
+        for(Rota r : asRotaTudo){
+            System.out.println(r.getRota());
+        }
+    }
 }
 
 

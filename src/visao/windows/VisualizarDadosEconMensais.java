@@ -76,7 +76,10 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
           
         fillComboBox();
         
-        definirBDListeners();            
+        initGTAE();
+        
+        definirBDListeners();
+        
         System.out.println(System.currentTimeMillis() - tempoIni);
     }
     
@@ -187,7 +190,6 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         }
     }
    
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -919,8 +921,12 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         
         gtae.addTableModifyListener((TableModifiedEvent evt) -> {
        
-            Object[][] areaData = evt.getTableData();
+            Object[][] areaData = evt.getTableAreaData();
             List<Integer> linhas = evt.getRowsModified();
+            
+            if(areaData == null){
+                System.out.println("areaData is NULL in GTAE \"" + gtae.getName() + "\"");
+            }
             
             for (Integer l : linhas) {
 
@@ -986,51 +992,94 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         this.salarioMensal = salarioMes;
     }
             
-    private void configGTAE(int selected) {
+    private void initGTAE(){
         
-        List<String> especificacoesStr = new ArrayList<>();
+        List<String> especColumnRows = new ArrayList<>(tabelaEspecificacao.getRowCount());
         
-        for(int i = 0; i < tabelaEspecificacao.getRowCount(); i++) {
-            especificacoesStr.add(tabelaEspecificacao.getValueAt(i, 0).toString());
+        for(int i=0; i<tabelaEspecificacao.getRowCount(); i++){
+            
+            especColumnRows.add(Cast.toString(tabelaEspecificacao.getValueAt(i, 0).toString()));
         }
         
-        //gtae.addStringColumn(tabelaEspecificacao.getColumnModel().getColumn(0).getWidth(), "Especificação",
-        //        especificacoesStr, tabelaEspecificacao.getDefaultRenderer(Object.class));
-        
-        gtae.getEditTable().setDefaultRenderer(Object.class, tabelaDadosEconomicos.getDefaultRenderer(Object.class));
-        gtae.getEditTable().setDefaultEditor(Object.class, new CellEditor());
-        
-        gtae.setColumnInterval((selected-1) * 3, ((selected-1) * 3) + 2);
-        
         gtae.setName("GTAE DadosEconMensais");
+        gtae.addStringColumn(200, "Especificação", especColumnRows, tabelaEspecificacao.getDefaultRenderer(Object.class));
+        
+        gtae.setDefaultRenderer( tabelaDadosEconomicos.getDefaultRenderer(Object.class) );
+        gtae.setDefaultEditor(new CellEditor());
+    }
+    
+    private void configGTAE(int selected) {
+        
+        //O que tinha daqui pra cima foi pra initGTAE() ^^^^^^
+        // initGTAE() é chamada apenas uma vez, no construtor (y).
+        
         gtae.setRowsDisplayed(10);
         gtae.setAllowEmptyRows(true);
-        gtae.setColumnEditable(0, false);
-        gtae.setColumnEditable(1, true);
-        gtae.setColumnEditable(2, true);
-        gtae.setColumnEditable(3, false);
         
-        gtae.setSourceRowEditable(0, false);
-        gtae.setSourceRowEditable(7, false);
-        gtae.setSourceRowEditable(8, false);
-        gtae.setSourceRowEditable(20, false);
-        gtae.setSourceRowEditable(21, false);
-        gtae.setSourceRowEditable(33, false);
-        gtae.setSourceRowEditable(34, false);
-        gtae.setSourceRowEditable(45, false);
-        gtae.setSourceRowEditable(46, false);
-        gtae.setSourceRowEditable(53, false);
-        gtae.setSourceRowEditable(54, false);
-        gtae.setSourceRowEditable(67, false);
-        gtae.setSourceRowEditable(68, false);
-        gtae.setSourceRowEditable(73, false);
-        gtae.setSourceRowEditable(74, false);
-        gtae.setSourceRowEditable(80, false);
-        gtae.setSourceRowEditable(81, false);
-        gtae.setSourceRowEditable(85, false);
-        gtae.setSourceRowEditable(86, false);
-        gtae.setSourceRowEditable(88, false); 
-
+        gtae.setColumnInterval(((selected-1) * 3), ((selected-1)*3) + 2); // :}
+        gtae.setRowInterval(0, 89); //Linha 1 a 90
+        
+        //Configura o editor de acordo com o intervalo de linhas e colunas especificado. (depois deixo isso automatico)
+        gtae.processEditor();
+        
+        //setCellEditable, setColumnEditable e setRowEditable sobrescrevem uns aos outros.
+        
+        // Ex: setCellEditable(false,0,0); == cell 0,0 is not editable
+        // setColumnEditable(true,0); == cell 0,0 is now editable :) (afeta todas as linhas, naquela coluna)
+        // setRowEditable(false,0); == cell 0,0 is not editable (again).  Got it?  Now have fun.
+         
+        gtae.setRowEditable(0, false);
+        gtae.setRowEditable(7, false);
+        gtae.setRowEditable(8, false);
+        gtae.setRowEditable(20, false);
+        gtae.setRowEditable(21, false);
+        gtae.setRowEditable(33, false);
+        gtae.setRowEditable(34, false);
+        gtae.setRowEditable(45, false);
+        gtae.setRowEditable(46, false);
+        gtae.setRowEditable(53, false);
+        gtae.setRowEditable(54, false);
+        gtae.setRowEditable(67, false);
+        gtae.setRowEditable(68, false);
+        gtae.setRowEditable(73, false);
+        gtae.setRowEditable(74, false);
+        gtae.setRowEditable(80, false);
+        gtae.setRowEditable(81, false);
+        gtae.setRowEditable(85, false);
+        gtae.setRowEditable(86, false);
+        gtae.setRowEditable(88, false); 
+        
+        //setColumnEditable afeta todas as células da coluna especificada, em todas linhas do GTAE 
+        //gtae.setColumnEditable(0, false);
+        //gtae.setColumnEditable(1, true);
+        //gtae.setColumnEditable(2, true);
+        
+        List<boolean[]> edit = gtae.getCellEditableMatrix();
+        boolean[] colEdit = gtae.getColumnEditableArray();
+        
+        System.out.println("Row Count: " +gtae.getEditTable().getRowCount());
+        System.out.println("Column Count: " + gtae.getEditTable().getColumnCount() + "\n");
+        System.out.println("CellEditable Matrix Row Count: " + edit.size());
+        
+        System.out.print("Cols: ");
+        for(int i=0; i<colEdit.length; i++){
+            System.out.print(i + "[" + colEdit[i] + "] ");
+        }
+        System.out.println("");
+        
+        for (int i = 0; i < edit.size(); i++) {
+            
+            System.out.print("L: " + i + " = ");
+            
+            for(int j=0; j<edit.get(i).length; j++){
+                
+                System.out.print("[");
+                System.out.print(edit.get(i)[j]);
+                System.out.print("]");
+            }
+            
+            System.out.println("");
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

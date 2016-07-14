@@ -8,7 +8,7 @@ package flex.db;
 import java.util.Map;
 
 /**
- *
+ * @version 1.7.13
  * @author Jefferson Sales
  */
 public abstract class DatabaseObject {

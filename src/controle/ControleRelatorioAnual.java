@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package flex.table;
+package controle;
 
 /**
- * @version 1.7.13
- * @author Jefferson Sales
+ *
+ * @author Fabricio
  */
-public interface TableModifyListener {
+public class ControleRelatorioAnual {
     
-    public abstract void tableModified(TableModifiedEvent event);
 }

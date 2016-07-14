@@ -6,6 +6,7 @@
 package visao.windows;
 
 import controle.ControlePerfil;
+import controle.ControleRelatoriosMensais;
 import flex.db.GenericDAO;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -26,7 +27,7 @@ public class PeriodSelector extends javax.swing.JDialog {
     private final Perfil atual;
     private GenericDAO<DadosTecMensais> dadosTec;
     private GenericDAO<DadosEconMensais> dadosEcon;
-    
+    private int tipoSelecionado;
     /**
      * Creates new form PeriodSelector
      * @param parent
@@ -210,26 +211,26 @@ public class PeriodSelector extends javax.swing.JDialog {
                     "Alerta - Período Inválido", JOptionPane.WARNING_MESSAGE);
             return;
         }
-            
-        int mesIni = getStartMonth();
-        int mesFim = getEndMonth();
-        int anoIni = getStartYear();
-        int anoFim = getEndYear();
-        int tipo = 0;
 
         if (tipoEconomico.isSelected()) {
-            tipo = 1;
+            this.setTipoSelecionado(1);
             
         } else if (tipoTecnico.isSelected()) {
-            tipo = 2;
+            this.setTipoSelecionado(2);
             
         } else {
             JOptionPane.showMessageDialog(this, "Nenhum Tipo de Indicadores foi selecionado.", "Alerta - Seleção de Tipo",
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
-  
-        this.setVisible(false);
+        
+        ControleRelatoriosMensais controleRelatorios = ControleRelatoriosMensais.getInstance();
+        controleRelatorios.gerarRelatorio(getTipoSelecionado(), getStartMonth(), getEndMonth(), getStartYear(), getEndYear());
+        
+        new VisualizarRelatoriosMensais().setVisible(true);
+        this.getOwner().setVisible(false);
+        this.getOwner().dispose();
+        this.setVisible(false);     
         this.dispose();
     }//GEN-LAST:event_confirmaBTActionPerformed
 
@@ -317,4 +318,13 @@ public class PeriodSelector extends javax.swing.JDialog {
         return mesFimCombo.getSelectedIndex() == 0 ? -1 : mesFimCombo.getSelectedIndex();
     }
 
+    public int getTipoSelecionado() {
+        return tipoSelecionado;
+    }
+
+    public void setTipoSelecionado(int tipoSelecionado) {
+        this.tipoSelecionado = tipoSelecionado;
+    }
+    
+    
 }

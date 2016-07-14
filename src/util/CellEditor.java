@@ -6,7 +6,6 @@
 package util;
 
 import java.awt.Component;
-import java.util.EventObject;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -27,9 +26,12 @@ public class CellEditor extends DefaultCellEditor {
         
         final JTextField component = (JTextField) super.getTableCellEditorComponent(table, value, isSelected, row, column);
         
-        SwingUtilities.invokeLater(() -> {
-            component.selectAll();
-        });
+        if (!component.getText().isEmpty()) {
+            SwingUtilities.invokeLater(() -> {
+                component.requestFocus();
+                component.selectAll();
+            });
+        }
         
         return component;
     }
