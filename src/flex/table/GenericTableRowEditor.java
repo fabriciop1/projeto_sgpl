@@ -13,7 +13,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**
- * @version 1.7.13
+ * @version 1.7.16
  * @author Jefferson Sales
  */
 public class GenericTableRowEditor extends GenericTableModifier {
@@ -33,6 +33,8 @@ public class GenericTableRowEditor extends GenericTableModifier {
         super.setRebuildEditTable(false);
         
         super.composeEditTable();
+        super.resizeColumnEditableArray();
+        super.resizeCellEditableMatrix(0, 0);
     }
     
     @Override

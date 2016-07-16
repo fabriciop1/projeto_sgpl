@@ -13,26 +13,28 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 /**
- * Classe necessária para manter apenas duas casas após a vírgula para cada campo double (Aproximação é feita).
- * @author Usuário
+ *
+ * @author Fabricio
  */
-public class DecimalFormatRenderer extends DefaultTableCellRenderer{
+public class DecimalFormatRenderer extends DefaultTableCellRenderer {
+    
     private static final NumberFormat FORMATTER = new DecimalFormat( "#.##" );
-      
-    public DecimalFormatRenderer(boolean alignment) { 
+    
+    public DecimalFormatRenderer(boolean alignment) {
         if(alignment) {  
             super.setHorizontalAlignment(JLabel.RIGHT);
         }
+        FORMATTER.setMinimumFractionDigits(1);
     }
- 
+    
     @Override
-    public Component getTableCellRendererComponent( JTable table, Object value, boolean isSelected,
-        boolean hasFocus, int row, int column) {
- 
-        if (value != null && !value.toString().isEmpty() && (value.getClass() == Double.class || value.getClass() == Integer.class)) {
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+     
+        if (value != null && !value.toString().isEmpty() && (value instanceof Double) ) {
             value = FORMATTER.format(value);
-        }
-       
-        return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column );
+        }    
+        
+        return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
     }
+    
 }

@@ -13,6 +13,7 @@ import javax.swing.table.DefaultTableModel;
 import modelo.negocio.DadosEconMensais;
 import modelo.negocio.DadosTecMensais;
 import modelo.negocio.Perfil;
+import util.Util;
 
 /**
  * @author Alexandre
@@ -33,6 +34,8 @@ public class VisualizarRelatoriosMensais extends javax.swing.JFrame {
         
         tabelaRelatorios.setShowGrid(true);
         tabelaRelatorios.setShowHorizontalLines(true);
+        tabelaRelatorios.setCellSelectionEnabled(false);
+        tabelaRelatorios.setRowSelectionAllowed(true);
         
         crm = ControleRelatoriosMensais.getInstance();
         
@@ -83,10 +86,9 @@ public class VisualizarRelatoriosMensais extends javax.swing.JFrame {
         int anoFim  = crm.getAnoFim();
         int mesCont = crm.getMesIni() - 1;
         int mesFim  = crm.getMesFim();
-        Object[] temp;
+        Object[] temp = new Object[32];
         
         do{
-            temp = new Object[32];
             temp[1] = "teste " + mesCont;
             
             mesCont++;
@@ -98,11 +100,11 @@ public class VisualizarRelatoriosMensais extends javax.swing.JFrame {
             
             //----FINAL---------------------------------------------------------
             modelIndicadores.addColumn(mesCont + "/" + anoCont, temp);
-            
-            System.out.println("mes: " + mesCont + "/" + anoCont);
-            
+           
+            Util.clearVector(temp);
         }while(anoCont != anoFim || mesCont != mesFim);
-  
+        
+        tabelaRelatorios.setModel(modelIndicadores);
     }
     
     private void preencherTabelaITM(List<DadosTecMensais> itm){
@@ -114,10 +116,9 @@ public class VisualizarRelatoriosMensais extends javax.swing.JFrame {
         int anoFim  = crm.getAnoFim();
         int mesCont = crm.getMesIni() - 1;
         int mesFim  = crm.getMesFim();
-        Object[] temp;
+        Object[] temp = new Object[32];
         
         do{
-            temp = new Object[32];
             temp[1] = "teste " + mesCont;
             
             mesCont++;
@@ -128,17 +129,12 @@ public class VisualizarRelatoriosMensais extends javax.swing.JFrame {
             }
             
             //----FINAL---------------------------------------------------------
+          
             modelIndicadores.addColumn(mesCont + "/" + anoCont, temp);
-            
-            System.out.println("mes: " + mesCont + "/" + anoCont);
-            
+          
+            Util.clearVector(temp);
         }while(anoCont != anoFim || mesCont != mesFim);
         
-        tabelaRelatorios.setModel(modelIndicadores);
-       /* if(modelIndicadores.getColumnCount() > 10){
-            int colunasAMais = modelIndicadores.getColumnCount() - 10;
-            tabelaRelatorios.setSize(tabelaRelatorios.getWidth() + (colunasAMais * 100), tabelaRelatorios.getHeight());
-        }*/
     }
 
     @SuppressWarnings("unchecked")
@@ -214,24 +210,16 @@ public class VisualizarRelatoriosMensais extends javax.swing.JFrame {
                 "Indicadores", "Unidade"
             }
         ) {
-            boolean[] canEdit = new boolean [] {
-                false, false
-            };
-
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+                return false;
             }
         });
         tabelaRelatorios.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        tabelaRelatorios.setColumnSelectionAllowed(true);
         tabelaRelatorios.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tabelaRelatorios.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tabelaRelatorios);
         tabelaRelatorios.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        if (tabelaRelatorios.getColumnModel().getColumnCount() > 0) {
-            tabelaRelatorios.getColumnModel().getColumn(0).setResizable(false);
-            tabelaRelatorios.getColumnModel().getColumn(0).setPreferredWidth(300);
-            tabelaRelatorios.getColumnModel().getColumn(1).setResizable(false);
-        }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

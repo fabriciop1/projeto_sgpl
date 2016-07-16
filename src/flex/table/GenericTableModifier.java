@@ -9,7 +9,6 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +25,7 @@ import util.Regex;
 
 
 /**
- * @version 1.7.13
+ * @version 1.7.16
  * @author Jefferson Sales
  */
 public abstract class GenericTableModifier extends JDialog{
@@ -683,7 +682,7 @@ public abstract class GenericTableModifier extends JDialog{
     protected boolean validateEditTableValue(int editRow, int editColumn, int sourceColumn){
         
         Object cellValue = getEditTableValue(editRow, editColumn);
-        
+    
         if(cellEditable.get(editRow)[editColumn] == true && !validateValue(cellValue, sourceColumn)){
             
             return false;
@@ -1012,8 +1011,9 @@ public abstract class GenericTableModifier extends JDialog{
         
         if(editTable.getRowCount() > 0){
             
-            for (boolean[] columns : cellEditable) {
-                columns[columnIndex] = isEditable;
+            for(int i=0; i<cellEditable.size(); i++){
+                
+                cellEditable.get(i)[columnIndex] = isEditable;
             }
         }
     }

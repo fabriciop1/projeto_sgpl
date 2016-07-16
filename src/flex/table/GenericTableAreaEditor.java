@@ -18,7 +18,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 /**
- * @version 1.7.13
+ * @version 1.7.16
  * @author selaS nosreffeJ
  */
 public class GenericTableAreaEditor extends GenericTableModifier {
@@ -178,7 +178,7 @@ public class GenericTableAreaEditor extends GenericTableModifier {
                         return false;
                     }
                 }
-                else if(isCellEditable(i, j) && !validateEditTableValue(i, j, startColumn + j)){
+                else if(isCellEditable(i, j) && !validateEditTableValue(i, j, startColumn + j - getStringColumnsOffset())){
                     
                     JOptionPane.showMessageDialog(this, "O valor da coluna \"" + editTable.getColumnName(j) + "\" na linha " + (i+1) +
                             " é inválido.", "Valor de Coluna Inválido", JOptionPane.ERROR_MESSAGE);
@@ -303,7 +303,6 @@ public class GenericTableAreaEditor extends GenericTableModifier {
     public int getStartColumn() {
         return startColumn;
     }
-
 
     public int getEndColumn() {
         return endColumn;

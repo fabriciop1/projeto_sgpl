@@ -12,10 +12,10 @@ import flex.table.GenericTableAreaEditor;
 import flex.table.TableModifiedEvent;
 import java.awt.event.ItemEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
-import util.CellEditor;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollBar;
 import javax.swing.table.DefaultTableModel;
@@ -153,7 +153,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                     if(i == 7) {
 
                         if (tempTotais[indexCol] != 0.0) { 
-                            linhaTemp[indexCol] = tempTotais[indexCol];
+                            linhaTemp[indexCol] = (int)tempTotais[indexCol];
                             tempTotais[indexCol] = 0.0;
                         }
 
@@ -163,7 +163,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                         } 
 
                     }
-
+                    
                     if( i == 88 ){
 
                         if (coeAtivLeite[dem.get(j).getMes() - 1] != 0.0) {
@@ -201,7 +201,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
 
         btnVoltar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        anoCombo = new javax.swing.JComboBox<String>();
+        anoCombo = new javax.swing.JComboBox<>();
         adicionarAnoBT = new javax.swing.JButton();
         jScrollPane6 = new javax.swing.JScrollPane();
         jPanel3 = new javax.swing.JPanel();
@@ -562,7 +562,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Quant.", "Valor Unit.", "Total (R$)", "Quant.", "Valor Unit.", "Total(R$)", "Quant.", "Valor Unit.", "Total(R$)", "Quant.", "Valor Unit.", "Total(R$)", "Quant.", "Valor Unit.", "Total(R$)", "Quant.", "Valor Unit.", "Total(R$)", "Quant.", "Valor Unit.", "Total(R$)", "Quant.", "Valor Unit.", "Total(R$)", "Quant.", "Valor Unit.", "Total(R$)", "Quant.", "Valor Unit.", "Total(R$)", "Quant.", "Valor Unit.", "Total(R$)", "Quant.", "Valor Unit.", "Total(R$)"
+                "Quant.", "Valor Unit.", "Total (R$)", "Quant.", "Valor Unit.", "Total (R$)", "Quant.", "Valor Unit.", "Total (R$)", "Quant.", "Valor Unit.", "Total (R$)", "Quant.", "Valor Unit.", "Total (R$)", "Quant.", "Valor Unit.", "Total (R$)", "Quant.", "Valor Unit.", "Total (R$)", "Quant.", "Valor Unit.", "Total (R$)", "Quant.", "Valor Unit.", "Total (R$)", "Quant.", "Valor Unit.", "Total (R$)", "Quant.", "Valor Unit.", "Total (R$)", "Quant.", "Valor Unit.", "Total (R$)"
             }
         ) {
             Class[] types = new Class [] {
@@ -787,8 +787,6 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
             
             configGTAE(selecionado);
             
-            
-            
             gtae.showEditor(evt);          
         }
     }//GEN-LAST:event_editarValoresBTActionPerformed
@@ -958,7 +956,12 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                 } else {
 
                     DadosEconMensais dem = dadosEM.get(0);
-
+                    
+                    if (Cast.toString(areaData[l][0]).isEmpty() && Cast.toString(areaData[l][1]).isEmpty()) {
+                        demdao.remove(dem.getId());
+                        continue;
+                    }
+                    
                     dem.setValorUnitario(valorUnitario);
                     dem.setQuantidade(quantidade);
 
@@ -998,88 +1001,46 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         
         for(int i=0; i<tabelaEspecificacao.getRowCount(); i++){
             
-            especColumnRows.add(Cast.toString(tabelaEspecificacao.getValueAt(i, 0).toString()));
+            especColumnRows.add(Cast.toString(tabelaEspecificacao.getValueAt(i, 0)));
         }
         
         gtae.setName("GTAE DadosEconMensais");
-        gtae.addStringColumn(200, "Especificação", especColumnRows, tabelaEspecificacao.getDefaultRenderer(Object.class));
         
+        gtae.addStringColumn(tabelaEspecificacao.getColumnModel().getColumn(0).getWidth(), "Especificação", especColumnRows,
+                        tabelaEspecificacao.getDefaultRenderer(Object.class));
+       
         gtae.setDefaultRenderer( tabelaDadosEconomicos.getDefaultRenderer(Object.class) );
-        gtae.setDefaultEditor(new CellEditor());
     }
     
     private void configGTAE(int selected) {
+       
+        List<Integer> rowsNotEditable = Arrays.asList(0, 7, 8, 20, 21, 33, 34, 45, 46, 53, 54, 67, 68, 73, 74, 80, 81, 85, 86, 88); 
         
-        //O que tinha daqui pra cima foi pra initGTAE() ^^^^^^
-        // initGTAE() é chamada apenas uma vez, no construtor (y).
-        
-        gtae.setRowsDisplayed(10);
+        gtae.setRowsDisplayed(21);
         gtae.setAllowEmptyRows(true);
         
-        gtae.setColumnInterval(((selected-1) * 3), ((selected-1)*3) + 2); // :}
-        gtae.setRowInterval(0, 89); //Linha 1 a 90
+        gtae.setColumnInterval(((selected-1) * 3), ((selected-1)*3) + 2);
         
-        //Configura o editor de acordo com o intervalo de linhas e colunas especificado. (depois deixo isso automatico)
+        gtae.setRowInterval(0, tabelaDadosEconomicos.getRowCount()-1); //Linha 1 a 90
+        
+        //Configura o editor de acordo com o intervalo de linhas e colunas especificado.
         gtae.processEditor();
-        
-        //setCellEditable, setColumnEditable e setRowEditable sobrescrevem uns aos outros.
-        
-        // Ex: setCellEditable(false,0,0); == cell 0,0 is not editable
-        // setColumnEditable(true,0); == cell 0,0 is now editable :) (afeta todas as linhas, naquela coluna)
-        // setRowEditable(false,0); == cell 0,0 is not editable (again).  Got it?  Now have fun.
-         
-        gtae.setRowEditable(0, false);
-        gtae.setRowEditable(7, false);
-        gtae.setRowEditable(8, false);
-        gtae.setRowEditable(20, false);
-        gtae.setRowEditable(21, false);
-        gtae.setRowEditable(33, false);
-        gtae.setRowEditable(34, false);
-        gtae.setRowEditable(45, false);
-        gtae.setRowEditable(46, false);
-        gtae.setRowEditable(53, false);
-        gtae.setRowEditable(54, false);
-        gtae.setRowEditable(67, false);
-        gtae.setRowEditable(68, false);
-        gtae.setRowEditable(73, false);
-        gtae.setRowEditable(74, false);
-        gtae.setRowEditable(80, false);
-        gtae.setRowEditable(81, false);
-        gtae.setRowEditable(85, false);
-        gtae.setRowEditable(86, false);
-        gtae.setRowEditable(88, false); 
+       
+        /*setCellEditable, setColumnEditable e setRowEditable sobrescrevem uns aos outros.
+         Ex: setCellEditable(false,0,0); == cell 0,0 is not editable
+         setColumnEditable(true,0); == cell 0,0 is now editable (afeta todas as linhas, naquela coluna)
+         setRowEditable(false,0); == cell 0,0 is not editable (again).  */
         
         //setColumnEditable afeta todas as células da coluna especificada, em todas linhas do GTAE 
-        //gtae.setColumnEditable(0, false);
-        //gtae.setColumnEditable(1, true);
-        //gtae.setColumnEditable(2, true);
         
-        List<boolean[]> edit = gtae.getCellEditableMatrix();
-        boolean[] colEdit = gtae.getColumnEditableArray();
+        /*for (int i: rowsNotEditable) {
+            gtae.setRowEditable(i, false);
+        } */
         
-        System.out.println("Row Count: " +gtae.getEditTable().getRowCount());
-        System.out.println("Column Count: " + gtae.getEditTable().getColumnCount() + "\n");
-        System.out.println("CellEditable Matrix Row Count: " + edit.size());
+        gtae.setColumnEditable(2, false);
         
-        System.out.print("Cols: ");
-        for(int i=0; i<colEdit.length; i++){
-            System.out.print(i + "[" + colEdit[i] + "] ");
-        }
-        System.out.println("");
+       // gtae.setCellEditable(false, 89, 1);
         
-        for (int i = 0; i < edit.size(); i++) {
-            
-            System.out.print("L: " + i + " = ");
-            
-            for(int j=0; j<edit.get(i).length; j++){
-                
-                System.out.print("[");
-                System.out.print(edit.get(i)[j]);
-                System.out.print("]");
-            }
-            
-            System.out.println("");
-        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

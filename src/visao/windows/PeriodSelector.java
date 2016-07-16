@@ -37,7 +37,7 @@ public class PeriodSelector extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        super.setTitle("SGPL - Relatórios de Indicadores Mensais");
+        super.setTitle("SGPL - Relatório de Indicadores Mensais");
         atual = ControlePerfil.getInstance().getPerfilSelecionado();
         
         super.setLocationRelativeTo(null);

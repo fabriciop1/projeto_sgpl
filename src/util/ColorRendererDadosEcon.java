@@ -22,12 +22,14 @@ public class ColorRendererDadosEcon extends DecimalFormatRenderer {
     }
 
     @Override
-    public Component getTableCellRendererComponent(JTable table, Object color, boolean isSelected, boolean hasFocus, int row, int column) {
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
        
-        super.getTableCellRendererComponent(table, color, isSelected, hasFocus, row, column); 
+        super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column); 
         
-        if(column == 2 || column == 5 || column == 8 || column == 11 || column == 14 || column == 17 || 
-           column == 20 || column == 23 || column == 26 || column == 29 || column == 32 || column == 35) {
+        
+        /*if(column == 2 || column == 5 || column == 8 || column == 11 || column == 14 || column == 17 || 
+           column == 20 || column == 23 || column == 26 || column == 29 || column == 32 || column == 35) { */
+        if (table.getColumnName(column).equals("Total (R$)")) {
             this.setBackground(COLOR);
             this.setFont(getFont().deriveFont(FONT));
         

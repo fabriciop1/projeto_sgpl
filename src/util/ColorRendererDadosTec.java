@@ -8,7 +8,11 @@ package util;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  *
@@ -21,13 +25,13 @@ public class ColorRendererDadosTec extends DecimalFormatRenderer {
     private static final int FONT = Font.BOLD;
     
     public ColorRendererDadosTec(boolean alignment) {
-        super(alignment);
+        super(alignment); 
         super.setOpaque(true);
     }
     
      @Override
-    public Component getTableCellRendererComponent(JTable table, Object color, boolean isSelected, boolean hasFocus, int row, int column) {
-        super.getTableCellRendererComponent(table, color, isSelected, hasFocus, row, column); 
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column); 
         
         if(column == 12 || row == 1 || row == 3 || row == 14) {
             this.setBackground(COLOR);

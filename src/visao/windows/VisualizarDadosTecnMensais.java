@@ -10,20 +10,19 @@ import flex.db.GenericDAO;
 import flex.table.GenericTableAreaEditor;
 import flex.table.TableModifiedEvent;
 import java.awt.event.ItemEvent;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollBar;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.JTextComponent;
 import modelo.negocio.DadosTecMensais;
 import modelo.negocio.Indicador;
 import modelo.negocio.Perfil;
 import util.Calc;
 import util.Cast;
-import util.CellEditor;
 import util.ColorRendererDadosTec;
 import util.Util;
 
@@ -70,6 +69,8 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         
         fillComboBox();
         
+        initGTAE();
+        
         definirBDListeners();
     }
     
@@ -91,8 +92,9 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         }
     }
     
-    private void PreencherTabelaDTM(int ano, List<DadosTecMensais> dtm){
+    private void PreencherTabelaDTM(List<DadosTecMensais> dtm){
         
+        int ano = Integer.parseInt(anoCombo.getSelectedItem().toString());
         DefaultTableModel modelIndicadores = (DefaultTableModel) tabelaIndicadores.getModel();
         DefaultTableModel modelDadosTecnicos = (DefaultTableModel) tabelaDadosTecnicos.getModel();
         modelDadosTecnicos.setNumRows(0);
@@ -102,24 +104,21 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         for( int i = 0; i < modelIndicadores.getRowCount(); i++) {
             
             for( int j = 0; j < dtm.size(); j++){
-                
-                if (dtm.get(j).getAno() == ano) {
                     
-                    int indexCol = dtm.get(j).getMes() - 1;
-                    if( modelIndicadores.getValueAt(i, 0).equals(dtm.get(j).getIndicador().getIndicador())){
+                int indexCol = dtm.get(j).getMes() - 1;
+                if( modelIndicadores.getValueAt(i, 0).equals(dtm.get(j).getIndicador().getIndicador())){
 
-                        double dadoTemp = dtm.get(j).getDado();
+                    double dadoTemp = dtm.get(j).getDado();
 
-                        linhaTemp[indexCol] = dadoTemp;
-                    }
+                    linhaTemp[indexCol] = dadoTemp;
+                }
 
-                    if( i == 1 && dtm.get(j).getAno() == ano) {    
-                        double tempMedia = (Double) modelDadosTecnicos.getValueAt(0, indexCol);
+                if( i == 1 && dtm.get(j).getAno() == ano) {    
+                    double tempMedia = (Double) modelDadosTecnicos.getValueAt(0, indexCol);
 
-                        if( tempMedia != 0.0 ) {
-                            linhaTemp[indexCol] = Calc.dividir(tempMedia, Util.diasDoMes(ano, indexCol + 1));
-                        }  
-                    }
+                    if( tempMedia != 0.0 ) {
+                        linhaTemp[indexCol] = Calc.dividir(tempMedia, Util.diasDoMes(ano, indexCol + 1));
+                    }  
                 }
             }
             double divisao = calcularMedia(linhaTemp);
@@ -474,7 +473,6 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
-
         new MenuPrincipal().setVisible(true);
         this.setVisible(false);
         this.dispose();
@@ -574,43 +572,53 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
 
     private void anoComboItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_anoComboItemStateChanged
         if(evt.getStateChange() == ItemEvent.SELECTED) { 
-            PreencherTabelaDTM(Integer.parseInt(anoCombo.getSelectedItem().toString()), dtms);
+            dtms = dtmdao.retrieveByColumns(new String[]{"idPerfilFK", "ano"}, new Object[]{atual.getId(), 
+                    Integer.parseInt(anoCombo.getSelectedItem().toString())});
+            PreencherTabelaDTM(dtms);
         }
     }//GEN-LAST:event_anoComboItemStateChanged
 
-    private void configGTAE(int selected) {
-        gtae.getEditTable().setDefaultRenderer(Object.class, new ColorRendererDadosTec(true));       
-        gtae.getEditTable().setDefaultEditor(Object.class, new CellEditor());
-    
+    private void initGTAE() {
+        List<String> indColumnRows = new ArrayList<>(tabelaIndicadores.getRowCount());
+        
+        for(int i = 0; i < tabelaIndicadores.getRowCount(); i++) {
+            indColumnRows.add(Cast.toString(tabelaIndicadores.getValueAt(i, 0).toString()));
+        }
+        
         gtae.setName("GTAE Dados Técnicos Mensais");
-        gtae.setRowsDisplayed(10);
+        gtae.addStringColumn(tabelaIndicadores.getColumnModel().getColumn(0).getWidth(), "Indicador", indColumnRows, 
+                tabelaIndicadores.getDefaultRenderer(Object.class));
+        
+        gtae.setDefaultRenderer(tabelaDadosTecnicos.getDefaultRenderer(Object.class));
+        
+    }
+    
+    private void configGTAE(int selected) {
+        
+        List<Integer> rowsNotEditable = Arrays.asList(1, 2, 3, 13, 14);
+        
+        gtae.setRowsDisplayed(14);
         
         gtae.setAllowEmptyRows(true);
+        gtae.setAllowEmptyCells(true);
         
         int endColumn = (selected * 3) - 1;
         int startColumn = endColumn - 2;
         
         gtae.setColumnInterval(startColumn, endColumn);
+        gtae.setRowInterval(0, tabelaIndicadores.getRowCount()-1);
         
-        gtae.setColumnEditable(startColumn, true);
-        gtae.setColumnEditable(startColumn + 1, true);
-        gtae.setColumnEditable(endColumn, true);
+        gtae.processEditor();
         
-        gtae.setAllowEmptyCells(true);
-        
-        gtae.setSourceRowEditable(1, false);
-        gtae.setSourceRowEditable(2, false);
-        gtae.setSourceRowEditable(3, false);
-        gtae.setSourceRowEditable(13, false);
-        gtae.setSourceRowEditable(14, false);
+       /* for (int i: rowsNotEditable) {
+            gtae.setRowEditable(i, false);
+        } */
          
     }
     
     private void fillComboBox() {
-        atual = ControlePerfil.getInstance().getPerfilSelecionado();
         
         List<DadosTecMensais> dados = dtmdao.retrieveByColumn("idPerfilFK", atual.getId(), "ano", "ano DESC");
-        dtms = dtmdao.retrieveByColumn("idPerfilFK", atual.getId());
         
         if (dados.isEmpty()) {
             Calendar cal = GregorianCalendar.getInstance();
@@ -623,22 +631,25 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
     }
     
     private void definirBDListeners() {
+        
          gtae.addTableModifyListener((TableModifiedEvent evt) -> {
-             
-            Object[][] areaData = evt.getTableData();
+           
+            Object[][] areaData = evt.getTableAreaData();
             List<Integer> linhas = evt.getRowsModified();
-            boolean[][] dataModified = evt.getTableDataModified();
+            boolean[][] dataModified = evt.getTableCellModified();
          
             int ano = Integer.parseInt(anoCombo.getSelectedItem().toString());
             
             for (Integer l : linhas) {
-                for(int c = 0; c < gtae.getEditTable().getColumnCount(); c++) {
-                   // if (dataModified[l][c]) {
-                        int mes = c + 1;
-
+                for(int c = 0; c < gtae.getEditTable().getColumnCount()-1; c++) {
+                    if (dataModified[l][c]) {
+                        int mes = (c + 1) + gtae.getStartColumn();
+                        
                         Indicador ind = dtmindao.retrieveByColumn("indicador", tabelaIndicadores.getValueAt(l, 0)).get(0);
 
-                        double dado = Double.parseDouble(areaData[l][c].toString());
+                        String valor = Cast.toString(areaData[l][c]);
+                        
+                        double dado = (valor.isEmpty()? 0.0 : Double.parseDouble(valor));
 
                         List<DadosTecMensais> dadosTec = dtmdao.retrieveByColumns(new String[]{"mes", "ano", "idDTM_indicadorFK", "idPerfilFK"}, 
                                                                         new Object[]{mes, ano, ind.getId(), atual.getId()});
@@ -660,11 +671,12 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
 
                             dtmdao.update(dtm);
                         }
-                    //}
+                    }
                 }
             }
-            dtms = dtmdao.retrieveByColumn("idPerfilFK", atual.getId());
-            PreencherTabelaDTM(ano, dtms);
+            dtms = dtmdao.retrieveByColumns(new String[]{"idPerfilFK", "ano"}, new Object[]{atual.getId(), 
+                    Integer.parseInt(anoCombo.getSelectedItem().toString())});
+            PreencherTabelaDTM(dtms);
          });
     }
     

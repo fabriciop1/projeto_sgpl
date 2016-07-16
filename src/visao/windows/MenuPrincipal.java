@@ -83,7 +83,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         nomCida.setText("nome_cidade");
 
         btnPerfil.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnPerfil.setText("Visualizar Perfil(s)");
+        btnPerfil.setText("Visualizar Perfis");
         btnPerfil.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPerfilActionPerformed(evt);
@@ -107,7 +107,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
 
         btnIndicEconMensais.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnIndicEconMensais.setText("Relatórios de Indicadores Mensais");
+        btnIndicEconMensais.setText("Indicadores Mensais");
         btnIndicEconMensais.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIndicEconMensaisActionPerformed(evt);
@@ -123,7 +123,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
 
         btnIndicEconAnuais.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnIndicEconAnuais.setText("Relatórios de Indicadores Anuais");
+        btnIndicEconAnuais.setText("Indicadores Anuais");
         btnIndicEconAnuais.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIndicEconAnuaisActionPerformed(evt);

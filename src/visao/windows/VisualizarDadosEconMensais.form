@@ -414,37 +414,37 @@
                                 <Column editable="false" title="Total (R$)" type="java.lang.Double"/>
                                 <Column editable="false" title="Quant." type="java.lang.Integer"/>
                                 <Column editable="false" title="Valor Unit." type="java.lang.Double"/>
-                                <Column editable="false" title="Total(R$)" type="java.lang.Double"/>
+                                <Column editable="false" title="Total (R$)" type="java.lang.Double"/>
                                 <Column editable="false" title="Quant." type="java.lang.Integer"/>
                                 <Column editable="false" title="Valor Unit." type="java.lang.Double"/>
-                                <Column editable="false" title="Total(R$)" type="java.lang.Double"/>
+                                <Column editable="false" title="Total (R$)" type="java.lang.Double"/>
                                 <Column editable="false" title="Quant." type="java.lang.Integer"/>
                                 <Column editable="false" title="Valor Unit." type="java.lang.Double"/>
-                                <Column editable="false" title="Total(R$)" type="java.lang.Double"/>
+                                <Column editable="false" title="Total (R$)" type="java.lang.Double"/>
                                 <Column editable="false" title="Quant." type="java.lang.Integer"/>
                                 <Column editable="false" title="Valor Unit." type="java.lang.Double"/>
-                                <Column editable="false" title="Total(R$)" type="java.lang.Double"/>
+                                <Column editable="false" title="Total (R$)" type="java.lang.Double"/>
                                 <Column editable="false" title="Quant." type="java.lang.Integer"/>
                                 <Column editable="false" title="Valor Unit." type="java.lang.Double"/>
-                                <Column editable="false" title="Total(R$)" type="java.lang.Double"/>
+                                <Column editable="false" title="Total (R$)" type="java.lang.Double"/>
                                 <Column editable="false" title="Quant." type="java.lang.Integer"/>
                                 <Column editable="false" title="Valor Unit." type="java.lang.Double"/>
-                                <Column editable="false" title="Total(R$)" type="java.lang.Double"/>
+                                <Column editable="false" title="Total (R$)" type="java.lang.Double"/>
                                 <Column editable="false" title="Quant." type="java.lang.Integer"/>
                                 <Column editable="false" title="Valor Unit." type="java.lang.Double"/>
-                                <Column editable="false" title="Total(R$)" type="java.lang.Double"/>
+                                <Column editable="false" title="Total (R$)" type="java.lang.Double"/>
                                 <Column editable="false" title="Quant." type="java.lang.Integer"/>
                                 <Column editable="false" title="Valor Unit." type="java.lang.Double"/>
-                                <Column editable="false" title="Total(R$)" type="java.lang.Double"/>
+                                <Column editable="false" title="Total (R$)" type="java.lang.Double"/>
                                 <Column editable="false" title="Quant." type="java.lang.Integer"/>
                                 <Column editable="false" title="Valor Unit." type="java.lang.Double"/>
-                                <Column editable="false" title="Total(R$)" type="java.lang.Double"/>
+                                <Column editable="false" title="Total (R$)" type="java.lang.Double"/>
                                 <Column editable="false" title="Quant." type="java.lang.Integer"/>
                                 <Column editable="false" title="Valor Unit." type="java.lang.Double"/>
-                                <Column editable="false" title="Total(R$)" type="java.lang.Double"/>
+                                <Column editable="false" title="Total (R$)" type="java.lang.Double"/>
                                 <Column editable="false" title="Quant." type="java.lang.Integer"/>
                                 <Column editable="false" title="Valor Unit." type="java.lang.Double"/>
-                                <Column editable="false" title="Total(R$)" type="java.lang.Double"/>
+                                <Column editable="false" title="Total (R$)" type="java.lang.Double"/>
                               </Table>
                             </Property>
                             <Property name="autoscrolls" type="boolean" value="false"/>

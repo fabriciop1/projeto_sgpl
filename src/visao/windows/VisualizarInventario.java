@@ -27,7 +27,6 @@ import modelo.negocio.Perfil;
 import util.Calc;
 import util.Pair;
 import util.Cast;
-import util.CellEditor;
 import util.DecimalFormatRenderer;
 
 /**
@@ -2296,13 +2295,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
         tabelaBenfeitoriasGTRE.getEditTable().getColumnModel().getColumn(6).setCellRenderer(new DecimalFormatRenderer(false));
         tabelaForrageirasGTRE.getEditTable().getColumnModel().getColumn(5).setCellRenderer(new DecimalFormatRenderer(false));
         tabelaForrageirasGTRE.getEditTable().getColumnModel().getColumn(2).setCellRenderer(new DecimalFormatRenderer(false));
-        
-        tabelaTerrasGTRE.getEditTable().setDefaultEditor(Object.class, new CellEditor());
-        tabelaForrageirasGTRE.getEditTable().setDefaultEditor(Object.class, new CellEditor());
-        tabelaAnimaisProdGTRE.getEditTable().setDefaultEditor(Object.class, new CellEditor());
-        tabelaAnimaisServGTRE.getEditTable().setDefaultEditor(Object.class, new CellEditor());
-        tabelaBenfeitoriasGTRE.getEditTable().setDefaultEditor(Object.class, new CellEditor());
-        tabelaMaquinasGTRE.getEditTable().setDefaultEditor(Object.class, new CellEditor());
         
         tabelaForrageirasGTRE.setColumnEditable(2, false);
         tabelaForrageirasGTRE.setColumnEditable(3, false);
