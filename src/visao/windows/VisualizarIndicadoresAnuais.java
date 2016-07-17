@@ -5,24 +5,86 @@
  */
 package visao.windows;
 
+import controle.ControleIndicadoresAnuais;
+import controle.ControlePerfil;
+import flex.db.GenericDAO;
+import java.util.List;
+import modelo.negocio.DadosEconMensais;
+import modelo.negocio.DadosTecMensais;
+import modelo.negocio.Perfil;
+
 /**
  *
  * @author Fabricio
  */
-public class VisualizarRelatoriosAnuais extends javax.swing.JFrame {
+public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
 
+    private final Perfil atual;
+    private List<DadosEconMensais> dems;
+    private List<DadosTecMensais>  dtms;
+    private GenericDAO<DadosEconMensais> demdao;
+    private GenericDAO<DadosTecMensais> dtmdao;
+    private final ControleIndicadoresAnuais cia;
+    
     /**
      * Creates new form VisualizarRelatoriosAnuais
      */
-    public VisualizarRelatoriosAnuais() {
+    
+    public VisualizarIndicadoresAnuais() {
         initComponents();
         
         tabelaIndicadoresAnuais.setShowGrid(true);
         tabelaIndicadoresAnuais.setShowHorizontalLines(true);
         
+        cia = ControleIndicadoresAnuais.getInstance();
+        
+        atual = ControlePerfil.getInstance().getPerfilSelecionado();
+        
+        super.setLocationRelativeTo(null);
+        super.setResizable(false);
+        super.setTitle("SGPL - " + atual.getNome() + " - Indicadores Anuais");
+    
+        if(cia.getTipoIndicador() == 1) {
+            demdao = new GenericDAO<>(DadosEconMensais.class);
+            dtmdao = new GenericDAO<>(DadosTecMensais.class);
+            
+            dems = demdao.executeSQL("SELECT * "
+                                + "FROM dados_economicos_mensais AS dem "
+                                + "WHERE (dem.ano >= " + cia.getAnosSelecionados().get(0) + " AND "
+                                      + "dem.ano <= " + cia.getAnosSelecionados().get(cia.getAnosSelecionados().size()-1) + ") AND "
+                                      + "dem.idPerfilFK = " + atual.getId()
+                                      + " ORDER BY dem.ano");
+            
+            dtms = dtmdao.executeSQL("SELECT * "
+                                + "FROM dados_tecnicos_mensais AS dtm "
+                                + "WHERE (dtm.ano >= " + cia.getAnosSelecionados().get(0) + " AND "
+                                      + "dtm.ano <= " + cia.getAnosSelecionados().get(cia.getAnosSelecionados().size()-1) + ") AND "
+                                      + "dtm.idPerfilFK = " + atual.getId()
+                                      + " ORDER BY dtm.ano");
+            
+            preencherTabelaIEA(dems, dtms);
+            
+        } else if (cia.getTipoIndicador() == 2) {
+            dtmdao = new GenericDAO<>(DadosTecMensais.class);
+            
+            dtms = dtmdao.executeSQL("SELECT * "
+                                + "FROM dados_tecnicos_mensais AS dtm "
+                                + "WHERE (dtm.ano >= " + cia.getAnosSelecionados().get(0) + " AND "
+                                      + "dtm.ano <= " + cia.getAnosSelecionados().get(cia.getAnosSelecionados().size()-1) + ") AND "
+                                      + "dtm.idPerfilFK = " + atual.getId()
+                                      + " ORDER BY dtm.ano");
+            
+            preencherTabelaITA(dtms);
+        }
+    }
+    
+    private void preencherTabelaIEA(List<DadosEconMensais> dems, List<DadosTecMensais> dtms) {
         
     }
 
+    private void preencherTabelaITA(List<DadosTecMensais> dtms) {
+        
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -38,7 +100,6 @@ public class VisualizarRelatoriosAnuais extends javax.swing.JFrame {
         tabelaIndicadoresAnuais = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(1001, 660));
 
         textoEntrada.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         textoEntrada.setForeground(new java.awt.Color(0, 38, 255));
@@ -53,6 +114,16 @@ public class VisualizarRelatoriosAnuais extends javax.swing.JFrame {
 
         tabelaIndicadoresAnuais.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
                 {null, null},
                 {null, null},
                 {null, null},
@@ -99,7 +170,9 @@ public class VisualizarRelatoriosAnuais extends javax.swing.JFrame {
             }
         });
         tabelaIndicadoresAnuais.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        tabelaIndicadoresAnuais.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(tabelaIndicadoresAnuais);
+        tabelaIndicadoresAnuais.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         if (tabelaIndicadoresAnuais.getColumnModel().getColumnCount() > 0) {
             tabelaIndicadoresAnuais.getColumnModel().getColumn(0).setResizable(false);
             tabelaIndicadoresAnuais.getColumnModel().getColumn(1).setResizable(false);
@@ -129,8 +202,8 @@ public class VisualizarRelatoriosAnuais extends javax.swing.JFrame {
                     .addComponent(textoEntrada)
                     .addComponent(btnVoltar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 535, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(78, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 694, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();

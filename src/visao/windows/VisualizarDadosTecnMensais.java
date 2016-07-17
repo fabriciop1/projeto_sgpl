@@ -146,7 +146,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         btnVoltar = new javax.swing.JButton();
         textoEntrada = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        anoCombo = new javax.swing.JComboBox<String>();
+        anoCombo = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -639,9 +639,9 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
             boolean[][] dataModified = evt.getTableCellModified();
          
             int ano = Integer.parseInt(anoCombo.getSelectedItem().toString());
-            
+           
             for (Integer l : linhas) {
-                for(int c = 0; c < gtae.getEditTable().getColumnCount()-1; c++) {
+                for(int c = 0; c < gtae.getColumnEditableArray().length; c++) {
                     if (dataModified[l][c]) {
                         int mes = (c + 1) + gtae.getStartColumn();
                         

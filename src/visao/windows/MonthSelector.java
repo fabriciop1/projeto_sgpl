@@ -5,6 +5,7 @@
  */
 package visao.windows;
 
+import com.sun.glass.events.KeyEvent;
 import javax.swing.JDialog;
 
 /**
@@ -26,6 +27,8 @@ public class MonthSelector extends javax.swing.JDialog {
         super.setLocationRelativeTo(null);
         super.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         super.setResizable(false);
+        
+        super.getRootPane().setDefaultButton(confirmaBT);
     }
 
     /**

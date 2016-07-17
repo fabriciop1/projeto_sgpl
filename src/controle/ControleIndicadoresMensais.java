@@ -9,35 +9,35 @@ package controle;
  *
  * @author Alexandre
  */
-public class ControleRelatoriosMensais {
-    private int tipo, anoIni, anoFim, mesIni, mesFim;
+public class ControleIndicadoresMensais {
+    private int tipoIndicador, anoIni, anoFim, mesIni, mesFim;
     
-    private ControleRelatoriosMensais() {}
+    public ControleIndicadoresMensais() {}
     
     private static class RelatorioHolder { 
-        private final static ControleRelatoriosMensais instance = new ControleRelatoriosMensais();
+        private final static ControleIndicadoresMensais INSTANCE = new ControleIndicadoresMensais();
     }
 
-    public static ControleRelatoriosMensais getInstance() {
-            return RelatorioHolder.instance;
+    public static ControleIndicadoresMensais getInstance() {
+            return RelatorioHolder.INSTANCE;
     }
     
-    public void gerarRelatorio(int tipo, int mesIni, int mesFim, int anoIni, int anoFim){
+    public void gerarIndicadores(int tipoIndicador, int mesIni, int mesFim, int anoIni, int anoFim){
         
-        getInstance().setTipo(tipo);
+        getInstance().setTipoIndicador(tipoIndicador);
         getInstance().setAnoIni(anoIni);
         getInstance().setAnoFim(anoFim);
         getInstance().setMesIni(mesIni);
         getInstance().setMesFim(mesFim);        
         
     }
-    
-    public int getTipo() {
-        return tipo;
+
+    public void setTipoIndicador(int tipoIndicador) {
+        this.tipoIndicador = tipoIndicador;
     }
 
-    public void setTipo(int tipo) {
-        this.tipo = tipo;
+    public int getTipoIndicador() {
+        return tipoIndicador;
     }
 
     public int getAnoIni() {

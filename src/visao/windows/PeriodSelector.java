@@ -6,7 +6,7 @@
 package visao.windows;
 
 import controle.ControlePerfil;
-import controle.ControleRelatoriosMensais;
+import controle.ControleIndicadoresMensais;
 import flex.db.GenericDAO;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -44,6 +44,7 @@ public class PeriodSelector extends javax.swing.JDialog {
         super.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         super.setResizable(false);
     
+        super.getRootPane().setDefaultButton(cancelaBT);
     }
 
     /**
@@ -224,10 +225,10 @@ public class PeriodSelector extends javax.swing.JDialog {
             return;
         }
         
-        ControleRelatoriosMensais controleRelatorios = ControleRelatoriosMensais.getInstance();
-        controleRelatorios.gerarRelatorio(getTipoSelecionado(), getStartMonth(), getEndMonth(), getStartYear(), getEndYear());
+        ControleIndicadoresMensais controleRelatorios = ControleIndicadoresMensais.getInstance();
+        controleRelatorios.gerarIndicadores(getTipoSelecionado(), getStartMonth(), getEndMonth(), getStartYear(), getEndYear());
         
-        new VisualizarRelatoriosMensais().setVisible(true);
+        new VisualizarIndicadoresMensais().setVisible(true);
         this.getOwner().setVisible(false);
         this.getOwner().dispose();
         this.setVisible(false);     

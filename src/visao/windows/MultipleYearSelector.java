@@ -5,6 +5,7 @@
  */
 package visao.windows;
 
+import controle.ControleIndicadoresAnuais;
 import controle.ControlePerfil;
 import flex.db.GenericDAO;
 import java.awt.Color;
@@ -13,7 +14,6 @@ import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
-import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import modelo.negocio.DadosEconMensais;
 import modelo.negocio.DadosTecMensais;
@@ -27,7 +27,8 @@ import util.Cast;
 public class MultipleYearSelector extends javax.swing.JDialog {
 
      private final Perfil atual;
-     private List<Integer> selectedYears;
+     private final List<Integer> selectedYears;
+     private int tipoIndicador;
     /**
      * Creates new form MultipleYearSelector
      * @param parent
@@ -44,6 +45,7 @@ public class MultipleYearSelector extends javax.swing.JDialog {
         super.setLocationRelativeTo(null);
         super.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         super.setResizable(false);
+        super.getRootPane().setDefaultButton(cancelarBT);
         
         listaAnos.setBackground(Color.WHITE);
         listaAnos.setSelectionBackground(Color.GRAY);
@@ -174,7 +176,7 @@ public class MultipleYearSelector extends javax.swing.JDialog {
         List<DadosTecMensais> dados = dadosTecDAO.retrieveByColumn("idPerfilFK", atual.getId(), "ano", "ano DESC");
 
         if (dados.isEmpty()) {
-
+            listModel.addElement("Nenhum ano cadastrado.");
         }
 
         for(int i = 0; i < dados.size(); i++) {
@@ -209,12 +211,11 @@ public class MultipleYearSelector extends javax.swing.JDialog {
     }//GEN-LAST:event_cancelarBTActionPerformed
 
     private void confirmaBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmaBTActionPerformed
-        int tipoSelected = 0;
         
         if (tipoTecnico.isSelected()) {
-            tipoSelected = 1;
+            setTipoIndicador(1);
         } else if (tipoEconomico.isSelected()) {
-            tipoSelected = 2;
+            setTipoIndicador(2);
         } else {
              JOptionPane.showMessageDialog(this, "Nenhum Tipo de Indicadores foi selecionado.", "Alerta - Seleção de Tipo",
                     JOptionPane.WARNING_MESSAGE);
@@ -230,6 +231,13 @@ public class MultipleYearSelector extends javax.swing.JDialog {
         
         setSelectedYears(selectedYearsStr);
         
+        ControleIndicadoresAnuais controle = ControleIndicadoresAnuais.getInstance();
+        controle.gerarIndicadores(getTipoIndicador(), getSelectedYears());
+        
+        new VisualizarIndicadoresAnuais().setVisible(true);
+        
+        this.getOwner().setVisible(false);
+        this.getOwner().dispose();
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_confirmaBTActionPerformed
@@ -243,6 +251,16 @@ public class MultipleYearSelector extends javax.swing.JDialog {
     public List<Integer> getSelectedYears() {
         return this.selectedYears;
     }
+
+    public int getTipoIndicador() {
+        return tipoIndicador;
+    }
+
+    public void setTipoIndicador(int tipoIndicador) {
+        this.tipoIndicador = tipoIndicador;
+    }
+    
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;

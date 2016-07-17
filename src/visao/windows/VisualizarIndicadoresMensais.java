@@ -6,7 +6,7 @@
 package visao.windows;
 
 import controle.ControlePerfil;
-import controle.ControleRelatoriosMensais;
+import controle.ControleIndicadoresMensais;
 import flex.db.GenericDAO;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
@@ -18,18 +18,18 @@ import util.Util;
 /**
  * @author Alexandre
  */
-public class VisualizarRelatoriosMensais extends javax.swing.JFrame {
+public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
 
     private final Perfil atual;
     private List<DadosEconMensais> dems;
     private List<DadosTecMensais>  dtms;
     private GenericDAO dao;
-    private final ControleRelatoriosMensais crm;
+    private final ControleIndicadoresMensais cim;
     
     /**
      * Creates new form VisualizarRelatoriosMensais
      */
-    public VisualizarRelatoriosMensais() {
+    public VisualizarIndicadoresMensais() {
         initComponents();
         
         tabelaRelatorios.setShowGrid(true);
@@ -37,7 +37,7 @@ public class VisualizarRelatoriosMensais extends javax.swing.JFrame {
         tabelaRelatorios.setCellSelectionEnabled(false);
         tabelaRelatorios.setRowSelectionAllowed(true);
         
-        crm = ControleRelatoriosMensais.getInstance();
+        cim = ControleIndicadoresMensais.getInstance();
         
         atual = ControlePerfil.getInstance().getPerfilSelecionado();
         
@@ -45,31 +45,31 @@ public class VisualizarRelatoriosMensais extends javax.swing.JFrame {
         super.setResizable(false);
         super.setTitle("SGPL - " + atual.getNome() + " - Indicadores Mensais");
         
-        if( crm.getTipo() == 1 ){
+        if( cim.getTipoIndicador() == 1 ){
             
             dao = new GenericDAO<>(DadosEconMensais.class);
             
             dems = dao.executeSQL("SELECT * "
                                 + "FROM dados_economicos_mensais AS d "
-                                + "WHERE (d.ano >= " + crm.getAnoIni() + "  AND "
-                                       + "d.ano <= " + crm.getAnoFim() + "  AND "
-                                       + "d.mes >= " + crm.getMesIni() + "  AND "
-                                       + "d.mes <= " + crm.getMesFim() + ") AND "
+                                + "WHERE (d.ano >= " + cim.getAnoIni() + "  AND "
+                                       + "d.ano <= " + cim.getAnoFim() + "  AND "
+                                       + "d.mes >= " + cim.getMesIni() + "  AND "
+                                       + "d.mes <= " + cim.getMesFim() + ") AND "
                                        + "d.idPerfilFK = " + atual.getId()
                                 + " ORDER BY d.ano, d.mes");
             
             preencherTabelaIEM(dems);
             
-        } else if( crm.getTipo() == 2 ){
+        } else if( cim.getTipoIndicador() == 2 ){
             
             dao = new GenericDAO<>(DadosTecMensais.class);
             
             dtms = dao.executeSQL("SELECT * "
                                 + "FROM dados_tecnicos_mensais AS d "
-                                + "WHERE (d.ano >= " + crm.getAnoIni() + "  AND "
-                                       + "d.ano <= " + crm.getAnoFim() + "  AND "
-                                       + "d.mes >= " + crm.getMesIni() + "  AND "
-                                       + "d.mes <= " + crm.getMesFim() + ") AND "
+                                + "WHERE (d.ano >= " + cim.getAnoIni() + "  AND "
+                                       + "d.ano <= " + cim.getAnoFim() + "  AND "
+                                       + "d.mes >= " + cim.getMesIni() + "  AND "
+                                       + "d.mes <= " + cim.getMesFim() + ") AND "
                                        + "d.idPerfilFK = " + atual.getId()
                                 + " ORDER BY d.ano, d.mes");
             
@@ -82,10 +82,10 @@ public class VisualizarRelatoriosMensais extends javax.swing.JFrame {
         DefaultTableModel modelIndicadores = (DefaultTableModel) tabelaRelatorios.getModel();
         modelIndicadores.setNumRows(0);
         
-        int anoCont = crm.getAnoIni();
-        int anoFim  = crm.getAnoFim();
-        int mesCont = crm.getMesIni() - 1;
-        int mesFim  = crm.getMesFim();
+        int anoCont = cim.getAnoIni();
+        int anoFim  = cim.getAnoFim();
+        int mesCont = cim.getMesIni() - 1;
+        int mesFim  = cim.getMesFim();
         Object[] temp = new Object[32];
         
         do{
@@ -112,10 +112,10 @@ public class VisualizarRelatoriosMensais extends javax.swing.JFrame {
         DefaultTableModel modelIndicadores = (DefaultTableModel) tabelaRelatorios.getModel();
         modelIndicadores.setNumRows(0);
         
-        int anoCont = crm.getAnoIni();
-        int anoFim  = crm.getAnoFim();
-        int mesCont = crm.getMesIni() - 1;
-        int mesFim  = crm.getMesFim();
+        int anoCont = cim.getAnoIni();
+        int anoFim  = cim.getAnoFim();
+        int mesCont = cim.getMesIni() - 1;
+        int mesFim  = cim.getMesFim();
         Object[] temp = new Object[32];
         
         do{

@@ -9,6 +9,7 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -340,7 +341,7 @@ public abstract class GenericTableModifier extends JDialog{
         
         for (int i = getStringColumnsOffset(); i < editTable.getColumnCount(); i++) {
 
-            int sourceColumnWidth = getSourceTableColumnWidth(i);
+            int sourceColumnWidth = getSourceTableColumnWidth(i - getStringColumnsOffset());
             TableColumn column = editTable.getColumnModel().getColumn(i); //
             
             column.setPreferredWidth(sourceColumnWidth);
@@ -485,12 +486,18 @@ public abstract class GenericTableModifier extends JDialog{
             
             Object sourceValue = Cast.toPrimitiveType(value.toString(), sourceTable.getColumnClass(sourceColumn));
 
-            if (sourceValue.getClass() == sourceTable.getColumnClass(sourceColumn)) {
-                return sourceValue;
+            if (sourceTable.getColumnClass(sourceColumn) != Object.class){
+                
+                if(sourceValue.getClass() == sourceTable.getColumnClass(sourceColumn)){
+                    return sourceValue;
+                } else {
+                    throw new IllegalArgumentException("O valor não é do mesmo tipo da coluna correspondente na tabela.");
+                }
                 
             } else {
-                throw new IllegalArgumentException("O valor não é do mesmo tipo da coluna correspondente na tabela.");
-            }
+                return sourceValue;
+            } 
+            
         } else {
             return null; 
         }
@@ -682,12 +689,10 @@ public abstract class GenericTableModifier extends JDialog{
     protected boolean validateEditTableValue(int editRow, int editColumn, int sourceColumn){
         
         Object cellValue = getEditTableValue(editRow, editColumn);
-    
-        if(cellEditable.get(editRow)[editColumn] == true && !validateValue(cellValue, sourceColumn)){
-            
+        
+        if(!validateValue(cellValue, sourceColumn)){
             return false;
         }
-        
         return true;
     }
     
@@ -736,7 +741,7 @@ public abstract class GenericTableModifier extends JDialog{
                     }
                     
                 }
-                else if(!validateEditTableValue(i, j, j)){
+                else if(isCellEditable(i, j) && !validateEditTableValue(i, j, j - getStringColumnsOffset())){
                     
                     JOptionPane.showMessageDialog(this, "O valor da coluna \"" + editTable.getColumnName(j) + "\" na linha " + (i+1) +
                             " é inválido.", "Valor de Coluna Inválido", JOptionPane.ERROR_MESSAGE);
@@ -1170,5 +1175,9 @@ public abstract class GenericTableModifier extends JDialog{
             }
         }
         
+    }
+
+    public int getRealColumnCount(){
+        return getColumnEditableArray().length;
     }
 }

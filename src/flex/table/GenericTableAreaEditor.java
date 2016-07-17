@@ -304,6 +304,7 @@ public class GenericTableAreaEditor extends GenericTableModifier {
         return startColumn;
     }
 
+
     public int getEndColumn() {
         return endColumn;
     }
