@@ -32,7 +32,7 @@ import util.Util;
  */
 public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
 
-    private Perfil atual;
+    private final Perfil atual;
     private final GenericDAO<DadosTecMensais> dtmdao; 
     private final GenericDAO<Indicador> dtmindao;
     private List<DadosTecMensais> dtms;
@@ -114,11 +114,13 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
                 }
 
                 if( i == 1 && dtm.get(j).getAno() == ano) {    
-                    double tempMedia = (Double) modelDadosTecnicos.getValueAt(0, indexCol);
+                    if (modelDadosTecnicos.getValueAt(0, indexCol) != null) {
+                        double tempMedia = (Double) modelDadosTecnicos.getValueAt(0, indexCol);
 
-                    if( tempMedia != 0.0 ) {
-                        linhaTemp[indexCol] = Calc.dividir(tempMedia, Util.diasDoMes(ano, indexCol + 1));
-                    }  
+                        if( tempMedia != 0.0 ) {
+                            linhaTemp[indexCol] = Calc.dividir(tempMedia, Util.diasDoMes(ano, indexCol + 1));
+                        }  
+                    }
                 }
             }
             double divisao = calcularMedia(linhaTemp);
@@ -131,8 +133,6 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
             Util.clearVector(linhaTemp);
         }
     }
-      
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -165,6 +165,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         btnVoltar.setText("Voltar");
+        btnVoltar.setToolTipText("Menu Principal");
         btnVoltar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnVoltarActionPerformed(evt);
@@ -399,6 +400,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jPanel1);
 
         adicionarAnoBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/add.png"))); // NOI18N
+        adicionarAnoBT.setToolTipText("Adicionar novo ano");
         adicionarAnoBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 adicionarAnoBTActionPerformed(evt);
@@ -406,6 +408,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         });
 
         editarAnoBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit.png"))); // NOI18N
+        editarAnoBT.setToolTipText("Inserir/Editar dados ");
         editarAnoBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editarAnoBTActionPerformed(evt);
@@ -535,7 +538,6 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         telaNovoAno.setVisible(true);
         
         String ano = telaNovoAno.getSelected();
-        int index = telaNovoAno.getIndex();
         
         for(int i = 0; i < anoCombo.getItemCount(); i++) {
             if (anoCombo.getItemAt(i).equals(ano)) {
@@ -546,23 +548,22 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         if (existe == true) {
             JOptionPane.showMessageDialog(this, "Este ano já foi inserido para o perfil de " + atual.getNome()
                     + ".", "Alerta - Inserção de ano já cadastrado", JOptionPane.WARNING_MESSAGE);
+            return;
         }
-         if (index != 0 && existe == false) {
-            anoCombo.addItem(ano);
-            anoCombo.setSelectedItem(ano);
-        }
+        anoCombo.addItem(ano);
+        anoCombo.setSelectedItem(ano);
     }//GEN-LAST:event_adicionarAnoBTActionPerformed
 
     private void editarAnoBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarAnoBTActionPerformed
-        QuarterSelector telaMes = new QuarterSelector(this, true);
-        telaMes.setTitle("SGPL - DTM - Seleção de Trimestre");
-
-        telaMes.setVisible(true);
-        int selecionado = telaMes.getSelectedIndex(); 
+        MonthSelector telaMes = new MonthSelector(this, true);
         
-         if (selecionado != 0) {
-            
-            gtae.setTitle("Editar D.T.M. - " + telaMes.getQuarterSelected().toUpperCase());
+        telaMes.setTitle("SGPL - DTM - Seleção de Trimestre");
+        telaMes.setVisible(true);
+        
+        int selecionado = telaMes.getSelected(); 
+       
+        if (selecionado > 0) {
+            gtae.setTitle("Editar D.T.M. - " + telaMes.getMonthSelected().toUpperCase());
             
             configGTAE(selecionado);
             
@@ -602,10 +603,8 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         gtae.setAllowEmptyRows(true);
         gtae.setAllowEmptyCells(true);
         
-        int endColumn = (selected * 3) - 1;
-        int startColumn = endColumn - 2;
+        gtae.setColumnInterval(selected-1, selected-1);
         
-        gtae.setColumnInterval(startColumn, endColumn);
         gtae.setRowInterval(0, tabelaIndicadores.getRowCount()-1);
         
         gtae.processEditor();
@@ -636,42 +635,38 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
            
             Object[][] areaData = evt.getTableAreaData();
             List<Integer> linhas = evt.getRowsModified();
-            boolean[][] dataModified = evt.getTableCellModified();
-         
+                    
             int ano = Integer.parseInt(anoCombo.getSelectedItem().toString());
-           
+            
             for (Integer l : linhas) {
-                for(int c = 0; c < gtae.getColumnEditableArray().length; c++) {
-                    if (dataModified[l][c]) {
-                        int mes = (c + 1) + gtae.getStartColumn();
-                        
-                        Indicador ind = dtmindao.retrieveByColumn("indicador", tabelaIndicadores.getValueAt(l, 0)).get(0);
+                int mes = gtae.getStartColumn() + 1;
+                
+                String valor = Cast.toString(areaData[l][0]);
+                double dado = (valor.isEmpty()? 0.0 : Double.parseDouble(valor));
+                
+                Indicador ind = dtmindao.retrieveByColumn("indicador", tabelaIndicadores.getValueAt(l, 0)).get(0);
 
-                        String valor = Cast.toString(areaData[l][c]);
-                        
-                        double dado = (valor.isEmpty()? 0.0 : Double.parseDouble(valor));
+                List<DadosTecMensais> dadosTec = dtmdao.retrieveByColumns(new String[]{"mes", "ano", "idDTM_indicadorFK", "idPerfilFK"}, 
+                                                        new Object[]{mes, ano, ind.getId(), atual.getId()});
 
-                        List<DadosTecMensais> dadosTec = dtmdao.retrieveByColumns(new String[]{"mes", "ano", "idDTM_indicadorFK", "idPerfilFK"}, 
-                                                                        new Object[]{mes, ano, ind.getId(), atual.getId()});
+                if (dadosTec.isEmpty()) {
+                    if (dado != 0.0) {
+                        DadosTecMensais dadoTec = new DadosTecMensais(mes, ano, dado, ind, atual.getId());
 
-                        if (dadosTec.isEmpty()) {
-                            DadosTecMensais dadoTec = new DadosTecMensais(mes, ano, dado, ind, atual.getId());
-
-                            dtmdao.insert(dadoTec);
-
-                        } else {
-                            DadosTecMensais dtm = dadosTec.get(0);
-                            
-                            if (Cast.toString(areaData[l][c]).isEmpty()) {
-                                dtmdao.remove(dtm.getId());
-                                continue;
-                            }
-
-                            dtm.setDado(dado);
-
-                            dtmdao.update(dtm);
-                        }
+                        dtmdao.insert(dadoTec);
                     }
+
+                } else {
+                    DadosTecMensais dtm = dadosTec.get(0);
+
+                    if (valor.isEmpty() || dado == 0.0) {
+                        dtmdao.remove(dtm.getId());
+                        continue;
+                    }
+
+                    dtm.setDado(dado);
+
+                    dtmdao.update(dtm);
                 }
             }
             dtms = dtmdao.retrieveByColumns(new String[]{"idPerfilFK", "ano"}, new Object[]{atual.getId(), 

@@ -5,7 +5,8 @@
  */
 package visao.windows;
 
-import com.sun.glass.events.KeyEvent;
+import java.util.Arrays;
+import java.util.List;
 import javax.swing.JDialog;
 
 /**
@@ -28,7 +29,7 @@ public class MonthSelector extends javax.swing.JDialog {
         super.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         super.setResizable(false);
         
-        super.getRootPane().setDefaultButton(confirmaBT);
+        super.getRootPane().setDefaultButton(cancelaBT);
     }
 
     /**
@@ -40,26 +41,25 @@ public class MonthSelector extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        mesCombo = new javax.swing.JComboBox<>();
-        confirmaBT = new javax.swing.JButton();
         cancelaBT = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        janeiroBT = new javax.swing.JButton();
+        fevereiroBT = new javax.swing.JButton();
+        marcoBT = new javax.swing.JButton();
+        abrilBT = new javax.swing.JButton();
+        maioBT = new javax.swing.JButton();
+        junhoBT = new javax.swing.JButton();
+        setembroBT = new javax.swing.JButton();
+        julhoBT = new javax.swing.JButton();
+        agostoBT = new javax.swing.JButton();
+        dezembroBT = new javax.swing.JButton();
+        outubroBT = new javax.swing.JButton();
+        novembroBT = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);
-            }
-        });
-
-        mesCombo.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        mesCombo.setMaximumRowCount(13);
-        mesCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione...", "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro" }));
-
-        confirmaBT.setText("OK");
-        confirmaBT.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                confirmaBTActionPerformed(evt);
             }
         });
 
@@ -71,7 +71,103 @@ public class MonthSelector extends javax.swing.JDialog {
         });
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel1.setText("Selecione o mês para inserção/edição dos dados: ");
+        jLabel1.setText("Selecione o mês para inserir os dados: ");
+
+        janeiroBT.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        janeiroBT.setText("JANEIRO");
+        janeiroBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                janeiroBTActionPerformed(evt);
+            }
+        });
+
+        fevereiroBT.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        fevereiroBT.setText("FEVEREIRO");
+        fevereiroBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fevereiroBTActionPerformed(evt);
+            }
+        });
+
+        marcoBT.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        marcoBT.setText("MARÇO");
+        marcoBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                marcoBTActionPerformed(evt);
+            }
+        });
+
+        abrilBT.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        abrilBT.setText("ABRIL");
+        abrilBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                abrilBTActionPerformed(evt);
+            }
+        });
+
+        maioBT.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        maioBT.setText("MAIO");
+        maioBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                maioBTActionPerformed(evt);
+            }
+        });
+
+        junhoBT.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        junhoBT.setText("JUNHO");
+        junhoBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                junhoBTActionPerformed(evt);
+            }
+        });
+
+        setembroBT.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        setembroBT.setText("SETEMBRO");
+        setembroBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                setembroBTActionPerformed(evt);
+            }
+        });
+
+        julhoBT.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        julhoBT.setText("JULHO");
+        julhoBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                julhoBTActionPerformed(evt);
+            }
+        });
+
+        agostoBT.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        agostoBT.setText("AGOSTO");
+        agostoBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                agostoBTActionPerformed(evt);
+            }
+        });
+
+        dezembroBT.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        dezembroBT.setText("DEZEMBRO");
+        dezembroBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dezembroBTActionPerformed(evt);
+            }
+        });
+
+        outubroBT.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        outubroBT.setText("OUTUBRO");
+        outubroBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                outubroBTActionPerformed(evt);
+            }
+        });
+
+        novembroBT.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        novembroBT.setText("NOVEMBRO");
+        novembroBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                novembroBTActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -80,58 +176,175 @@ public class MonthSelector extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(mesCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel1)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addComponent(cancelaBT, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(confirmaBT, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(32, Short.MAX_VALUE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(abrilBT, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(janeiroBT, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(julhoBT, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(outubroBT, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
+                            .addComponent(cancelaBT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(maioBT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(fevereiroBT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(agostoBT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(novembroBT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(junhoBT, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(setembroBT, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(marcoBT, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(dezembroBT, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(mesCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(marcoBT, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(janeiroBT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(fevereiroBT, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(confirmaBT, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
-                    .addComponent(cancelaBT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(48, Short.MAX_VALUE))
+                    .addComponent(abrilBT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(maioBT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(junhoBT, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(agostoBT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(julhoBT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(setembroBT, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(outubroBT, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(novembroBT, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(dezembroBT, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addComponent(cancelaBT, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(19, 19, 19))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void confirmaBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmaBTActionPerformed
-        this.setVisible(false);        
-        this.selected = mesCombo.getSelectedIndex();
-    }//GEN-LAST:event_confirmaBTActionPerformed
-
     private void cancelaBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelaBTActionPerformed
+        this.setSelected(-1);
         this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_cancelaBTActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_formWindowClosed
 
-   public int getSelected() {
+    private void janeiroBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_janeiroBTActionPerformed
+        this.setSelected(1);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_janeiroBTActionPerformed
+
+    private void fevereiroBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fevereiroBTActionPerformed
+        this.setSelected(2);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_fevereiroBTActionPerformed
+
+    private void marcoBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_marcoBTActionPerformed
+        this.setSelected(3);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_marcoBTActionPerformed
+
+    private void abrilBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrilBTActionPerformed
+        this.setSelected(4);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_abrilBTActionPerformed
+
+    private void maioBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_maioBTActionPerformed
+        this.setSelected(5);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_maioBTActionPerformed
+
+    private void junhoBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_junhoBTActionPerformed
+        this.setSelected(6);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_junhoBTActionPerformed
+
+    private void julhoBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_julhoBTActionPerformed
+        this.setSelected(7);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_julhoBTActionPerformed
+
+    private void agostoBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agostoBTActionPerformed
+        this.setSelected(8);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_agostoBTActionPerformed
+
+    private void setembroBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setembroBTActionPerformed
+        this.setSelected(9);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_setembroBTActionPerformed
+
+    private void outubroBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_outubroBTActionPerformed
+        this.setSelected(10);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_outubroBTActionPerformed
+
+    private void novembroBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_novembroBTActionPerformed
+        this.setSelected(11);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_novembroBTActionPerformed
+
+    private void dezembroBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dezembroBTActionPerformed
+        this.setSelected(12);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_dezembroBTActionPerformed
+
+    private void setSelected(int selected) {
+        this.selected = selected;
+    }
+            
+    public int getSelected() {
        return this.selected;
-   }
+    }
    
-   public String getMonthSelected() {
-       return this.mesCombo.getItemAt(this.selected);
-   }
-   
+    public String getMonthSelected() {
+       List<String> months = Arrays.asList("Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", 
+               "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro");
+ 
+       return months.get(getSelected()-1);
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton abrilBT;
+    private javax.swing.JButton agostoBT;
     private javax.swing.JButton cancelaBT;
-    private javax.swing.JButton confirmaBT;
+    private javax.swing.JButton dezembroBT;
+    private javax.swing.JButton fevereiroBT;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JComboBox<String> mesCombo;
+    private javax.swing.JButton janeiroBT;
+    private javax.swing.JButton julhoBT;
+    private javax.swing.JButton junhoBT;
+    private javax.swing.JButton maioBT;
+    private javax.swing.JButton marcoBT;
+    private javax.swing.JButton novembroBT;
+    private javax.swing.JButton outubroBT;
+    private javax.swing.JButton setembroBT;
     // End of variables declaration//GEN-END:variables
 }

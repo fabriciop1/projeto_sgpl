@@ -18,7 +18,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modelo.dao.DAO;
-import modelo.negocio.Rota;
 import util.Cast;
 
 /**
@@ -370,17 +369,6 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
         } catch (InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(GenericDAO.class.getName()).log(Level.SEVERE, null, ex);
             return null;
-        }
-    }
-
-    public static void main(String[] args) {
-        
-        GenericDAO<Rota> dao = new GenericDAO<>(Rota.class);
-        
-        List<Rota> asRotaTudo = dao.retrieveByColumn("rota", "Lajedo");
-        
-        for(Rota r : asRotaTudo){
-            System.out.println(r.getRota());
         }
     }
 }

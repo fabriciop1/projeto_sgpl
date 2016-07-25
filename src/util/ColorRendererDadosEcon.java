@@ -26,9 +26,6 @@ public class ColorRendererDadosEcon extends DecimalFormatRenderer {
        
         super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column); 
         
-        
-        /*if(column == 2 || column == 5 || column == 8 || column == 11 || column == 14 || column == 17 || 
-           column == 20 || column == 23 || column == 26 || column == 29 || column == 32 || column == 35) { */
         if (table.getColumnName(column).equals("Total (R$)")) {
             this.setBackground(COLOR);
             this.setFont(getFont().deriveFont(FONT));
@@ -41,8 +38,7 @@ public class ColorRendererDadosEcon extends DecimalFormatRenderer {
             this.setBackground(COLOR);
             this.setFont(getFont().deriveFont(FONT));
             
-        } else if (row == 89 && (column == 1 || column == 4 || column == 7 || column == 10 || column == 13 || column == 16
-                || column == 19 || column == 22 || column == 25 || column == 28 || column == 31 || column == 34)) {
+        } else if (row == 89 && table.getColumnName(column).equals("Valor Unit.")) {
             this.setBackground(COLOR);
             this.setFont(getFont().deriveFont(FONT));
             

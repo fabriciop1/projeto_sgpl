@@ -6,7 +6,7 @@
 package visao.windows;
 
 import controle.ControlePerfil;
-import controle.ControleRelatoriosMensais;
+import controle.ControleIndicadoresMensais;
 import flex.db.GenericDAO;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
@@ -21,11 +21,11 @@ import util.Util;
 public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
 
     private final Perfil atual;
-    private List<DadosEconMensais> dems;
+    private final List<DadosEconMensais> dems;
     private List<DadosTecMensais>  dtms;
     private GenericDAO<DadosEconMensais> demdao;
     private GenericDAO<DadosTecMensais>  dtmdao;
-    private final ControleRelatoriosMensais crm;
+    private final ControleIndicadoresMensais crm;
     
     /**
      * Creates new form VisualizarRelatoriosMensais
@@ -38,15 +38,12 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
         tabelaRelatorios.setCellSelectionEnabled(false);
         tabelaRelatorios.setRowSelectionAllowed(true);
         
-        crm = ControleRelatoriosMensais.getInstance();
+        crm = ControleIndicadoresMensais.getInstance();
         
         atual = ControlePerfil.getInstance().getPerfilSelecionado();
         
         super.setLocationRelativeTo(null);
-        super.setResizable(false);
-        super.setTitle("SGPL - " + atual.getNome() + " - Indicadores Mensais");
-        
-        
+        super.setResizable(false);      
             
         demdao = new GenericDAO<>(DadosEconMensais.class);
         dems = demdao.executeSQL("SELECT * "
@@ -68,14 +65,16 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
                                    + "d.idPerfilFK = " + atual.getId()
                             + " ORDER BY d.ano, d.mes");
                 
-        if( crm.getTipo() == 1 ){    
-            preencherTabelaIEM(dems);            
-        } else if( crm.getTipo() == 2 ){
-            preencherTabelaITM(dtms);
+        if( crm.getTipoIndicador()== 1 ){ 
+            preencherTabelaIEM(dems);
+        } else if( crm.getTipoIndicador()== 2 ){
+            preencherTabelaITM(dtms); 
         }
     }
     
     private void preencherTabelaIEM(List<DadosEconMensais> iem){
+        
+        super.setTitle("SGPL - " + atual.getNome() + " - Indicadores Econômicos Mensais");
         
         DefaultTableModel modelIndicadores = (DefaultTableModel) tabelaRelatorios.getModel();
         modelIndicadores.setNumRows(0);
@@ -87,7 +86,6 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
         Object[] temp = new Object[32];
                 
         modelIndicadores.addColumn("Indicadores", getIEM());
-        tabelaRelatorios.getColumnModel().getColumn(0).setPreferredWidth(300);
         
         do{
             for(int i = 0; i < iem.size(); i++){
@@ -106,10 +104,7 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
                 }
             }
             
-            
-            
-            
-            
+           
             mesCont++;
             
             if( mesCont > 12 ){
@@ -124,9 +119,13 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
         }while(anoCont != anoFim || mesCont != mesFim);
         
         tabelaRelatorios.setModel(modelIndicadores);
+        tabelaRelatorios.getColumnModel().getColumn(0).setPreferredWidth(370);
+        
     }
     
     private void preencherTabelaITM(List<DadosTecMensais> itm){
+       
+        super.setTitle("SGPL - " + atual.getNome() + " - Indicadores Técnicos Mensais");
         
         DefaultTableModel modelIndicadores = (DefaultTableModel) tabelaRelatorios.getModel();
         modelIndicadores.setNumRows(0);
@@ -138,7 +137,6 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
         Object[] temp = new Object[32];
         
         modelIndicadores.addColumn("Indicadores", getITM());
-        tabelaRelatorios.getColumnModel().getColumn(0).setPreferredWidth(300);
         
         do{
             temp[1] = "teste " + mesCont;
@@ -157,6 +155,7 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
             Util.clearVector(temp);
         }while(anoCont != anoFim || mesCont != mesFim);
         
+        tabelaRelatorios.getColumnModel().getColumn(0).setPreferredWidth(330);
     }
     
     public Object[] getIEM(){
@@ -284,9 +283,13 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
             new String [] {
 
             }
-        ));
+        )   {
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return false;
+            }
+        });
         tabelaRelatorios.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
-        tabelaRelatorios.setColumnSelectionAllowed(true);
+        tabelaRelatorios.setColumnSelectionAllowed(false);
         tabelaRelatorios.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tabelaRelatorios.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tabelaRelatorios);

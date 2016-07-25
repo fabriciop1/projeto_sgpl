@@ -594,6 +594,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total12.setText("<total12>");
 
         editarInvTerrasBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit.png"))); // NOI18N
+        editarInvTerrasBT.setToolTipText("Editar linha");
         editarInvTerrasBT.setPreferredSize(new java.awt.Dimension(80, 25));
         editarInvTerrasBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -602,6 +603,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         });
 
         adicionarInvTerrasBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/add.png"))); // NOI18N
+        adicionarInvTerrasBT.setToolTipText("Adicionar linhas");
         adicionarInvTerrasBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 adicionarInvTerrasBTActionPerformed(evt);
@@ -609,6 +611,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         });
 
         removerInvTerrasBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/delete.png"))); // NOI18N
+        removerInvTerrasBT.setToolTipText("Excluir linhas");
         removerInvTerrasBT.setPreferredSize(new java.awt.Dimension(80, 50));
         removerInvTerrasBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -965,6 +968,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total39.setText("<total39>");
 
         editarInvAnimaisBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit.png"))); // NOI18N
+        editarInvAnimaisBT.setToolTipText("Editar linha");
         editarInvAnimaisBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editarInvAnimaisBTActionPerformed(evt);
@@ -972,6 +976,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         });
 
         valorGastoAnimaisBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit_values.png"))); // NOI18N
+        valorGastoAnimaisBT.setToolTipText("Inserir valor");
         valorGastoAnimaisBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 valorGastoAnimaisBTActionPerformed(evt);
@@ -979,6 +984,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         });
 
         removerInvAnimaisBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/delete.png"))); // NOI18N
+        removerInvAnimaisBT.setToolTipText("Excluir linha");
         removerInvAnimaisBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removerInvAnimaisBTActionPerformed(evt);
@@ -986,6 +992,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         });
 
         adicionarInvAnimaisBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/add.png"))); // NOI18N
+        adicionarInvAnimaisBT.setToolTipText("Adicionar linha");
         adicionarInvAnimaisBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 adicionarInvAnimaisBTActionPerformed(evt);
@@ -993,6 +1000,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         });
 
         vidaUtilReprodBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit_values.png"))); // NOI18N
+        vidaUtilReprodBT.setToolTipText("Inserir valor");
         vidaUtilReprodBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 vidaUtilReprodBTActionPerformed(evt);
@@ -1000,6 +1008,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         });
 
         vidaUtilServBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit_values.png"))); // NOI18N
+        vidaUtilServBT.setToolTipText("Inserir valor");
         vidaUtilServBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 vidaUtilServBTActionPerformed(evt);
@@ -1286,6 +1295,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total41.setText("<total41>");
 
         editarInvBenfeitoriasBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit.png"))); // NOI18N
+        editarInvBenfeitoriasBT.setToolTipText("Editar linha");
         editarInvBenfeitoriasBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editarInvBenfeitoriasBTActionPerformed(evt);
@@ -1293,6 +1303,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         });
 
         adicionarInvBenfeitoriasBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/add.png"))); // NOI18N
+        adicionarInvBenfeitoriasBT.setToolTipText("Adicionar linha");
         adicionarInvBenfeitoriasBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 adicionarInvBenfeitoriasBTActionPerformed(evt);
@@ -1300,6 +1311,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         });
 
         removerInvBenfeitoriasBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/delete.png"))); // NOI18N
+        removerInvBenfeitoriasBT.setToolTipText("Excluir linha");
         removerInvBenfeitoriasBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removerInvBenfeitoriasBTActionPerformed(evt);
@@ -1437,6 +1449,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total43.setText("<total43>");
 
         editarInvMaquinasBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit.png"))); // NOI18N
+        editarInvMaquinasBT.setToolTipText("Editar linha");
         editarInvMaquinasBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editarInvMaquinasBTActionPerformed(evt);
@@ -1444,6 +1457,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         });
 
         removerInvMaquinasBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/delete.png"))); // NOI18N
+        removerInvMaquinasBT.setToolTipText("Excluir linha");
         removerInvMaquinasBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removerInvMaquinasBTActionPerformed(evt);
@@ -1451,6 +1465,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         });
 
         adicionarInvMaquinasBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/add.png"))); // NOI18N
+        adicionarInvMaquinasBT.setToolTipText("Adicionar linha");
         adicionarInvMaquinasBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 adicionarInvMaquinasBTActionPerformed(evt);
@@ -1902,6 +1917,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         jPanel5.add(jLabel50, gridBagConstraints);
 
         atividadeLeiteBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit_values.png"))); // NOI18N
+        atividadeLeiteBT.setToolTipText("Inserir valor");
         atividadeLeiteBT.setPreferredSize(new java.awt.Dimension(47, 29));
         atividadeLeiteBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1915,6 +1931,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         jPanel5.add(atividadeLeiteBT, gridBagConstraints);
 
         custoOportBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit_values.png"))); // NOI18N
+        custoOportBT.setToolTipText("Inserir valor");
         custoOportBT.setPreferredSize(new java.awt.Dimension(47, 29));
         custoOportBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1928,6 +1945,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         jPanel5.add(custoOportBT, gridBagConstraints);
 
         salarioMinimoBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit_values.png"))); // NOI18N
+        salarioMinimoBT.setToolTipText("Inserir valor");
         salarioMinimoBT.setPreferredSize(new java.awt.Dimension(47, 29));
         salarioMinimoBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1973,6 +1991,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         jTabbedPane1.addTab("Resumo", jPanel5);
 
         btnVoltar.setText("Voltar");
+        btnVoltar.setToolTipText("Menu Principal");
         btnVoltar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnVoltarActionPerformed(evt);

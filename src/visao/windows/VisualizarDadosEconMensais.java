@@ -10,6 +10,7 @@ import controle.ControlePerfil;
 import flex.db.GenericDAO;
 import flex.table.GenericTableAreaEditor;
 import flex.table.TableModifiedEvent;
+import java.awt.Font;
 import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,15 +58,13 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         
         this.setSalarioMensal();
         
-        tabelaEspecificacao.setShowHorizontalLines(true);
-        
+        tabelaMeses.getTableHeader().setFont(super.getFont().deriveFont(Font.BOLD));
+        tabelaEspecificacao.setShowHorizontalLines(true);        
         tabelaDadosEconomicos.setShowGrid(true);
-        
         tabelaDadosEconomicos.setDefaultRenderer(Object.class, new ColorRendererDadosEcon(true));
         tabelaEspecificacao.setDefaultRenderer(Object.class, new ColorRendererDadosEcon(false));
         
         demdao = new GenericDAO<>(DadosEconMensais.class);
-        
         demespdao = new GenericDAO<>(Especificacao.class);
         
         especificacoes = demespdao.retrieveAll();
@@ -142,7 +141,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
 
                     }
 
-                    if( modelEspecificacao.getValueAt(i, 0).equals("SUB-TOTAL")) {    
+                    if( modelEspecificacao.getValueAt(i, 0).equals("SUB-TOTAL") || i == 87) {    
                         if (tempTotais[indexCol + 2] != 0.0) {
                             linhaTemp[indexCol + 2] = tempTotais[indexCol + 2];
                             coeAtivLeite[dem.get(j).getMes() - 1] += tempTotais[indexCol + 2];
@@ -228,6 +227,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         });
 
         btnVoltar.setText("Voltar");
+        btnVoltar.setToolTipText("Menu Principal");
         btnVoltar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnVoltarActionPerformed(evt);
@@ -244,6 +244,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         });
 
         adicionarAnoBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/add.png"))); // NOI18N
+        adicionarAnoBT.setToolTipText("Adicionar novo ano");
         adicionarAnoBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 adicionarAnoBTActionPerformed(evt);
@@ -430,6 +431,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
 
         jPanel2.setPreferredSize(new java.awt.Dimension(2780, 1512));
 
+        tabelaMeses.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         tabelaMeses.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -703,6 +705,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         });
 
         editarValoresBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit.png"))); // NOI18N
+        editarValoresBT.setToolTipText("Inserir/Editar dados");
         editarValoresBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editarValoresBTActionPerformed(evt);
@@ -781,12 +784,11 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         telaMes.setVisible(true);
         int selecionado = telaMes.getSelected();
         
-        if (selecionado != 0) {
-             
+        if (selecionado > 0) {
             gtae.setTitle("Editar Dados Econômicos Mensais - " + telaMes.getMonthSelected().toUpperCase());
-            
+
             configGTAE(selecionado);
-            
+
             gtae.showEditor(evt);          
         }
     }//GEN-LAST:event_editarValoresBTActionPerformed
@@ -817,7 +819,6 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         telaNovoAno.setVisible(true);
         
         String ano = telaNovoAno.getSelected();
-        int index = telaNovoAno.getIndex();
         
         for(int i = 0; i < anoCombo.getItemCount(); i++) {
             if (anoCombo.getItemAt(i).equals(ano)) {
@@ -828,11 +829,12 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         if (existe) {
             JOptionPane.showMessageDialog(this, "Este ano já foi inserido para o perfil de " + atual.getNome()
                     + ".", "Alerta - Inserção de ano já cadastrado", JOptionPane.WARNING_MESSAGE);
-        }
-        if (index != 0 && existe == false) {
-            anoCombo.addItem(ano);
-            anoCombo.setSelectedItem(ano);
-        }
+            return;
+        } 
+        
+        anoCombo.addItem(ano);
+        anoCombo.setSelectedItem(ano);
+        
     }//GEN-LAST:event_adicionarAnoBTActionPerformed
 
     private void anoComboItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_anoComboItemStateChanged
@@ -893,7 +895,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
     private void fillComboBox() {
          
         List<DadosEconMensais> dados = demdao.retrieveByColumn("idPerfilFK", atual.getId(), "ano", "ano DESC");
- 
+        
         if (dados.isEmpty()) {
             Calendar cal = GregorianCalendar.getInstance();
             anoCombo.addItem(Cast.toString(cal.get(Calendar.YEAR)));

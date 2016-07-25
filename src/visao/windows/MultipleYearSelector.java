@@ -212,9 +212,9 @@ public class MultipleYearSelector extends javax.swing.JDialog {
 
     private void confirmaBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmaBTActionPerformed
         
-        if (tipoTecnico.isSelected()) {
+        if (tipoEconomico.isSelected()) {
             setTipoIndicador(1);
-        } else if (tipoEconomico.isSelected()) {
+        } else if (tipoTecnico.isSelected()) {
             setTipoIndicador(2);
         } else {
              JOptionPane.showMessageDialog(this, "Nenhum Tipo de Indicadores foi selecionado.", "Alerta - Seleção de Tipo",
@@ -224,6 +224,10 @@ public class MultipleYearSelector extends javax.swing.JDialog {
         
         if (listaAnos.isSelectionEmpty()) {
             JOptionPane.showMessageDialog(this, "Nenhum ano foi selecionado.", "Alerta - Seleção de Ano", JOptionPane.WARNING_MESSAGE);
+            return;
+        } else if (listaAnos.getSelectedValue().equals("Nenhum ano cadastrado.")) {
+            JOptionPane.showMessageDialog(this, "Nenhum ano foi cadastrado para este perfil.", 
+                    "Alerta - Nenhum ano cadastrado", JOptionPane.WARNING_MESSAGE );
             return;
         }
         

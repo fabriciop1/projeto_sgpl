@@ -8,6 +8,7 @@ package modelo.dao;
 import com.mysql.jdbc.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -43,6 +44,8 @@ public class DBConexao {
             System.out.println("Driver não encontrado. " + e.getMessage());
             return null;
         } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Problema durante conexão com servidor. " + ex.getMessage(), 
+                    "Problema encontrado no servidor.", JOptionPane.ERROR_MESSAGE);
             System.out.println("Problema durante conexão com banco de dados. " + ex.getMessage());
             return null;
         }
