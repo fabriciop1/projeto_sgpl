@@ -8,11 +8,16 @@ package visao.windows;
 import controle.ControlePerfil;
 import controle.ControleIndicadoresMensais;
 import flex.db.GenericDAO;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
 import java.util.List;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import modelo.negocio.DadosEconMensais;
 import modelo.negocio.DadosTecMensais;
 import modelo.negocio.Perfil;
+import util.DecimalFormatRenderer;
 import util.Util;
 
 /**
@@ -33,18 +38,19 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
     public VisualizarIndicadoresMensais() {
         initComponents();
         
-        tabelaRelatorios.setShowGrid(true);
-        tabelaRelatorios.setShowHorizontalLines(true);
-        tabelaRelatorios.setCellSelectionEnabled(false);
-        tabelaRelatorios.setRowSelectionAllowed(true);
+        tabelaIndicadoresMensais.setShowGrid(true);
+        tabelaIndicadoresMensais.setShowHorizontalLines(true);
+        tabelaIndicadoresMensais.setCellSelectionEnabled(false);
+        tabelaIndicadoresMensais.setRowSelectionAllowed(true);
         
         crm = ControleIndicadoresMensais.getInstance();
         
         atual = ControlePerfil.getInstance().getPerfilSelecionado();
         
         super.setLocationRelativeTo(null);
-        super.setResizable(false);      
-            
+        super.setResizable(false);
+        super.setTitle("SGPL - " + atual.getNome() + " - Indicadores Mensais");
+          
         demdao = new GenericDAO<>(DadosEconMensais.class);
         dems = demdao.executeSQL("SELECT * "
                             + "FROM dados_economicos_mensais AS d "
@@ -65,47 +71,34 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
                                    + "d.idPerfilFK = " + atual.getId()
                             + " ORDER BY d.ano, d.mes");
                 
-        if( crm.getTipoIndicador()== 1 ){ 
-            preencherTabelaIEM(dems);
-        } else if( crm.getTipoIndicador()== 2 ){
-            preencherTabelaITM(dtms); 
+        if( crm.getTipoIndicador() == 1 ){    
+            preencherTabelaIEM(dems, dtms);            
+        } else if( crm.getTipoIndicador() == 2 ){
+            preencherTabelaITM(dtms);
         }
     }
     
-    private void preencherTabelaIEM(List<DadosEconMensais> iem){
+    private void preencherTabelaIEM(List<DadosEconMensais> iem, List<DadosTecMensais> itm){
         
         super.setTitle("SGPL - " + atual.getNome() + " - Indicadores Econômicos Mensais");
         
-        DefaultTableModel modelIndicadores = (DefaultTableModel) tabelaRelatorios.getModel();
+        DefaultTableModel modelIndicadores = (DefaultTableModel) tabelaIndicadoresMensais.getModel();
         modelIndicadores.setNumRows(0);
         
         int anoCont = crm.getAnoIni();
         int anoFim  = crm.getAnoFim();
         int mesCont = crm.getMesIni() - 1;
         int mesFim  = crm.getMesFim();
-        Object[] temp = new Object[32];
+        Object[] temp;
                 
-        modelIndicadores.addColumn("Indicadores", getIEM());
+        modelIndicadores.addColumn("Indicadores", crm.getIndEconomMensais());
+        modelIndicadores.addColumn("Unidade", crm.getUniEconomMensais());
         
         do{
-            for(int i = 0; i < iem.size(); i++){
-                
-                DadosEconMensais dem = iem.get(i);
-                
-                if(dem.getEspecificacao().getEspecificacao().equals("Venda de Leite (L)")
-                        && dem.getMes() == mesCont && dem.getAno() == anoCont){
-                    temp[0] = dem.getQuantidade() * dem.getValorUnitario();
-                    break;
-                }
-                
-                if((getTotalLitroLeite(dtms, mesCont, anoCont) != -1 || getTotalLitroLeite(dtms, mesCont, anoCont) != 0.0)
-                        && temp[0] != null){
-                    temp[1] = (Double) temp[0]/getTotalLitroLeite(dtms, mesCont, anoCont);
-                }
-            }
-            
-           
+            temp = crm.getConteudoEconomico(iem, itm, mesCont, anoCont);
+                        
             mesCont++;
+            
             
             if( mesCont > 12 ){
                 mesCont = 1;
@@ -118,28 +111,30 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
             Util.clearVector(temp);
         }while(anoCont != anoFim || mesCont != mesFim);
         
-        tabelaRelatorios.setModel(modelIndicadores);
-        tabelaRelatorios.getColumnModel().getColumn(0).setPreferredWidth(370);
+        tabelaIndicadoresMensais.setModel(modelIndicadores);
+        tabelaIndicadoresMensais.getColumnModel().getColumn(0).setPreferredWidth(370);
+        tabelaIndicadoresMensais.setDefaultRenderer(Object.class, new DecimalFormatRenderer(false));
         
     }
     
-    private void preencherTabelaITM(List<DadosTecMensais> itm){
-       
+    private void preencherTabelaITM(List<DadosTecMensais> dtms){
+        
         super.setTitle("SGPL - " + atual.getNome() + " - Indicadores Técnicos Mensais");
         
-        DefaultTableModel modelIndicadores = (DefaultTableModel) tabelaRelatorios.getModel();
+        DefaultTableModel modelIndicadores = (DefaultTableModel) tabelaIndicadoresMensais.getModel();
         modelIndicadores.setNumRows(0);
         
         int anoCont = crm.getAnoIni();
         int anoFim  = crm.getAnoFim();
         int mesCont = crm.getMesIni() - 1;
         int mesFim  = crm.getMesFim();
-        Object[] temp = new Object[32];
+        Object[] temp;
         
-        modelIndicadores.addColumn("Indicadores", getITM());
+        modelIndicadores.addColumn("Indicadores", crm.getIndTecnMensais());
+        modelIndicadores.addColumn("Unidade", crm.getUniTecnMensais());
         
         do{
-            temp[1] = "teste " + mesCont;
+            temp = crm.getConteudoTecnico(dtms, mesCont + 1, anoCont);
             
             mesCont++;
             
@@ -155,79 +150,29 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
             Util.clearVector(temp);
         }while(anoCont != anoFim || mesCont != mesFim);
         
-        tabelaRelatorios.getColumnModel().getColumn(0).setPreferredWidth(330);
-    }
-    
-    public Object[] getIEM(){
-        return new Object[] {
-            "Renda bruta do leite (R$/Mês)",
-            "Preço médio mensal do leite (R$/L)",
-            "COE do leite (R$/Mês)",
-            "COT do leite (R$/Mês)",
-            "Custo total do leite (R$/Mês)",
-            "COE unitário do leite (R$/L)",
-            "COT unitário do leite (R$/L)",
-            "CT unitário do leite (R$/Mês)",
-            "COE do leite/preço do leite (L/Mês)",
-            "COT do leite/preço do leite (L/Mês)",
-            "CT do leite/preço do leite (L/Mês)",
-            "Gasto com MDO contratada permanente do leite/renda bruta do leite (%)",
-            "Gasto com MDO total do leite/ renda bruta do leite (%)",
-            "Gasto com concentrado do leite/renda bruta do leite (%)",
-            "Margem bruta do leite (R$/Mês)",
-            "Margem bruta unitária (R$/L)",
-            "Margem bruta em equivalente litros de leite (L/Mês)",
-            "Margem bruta/Área (R$/ha/Mês)",
-            "Margem bruta/vaca em lactação (R$/Cab)",
-            "Margem bruta/total de vacas (R$/Cab)",
-            "Margem líquida do leite (R$/Mês)",
-            "Margem líquida unitária (R$/L)",
-            "Margem líquida em equivalente litros de leite (L/Mês)", 
-            "Margem líquida/Área (R$/ha/Mês)",
-            "Lucro total do leite (R$/Mês)",
-            "Lucro unitário (R$/L)",
-            "Lucro em equivalente litros de leite (L/Mês)",
-            "Custo da mão-de-obra familiar (R$/Mês)",
-            "Lucratividade (% a.m.)",
-            "Ponto de Resíduo ( RB = COT ) (L/dia)",
-            "Ponto de Nivelamento ( RB = CT) - Litros/dia (L/dia)",
-            "Capital investido por litro de leite (R$/L)"
-        };
-        
-    }
-    
-    public Object[] getITM(){
-        return new Object[] {
-            "PRODUTIVOS",
-            "Produção mensal de leite (L/dia)",
-            "Área usada para pecuária (ha)",
-            "Rebanho total",
-            "Total de vacas (Cab)",
-            "Vacas em lactação (Cab)",
-            "Vaca Seca (Cab)",
-            "Novilhas (Cab)",
-            "Bezerras (Cab)",
-            "Bezerros (Cab)",
-            "Touro (Cab)",
-            "Outros (Cab)",
-            "Vacas em lactação / total de vacas (%)",
-            "Vacas em lactação / rebanho (%)",
-            "Vacas em lactação / área para pecuária (Cab/ha)",
-            "Vacas em lactação / funcionário",
-            "Produção / vaca em lactação (L/dia)",
-            "Produção / mão-de-obra permanente (contratada) (L/dh)",
-            "Produção / área para pecuária (1/2) x 365 (L/ha/Mês)",
-
-            "SANITÁRIOS",
-            "Nº Abortos",
-            "Nº Natimortos",
-            "Nº Retenção de placenta",
-            "Nº Morte de bezerros",
-            "Nº Bezerros doentes",
-            "Nº Morte de novilhas",
-            "Nº Morte de vacas",
-            "Nº Vacas com mastite clínica",
-        };    
+        tabelaIndicadoresMensais.getColumnModel().getColumn(0).setPreferredWidth(330);
+        tabelaIndicadoresMensais.setDefaultRenderer(Object.class, new DecimalFormatRenderer(false) {
+            private final Color BG = null;
+            
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
+                
+                super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column); 
+                
+                if (row == 0 || row == 20) {
+                    this.setBackground(Color.LIGHT_GRAY);
+                    this.setFont(getFont().deriveFont(Font.BOLD));
+                } else {
+                    this.setBackground(null);
+                }
+                
+                if (isSelected) {
+                    super.setBackground(BG == null ? table.getSelectionBackground(): null);
+                }
+                return this;
+            }
+        });
     }
     
     public double getTotalLitroLeite(List<DadosTecMensais> dtm, int mes, int ano){
@@ -250,7 +195,7 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
         textoEntrada = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tabelaRelatorios = new javax.swing.JTable();
+        tabelaIndicadoresMensais = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -276,24 +221,20 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
             .addGap(0, 560, Short.MAX_VALUE)
         );
 
-        tabelaRelatorios.setModel(new javax.swing.table.DefaultTableModel(
+        tabelaIndicadoresMensais.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
 
             }
-        )   {
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return false;
-            }
-        });
-        tabelaRelatorios.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
-        tabelaRelatorios.setColumnSelectionAllowed(false);
-        tabelaRelatorios.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        tabelaRelatorios.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(tabelaRelatorios);
-        tabelaRelatorios.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        ));
+        tabelaIndicadoresMensais.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        tabelaIndicadoresMensais.setColumnSelectionAllowed(true);
+        tabelaIndicadoresMensais.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tabelaIndicadoresMensais.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(tabelaIndicadoresMensais);
+        tabelaIndicadoresMensais.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -340,7 +281,7 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
     private javax.swing.JButton btnVoltar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tabelaRelatorios;
+    private javax.swing.JTable tabelaIndicadoresMensais;
     private javax.swing.JLabel textoEntrada;
     // End of variables declaration//GEN-END:variables
 }
