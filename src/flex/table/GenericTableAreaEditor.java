@@ -148,8 +148,8 @@ public class GenericTableAreaEditor extends GenericTableModifier {
                     tableCellModified, TableModifiedEvent.AREA_CHANGED));
         }
         
-        System.out.println("Rows Modified: " + rowsModified.size());
-        System.out.println("Columns Modified: " + columnsModified.size());
+//        System.out.println("Rows Modified: " + rowsModified.size());
+//        System.out.println("Columns Modified: " + columnsModified.size());
     }
     
     @Override
@@ -207,9 +207,9 @@ public class GenericTableAreaEditor extends GenericTableModifier {
             editColumnNames[i] = columnNames[startColumn + i - getStringColumnsOffset()];
         }
         
-        for(String s : editColumnNames){
-            System.out.println("ColumnName: " +s);
-        }
+//        for(String s : editColumnNames){
+//            System.out.println("ColumnName: " +s);
+//        }
 
         DefaultTableModel model = new DefaultTableModel(new Object[][]{ }, editColumnNames){
             
@@ -220,10 +220,6 @@ public class GenericTableAreaEditor extends GenericTableModifier {
 
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-               
-                if(columnIndex < getStringColumnsOffset()){
-                    return false;
-                }
                
                 if(!isForceCellEditingEnabled()){
                     
@@ -239,6 +235,20 @@ public class GenericTableAreaEditor extends GenericTableModifier {
         
         return model;
     }
+    
+//    public void showArray(int length){ //Só pra testar as coisa
+//        
+//        System.out.println("");
+//        
+//        for(int i=0; i<length; i++){
+//            System.out.print("("+i+")");
+//            for(int j=0; j<getCellEditableMatrix().get(i).length; j++){
+//                System.out.print("["+getCellEditableMatrix().get(i)[j]+"]");
+//            }
+//            System.out.println("");
+//        }
+//        
+//    }
     
     @Override
     protected void copySourceTableEditors() {
