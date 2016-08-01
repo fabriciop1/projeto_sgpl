@@ -67,6 +67,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         listaPerfisGTRE = new GenericTableRowEditor(this, listaPerfis, false);
         listaPerfisGTRE.getSourceTableModel().setRowCount(0);
         listaPerfisGTRE.setAllowEmptyCells(false);
+        
         setRotasCombo();
          
         for(int i = 0; i < perfis.size(); i++){
@@ -314,6 +315,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
     }//GEN-LAST:event_removerPerfilBTActionPerformed
 
     private void editPerfilBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editPerfilBTActionPerformed
+        listaPerfisGTRE.setTitle("Editar Perfil");
         listaPerfisGTRE.setEditorType(GenericTableRowEditor.GTRE_UPDATE);
         listaPerfisGTRE.showEditor(evt);
     }//GEN-LAST:event_editPerfilBTActionPerformed

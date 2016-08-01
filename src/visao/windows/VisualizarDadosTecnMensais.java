@@ -76,7 +76,6 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
     
     private void PreencherTabelaIND(List<Indicador> ind){
        
-        
         DefaultTableModel modelIndicadores = (DefaultTableModel) tabelaIndicadores.getModel();
         modelIndicadores.setNumRows(0);
 
@@ -94,6 +93,9 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
     
     private void PreencherTabelaDTM(List<DadosTecMensais> dtm){
         
+        int indexCol;
+        double dadoTemp, tempMedia, divisao;
+        
         int ano = Integer.parseInt(anoCombo.getSelectedItem().toString());
         DefaultTableModel modelIndicadores = (DefaultTableModel) tabelaIndicadores.getModel();
         DefaultTableModel modelDadosTecnicos = (DefaultTableModel) tabelaDadosTecnicos.getModel();
@@ -105,17 +107,17 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
             
             for( int j = 0; j < dtm.size(); j++){
                     
-                int indexCol = dtm.get(j).getMes() - 1;
+                indexCol = dtm.get(j).getMes() - 1;
                 if( modelIndicadores.getValueAt(i, 0).equals(dtm.get(j).getIndicador().getIndicador())){
 
-                    double dadoTemp = dtm.get(j).getDado();
+                    dadoTemp = dtm.get(j).getDado();
 
                     linhaTemp[indexCol] = dadoTemp;
                 }
 
                 if( i == 1 && dtm.get(j).getAno() == ano) {    
                     if (modelDadosTecnicos.getValueAt(0, indexCol) != null) {
-                        double tempMedia = (Double) modelDadosTecnicos.getValueAt(0, indexCol);
+                        tempMedia = (Double) modelDadosTecnicos.getValueAt(0, indexCol);
 
                         if( tempMedia != 0.0 ) {
                             linhaTemp[indexCol] = Calc.dividir(tempMedia, Util.diasDoMes(ano, indexCol + 1));
@@ -123,7 +125,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
                     }
                 }
             }
-            double divisao = calcularMedia(linhaTemp);
+            divisao = calcularMedia(linhaTemp);
             
             if (divisao != 0.0) { 
                 linhaTemp[12] = divisao; 
@@ -539,6 +541,10 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         
         String ano = telaNovoAno.getSelected();
         
+        if (ano == null) {
+            return;
+        }
+        
         for(int i = 0; i < anoCombo.getItemCount(); i++) {
             if (anoCombo.getItemAt(i).equals(ano)) {
                 existe = true;
@@ -563,6 +569,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         int selecionado = telaMes.getSelected(); 
        
         if (selecionado > 0) {
+            gtae.setLabelText("Editar - " + telaMes.getMonthSelected().toUpperCase() );
             gtae.setTitle("Editar D.T.M. - " + telaMes.getMonthSelected().toUpperCase());
             
             configGTAE(selecionado);
@@ -609,9 +616,9 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         
         gtae.processEditor();
         
-       /* for (int i: rowsNotEditable) {
+        for (int i: rowsNotEditable) {
             gtae.setRowEditable(i, false);
-        } */
+        } 
          
     }
     

@@ -44,7 +44,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
     private InventarioResumo resumo;
     private final Perfil perfilAtual;
-
+    
     private final GenericDAO<InventarioTerras> itdao;
     private final GenericDAO<InventarioAnimais> iadao;
     private final GenericDAO<InventarioBenfeitorias> ibdao;
@@ -2096,6 +2096,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 + Double.parseDouble(total46.getText().replace(',', '.'))
                 + Double.parseDouble(total47.getText().replace(',', '.'))
                 + Double.parseDouble(total48.getText().replace(',', '.')))));
+        
         total50.setText(String.format("R$ %.2f", ((Double.parseDouble(atividadeLeite.getText().replace(',', '.')) / 100)
                 * Double.parseDouble(total49.getText().substring(2).replace(',', '.')))));
 
@@ -2566,11 +2567,13 @@ public class VisualizarInventario extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVoltarActionPerformed
 
     private void editarInvAnimaisBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarInvAnimaisBTActionPerformed
-
+       
         if (tabelaInveAnimaisProd.getSelectedRowCount() > 0) {
+            tabelaAnimaisProdGTRE.setTitle("Editar - Inventário: Animais de Produção");
             tabelaAnimaisProdGTRE.setEditorType(GTRE_UPDATE);
             tabelaAnimaisProdGTRE.showEditor(evt);
         } else if (tabelaInveAnimaisServ.getSelectedRowCount() > 0) {
+            tabelaAnimaisServGTRE.setTitle("Editar - Inventário: Animais de Serviço");
             tabelaAnimaisServGTRE.setEditorType(GTRE_UPDATE);
             tabelaAnimaisServGTRE.showEditor(evt);
         } else {
@@ -2612,11 +2615,13 @@ public class VisualizarInventario extends javax.swing.JFrame {
     }//GEN-LAST:event_valorGastoAnimaisBTActionPerformed
 
     private void editarInvTerrasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarInvTerrasBTActionPerformed
-
+        
         if (tabelaInveTerras.getSelectedRowCount() > 0) {
+            tabelaTerrasGTRE.setTitle("Editar - Inventário: Terras");
             tabelaTerrasGTRE.setEditorType(GTRE_UPDATE);
             tabelaTerrasGTRE.showEditor(evt);
         } else if (tabelaInveForrageiras.getSelectedRowCount() > 0) {
+            tabelaForrageirasGTRE.setTitle("Editar - Inventário: Custo Médio de Formação");
             tabelaForrageirasGTRE.setEditorType(GTRE_UPDATE);
             tabelaForrageirasGTRE.showEditor(evt);
         } else {
@@ -2633,6 +2638,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
     }//GEN-LAST:event_adicionarInvTerrasBTActionPerformed
 
     private void editarInvMaquinasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarInvMaquinasBTActionPerformed
+        tabelaMaquinasGTRE.setTitle("Editar - Inventário: Máquinas");
         tabelaMaquinasGTRE.setEditorType(GTRE_UPDATE);
         tabelaMaquinasGTRE.showEditor(evt);
     }//GEN-LAST:event_editarInvMaquinasBTActionPerformed
@@ -2654,6 +2660,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
     }//GEN-LAST:event_tabelaInveAnimaisServFocusGained
 
     private void editarInvBenfeitoriasBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarInvBenfeitoriasBTActionPerformed
+        tabelaBenfeitoriasGTRE.setTitle("Editar - Inventário: Benfeitorias");
         tabelaBenfeitoriasGTRE.setEditorType(GTRE_UPDATE);
         tabelaBenfeitoriasGTRE.showEditor(evt);
     }//GEN-LAST:event_editarInvBenfeitoriasBTActionPerformed
@@ -2982,6 +2989,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
        tabelaInveForrageiras.getColumnModel().getColumn(5).setCellRenderer(new DecimalFormatRenderer(true));
        tabelaInveForrageiras.getColumnModel().getColumn(2).setCellRenderer(new DecimalFormatRenderer(true));
     }
+    
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

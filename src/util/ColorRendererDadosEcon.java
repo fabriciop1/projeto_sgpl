@@ -52,4 +52,5 @@ public class ColorRendererDadosEcon extends DecimalFormatRenderer {
        
         return this;
      }
+    
 }

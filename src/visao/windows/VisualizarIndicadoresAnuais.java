@@ -12,14 +12,13 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.util.List;
+import javax.swing.JScrollBar;
 import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import modelo.negocio.DadosEconMensais;
 import modelo.negocio.DadosTecMensais;
 import modelo.negocio.Perfil;
 import util.DecimalFormatRenderer;
-import util.Util;
 
 /**
  *
@@ -31,7 +30,7 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
     private List<DadosEconMensais> dems;
     private List<DadosTecMensais>  dtms;
     private GenericDAO<DadosEconMensais> demdao;
-    private GenericDAO<DadosTecMensais> dtmdao;
+    private final GenericDAO<DadosTecMensais> dtmdao;
     private final ControleIndicadoresAnuais cia;
     
     /**
@@ -39,14 +38,12 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
      */
     
     public VisualizarIndicadoresAnuais() {
+        
         initComponents();
         
         tabelaIndicadoresAnuais.setShowGrid(true);
-        tabelaIndicadoresAnuais.setShowHorizontalLines(true);
-        tabelaIndicadoresAnuais.setCellSelectionEnabled(false);
-        tabelaIndicadoresAnuais.setRowSelectionAllowed(true);
         tabelaIndicadoresAnuais.getTableHeader().setFont(super.getFont().deriveFont(Font.BOLD));
-        tabelaIndicadoresAnuais.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tabelaIndicadoresAnuais.getTableHeader().setResizingAllowed(false);
         
         cia = ControleIndicadoresAnuais.getInstance();
         
@@ -59,7 +56,6 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
        
         if (cia.getTipoIndicador() == 1) { //Tipo Indicadores Econômicos
             demdao = new GenericDAO<>(DadosEconMensais.class);
-            dtmdao = new GenericDAO<>(DadosTecMensais.class);
             
             dems = demdao.executeSQL("SELECT * "
                                 + "FROM dados_economicos_mensais AS dem "
@@ -86,13 +82,14 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
                                       + " ORDER BY dtm.ano");
             
             preencherTabelaITA(dtms);
-
         } 
+        
     }
     
     private void preencherTabelaIEA(List<DadosEconMensais> dems, List<DadosTecMensais> dtms) {
         
         super.setTitle("SGPL - " + atual.getNome() + " - Indicadores Econômicos Anuais");
+        textoEntrada.setText("INDICADORES ECONÔMICOS ANUAIS");
         
         DefaultTableModel modelIndicadores = (DefaultTableModel) tabelaIndicadoresAnuais.getModel();
         modelIndicadores.setNumRows(0);
@@ -104,6 +101,10 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
             modelIndicadores.addColumn(cia.getAnosSelecionados().get(i), cia.getConteudoEconomico(dems, dtms, cia.getAnosSelecionados().get(i)));
         }
         
+        for(int i = 2; i < tabelaIndicadoresAnuais.getColumnCount(); i++) {
+            tabelaIndicadoresAnuais.getColumnModel().getColumn(i).setPreferredWidth(100);
+        }
+        
         tabelaIndicadoresAnuais.getColumnModel().getColumn(0).setPreferredWidth(390);
         tabelaIndicadoresAnuais.setDefaultRenderer(Object.class, new DecimalFormatRenderer(false));
 
@@ -112,6 +113,7 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
     private void preencherTabelaITA(List<DadosTecMensais> dtms) {
         
         super.setTitle("SGPL - " + atual.getNome() + " - Indicadores Técnicos Anuais");
+        textoEntrada.setText("INDICADORES TÉCNICOS ANUAIS");
         
         DefaultTableModel modelIndicadores = (DefaultTableModel) tabelaIndicadoresAnuais.getModel();
         modelIndicadores.setNumRows(0);
@@ -184,7 +186,9 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
             }
         });
         tabelaIndicadoresAnuais.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        tabelaIndicadoresAnuais.setAutoscrolls(false);
         tabelaIndicadoresAnuais.setColumnSelectionAllowed(false);
+        tabelaIndicadoresAnuais.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tabelaIndicadoresAnuais.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(tabelaIndicadoresAnuais);
         tabelaIndicadoresAnuais.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -205,7 +209,7 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 280, Short.MAX_VALUE)
+                        .addGap(280, 280, 280)
                         .addComponent(textoEntrada)
                         .addGap(402, 402, 402))))
         );
@@ -213,11 +217,11 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(textoEntrada)
-                    .addComponent(btnVoltar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 694, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(textoEntrada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnVoltar, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 691, Short.MAX_VALUE)
                 .addContainerGap())
         );
 

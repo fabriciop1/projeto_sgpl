@@ -18,7 +18,7 @@ import javax.swing.table.DefaultTableCellRenderer;
  */
 public class DecimalFormatRenderer extends DefaultTableCellRenderer {
     
-    private static final NumberFormat FORMATTER = new DecimalFormat( "#.##" );
+    private static final NumberFormat FORMATTER = new DecimalFormat( "0.00" );
     
     public DecimalFormatRenderer(boolean alignment) {
         if(alignment) {  

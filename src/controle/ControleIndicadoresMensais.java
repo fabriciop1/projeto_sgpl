@@ -16,6 +16,7 @@ import modelo.negocio.InventarioForrageiras;
 import modelo.negocio.InventarioMaquinas;
 import modelo.negocio.InventarioResumo;
 import modelo.negocio.InventarioTerras;
+import modelo.negocio.Perfil;
 import util.Calc;
 
 /**
@@ -198,24 +199,24 @@ public class ControleIndicadoresMensais {
     public Object[] getUniTecnMensais(){
         return new Object[] {
             "",
-            "L/dia",
+            "L/mês",
             "ha",
-            "",
-            "Cab",
-            "Cab",
-            "Cab",
-            "Cab",
-            "Cab",
-            "Cab",
-            "Cab)",
-            "Cab",
+            "Cab.",
+            "Cab.",
+            "Cab.",
+            "Cab.",
+            "Cab.",
+            "Cab.",
+            "Cab.",
+            "Cab.",
+            "Cab.",
             "%",
             "%",
-            "Cab/ha",
-            "",
+            "Cab./ha",
+            "Cab./dh",
             "L/dia",
             "L/dh",
-            "L/ha/Mês",
+            "L/ha/mês",
             "",
             "",
             "",
@@ -232,21 +233,35 @@ public class ControleIndicadoresMensais {
     public Object[] getConteudoEconomico(List<DadosEconMensais> dems, List<DadosTecMensais> dtms, int mes, int ano){
         
         double rendaBruta = 0.0, litros = 0.0, coeLeite = 0.0, lactacao = 0.0;
-        double somaConcentrado = 0.0, somaCOE = 0.0, somaVacas = 0.0, capitalEmpatado = 0.0;
-        double maoObraFam = 0.0, maoObraPer = 0.0, depreciacaoDoLeite = 0.0;
+        double somaConcentrado = 0.0, somaCOE = 0.0, somaVacas = 0.0, capitalEmpatado = 0.0, salarioMensal = 0.0;
+        double maoObraFam = 0.0, maoObraPer = 0.0, depreciacaoDoLeite = 0.0, ativLeiteira = 0.0, custoOportunidade = 0.0;
         
+        Perfil perfil = ControlePerfil.getInstance().getPerfilSelecionado();
         InventarioResumo resumo = null;
         
         GenericDAO<InventarioResumo> irdao = new GenericDAO<>(InventarioResumo.class);
-        List<InventarioResumo> resumos = irdao.retrieveByColumn("idPerfilFK", ControlePerfil.getInstance().getPerfilSelecionado().getId());
+        List<InventarioResumo> resumos = irdao.retrieveByColumn("idPerfilFK", perfil.getId());
         
-        if(!resumos.isEmpty()) {
-            resumo = resumos.get(0);          
-        }
+        GenericDAO<InventarioTerras> itdao = new GenericDAO<>(InventarioTerras.class);
+        List<InventarioTerras> terras = itdao.retrieveByColumn("idPerfilFK", perfil.getId());
         
-        if(resumo == null){
-            resumo = new InventarioResumo();
-            resumo.setAtividadeLeiteira(0.0);
+        GenericDAO<InventarioForrageiras> ifdao = new GenericDAO<>(InventarioForrageiras.class);
+        List<InventarioForrageiras> forrageiras = ifdao.retrieveByColumn("idPerfilFK", perfil.getId());
+        
+        GenericDAO<InventarioAnimais> iadao = new GenericDAO<>(InventarioAnimais.class);
+        List<InventarioAnimais> animais = iadao.retrieveByColumn("idPerfilFK", perfil.getId());
+        
+        GenericDAO<InventarioMaquinas> imdao = new GenericDAO<>(InventarioMaquinas.class);
+        List<InventarioMaquinas> maquinas = imdao.retrieveByColumn("idPerfilFK", perfil.getId());
+        
+        GenericDAO<InventarioBenfeitorias> ibdao = new GenericDAO<>(InventarioBenfeitorias.class);
+        List<InventarioBenfeitorias> benfeitorias = ibdao.retrieveByColumn("idPerfilFK", perfil.getId());
+        
+        if(resumos != null && !resumos.isEmpty()) {
+            resumo = resumos.get(0);
+            ativLeiteira = resumo.getAtividadeLeiteira() / 100.0;
+            custoOportunidade = resumo.getCustoOportunidade() / 100.0;
+            salarioMensal = (resumo.getSalarioMinimo() * 13 + resumo.getSalarioMinimo() * 0.3) / 12.0;
         }
         
         for(int i = 0; i < dems.size(); i++) {   
@@ -259,12 +274,11 @@ public class ControleIndicadoresMensais {
                         maoObraPer = dems.get(i).getQuantidade() * dems.get(i).getValorUnitario();
                         break;
                     case 70: //Mão-de-obra familiar (não paga)
-                        maoObraFam = dems.get(i).getQuantidade() * dems.get(i).getValorUnitario();
+                        maoObraFam = dems.get(i).getQuantidade() * salarioMensal;
                         break;
-                        
                 }
                 
-                if(dems.get(i).getEspecificacao().getId() >= 7){
+                if(dems.get(i).getEspecificacao().getId() >= 7 &&  dems.get(i).getEspecificacao().getId() < 70){
                     somaCOE += dems.get(i).getQuantidade() * dems.get(i).getValorUnitario();
                 }
                 
@@ -283,61 +297,68 @@ public class ControleIndicadoresMensais {
                         break;
                     case 2: //Nº V. Lactação
                         lactacao = dtms.get(i).getDado();
-                        somaVacas += 1;
+                        somaVacas += dtms.get(i).getDado();
                         break;
                     case 3: //Nº V. Secas
-                        somaVacas += 1;
+                        somaVacas += dtms.get(i).getDado();
                         break;
                 }
             }
         }
         
-        depreciacaoDoLeite = getResumoDepreciacao(resumo);
-        capitalEmpatado = getResumoInventario(resumo);
-        coeLeite = somaCOE * resumo.getAtividadeLeiteira();
+        depreciacaoDoLeite = ativLeiteira * getResumoDepreciacao(resumo, terras, forrageiras, animais, benfeitorias, maquinas);
+        capitalEmpatado = ativLeiteira * getResumoInventario(terras, forrageiras, animais, benfeitorias, maquinas);
+        coeLeite = somaCOE * ativLeiteira;
+        
+        double custoTotalLeite = (coeLeite + maoObraFam + ( depreciacaoDoLeite/12.0 )) + (capitalEmpatado * ((custoOportunidade)/12.0));
         
         return new Object[] {
             rendaBruta,
             Calc.dividir(rendaBruta, litros),
             coeLeite,
             coeLeite + maoObraFam + ( depreciacaoDoLeite/12.0 ),
-            (coeLeite + maoObraFam + ( depreciacaoDoLeite/12.0 )) + (capitalEmpatado * ((resumo.getCustoOportunidade()/100.0)/12.0)),
+            custoTotalLeite,
             Calc.dividir(coeLeite, litros), 
             Calc.dividir((coeLeite + maoObraFam + ( depreciacaoDoLeite/12.0 )),litros),
-            Calc.dividir(((coeLeite + maoObraFam + ( depreciacaoDoLeite/12.0 )) + (capitalEmpatado * ((resumo.getCustoOportunidade()/100.0)/12.0))),litros),
+            Calc.dividir(custoTotalLeite,litros),
             Calc.dividir(coeLeite,rendaBruta),
             Calc.dividir((coeLeite + maoObraFam + ( depreciacaoDoLeite/12.0 )),rendaBruta),
-            Calc.dividir(((coeLeite + maoObraFam + ( depreciacaoDoLeite/12.0 )) + (capitalEmpatado * ((resumo.getCustoOportunidade()/100.0)/12.0))),rendaBruta),
-            Calc.dividir((maoObraPer * resumo.getAtividadeLeiteira()),rendaBruta),
-            Calc.dividir(((maoObraPer + maoObraFam) * resumo.getAtividadeLeiteira()),rendaBruta),
-            Calc.dividir((somaConcentrado * resumo.getAtividadeLeiteira()),rendaBruta),
+            Calc.dividir(custoTotalLeite,rendaBruta),
+            Calc.dividir((maoObraPer * ativLeiteira), rendaBruta) * 100.0,
+            Calc.dividir((maoObraPer + maoObraFam) * ativLeiteira, rendaBruta) * 100.0,
+            Calc.dividir((somaConcentrado * ativLeiteira),rendaBruta) * 100.0,
             rendaBruta - coeLeite,
-            Calc.dividir((rendaBruta - coeLeite),litros),
-            Calc.dividir((rendaBruta - coeLeite),(Calc.dividir(rendaBruta,litros))),
-            Calc.dividir((rendaBruta - coeLeite),ControlePerfil.getInstance().getPerfilSelecionado().getAreaPecLeite()),
-            Calc.dividir((rendaBruta - coeLeite),lactacao),
-            Calc.dividir((rendaBruta - coeLeite),somaVacas),
+            Calc.dividir((rendaBruta - coeLeite), litros),
+            Calc.dividir((rendaBruta - coeLeite), (Calc.dividir(rendaBruta,litros))),
+            Calc.dividir((rendaBruta - coeLeite), perfil.getAreaPecLeite()),
+            Calc.dividir((rendaBruta - coeLeite), lactacao),
+            Calc.dividir((rendaBruta - coeLeite), somaVacas),
             rendaBruta - (coeLeite + maoObraFam + ( depreciacaoDoLeite/12.0 )),
             Calc.dividir(rendaBruta - (coeLeite + maoObraFam + ( depreciacaoDoLeite/12.0 )), litros),
             Calc.dividir(rendaBruta - (coeLeite + maoObraFam + ( depreciacaoDoLeite/12.0 )), Calc.dividir(rendaBruta, litros)), 
-            Calc.dividir(rendaBruta - (coeLeite + maoObraFam + ( depreciacaoDoLeite/12.0 )), ControlePerfil.getInstance().getPerfilSelecionado().getAreaPecLeite()),
-            rendaBruta - (coeLeite + maoObraFam + ( depreciacaoDoLeite/12.0 )) + (capitalEmpatado * ((resumo.getCustoOportunidade()/100.0)/12.0)),
-            Calc.dividir(rendaBruta - (coeLeite + maoObraFam + ( depreciacaoDoLeite/12.0 )) + (capitalEmpatado * ((resumo.getCustoOportunidade()/100.0)/12.0)), litros),
-            Calc.dividir(rendaBruta - (coeLeite + maoObraFam + ( depreciacaoDoLeite/12.0 )) + (capitalEmpatado * ((resumo.getCustoOportunidade()/100.0)/12.0)), Calc.dividir(rendaBruta, litros)),
+            Calc.dividir(rendaBruta - (coeLeite + maoObraFam + ( depreciacaoDoLeite/12.0 )), perfil.getAreaPecLeite()),
+            rendaBruta - custoTotalLeite,
+            Calc.dividir(rendaBruta - custoTotalLeite, litros),
+            Calc.dividir(rendaBruta - custoTotalLeite, Calc.dividir(rendaBruta, litros)),
             maoObraFam,
-            Calc.dividir(rendaBruta - (coeLeite + maoObraFam + ( depreciacaoDoLeite/12.0 )) + (capitalEmpatado * ((resumo.getCustoOportunidade()/100.0)/12.0)), rendaBruta * 100.0),
+            Calc.dividir(rendaBruta - custoTotalLeite, rendaBruta) * 100.0,
             Calc.dividir((maoObraFam + ( depreciacaoDoLeite/12.0 )), Calc.dividir((rendaBruta - coeLeite),litros))/30.0,
-            Calc.dividir((maoObraFam + ( depreciacaoDoLeite/12.0 )) + (capitalEmpatado * ((resumo.getCustoOportunidade()/100.0)/12.0)), Calc.dividir((rendaBruta - coeLeite),litros))/30.0,
-            Calc.dividir(capitalEmpatado * (resumo.getCustoOportunidade()/100.0), Calc.dividir(litros, util.Util.diasDoMes(ano, mes+1))),
+            Calc.dividir((maoObraFam + ( depreciacaoDoLeite/12.0 )) + (capitalEmpatado * (custoOportunidade/12.0)), Calc.dividir((rendaBruta - coeLeite),litros))/30.0,
+            Calc.dividir(Calc.dividir(capitalEmpatado, ativLeiteira), Calc.dividir(litros, util.Util.diasDoMes(ano, mes))),
         };
     }
     
-    public Object[] getConteudoTecnico(List<DadosTecMensais> dados, int mes, int ano){
+    public Object[] getConteudoTecnico(List<DadosTecMensais> dados, List<DadosEconMensais> dems, int mes, int ano){
         double litros = 0.0,   totalVacas = 0.0, rebanhoMedio = 0.0, vacasLactacao = 0.0, vacaSeca = 0.0;
         double novilhas = 0.0, bezerros = 0.0,   bezerras = 0.0,     touros = 0.0,        outros = 0.0;
         double abortos = 0.0,  natimortos = 0.0, retenPlac = 0.0,    morteBez = 0.0,      bezDoentes = 0.0;
-        double morteNov = 0.0, morteVacas = 0.0, vacasMastCli = 0.0;
+        double morteNov = 0.0, morteVacas = 0.0, vacasMastCli = 0.0, maoObraPerm = 0.0 ;
         
+        for(int i = 0; i < dems.size(); i++) {
+            if(dems.get(i).getAno() == ano && dems.get(i).getMes() == mes && dems.get(i).getEspecificacao().getId() == 7) { // MDO perm.
+                maoObraPerm = dems.get(i).getQuantidade();
+            }
+        }
         for(int i = 0; i < dados.size(); i++) {   
             if (dados.get(i).getAno() == ano && dados.get(i).getMes() == mes) {    
                 switch(dados.get(i).getIndicador().getId()) { 
@@ -415,12 +436,12 @@ public class ControleIndicadoresMensais {
             bezerros,
             touros,
             outros,
-            Calc.dividir(vacasLactacao, totalVacas), 
-            Calc.dividir(vacasLactacao, rebanhoMedio),
+            Calc.dividir(vacasLactacao, totalVacas) * 100.0, 
+            Calc.dividir(vacasLactacao, rebanhoMedio) * 100.0,
             Calc.dividir(vacasLactacao, ControlePerfil.getInstance().getPerfilSelecionado().getAreaPecLeite()),
-            Calc.dividir(vacasLactacao, ControlePerfil.getInstance().getPerfilSelecionado().getEmpPermanentes()),
-            Calc.dividir(litros, vacasLactacao), 
-            Calc.dividir(litros, ControlePerfil.getInstance().getPerfilSelecionado().getEmpPermanentes()),
+            Calc.dividir(vacasLactacao, maoObraPerm),
+            Calc.dividir(litros, vacasLactacao) / 30.0, 
+            Calc.dividir(litros, maoObraPerm),
             Calc.dividir(litros, ControlePerfil.getInstance().getPerfilSelecionado().getAreaPecLeite()),
             "",
             "",
@@ -435,28 +456,13 @@ public class ControleIndicadoresMensais {
         };       
     }
     
-    public double getResumoDepreciacao(InventarioResumo resumo){
+    public double getResumoDepreciacao(InventarioResumo resumo, List<InventarioTerras> terras,
+            List<InventarioForrageiras> forrageiras, List<InventarioAnimais> animais, List<InventarioBenfeitorias> benfeitorias,
+            List<InventarioMaquinas> maquinas){
         
         double ha = 0, valorHa = 0, depreciacao = 0;
-        double capitalReprod = 0.0, animaisDeTrab = 0.0, reprodutores = 0.0;
-        double totalDepreciacao = 0, totalBenfeitorias = 0.0, totalMaquinas = 0.0;
-        
-        int idPerfil = ControlePerfil.getInstance().getPerfilSelecionado().getId();
-        
-        GenericDAO<InventarioTerras> itdao = new GenericDAO<>(InventarioTerras.class);
-        List<InventarioTerras> terras = itdao.retrieveByColumn("idPerfilFK", idPerfil);
-        
-        GenericDAO<InventarioForrageiras> ifdao = new GenericDAO<>(InventarioForrageiras.class);
-        List<InventarioForrageiras> forrageiras = ifdao.retrieveByColumn("idPerfilFK", idPerfil);
-        
-        GenericDAO<InventarioAnimais> iadao = new GenericDAO<>(InventarioAnimais.class);
-        List<InventarioAnimais> animais = iadao.retrieveByColumn("idPerfilFK", idPerfil);
-        
-        GenericDAO<InventarioMaquinas> imdao = new GenericDAO<>(InventarioMaquinas.class);
-        List<InventarioMaquinas> maquinas = imdao.retrieveByColumn("idPerfilFK", idPerfil);
-        
-        GenericDAO<InventarioBenfeitorias> ibdao = new GenericDAO<>(InventarioBenfeitorias.class);
-        List<InventarioBenfeitorias> benfeitorias = ibdao.retrieveByColumn("idPerfilFK", idPerfil);
+        double capitalReprod = 0.0, animaisDeTrab = 0.0, reprodutores = 0.0, valorInicio = 0.0, valorFinal = 0.0;
+        double forragNaoAnuais = 0, totalBenfeitorias = 0.0, totalMaquinas = 0.0, total = 0.0;
                         
         //----------------------------------- Terras
         
@@ -466,7 +472,7 @@ public class ControleIndicadoresMensais {
             valorHa = forrageiras.get(i).getCustoFormacaoHectare() * ha;
             depreciacao = Calc.dividir(valorHa, forrageiras.get(i).getVidaUtil());
 
-            totalDepreciacao += (depreciacao);
+            forragNaoAnuais += (depreciacao);
         }
         
         //----------------------------------- Animais
@@ -480,8 +486,8 @@ public class ControleIndicadoresMensais {
 
                 if (animais.get(i).getCategoria().equalsIgnoreCase("Touro") || 
                         animais.get(i).getCategoria().equalsIgnoreCase("Touros")) {
-                    double valorInicio = animais.get(i).getValorInicio() * animais.get(i).getValorCabeca();
-                    double valorFinal = animais.get(i).getValorFinal() * animais.get(i).getValorCabeca();
+                    valorInicio = animais.get(i).getValorInicio() * animais.get(i).getValorCabeca();
+                    valorFinal = animais.get(i).getValorFinal() * animais.get(i).getValorCabeca();
                                         
                     capitalReprod += Calc.mediaAritmetica(valorInicio, valorFinal);
                     break;
@@ -494,53 +500,39 @@ public class ControleIndicadoresMensais {
             }
         }
         
-        reprodutores  = Calc.dividir(capitalReprod, resumo.getVidaUtilReprodutores());
-        animaisDeTrab = Calc.dividir(Calc.somaPonderada(totalValFinaServ, totalValCabeServ), resumo.getVidaUtilAnimaisServico());
+        if (resumo != null) {
+            reprodutores  = Calc.dividir(capitalReprod, resumo.getVidaUtilReprodutores());
+            animaisDeTrab = Calc.dividir(Calc.somaPonderada(totalValFinaServ, totalValCabeServ), resumo.getVidaUtilAnimaisServico());
+        }
         
         //----------------------------------- Máquinas
         
         for (int i = 0; i < maquinas.size(); i++) {
 
-            double total = maquinas.get(i).getQuantidade() * maquinas.get(i).getValorUnitario();
-            double depreciacaoMaq = Calc.dividir(total, maquinas.get(i).getVidaUtil());
+            total = maquinas.get(i).getQuantidade() * maquinas.get(i).getValorUnitario();
+            depreciacao = Calc.dividir(total, maquinas.get(i).getVidaUtil());
 
-            totalMaquinas += (depreciacaoMaq);
+            totalMaquinas += depreciacao;
         }
         
         //----------------------------------- Benfeitorias
         
         for (int i = 0; i < benfeitorias.size(); i++) {
 
-            double total = benfeitorias.get(i).getQuantidade() * benfeitorias.get(i).getValorUnitario();
-            double depreciacaoBen = Calc.dividir(total, benfeitorias.get(i).getVidaUtil());
+            total = benfeitorias.get(i).getQuantidade() * benfeitorias.get(i).getValorUnitario();
+            depreciacao = Calc.dividir(total, benfeitorias.get(i).getVidaUtil());
 
-            totalBenfeitorias += (depreciacaoBen);
+            totalBenfeitorias += depreciacao;
         }
         
-        return (resumo.getAtividadeLeiteira()/100) * ( totalDepreciacao + animaisDeTrab + reprodutores + totalMaquinas + totalBenfeitorias);
+        return forragNaoAnuais + animaisDeTrab + reprodutores + totalMaquinas + totalBenfeitorias;
     }
     
-    public double getResumoInventario(InventarioResumo resumo){
-        double valorTerra = 0.0, totalDepreciacao = 0.0, valorAnimais = 0.0;
-        double totalMaquinas = 0.0, totalBenfeitorias = 0.0, ha = 0.0, valorHa = 0.0;
+    public double getResumoInventario(List<InventarioTerras> terras, List<InventarioForrageiras> forrageiras,
+            List<InventarioAnimais> animais, List<InventarioBenfeitorias> benfeitorias, List<InventarioMaquinas> maquinas){
+        double valorTerra = 0.0, forragNaoAnuais = 0.0, valorAnimais = 0.0, total = 0.0;
+        double totalMaquinas = 0.0, totalBenfeitorias = 0.0, ha = 0.0, valorHa = 0.0, valorInicio = 0.0, valorFinal = 0.0;
         double depreciacao = 0.0, totalValorInicio = 0.0, totalValorFinal = 0.0;
-        
-        int idPerfil = ControlePerfil.getInstance().getPerfilSelecionado().getId();
-        
-        GenericDAO<InventarioTerras> itdao = new GenericDAO<>(InventarioTerras.class);
-        List<InventarioTerras> terras = itdao.retrieveByColumn("idPerfilFK", idPerfil);
-        
-        GenericDAO<InventarioForrageiras> ifdao = new GenericDAO<>(InventarioForrageiras.class);
-        List<InventarioForrageiras> forrageiras = ifdao.retrieveByColumn("idPerfilFK", idPerfil);
-        
-        GenericDAO<InventarioAnimais> iadao = new GenericDAO<>(InventarioAnimais.class);
-        List<InventarioAnimais> animais = iadao.retrieveByColumn("idPerfilFK", idPerfil);
-        
-        GenericDAO<InventarioMaquinas> imdao = new GenericDAO<>(InventarioMaquinas.class);
-        List<InventarioMaquinas> maquinas = imdao.retrieveByColumn("idPerfilFK", idPerfil);
-        
-        GenericDAO<InventarioBenfeitorias> ibdao = new GenericDAO<>(InventarioBenfeitorias.class);
-        List<InventarioBenfeitorias> benfeitorias = ibdao.retrieveByColumn("idPerfilFK", idPerfil);
 
         //--------------------------- Terras
         
@@ -560,10 +552,11 @@ public class ControleIndicadoresMensais {
             valorHa = forrageiras.get(i).getCustoFormacaoHectare() * ha;
             depreciacao = Calc.dividir(valorHa, forrageiras.get(i).getVidaUtil());
 
-            totalDepreciacao += (depreciacao);
+            forragNaoAnuais += (depreciacao);
         }
 
-        valorTerra =  Calc.mediaAritmetica(Calc.somaPonderada(totalAreaPropInic, totalTerraNua), Calc.somaPonderada(totalAreaPropFina, totalTerraNua));
+        valorTerra =  Calc.mediaAritmetica(Calc.somaPonderada(totalAreaPropInic, totalTerraNua), 
+                Calc.somaPonderada(totalAreaPropFina, totalTerraNua));
         
         
         //--------------------------- Animais
@@ -571,11 +564,11 @@ public class ControleIndicadoresMensais {
             
             if (animais.get(i).getTipoAnimal() == 1) { //Producao
 
-                double valorInicio = animais.get(i).getValorInicio() * animais.get(i).getValorCabeca();
-                double valorFinal = animais.get(i).getValorFinal() * animais.get(i).getValorCabeca();
+                valorInicio = animais.get(i).getValorInicio() * animais.get(i).getValorCabeca();
+                valorFinal = animais.get(i).getValorFinal() * animais.get(i).getValorCabeca();
                 
-                totalValorInicio += (valorInicio);
-                totalValorFinal += (valorFinal);
+                totalValorInicio += valorInicio;
+                totalValorFinal += valorFinal;
 
             }
         }
@@ -585,17 +578,17 @@ public class ControleIndicadoresMensais {
         //---------------------------- Maquinas
         for (int i = 0; i < maquinas.size(); i++) {
 
-            double total = maquinas.get(i).getQuantidade() * maquinas.get(i).getValorUnitario();
-            totalMaquinas += (total);
+            total = maquinas.get(i).getQuantidade() * maquinas.get(i).getValorUnitario();
+            totalMaquinas += total;
         }
         
         //---------------------------- Benfeitorias
         for (int i = 0; i < benfeitorias.size(); i++) {
-            double total = benfeitorias.get(i).getQuantidade() * benfeitorias.get(i).getValorUnitario();
-            totalBenfeitorias += (total);
+            total = benfeitorias.get(i).getQuantidade() * benfeitorias.get(i).getValorUnitario();
+            totalBenfeitorias += total;
         }
         
-        return (resumo.getCustoOportunidade()/100) * ( valorTerra + totalDepreciacao + valorAnimais + totalMaquinas + totalBenfeitorias);
+        return valorTerra + forragNaoAnuais + valorAnimais + totalMaquinas + totalBenfeitorias;
     }
     
 }

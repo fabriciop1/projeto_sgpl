@@ -37,7 +37,7 @@
                   </Group>
                   <Component id="anoText" alignment="0" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace pref="32" max="32767" attributes="0"/>
+              <EmptySpace pref="28" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -53,7 +53,7 @@
                   <Component id="confirmaBT" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
                   <Component id="cancelaBT" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="48" max="32767" attributes="0"/>
+              <EmptySpace pref="19" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>

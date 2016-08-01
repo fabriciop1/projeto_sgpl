@@ -5,11 +5,8 @@
  */
 package visao.windows;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
-import util.Cast;
 
 /**
  *
@@ -18,7 +15,6 @@ import util.Cast;
 public class SingleYearSelector extends JDialog {
     
     private String selected;
-    private int index;
 
     /**
      * Creates new form YearSelector
@@ -32,7 +28,7 @@ public class SingleYearSelector extends JDialog {
         super.setLocationRelativeTo(null);
         super.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         super.setResizable(false);
-        super.getRootPane().setDefaultButton(confirmaBT);
+        super.getRootPane().setDefaultButton(cancelaBT);
         
     }
 
@@ -88,7 +84,7 @@ public class SingleYearSelector extends JDialog {
                         .addGap(100, 100, 100)
                         .addComponent(confirmaBT, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(anoText))
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -101,7 +97,7 @@ public class SingleYearSelector extends JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(confirmaBT, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cancelaBT, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(48, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         pack();
@@ -127,6 +123,7 @@ public class SingleYearSelector extends JDialog {
     }//GEN-LAST:event_confirmaBTActionPerformed
 
     private void cancelaBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelaBTActionPerformed
+       this.selected = null;
        this.setVisible(false);
        this.dispose();
     }//GEN-LAST:event_cancelaBTActionPerformed

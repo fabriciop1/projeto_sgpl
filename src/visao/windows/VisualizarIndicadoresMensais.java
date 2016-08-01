@@ -12,6 +12,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.util.List;
+import javax.swing.JScrollBar;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import modelo.negocio.DadosEconMensais;
@@ -27,9 +28,9 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
 
     private final Perfil atual;
     private final List<DadosEconMensais> dems;
-    private List<DadosTecMensais>  dtms;
-    private GenericDAO<DadosEconMensais> demdao;
-    private GenericDAO<DadosTecMensais>  dtmdao;
+    private final List<DadosTecMensais>  dtms;
+    private final GenericDAO<DadosEconMensais> demdao;
+    private final GenericDAO<DadosTecMensais>  dtmdao;
     private final ControleIndicadoresMensais crm;
     
     /**
@@ -39,47 +40,49 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
         initComponents();
         
         tabelaIndicadoresMensais.setShowGrid(true);
-        tabelaIndicadoresMensais.setShowHorizontalLines(true);
-        tabelaIndicadoresMensais.setCellSelectionEnabled(false);
-        tabelaIndicadoresMensais.setRowSelectionAllowed(true);
-        
+        tabelaIndicadoresMensais.getTableHeader().setFont(super.getFont().deriveFont(Font.BOLD));
+        tabelaIndicadoresMensais.getTableHeader().setResizingAllowed(false);
         crm = ControleIndicadoresMensais.getInstance();
         
         atual = ControlePerfil.getInstance().getPerfilSelecionado();
         
         super.setLocationRelativeTo(null);
         super.setResizable(false);
-        super.setTitle("SGPL - " + atual.getNome() + " - Indicadores Mensais");
-          
+        
         demdao = new GenericDAO<>(DadosEconMensais.class);
         dems = demdao.executeSQL("SELECT * "
-                            + "FROM dados_economicos_mensais AS d "
-                            + "WHERE (d.ano >= " + crm.getAnoIni() + "  AND "
-                                   + "d.ano <= " + crm.getAnoFim() + "  AND "
-                                   + "d.mes >= " + crm.getMesIni() + "  AND "
-                                   + "d.mes <= " + crm.getMesFim() + ") AND "
-                                   + "d.idPerfilFK = " + atual.getId()
-                            + " ORDER BY d.ano, d.mes");
-        
+                        + "FROM dados_economicos_mensais AS d "
+                        + "WHERE (d.ano >= " + crm.getAnoIni() + "  AND "
+                               + "d.ano <= " + crm.getAnoFim() + "  AND "
+                               + "d.mes >= " + crm.getMesIni() + "  AND "
+                               + "d.mes <= " + crm.getMesFim() + ") AND "
+                               + "d.idPerfilFK = " + atual.getId()
+                        + " ORDER BY d.ano, d.mes");
+             
         dtmdao = new GenericDAO<>(DadosTecMensais.class);
         dtms = dtmdao.executeSQL("SELECT * "
-                            + "FROM dados_tecnicos_mensais AS d "
-                            + "WHERE (d.ano >= " + crm.getAnoIni() + "  AND "
-                                   + "d.ano <= " + crm.getAnoFim() + "  AND "
-                                   + "d.mes >= " + crm.getMesIni() + "  AND "
-                                   + "d.mes <= " + crm.getMesFim() + ") AND "
-                                   + "d.idPerfilFK = " + atual.getId()
-                            + " ORDER BY d.ano, d.mes");
+                        + "FROM dados_tecnicos_mensais AS d "
+                        + "WHERE (d.ano >= " + crm.getAnoIni() + "  AND "
+                               + "d.ano <= " + crm.getAnoFim() + "  AND "
+                               + "d.mes >= " + crm.getMesIni() + "  AND "
+                               + "d.mes <= " + crm.getMesFim() + ") AND "
+                               + "d.idPerfilFK = " + atual.getId()
+                        + " ORDER BY d.ano, d.mes");
                 
-        if( crm.getTipoIndicador() == 1 ){    
+        if( crm.getTipoIndicador() == 1 ) { // Tipo Indicadores Econômicos   
+            
             preencherTabelaIEM(dems, dtms);            
-        } else if( crm.getTipoIndicador() == 2 ){
-            preencherTabelaITM(dtms);
+            
+        } else if( crm.getTipoIndicador() == 2 ){ // Tipo Indicadores Técnicos
+            
+            preencherTabelaITM(dtms, dems);
         }
+        
     }
     
     private void preencherTabelaIEM(List<DadosEconMensais> iem, List<DadosTecMensais> itm){
         
+        textoEntrada.setText("INDICADORES ECONÔMICOS MENSAIS");
         super.setTitle("SGPL - " + atual.getNome() + " - Indicadores Econômicos Mensais");
         
         DefaultTableModel modelIndicadores = (DefaultTableModel) tabelaIndicadoresMensais.getModel();
@@ -87,38 +90,35 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
         
         int anoCont = crm.getAnoIni();
         int anoFim  = crm.getAnoFim();
-        int mesCont = crm.getMesIni() - 1;
+        int mesCont = crm.getMesIni();
         int mesFim  = crm.getMesFim();
-        Object[] temp;
-                
+        Object[] temp;        
         modelIndicadores.addColumn("Indicadores", crm.getIndEconomMensais());
         modelIndicadores.addColumn("Unidade", crm.getUniEconomMensais());
         
         do{
-            temp = crm.getConteudoEconomico(iem, itm, mesCont, anoCont);
-                        
-            mesCont++;
-            
-            
             if( mesCont > 12 ){
                 mesCont = 1;
                 anoCont++;
             }
             
+            temp = crm.getConteudoEconomico(iem, itm, mesCont, anoCont);
+            
             //----FINAL---------------------------------------------------------
             modelIndicadores.addColumn(mesCont + "/" + anoCont, temp);
-           
             Util.clearVector(temp);
-        }while(anoCont != anoFim || mesCont != mesFim);
+            mesCont++;
+        }while(anoCont < anoFim || mesCont <= mesFim);
         
         tabelaIndicadoresMensais.setModel(modelIndicadores);
-        tabelaIndicadoresMensais.getColumnModel().getColumn(0).setPreferredWidth(370);
+        tabelaIndicadoresMensais.getColumnModel().getColumn(0).setPreferredWidth(390);
         tabelaIndicadoresMensais.setDefaultRenderer(Object.class, new DecimalFormatRenderer(false));
         
     }
     
-    private void preencherTabelaITM(List<DadosTecMensais> dtms){
+    private void preencherTabelaITM(List<DadosTecMensais> dtms, List<DadosEconMensais> dems){
         
+        textoEntrada.setText("INDICADORES TÉCNICOS MENSAIS");
         super.setTitle("SGPL - " + atual.getNome() + " - Indicadores Técnicos Mensais");
         
         DefaultTableModel modelIndicadores = (DefaultTableModel) tabelaIndicadoresMensais.getModel();
@@ -126,7 +126,7 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
         
         int anoCont = crm.getAnoIni();
         int anoFim  = crm.getAnoFim();
-        int mesCont = crm.getMesIni() - 1;
+        int mesCont = crm.getMesIni();
         int mesFim  = crm.getMesFim();
         Object[] temp;
         
@@ -134,23 +134,22 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
         modelIndicadores.addColumn("Unidade", crm.getUniTecnMensais());
         
         do{
-            temp = crm.getConteudoTecnico(dtms, mesCont + 1, anoCont);
-            
-            mesCont++;
             
             if( mesCont > 12 ){
                 mesCont = 1;
                 anoCont++;
             }
             
+            temp = crm.getConteudoTecnico(dtms, dems, mesCont, anoCont);
+            
             //----FINAL---------------------------------------------------------
-          
             modelIndicadores.addColumn(mesCont + "/" + anoCont, temp);
           
             Util.clearVector(temp);
-        }while(anoCont != anoFim || mesCont != mesFim);
+            mesCont++;
+        }while(anoCont < anoFim || mesCont <= mesFim);
         
-        tabelaIndicadoresMensais.getColumnModel().getColumn(0).setPreferredWidth(330);
+        tabelaIndicadoresMensais.getColumnModel().getColumn(0).setPreferredWidth(300);
         tabelaIndicadoresMensais.setDefaultRenderer(Object.class, new DecimalFormatRenderer(false) {
             private final Color BG = null;
             
@@ -174,18 +173,6 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
             }
         });
     }
-    
-    public double getTotalLitroLeite(List<DadosTecMensais> dtm, int mes, int ano){
-        for(int i = 0; i < dtm.size(); i++){
-            if(dtm.get(i).getIndicador().getIndicador().equals("Total Litros/Mês (L")
-                    && dtm.get(i).getMes() == mes && dtm.get(i).getAno()== ano){
-                return dtm.get(i).getDado();
-            }
-        }
-        
-        return -1;
-    }
-
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -196,6 +183,8 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaIndicadoresMensais = new javax.swing.JTable();
+        retornarBT = new javax.swing.JButton();
+        avancarBT = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -221,6 +210,8 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
             .addGap(0, 560, Short.MAX_VALUE)
         );
 
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
         tabelaIndicadoresMensais.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -228,28 +219,49 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
             new String [] {
 
             }
-        ));
+
+        )   {
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return false;
+            }
+        });
         tabelaIndicadoresMensais.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
-        tabelaIndicadoresMensais.setColumnSelectionAllowed(true);
         tabelaIndicadoresMensais.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tabelaIndicadoresMensais.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tabelaIndicadoresMensais);
         tabelaIndicadoresMensais.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+
+        retornarBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/left_arrow.png"))); // NOI18N
+        retornarBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                retornarBTActionPerformed(evt);
+            }
+        });
+
+        avancarBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/right_arrow.png"))); // NOI18N
+        avancarBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                avancarBTActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(14, 14, 14)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(276, 276, 276)
+                        .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(102, 102, 102)
+                        .addComponent(retornarBT, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(avancarBT, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(77, 77, 77)
                         .addComponent(textoEntrada)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 978, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
@@ -258,14 +270,17 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnVoltar)
-                    .addComponent(textoEntrada))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(retornarBT, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(avancarBT, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(textoEntrada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnVoltar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane1))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -277,10 +292,22 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
 
+    private void retornarBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_retornarBTActionPerformed
+        JScrollBar barPanel = jScrollPane1.getHorizontalScrollBar();
+        barPanel.setValue(barPanel.getValue() - 695);
+    }//GEN-LAST:event_retornarBTActionPerformed
+
+    private void avancarBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_avancarBTActionPerformed
+        JScrollBar barPanel = jScrollPane1.getHorizontalScrollBar();
+        barPanel.setValue(barPanel.getValue() + 695);
+    }//GEN-LAST:event_avancarBTActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton avancarBT;
     private javax.swing.JButton btnVoltar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton retornarBT;
     private javax.swing.JTable tabelaIndicadoresMensais;
     private javax.swing.JLabel textoEntrada;
     // End of variables declaration//GEN-END:variables
