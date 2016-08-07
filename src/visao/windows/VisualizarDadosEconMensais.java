@@ -26,7 +26,6 @@ import modelo.negocio.InventarioResumo;
 import modelo.negocio.Perfil;
 import util.Cast;
 import util.ColorRendererDadosEcon;
-import util.Util;
 
 /**
  *
@@ -41,6 +40,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
     private final GenericTableAreaEditor gtae;
     private final Perfil atual;
     private double salarioMensal;
+    private int page;
     
     /**
      * Creates new form VisualizarDadosEconMensais
@@ -49,6 +49,8 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         
         initComponents();
        
+        setPage(1);
+        
         atual = ControlePerfil.getInstance().getPerfilSelecionado();
         
         super.setLocationRelativeTo(null);
@@ -56,20 +58,18 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         super.setTitle("SGPL - " + atual.getNome() + " - Dados Econômicos Mensais");
         
         this.setSalarioMensal();
-        tabelaMeses.getTableHeader().setFont(super.getFont().deriveFont(Font.BOLD));
+        tabelaTrimestre.getTableHeader().setFont(super.getFont().deriveFont(Font.BOLD));
                
-        tabelaDadosEconomicos.setShowGrid(true);
-        tabelaDadosEconomicos.setDefaultRenderer(Object.class, new ColorRendererDadosEcon(true));
+        tabelaDEM.setShowGrid(true);
+        tabelaDEM.setDefaultRenderer(Object.class, new ColorRendererDadosEcon(true));
         
         demdao = new GenericDAO<>(DadosEconMensais.class);
         demespdao = new GenericDAO<>(Especificacao.class);
         
         especificacoes = demespdao.retrieveAll();
        
-        gtae = new GenericTableAreaEditor(this, tabelaDadosEconomicos, false);
-        
-        PreencherTabelaESP(especificacoes);
-          
+        gtae = new GenericTableAreaEditor(this, tabelaDEM, false);
+                  
         fillComboBox();
         
         initGTAE();
@@ -78,110 +78,165 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         
     }
     
-    private void PreencherTabelaESP(List<Especificacao> esp){
+    private Object[] PreencherColunaESP(List<Especificacao> esp){
         
-        DefaultTableModel modelEspecificacao = (DefaultTableModel) tabelaDadosEconomicos.getModel();
-        modelEspecificacao.setNumRows(0);
+        Object[] colunaESP = new Object[90];
 
+        int cont = 0;
+        
         for(int i = 0; i < esp.size(); i++){
             
-            if(i == 0)  { modelEspecificacao.addRow(new Object[]{ "A - ENTRADAS" }); }
-            if(i == 6)  { modelEspecificacao.addRow(new Object[]{ "TOTAL DE ENTRADAS" });
-                          modelEspecificacao.addRow(new Object[]{ "B - SAÍDA" }); }
-            if(i == 17) { modelEspecificacao.addRow(new Object[]{ "SUB-TOTAL" });
-                          modelEspecificacao.addRow(new Object[]{ "DESPESAS COM VOLUMOSO" }); }
-            if(i == 28) { modelEspecificacao.addRow(new Object[]{ "SUB-TOTAL" }); 
-                          modelEspecificacao.addRow(new Object[]{ "CONCENTRADO" }); }
-            if(i == 38) { modelEspecificacao.addRow(new Object[]{ "SUB-TOTAL" });
-                          modelEspecificacao.addRow(new Object[]{ "MINERALIZAÇÃO" }); }
-            if(i == 44) { modelEspecificacao.addRow(new Object[]{ "SUB-TOTAL" });
-                          modelEspecificacao.addRow(new Object[]{ "MEDICAMENTOS" }); }
-            if(i == 56) { modelEspecificacao.addRow(new Object[]{ "SUB-TOTAL" });
-                          modelEspecificacao.addRow(new Object[]{ "ORDENHA" }); }
-            if(i == 60) { modelEspecificacao.addRow(new Object[]{ "SUB-TOTAL" });
-                          modelEspecificacao.addRow(new Object[]{ "INSEMINAÇÃO ARTIFICIAL" }); }
-            if(i == 65) { modelEspecificacao.addRow(new Object[]{ "SUB-TOTAL" });
-                          modelEspecificacao.addRow(new Object[]{ "DESPESAS DE INVESTIMENTO" }); }
-            if(i == 68) { modelEspecificacao.addRow(new Object[]{ "SUB-TOTAL" });
-                          modelEspecificacao.addRow(new Object[]{ "DESPESAS DE EMPRÉSTIMOS" }); }
-            if(i == 69) { modelEspecificacao.addRow(new Object[]{ "COE DE ATIVIDADE LEITEIRA" }); }
+            if(i == 0)  { colunaESP[cont] = "A - ENTRADAS"; cont += 1; }
+            if(i == 6)  { colunaESP[cont] = "TOTAL DE ENTRADAS"; cont += 1;
+                          colunaESP[cont] = "B - SAÍDA"; cont += 1; }
+            if(i == 17) { colunaESP[cont] = "SUB-TOTAL"; cont += 1;
+                          colunaESP[cont] = "DESPESAS COM VOLUMOSO"; cont += 1; }
+            if(i == 28) { colunaESP[cont] = "SUB-TOTAL"; cont += 1;
+                          colunaESP[cont] = "CONCENTRADO"; cont += 1; }
+            if(i == 38) { colunaESP[cont] = "SUB-TOTAL"; cont += 1;
+                          colunaESP[cont] = "MINERALIZAÇÃO"; cont += 1; }
+            if(i == 44) { colunaESP[cont] = "SUB-TOTAL"; cont += 1;
+                          colunaESP[cont] = "MEDICAMENTOS"; cont += 1; }
+            if(i == 56) { colunaESP[cont] = "SUB-TOTAL"; cont += 1;
+                          colunaESP[cont] = "ORDENHA"; cont += 1; }
+            if(i == 60) { colunaESP[cont] = "SUB-TOTAL"; cont += 1;
+                          colunaESP[cont] = "INSEMINAÇÃO ARTIFICIAL"; cont += 1; }
+            if(i == 65) { colunaESP[cont] = "SUB-TOTAL"; cont += 1;
+                          colunaESP[cont] = "DESPESAS DE INVESTIMENTO"; cont += 1; }
+            if(i == 68) { colunaESP[cont] = "SUB-TOTAL"; cont += 1;
+                          colunaESP[cont] = "DESPESAS DE EMPRÉSTIMOS"; cont += 1; }
+            if(i == 69) { colunaESP[cont] = "COE DE ATIVIDADE LEITEIRA"; cont += 1; }
             
-            modelEspecificacao.addRow( new Object[]{ esp.get(i).getEspecificacao() });
+            colunaESP[cont] = esp.get(i).getEspecificacao();
+            cont += 1;
         }
+        
+        return colunaESP;
+        
     }
     
-    private void PreencherTabelaDEM(List<DadosEconMensais> dem) {
+    private Object[][] addColunas(List<DadosEconMensais> dem, int mes){
         
-        DefaultTableModel modelDadosEconomicos = (DefaultTableModel) tabelaDadosEconomicos.getModel();
-        modelDadosEconomicos.setNumRows(0);
+        Object[][] colunas = new Object[3][90];
+        Object[] esp = PreencherColunaESP(especificacoes);
+        double[] tempTotais = new double[3];
+        double coeAtivLeite = 0;
         
-        Object[] linhaTemp = new Object[36];
-        double[] tempTotais = new double[36];
-        double[] coeAtivLeite = new double[12];
-    
-        for(int i = 0; i < modelDadosEconomicos.getRowCount(); i++){
+        
+        for(int i = 0; i < esp.length; i++){
             
             for(int j = 0; j < dem.size(); j++){
                     
-                    int indexCol = (dem.get(j).getMes() - 1) * 3;
-                     
-                    if( modelDadosEconomicos.getValueAt(i, 0).equals(dem.get(j).getEspecificacao().getEspecificacao())){
+                if(mes == dem.get(j).getMes()){
+                        if( esp[i].equals(dem.get(j).getEspecificacao().getEspecificacao())){
 
-                        linhaTemp[indexCol ] = dem.get(j).getQuantidade();
-                        linhaTemp[indexCol + 1] = dem.get(j).getValorUnitario();
-                        linhaTemp[indexCol + 2] = dem.get(j).getQuantidade() * dem.get(j).getValorUnitario();
+                            colunas[0][i] = dem.get(j).getQuantidade();
+                            colunas[1][i] = dem.get(j).getValorUnitario();
+                            colunas[2][i] = dem.get(j).getQuantidade() * dem.get(j).getValorUnitario();
 
-                        tempTotais[indexCol] += dem.get(j).getQuantidade();
-                        tempTotais[indexCol + 2] += dem.get(j).getQuantidade() * dem.get(j).getValorUnitario();
+                            tempTotais[0] += dem.get(j).getQuantidade();
+                            tempTotais[2] += dem.get(j).getQuantidade() * dem.get(j).getValorUnitario();
 
-                    }
-
-                    if( modelDadosEconomicos.getValueAt(i, 0).equals("SUB-TOTAL") || i == 87) {    
-                        if (tempTotais[indexCol + 2] != 0.0) {
-                            linhaTemp[indexCol + 2] = tempTotais[indexCol + 2];
-                            coeAtivLeite[dem.get(j).getMes() - 1] += tempTotais[indexCol + 2];
-                            tempTotais[indexCol + 2] = 0.0;
-                        } 
-                    } 
-
-                    if(i == 7) {
-
-                        if (tempTotais[indexCol] != 0.0) { 
-                            linhaTemp[indexCol] = (int)tempTotais[indexCol];
-                            tempTotais[indexCol] = 0.0;
                         }
 
-                        if (tempTotais[indexCol + 2] != 0.0) {
-                            linhaTemp[indexCol + 2] = tempTotais[indexCol + 2];
-                            tempTotais[indexCol + 2] = 0.0;
+                        if( esp[i].equals("SUB-TOTAL") || i == 87) {    
+                            if (tempTotais[2] != 0.0) {
+                                colunas[2][i] = tempTotais[2];
+                                coeAtivLeite += tempTotais[2];
+                                tempTotais[2] = 0.0;
+                            } 
                         } 
 
-                    }
-                    
-                    if( i == 88 ){
+                        if(i == 7) {
 
-                        if (coeAtivLeite[dem.get(j).getMes() - 1] != 0.0) {
-                            linhaTemp[indexCol + 2] = coeAtivLeite[dem.get(j).getMes() - 1];
-                            coeAtivLeite[dem.get(j).getMes() - 1] = 0.0;
-                        } 
+                            if (tempTotais[0] != 0.0) { 
+                                colunas[0][i] = (int) tempTotais[0];
+                                tempTotais[0] = 0.0;
+                            }
 
-                    }
+                            if (tempTotais[2] != 0.0) {
+                                colunas[2][i] = tempTotais[2];
+                                tempTotais[2] = 0.0;
+                            } 
 
-                    if( i == 89 ){
-                        if (linhaTemp != null && this.getSalarioMensal() != 0.0) {
-                            linhaTemp[indexCol + 1] = this.getSalarioMensal();
                         }
 
-                        if (linhaTemp[indexCol] != null && this.getSalarioMensal() != 0.0) {
-                            linhaTemp[indexCol + 2] = Double.parseDouble(linhaTemp[indexCol].toString()) * 
-                                    Double.parseDouble(linhaTemp[indexCol + 1].toString());
+                        if( i == 88 ){
+
+                            if (coeAtivLeite != 0.0) {
+                                colunas[2][i] = coeAtivLeite;
+                                coeAtivLeite = 0.0;
+                            } 
+
+                        }
+
+                        if( i == 89 ){
+                            if (colunas[0] != null && this.getSalarioMensal() != 0.0) {
+                                colunas[1][i] = this.getSalarioMensal();
+                            }
+
+                            if (colunas[0][i] != null && this.getSalarioMensal() != 0.0) {
+                                colunas[2][i] = Double.parseDouble(colunas[0][i].toString()) * 
+                                        Double.parseDouble(colunas[1][i].toString());
+                            }
                         }
                     }
                 }
-        
-                modelDadosEconomicos.addRow(linhaTemp);
-                Util.clearVector(linhaTemp);
+                
         }
+    
+        return colunas;
+        
+    }
+    
+    private void PreencherTabelaDEM(List<DadosEconMensais> dem, List<Especificacao> esp) {
+        
+        Object[][] meses = new Object[3][2];
+        Object[][] colunas;
+        
+        int paginaAtual = getPage();
+        
+        switch(paginaAtual){
+            case 1:
+                meses = new Object[][] {{ 1, "Janeiro"}, { 2, "Fevereiro"}, { 3,    "Março"}};
+                break;
+            case 2:
+                meses = new Object[][] {{ 4,   "Abril"}, { 5,      "Maio"}, { 6,    "Junho"}};
+                break;
+            case 3:
+                meses = new Object[][] {{ 7,   "Julho"}, { 8,    "Agosto"}, { 9, "Setembro"}};
+                break;
+            case 4:
+                meses = new Object[][] {{10, "Outubro"}, {11,  "Novembro"}, {12, "Dezembro"}};
+                break;
+        }
+        
+        DefaultTableModel modelDEM = (DefaultTableModel) tabelaDEM.getModel();
+        
+        tabelaTrimestre.getColumnModel().getColumn(0).setHeaderValue(meses[0][1]);
+        tabelaTrimestre.getColumnModel().getColumn(1).setHeaderValue(meses[1][1]);
+        tabelaTrimestre.getColumnModel().getColumn(2).setHeaderValue(meses[2][1]);
+        tabelaTrimestre.getTableHeader().resizeAndRepaint();
+        
+        DefaultTableModel modelDEMs = (DefaultTableModel) tabelaDEM.getModel();
+        modelDEMs.addColumn("Especificação", PreencherColunaESP(esp));
+                
+        int mesInicio = Integer.parseInt(meses[0][0].toString());
+        int mesFim    = Integer.parseInt(meses[2][0].toString());
+                
+        System.out.println(mesInicio + " " + mesFim);
+        
+        for(int i = mesInicio; i <= mesFim; i++){
+            colunas = addColunas(dem, i);
+            
+            modelDEM.addColumn("Quant.",      colunas[0]);
+            modelDEM.addColumn("Valor Unit.", colunas[1]);
+            modelDEM.addColumn("Total (R$)",  colunas[2]);
+        }
+            
+        tabelaDEM.setModel(modelDEM);
+        tabelaDEM.getColumnModel().getColumn(0).setPreferredWidth(273);
+        
     }
    
     /**
@@ -195,16 +250,16 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
 
         btnVoltar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        anoCombo = new javax.swing.JComboBox<>();
+        anoCombo = new javax.swing.JComboBox<String>();
         adicionarAnoBT = new javax.swing.JButton();
-        jScrollPane6 = new javax.swing.JScrollPane();
-        tabelaDadosEconomicos = new javax.swing.JTable();
         textoEntrada = new javax.swing.JLabel();
         avancarBT = new javax.swing.JButton();
         retornarBT = new javax.swing.JButton();
         editarValoresBT = new javax.swing.JButton();
-        jScrollPane7 = new javax.swing.JScrollPane();
-        tabelaMeses = new javax.swing.JTable();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tabelaTrimestre = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tabelaDEM = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addMouseWheelListener(new java.awt.event.MouseWheelListener() {
@@ -238,140 +293,6 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
             }
         });
 
-        jScrollPane6.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        jScrollPane6.setAutoscrolls(true);
-
-        tabelaDadosEconomicos.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "Especificação", "Quant.", "Valor Unit.", "Total (R$)", "Quant.", "Valor Unit.", "Total (R$)", "Quant.", "Valor Unit.", "Total (R$)"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        tabelaDadosEconomicos.setPreferredSize(new java.awt.Dimension(800, 1441));
-        tabelaDadosEconomicos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        tabelaDadosEconomicos.getTableHeader().setResizingAllowed(false);
-        tabelaDadosEconomicos.getTableHeader().setReorderingAllowed(false);
-        jScrollPane6.setViewportView(tabelaDadosEconomicos);
-        tabelaDadosEconomicos.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        if (tabelaDadosEconomicos.getColumnModel().getColumnCount() > 0) {
-            tabelaDadosEconomicos.getColumnModel().getColumn(0).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(1).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(2).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(3).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(4).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(5).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(6).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(7).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(8).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(9).setResizable(false);
-        }
-
         textoEntrada.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         textoEntrada.setForeground(new java.awt.Color(0, 38, 255));
         textoEntrada.setText("DADOS ECONÔMICOS MENSAIS");
@@ -398,12 +319,12 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
             }
         });
 
-        tabelaMeses.setModel(new javax.swing.table.DefaultTableModel(
+        tabelaTrimestre.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "JANEIRO", "FEVEREIRO", "MARÇO"
+                "mes1", "mes2", "mes3"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -414,12 +335,29 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane7.setViewportView(tabelaMeses);
-        if (tabelaMeses.getColumnModel().getColumnCount() > 0) {
-            tabelaMeses.getColumnModel().getColumn(0).setResizable(false);
-            tabelaMeses.getColumnModel().getColumn(1).setResizable(false);
-            tabelaMeses.getColumnModel().getColumn(2).setResizable(false);
+        tabelaTrimestre.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(tabelaTrimestre);
+        if (tabelaTrimestre.getColumnModel().getColumnCount() > 0) {
+            tabelaTrimestre.getColumnModel().getColumn(0).setResizable(false);
+            tabelaTrimestre.getColumnModel().getColumn(1).setResizable(false);
+            tabelaTrimestre.getColumnModel().getColumn(2).setResizable(false);
         }
+
+        tabelaDEM.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+
+        )   {
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return false;
+            }
+        });
+        tabelaDEM.getTableHeader().setReorderingAllowed(false);
+        jScrollPane2.setViewportView(tabelaDEM);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -428,15 +366,13 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 998, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 156, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 686, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 889, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(retornarBT, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(avancarBT, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -449,8 +385,8 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(adicionarAnoBT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(editarValoresBT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap())))
+                                .addComponent(editarValoresBT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -478,10 +414,11 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(anoCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 614, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 603, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -514,17 +451,43 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
     }//GEN-LAST:event_editarValoresBTActionPerformed
 
     private void formMouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_formMouseWheelMoved
-        moveScrollBar(evt);
+        
     }//GEN-LAST:event_formMouseWheelMoved
 
     private void avancarBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_avancarBTActionPerformed
-    //    JScrollBar barPanel = jScrollPane2.getHorizontalScrollBar();
-    //    barPanel.setValue(barPanel.getValue() + 695);
+                
+        boolean avancar = false;
+        
+        int pagAtual = getPage();
+        
+        if(pagAtual <= 3){
+            pagAtual += 1;
+            setPage(pagAtual);
+            avancar = true;
+        }
+                
+        if(avancar){
+            PreencherTabelaDEM(dems, especificacoes);
+        }
+        
     }//GEN-LAST:event_avancarBTActionPerformed
 
     private void retornarBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_retornarBTActionPerformed
-    //   JScrollBar barPanel = jScrollPane2.getHorizontalScrollBar();
-    //   barPanel.setValue(barPanel.getValue() - 695);
+    
+        boolean retornar = false;
+        
+        int pagAtual = getPage();
+        
+        if(pagAtual > 1){
+            pagAtual -= 1;
+            setPage(pagAtual);
+            retornar = true;
+        }
+        
+        if(retornar){
+            PreencherTabelaDEM(dems, especificacoes);
+        }
+        
     }//GEN-LAST:event_retornarBTActionPerformed
 
     private void adicionarAnoBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarAnoBTActionPerformed
@@ -561,7 +524,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         if (evt.getStateChange() == ItemEvent.SELECTED) {
            dems = demdao.retrieveByColumns(new String[]{"idPerfilFK", "ano"}, new Object[]{atual.getId(), 
                                     Integer.parseInt(anoCombo.getSelectedItem().toString())});    
-         //  PreencherTabelaDEM(dems);
+        PreencherTabelaDEM(dems, especificacoes);
         }    
     }//GEN-LAST:event_anoComboItemStateChanged
 
@@ -580,16 +543,6 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         
     }
     
-    private void moveScrollBar(java.awt.event.MouseWheelEvent evt) {
-        JScrollBar barPanel3 = jScrollPane6.getVerticalScrollBar();     
-        
-        if(evt.getWheelRotation() > 0) { //Up
-            barPanel3.setValue(barPanel3.getValue()+25); // velocidade de rolagem      
-        } else { //Down
-            barPanel3.setValue(barPanel3.getValue()-25);
-        }     
-    }
-    
     private void definirBDListeners() {
         
         gtae.addTableModifyListener((TableModifiedEvent evt) -> {
@@ -603,7 +556,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
             
             for (Integer l : linhas) {
 
-                Especificacao espec = demespdao.retrieveByColumn("especificacao", tabelaDadosEconomicos.getValueAt(l, 0)).get(0);
+                Especificacao espec = demespdao.retrieveByColumn("especificacao", tabelaDEM.getValueAt(l, 0)).get(0);
                 int ano = Integer.parseInt(anoCombo.getSelectedItem().toString());
                 int mes = ( (gtae.getStartColumn() + 1) / 3 ) + 1;
                 int quantidade = 0;
@@ -646,7 +599,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
             
             dems = demdao.retrieveByColumns(new String[]{"idPerfilFK", "ano"}, new Object[]{atual.getId(),
                     Integer.parseInt(anoCombo.getSelectedItem().toString())});
-            PreencherTabelaDEM(dems);
+            PreencherTabelaDEM(dems, especificacoes);
             
         });
     }
@@ -672,19 +625,19 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
             
     private void initGTAE(){
         
-        List<String> especColumnRows = new ArrayList<>(tabelaDadosEconomicos.getRowCount());
+        List<String> especColumnRows = new ArrayList<>(tabelaDEM.getRowCount());
         
-        for(int i=0; i<tabelaDadosEconomicos.getRowCount(); i++){
+        for(int i=0; i<tabelaDEM.getRowCount(); i++){
             
-            especColumnRows.add(Cast.toString(tabelaDadosEconomicos.getValueAt(i, 0)));
+            especColumnRows.add(Cast.toString(tabelaDEM.getValueAt(i, 0)));
         }
         
         gtae.setName("GTAE DadosEconMensais");
         
-        gtae.addStringColumn(tabelaDadosEconomicos.getColumnModel().getColumn(0).getWidth(), "Especificação", especColumnRows,
-                        tabelaDadosEconomicos.getDefaultRenderer(Object.class));
+        gtae.addStringColumn(tabelaDEM.getColumnModel().getColumn(0).getWidth(), "Especificação", especColumnRows,
+                        tabelaDEM.getDefaultRenderer(Object.class));
        
-        gtae.setDefaultRenderer( tabelaDadosEconomicos.getDefaultRenderer(Object.class) );
+        gtae.setDefaultRenderer( tabelaDEM.getDefaultRenderer(Object.class) );
     }
     
     private void configGTAE(int selected) {
@@ -696,7 +649,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         
         gtae.setColumnInterval(((selected-1) * 3), ((selected-1)*3) + 2);
         
-        gtae.setRowInterval(0, tabelaDadosEconomicos.getRowCount()-1); //Linha 1 a 90
+        gtae.setRowInterval(0, tabelaDEM.getRowCount()-1); //Linha 1 a 90
         
         //Configura o editor de acordo com o intervalo de linhas e colunas especificado.
         gtae.processEditor();
@@ -717,6 +670,16 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         gtae.setCellEditable(89, 1, false);
         
     }
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+    
+    
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -726,12 +689,11 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
     private javax.swing.JButton btnVoltar;
     private javax.swing.JButton editarValoresBT;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton retornarBT;
-    private javax.swing.JTable tabelaDadosEconomicos;
-    private javax.swing.JTable tabelaMeses;
+    private javax.swing.JTable tabelaDEM;
+    private javax.swing.JTable tabelaTrimestre;
     private javax.swing.JLabel textoEntrada;
     // End of variables declaration//GEN-END:variables
 }
