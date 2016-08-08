@@ -9,6 +9,7 @@ import controle.ControlePerfil;
 import flex.db.GenericDAO;
 import flex.table.GenericTableAreaEditor;
 import flex.table.TableModifiedEvent;
+import java.awt.Font;
 import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,12 +52,13 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         atual = ControlePerfil.getInstance().getPerfilSelecionado();
         
         tabelaDadosTecnicos.setShowGrid(true);
-        tabelaIndicadores.setShowHorizontalLines(true);
+        tabelaDadosTecnicos.setShowHorizontalLines(true);
+        tabelaDadosTecnicos.getTableHeader().setFont(super.getFont().deriveFont(Font.BOLD));
         
         super.setTitle("SGPL - " + atual.getNome() + " - Dados Técnicos Mensais");
         
         tabelaDadosTecnicos.setDefaultRenderer(Object.class, new ColorRendererDadosTec(true));
-        tabelaIndicadores.setDefaultRenderer(Object.class, new ColorRendererDadosTec(false));
+        tabelaDadosTecnicos.getColumnModel().getColumn(0).setCellRenderer(new ColorRendererDadosTec(false));
         
         dtmdao = new GenericDAO<>(DadosTecMensais.class);
         
@@ -64,8 +66,8 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         indicadores = dtmindao.retrieveAll();
         
         gtae = new GenericTableAreaEditor(this, tabelaDadosTecnicos, false);
-        
-        PreencherTabelaIND(indicadores);
+      
+        PreencherColunaIND(indicadores);
         
         fillComboBox();
         
@@ -74,20 +76,26 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         definirBDListeners();
     }
     
-    private void PreencherTabelaIND(List<Indicador> ind){
+    private void PreencherColunaIND(List<Indicador> ind){
        
-        DefaultTableModel modelIndicadores = (DefaultTableModel) tabelaIndicadores.getModel();
-        modelIndicadores.setNumRows(0);
-
+        int count = 0;
+        DefaultTableModel modelIndicadores = (DefaultTableModel) tabelaDadosTecnicos.getModel();
+        Object[] colunaIND = new Object[tabelaDadosTecnicos.getRowCount()];
+        
         for(int i = 0; i < ind.size(); i++){
             
-            if(i == 1)   { modelIndicadores.addRow(new Object[]{ "MÉDIA Litros/dia (L)" });
-                           modelIndicadores.addRow(new Object[]{ "" });
-                           modelIndicadores.addRow(new Object[]{ "INDICADORES PRODUTIVOS" }); }
-            if(i == 10)  { modelIndicadores.addRow(new Object[]{ "" });
-                           modelIndicadores.addRow(new Object[]{ "INDICADORES SANITÁRIOS" });}
+            if(i == 1)   { colunaIND[count] = "MÉDIA Litros/dia (L)"; count++;
+                           colunaIND[count] = ""; count++;
+                           colunaIND[count] = "INDICADORES PRODUTIVOS"; count++; }
+            if(i == 10)  { colunaIND[count] = ""; count++; 
+                           colunaIND[count] = "INDICADORES SANITÁRIOS"; count++; }
            
-            modelIndicadores.addRow( new Object[]{ ind.get(i).getIndicador()});
+            colunaIND[count] = ind.get(i).getIndicador();
+            count++;
+        }
+        
+        for(int i = 0; i < modelIndicadores.getRowCount(); i++) {
+            modelIndicadores.setValueAt(colunaIND[i], i, 0);
         }
     }
     
@@ -97,18 +105,17 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         double dadoTemp, tempMedia, divisao;
         
         int ano = Integer.parseInt(anoCombo.getSelectedItem().toString());
-        DefaultTableModel modelIndicadores = (DefaultTableModel) tabelaIndicadores.getModel();
         DefaultTableModel modelDadosTecnicos = (DefaultTableModel) tabelaDadosTecnicos.getModel();
-        modelDadosTecnicos.setNumRows(0);
         
-        Object[] linhaTemp = new Object[36];
+        Object[] linhaTemp = new Object[14];
         
-        for( int i = 0; i < modelIndicadores.getRowCount(); i++) {
+        for( int i = 0; i < modelDadosTecnicos.getRowCount(); i++) {
             
             for( int j = 0; j < dtm.size(); j++){
                     
-                indexCol = dtm.get(j).getMes() - 1;
-                if( modelIndicadores.getValueAt(i, 0).equals(dtm.get(j).getIndicador().getIndicador())){
+                indexCol = dtm.get(j).getMes();
+                
+                if( modelDadosTecnicos.getValueAt(i, 0).equals(dtm.get(j).getIndicador().getIndicador())){
 
                     dadoTemp = dtm.get(j).getDado();
 
@@ -119,19 +126,20 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
                     if (modelDadosTecnicos.getValueAt(0, indexCol) != null) {
                         tempMedia = (Double) modelDadosTecnicos.getValueAt(0, indexCol);
 
-                        if( tempMedia != 0.0 ) {
-                            linhaTemp[indexCol] = Calc.dividir(tempMedia, Util.diasDoMes(ano, indexCol + 1));
-                        }  
+                        linhaTemp[indexCol] = Calc.dividir(tempMedia, Util.diasDoMes(ano, indexCol));
+                          
                     }
                 }
             }
             divisao = calcularMedia(linhaTemp);
             
             if (divisao != 0.0) { 
-                linhaTemp[12] = divisao; 
+                linhaTemp[13] = divisao; 
             }         
 
-            modelDadosTecnicos.addRow(linhaTemp);
+            for(int j = 1; j < linhaTemp.length; j++) {              
+                modelDadosTecnicos.setValueAt(linhaTemp[j], i, j);
+            }
             Util.clearVector(linhaTemp);
         }
     }
@@ -150,14 +158,6 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         anoCombo = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jPanel1 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jPanel2 = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        tabelaIndicadores = new javax.swing.JTable();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        jPanel3 = new javax.swing.JPanel();
-        jScrollPane5 = new javax.swing.JScrollPane();
         tabelaDadosTecnicos = new javax.swing.JTable();
         adicionarAnoBT = new javax.swing.JButton();
         editarAnoBT = new javax.swing.JButton();
@@ -190,135 +190,42 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 
-        jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        jScrollPane2.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-
-        tabelaIndicadores.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null},
-                {null}
-            },
-            new String [] {
-                "Indicador"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        tabelaIndicadores.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        tabelaIndicadores.getTableHeader().setReorderingAllowed(false);
-        tabelaIndicadores.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseDragged(java.awt.event.MouseEvent evt) {
-                tabelaIndicadoresMouseDragged(evt);
-            }
-        });
-        tabelaIndicadores.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                tabelaIndicadoresMousePressed(evt);
-            }
-        });
-        tabelaIndicadores.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                tabelaIndicadoresKeyPressed(evt);
-            }
-        });
-        jScrollPane3.setViewportView(tabelaIndicadores);
-        if (tabelaIndicadores.getColumnModel().getColumnCount() > 0) {
-            tabelaIndicadores.getColumnModel().getColumn(0).setResizable(false);
-        }
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 240, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 559, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 45, Short.MAX_VALUE))
-        );
-
-        jScrollPane2.setViewportView(jPanel2);
-
-        jScrollPane4.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        jScrollPane4.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-
-        jScrollPane5.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-
         tabelaDadosTecnicos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "JANEIRO", "FEVEREIRO", "MARÇO", "ABRIL", "MAIO", "JUNHO", "JULHO", "AGOSTO", "SETEMBRO", "OUTUBRO", "NOVEMBRO", "DEZEMBRO", "Média"
+                "Indicador", "JANEIRO", "FEVEREIRO", "MARÇO", "ABRIL", "MAIO", "JUNHO", "JULHO", "AGOSTO", "SETEMBRO", "OUTUBRO", "NOVEMBRO", "DEZEMBRO", "Média"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class
+                java.lang.String.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -331,24 +238,11 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         });
         tabelaDadosTecnicos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tabelaDadosTecnicos.getTableHeader().setReorderingAllowed(false);
-        tabelaDadosTecnicos.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseDragged(java.awt.event.MouseEvent evt) {
-                tabelaDadosTecnicosMouseDragged(evt);
-            }
-        });
-        tabelaDadosTecnicos.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                tabelaDadosTecnicosMousePressed(evt);
-            }
-        });
-        tabelaDadosTecnicos.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                tabelaDadosTecnicosKeyPressed(evt);
-            }
-        });
-        jScrollPane5.setViewportView(tabelaDadosTecnicos);
+        jScrollPane1.setViewportView(tabelaDadosTecnicos);
+        tabelaDadosTecnicos.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         if (tabelaDadosTecnicos.getColumnModel().getColumnCount() > 0) {
             tabelaDadosTecnicos.getColumnModel().getColumn(0).setResizable(false);
+            tabelaDadosTecnicos.getColumnModel().getColumn(0).setPreferredWidth(240);
             tabelaDadosTecnicos.getColumnModel().getColumn(1).setResizable(false);
             tabelaDadosTecnicos.getColumnModel().getColumn(2).setResizable(false);
             tabelaDadosTecnicos.getColumnModel().getColumn(3).setResizable(false);
@@ -360,46 +254,10 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
             tabelaDadosTecnicos.getColumnModel().getColumn(9).setResizable(false);
             tabelaDadosTecnicos.getColumnModel().getColumn(10).setResizable(false);
             tabelaDadosTecnicos.getColumnModel().getColumn(11).setResizable(false);
+            tabelaDadosTecnicos.getColumnModel().getColumn(11).setPreferredWidth(80);
             tabelaDadosTecnicos.getColumnModel().getColumn(12).setResizable(false);
+            tabelaDadosTecnicos.getColumnModel().getColumn(13).setResizable(false);
         }
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 1032, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 558, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 29, Short.MAX_VALUE))
-        );
-
-        jScrollPane4.setViewportView(jPanel3);
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 744, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 347, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 559, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 1098, Short.MAX_VALUE))
-        );
-
-        jScrollPane1.setViewportView(jPanel1);
 
         adicionarAnoBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/add.png"))); // NOI18N
         adicionarAnoBT.setToolTipText("Adicionar novo ano");
@@ -437,23 +295,27 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(128, 128, 128)
-                .addComponent(retornarBT, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(avancarBT, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(54, 54, 54)
-                .addComponent(textoEntrada)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 113, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(anoCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(adicionarAnoBT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(editarAnoBT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18))
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(106, 106, 106)
+                        .addComponent(retornarBT, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(avancarBT, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(76, 76, 76)
+                        .addComponent(textoEntrada)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 113, Short.MAX_VALUE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(anoCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(adicionarAnoBT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(editarAnoBT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane1)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -467,9 +329,8 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
                         .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(textoEntrada)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(retornarBT, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(avancarBT, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(retornarBT, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(avancarBT, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE))
         );
@@ -482,55 +343,6 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
-
-    private void tabelaIndicadoresKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabelaIndicadoresKeyPressed
-        int temp;
-        if(evt.getKeyCode() == 40 && tabelaIndicadores.getSelectedRow() != (tabelaIndicadores.getRowCount() - 1)) {
-            temp = tabelaIndicadores.getSelectedRow() + 1;
-            tabelaDadosTecnicos.setRowSelectionInterval(temp, temp);
-        } else if (evt.getKeyCode() == 38 && tabelaIndicadores.getSelectedRow() != 0){
-            temp = tabelaIndicadores.getSelectedRow() - 1;
-            tabelaDadosTecnicos.setRowSelectionInterval(temp, temp);
-        }
-    }//GEN-LAST:event_tabelaIndicadoresKeyPressed
-
-    private void tabelaDadosTecnicosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabelaDadosTecnicosKeyPressed
-        int temp;
-        if(evt.getKeyCode() == 40 && tabelaDadosTecnicos.getSelectedRow() != (tabelaDadosTecnicos.getRowCount() - 1)) {
-            temp =  tabelaDadosTecnicos.getSelectedRow() + 1;
-            tabelaIndicadores.setRowSelectionInterval(temp, temp);
-
-        } else if (evt.getKeyCode() == 38 &&  tabelaDadosTecnicos.getSelectedRow() != 0){
-            temp =  tabelaDadosTecnicos.getSelectedRow() - 1;
-            tabelaIndicadores.setRowSelectionInterval(temp, temp);
-        }
-    }//GEN-LAST:event_tabelaDadosTecnicosKeyPressed
-
-    private void tabelaIndicadoresMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaIndicadoresMousePressed
-        tabelaDadosTecnicos.setRowSelectionInterval(tabelaIndicadores.getSelectedRow(), tabelaIndicadores.getSelectedRow());
-    }//GEN-LAST:event_tabelaIndicadoresMousePressed
-
-    private void tabelaDadosTecnicosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaDadosTecnicosMousePressed
-       tabelaIndicadores.setRowSelectionInterval(tabelaDadosTecnicos.getSelectedRow(), tabelaDadosTecnicos.getSelectedRow());
-    }//GEN-LAST:event_tabelaDadosTecnicosMousePressed
-
-    private void tabelaDadosTecnicosMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaDadosTecnicosMouseDragged
-        tabelaDadosTecnicosMousePressed(evt);
-    }//GEN-LAST:event_tabelaDadosTecnicosMouseDragged
-
-    private void tabelaIndicadoresMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaIndicadoresMouseDragged
-        tabelaIndicadoresMousePressed(evt);
-    }//GEN-LAST:event_tabelaIndicadoresMouseDragged
-
-    private void retornarBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_retornarBTActionPerformed
-        JScrollBar barPanel = jScrollPane4.getHorizontalScrollBar();
-        barPanel.setValue(barPanel.getValue() - 695);
-    }//GEN-LAST:event_retornarBTActionPerformed
-
-    private void avancarBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_avancarBTActionPerformed
-        JScrollBar barPanel = jScrollPane4.getHorizontalScrollBar();
-        barPanel.setValue(barPanel.getValue() + 695);
-    }//GEN-LAST:event_avancarBTActionPerformed
 
     private void adicionarAnoBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarAnoBTActionPerformed
         boolean existe = false;
@@ -586,16 +398,26 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_anoComboItemStateChanged
 
+    private void retornarBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_retornarBTActionPerformed
+        JScrollBar barPanel = jScrollPane1.getHorizontalScrollBar();
+        barPanel.setValue(barPanel.getValue() - 250);
+    }//GEN-LAST:event_retornarBTActionPerformed
+
+    private void avancarBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_avancarBTActionPerformed
+        JScrollBar barPanel = jScrollPane1.getHorizontalScrollBar();
+        barPanel.setValue(barPanel.getValue() + 250);
+    }//GEN-LAST:event_avancarBTActionPerformed
+
     private void initGTAE() {
-        List<String> indColumnRows = new ArrayList<>(tabelaIndicadores.getRowCount());
+        List<String> indColumnRows = new ArrayList<>(tabelaDadosTecnicos.getRowCount());
         
-        for(int i = 0; i < tabelaIndicadores.getRowCount(); i++) {
-            indColumnRows.add(Cast.toString(tabelaIndicadores.getValueAt(i, 0).toString()));
+        for(int i = 0; i < tabelaDadosTecnicos.getRowCount(); i++) {
+            indColumnRows.add(Cast.toString(tabelaDadosTecnicos.getValueAt(i, 0).toString()));
         }
         
         gtae.setName("GTAE Dados Técnicos Mensais");
-        gtae.addStringColumn(tabelaIndicadores.getColumnModel().getColumn(0).getWidth(), "Indicador", indColumnRows, 
-                tabelaIndicadores.getDefaultRenderer(Object.class));
+        gtae.addStringColumn(tabelaDadosTecnicos.getColumnModel().getColumn(0).getPreferredWidth(), "Indicador", indColumnRows, 
+                tabelaDadosTecnicos.getColumnModel().getColumn(0).getCellRenderer());
         
         gtae.setDefaultRenderer(tabelaDadosTecnicos.getDefaultRenderer(Object.class));
         
@@ -607,12 +429,14 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         
         gtae.setRowsDisplayed(14);
         
+        gtae.getEditTable().getTableHeader().setFont(super.getFont().deriveFont(Font.BOLD));
+        
         gtae.setAllowEmptyRows(true);
         gtae.setAllowEmptyCells(true);
         
-        gtae.setColumnInterval(selected-1, selected-1);
+        gtae.setColumnInterval(selected, selected);
         
-        gtae.setRowInterval(0, tabelaIndicadores.getRowCount()-1);
+        gtae.setRowInterval(0, tabelaDadosTecnicos.getRowCount()-1);
         
         gtae.processEditor();
         
@@ -646,27 +470,25 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
             int ano = Integer.parseInt(anoCombo.getSelectedItem().toString());
             
             for (Integer l : linhas) {
-                int mes = gtae.getStartColumn() + 1;
-                
+                int mes = gtae.getStartColumn();
+   
                 String valor = Cast.toString(areaData[l][0]);
                 double dado = (valor.isEmpty()? 0.0 : Double.parseDouble(valor));
                 
-                Indicador ind = dtmindao.retrieveByColumn("indicador", tabelaIndicadores.getValueAt(l, 0)).get(0);
+                Indicador ind = dtmindao.retrieveByColumn("indicador", tabelaDadosTecnicos.getValueAt(l, 0)).get(0);
 
                 List<DadosTecMensais> dadosTec = dtmdao.retrieveByColumns(new String[]{"mes", "ano", "idDTM_indicadorFK", "idPerfilFK"}, 
                                                         new Object[]{mes, ano, ind.getId(), atual.getId()});
 
                 if (dadosTec.isEmpty()) {
-                    if (dado != 0.0) {
-                        DadosTecMensais dadoTec = new DadosTecMensais(mes, ano, dado, ind, atual.getId());
+                    DadosTecMensais dadoTec = new DadosTecMensais(mes, ano, dado, ind, atual.getId());
 
-                        dtmdao.insert(dadoTec);
-                    }
+                    dtmdao.insert(dadoTec);
 
                 } else {
                     DadosTecMensais dtm = dadosTec.get(0);
 
-                    if (valor.isEmpty() || dado == 0.0) {
+                    if (valor.isEmpty()) {
                         dtmdao.remove(dtm.getId());
                         continue;
                     }
@@ -697,7 +519,6 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         return Calc.dividir(soma, cont);
     }
     
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton adicionarAnoBT;
     private javax.swing.JComboBox<String> anoCombo;
@@ -705,17 +526,9 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
     private javax.swing.JButton btnVoltar;
     private javax.swing.JButton editarAnoBT;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JButton retornarBT;
     private javax.swing.JTable tabelaDadosTecnicos;
-    private javax.swing.JTable tabelaIndicadores;
     private javax.swing.JLabel textoEntrada;
     // End of variables declaration//GEN-END:variables
 }
