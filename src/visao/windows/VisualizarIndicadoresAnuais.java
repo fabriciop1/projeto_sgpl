@@ -19,6 +19,7 @@ import modelo.negocio.DadosEconMensais;
 import modelo.negocio.DadosTecMensais;
 import modelo.negocio.Perfil;
 import util.DecimalFormatRenderer;
+import util.FixedColumnTable;
 
 /**
  *
@@ -32,6 +33,7 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
     private GenericDAO<DadosEconMensais> demdao;
     private final GenericDAO<DadosTecMensais> dtmdao;
     private final ControleIndicadoresAnuais cia;
+    private FixedColumnTable fixedTable;
     
     /**
      * Creates new form VisualizarRelatoriosAnuais
@@ -72,6 +74,7 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
                                       + " ORDER BY dtm.ano");
             
             preencherTabelaIEA(dems, dtms);
+            fixedTable = new FixedColumnTable(2, jScrollPane2);
         } else if(cia.getTipoIndicador() == 2) { // Tipo Indicadores Técnicos
           
             dtms = dtmdao.executeSQL("SELECT * "
@@ -82,7 +85,13 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
                                       + " ORDER BY dtm.ano");
             
             preencherTabelaITA(dtms);
+            
+            fixedTable = new FixedColumnTable(2, jScrollPane2);
+            fixedTable.getFixedTable().setDefaultRenderer(Object.class, tabelaIndicadoresAnuais.getDefaultRenderer(Object.class));
         } 
+        
+        fixedTable.getFixedTable().getTableHeader().setFont(super.getFont().deriveFont(Font.BOLD));
+                 
         
     }
     
@@ -146,7 +155,8 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
                 }
                 return this;
             }
-        });
+        });      
+ 
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -161,6 +171,8 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
         btnVoltar = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tabelaIndicadoresAnuais = new javax.swing.JTable();
+        retornarBT = new javax.swing.JButton();
+        avancarBT = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -174,6 +186,8 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
                 btnVoltarActionPerformed(evt);
             }
         });
+
+        jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         tabelaIndicadoresAnuais.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -197,6 +211,20 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
             tabelaIndicadoresAnuais.getColumnModel().getColumn(1).setResizable(false);
         }
 
+        retornarBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/left_arrow.png"))); // NOI18N
+        retornarBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                retornarBTActionPerformed(evt);
+            }
+        });
+
+        avancarBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/right_arrow.png"))); // NOI18N
+        avancarBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                avancarBTActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -209,7 +237,11 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(280, 280, 280)
+                        .addGap(104, 104, 104)
+                        .addComponent(retornarBT, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(avancarBT, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(79, 79, 79)
                         .addComponent(textoEntrada)
                         .addGap(402, 402, 402))))
         );
@@ -217,9 +249,13 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(textoEntrada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnVoltar, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(textoEntrada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnVoltar, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(retornarBT, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(avancarBT, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 691, Short.MAX_VALUE)
                 .addContainerGap())
@@ -234,10 +270,22 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
 
+    private void retornarBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_retornarBTActionPerformed
+        JScrollBar barPanel = jScrollPane2.getHorizontalScrollBar();
+        barPanel.setValue(barPanel.getValue() - 595);
+    }//GEN-LAST:event_retornarBTActionPerformed
+
+    private void avancarBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_avancarBTActionPerformed
+        JScrollBar barPanel = jScrollPane2.getHorizontalScrollBar();
+        barPanel.setValue(barPanel.getValue() + 595);
+    }//GEN-LAST:event_avancarBTActionPerformed
+
   
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton avancarBT;
     private javax.swing.JButton btnVoltar;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JButton retornarBT;
     private javax.swing.JTable tabelaIndicadoresAnuais;
     private javax.swing.JLabel textoEntrada;
     // End of variables declaration//GEN-END:variables

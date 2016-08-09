@@ -35,26 +35,26 @@
                           <Component id="abrilBT" alignment="0" max="32767" attributes="0"/>
                           <Component id="janeiroBT" alignment="0" max="32767" attributes="0"/>
                           <Component id="julhoBT" alignment="0" max="32767" attributes="0"/>
-                          <Component id="outubroBT" alignment="0" pref="93" max="32767" attributes="0"/>
-                          <Component id="cancelaBT" alignment="1" max="32767" attributes="0"/>
+                          <Component id="cancelaBT" alignment="1" pref="93" max="32767" attributes="0"/>
+                          <Component id="outubroBT" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="maioBT" alignment="0" max="32767" attributes="0"/>
-                          <Component id="fevereiroBT" alignment="0" max="32767" attributes="0"/>
+                          <Component id="fevereiroBT" alignment="0" pref="93" max="32767" attributes="0"/>
                           <Component id="agostoBT" alignment="0" max="32767" attributes="0"/>
-                          <Component id="novembroBT" alignment="0" max="32767" attributes="0"/>
+                          <Component id="novembroBT" pref="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" max="-2" attributes="0">
                           <Component id="junhoBT" alignment="0" max="32767" attributes="0"/>
                           <Component id="setembroBT" alignment="0" max="32767" attributes="0"/>
                           <Component id="marcoBT" alignment="0" max="32767" attributes="0"/>
-                          <Component id="dezembroBT" alignment="0" max="32767" attributes="0"/>
+                          <Component id="dezembroBT" alignment="0" min="-2" pref="93" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace pref="36" max="32767" attributes="0"/>
+              <EmptySpace pref="37" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>

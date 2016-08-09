@@ -137,8 +137,8 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
                 linhaTemp[13] = divisao; 
             }         
 
-            for(int j = 1; j < linhaTemp.length; j++) {              
-                modelDadosTecnicos.setValueAt(linhaTemp[j], i, j);
+            for(int k = 1; k < linhaTemp.length; k++) {              
+                modelDadosTecnicos.setValueAt(linhaTemp[k], i, k);
             }
             Util.clearVector(linhaTemp);
         }

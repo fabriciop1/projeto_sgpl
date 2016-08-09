@@ -162,7 +162,6 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
 //        return sql;
 //    }
 //    
-    protected static int counter = 0;
     
     public List<T> executeSQL(String sql){
         

@@ -19,6 +19,7 @@ import modelo.negocio.DadosEconMensais;
 import modelo.negocio.DadosTecMensais;
 import modelo.negocio.Perfil;
 import util.DecimalFormatRenderer;
+import util.FixedColumnTable;
 import util.Util;
 
 /**
@@ -32,6 +33,7 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
     private final GenericDAO<DadosEconMensais> demdao;
     private final GenericDAO<DadosTecMensais>  dtmdao;
     private final ControleIndicadoresMensais crm;
+    private FixedColumnTable tabelaFixa;
     
     /**
      * Creates new form VisualizarRelatoriosMensais
@@ -42,6 +44,7 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
         tabelaIndicadoresMensais.setShowGrid(true);
         tabelaIndicadoresMensais.getTableHeader().setFont(super.getFont().deriveFont(Font.BOLD));
         tabelaIndicadoresMensais.getTableHeader().setResizingAllowed(false);
+        
         crm = ControleIndicadoresMensais.getInstance();
         
         atual = ControlePerfil.getInstance().getPerfilSelecionado();
@@ -68,17 +71,25 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
                                + "d.mes <= " + crm.getMesFim() + ") AND "
                                + "d.idPerfilFK = " + atual.getId()
                         + " ORDER BY d.ano, d.mes");
-                
+        
+        
         if( crm.getTipoIndicador() == 1 ) { // Tipo Indicadores Econômicos   
             
-            preencherTabelaIEM(dems, dtms);            
+            preencherTabelaIEM(dems, dtms);   
             
+            tabelaFixa = new FixedColumnTable(2, jScrollPane1);
         } else if( crm.getTipoIndicador() == 2 ){ // Tipo Indicadores Técnicos
             
             preencherTabelaITM(dtms, dems);
+            
+            tabelaFixa = new FixedColumnTable(2, jScrollPane1);
+            tabelaFixa.getFixedTable().setDefaultRenderer(Object.class, tabelaIndicadoresMensais.getDefaultRenderer(Object.class));
+            
         }
+        tabelaFixa.getFixedTable().getTableHeader().setFont(super.getFont().deriveFont(Font.BOLD));
         
     }
+    
     
     private void preencherTabelaIEM(List<DadosEconMensais> iem, List<DadosTecMensais> itm){
         
@@ -172,6 +183,7 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
                 return this;
             }
         });
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -180,7 +192,6 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
 
         btnVoltar = new javax.swing.JButton();
         textoEntrada = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaIndicadoresMensais = new javax.swing.JTable();
         retornarBT = new javax.swing.JButton();
@@ -199,18 +210,8 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
         textoEntrada.setForeground(new java.awt.Color(0, 38, 255));
         textoEntrada.setText("INDICADORES MENSAIS");
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 6, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 560, Short.MAX_VALUE)
-        );
-
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 
         tabelaIndicadoresMensais.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -251,7 +252,8 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(14, 14, 14)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 980, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(102, 102, 102)
@@ -260,11 +262,7 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
                         .addComponent(avancarBT, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(77, 77, 77)
                         .addComponent(textoEntrada)
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 978, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(399, 399, 399))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -277,9 +275,7 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
                     .addComponent(textoEntrada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnVoltar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 560, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -294,18 +290,17 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
 
     private void retornarBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_retornarBTActionPerformed
         JScrollBar barPanel = jScrollPane1.getHorizontalScrollBar();
-        barPanel.setValue(barPanel.getValue() - 695);
+        barPanel.setValue(barPanel.getValue() - 400);
     }//GEN-LAST:event_retornarBTActionPerformed
 
     private void avancarBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_avancarBTActionPerformed
         JScrollBar barPanel = jScrollPane1.getHorizontalScrollBar();
-        barPanel.setValue(barPanel.getValue() + 695);
+        barPanel.setValue(barPanel.getValue() + 400);
     }//GEN-LAST:event_avancarBTActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton avancarBT;
     private javax.swing.JButton btnVoltar;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton retornarBT;
     private javax.swing.JTable tabelaIndicadoresMensais;

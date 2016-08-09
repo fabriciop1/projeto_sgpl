@@ -267,11 +267,11 @@ public abstract class GenericTableModifier extends JDialog{
     
     protected void resizeColumnEditableArray(){
         
-        System.out.println("resizeColumnEditableArray()");
+       // System.out.println("resizeColumnEditableArray()");
         
         final int realColumnCount = editTable.getColumnCount() - getStringColumnsOffset();
         
-        System.out.println("RealColumnCount: " + realColumnCount + " - Column EditableArray Length: " + columnEditable.length);
+       // System.out.println("RealColumnCount: " + realColumnCount + " - Column EditableArray Length: " + columnEditable.length);
         
         if(realColumnCount != columnEditable.length){
             
@@ -1158,7 +1158,7 @@ public abstract class GenericTableModifier extends JDialog{
             throw new IllegalArgumentException("O índice da linha passado é inválido. Linha: " + rowIndex);
         }
         
-        System.out.println("Column Count from CellEditableArray: " + cellEditable.get(rowIndex).length);
+       // System.out.println("Column Count from CellEditableArray: " + cellEditable.get(rowIndex).length);
         
         for(int i=0; i< cellEditable.get(rowIndex).length; i++){
             
