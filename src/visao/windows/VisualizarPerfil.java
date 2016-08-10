@@ -153,7 +153,6 @@ public class VisualizarPerfil extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        listaPerfis.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
         listaPerfis.setColumnSelectionAllowed(true);
         listaPerfis.getTableHeader().setReorderingAllowed(false);
         listaPerfis.addMouseListener(new java.awt.event.MouseAdapter() {

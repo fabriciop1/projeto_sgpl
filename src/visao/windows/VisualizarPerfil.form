@@ -127,7 +127,6 @@
                 <Column editable="false" title="N&#xba; de Familiares" type="java.lang.Integer"/>
               </Table>
             </Property>
-            <Property name="autoResizeMode" type="int" value="3"/>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
               <TableColumnModel selectionModel="1">
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">

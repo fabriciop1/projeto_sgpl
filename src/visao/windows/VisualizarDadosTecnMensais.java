@@ -25,6 +25,7 @@ import modelo.negocio.Perfil;
 import util.Calc;
 import util.Cast;
 import util.ColorRendererDadosTec;
+import util.FixedColumnTable;
 import util.Util;
 
 /**
@@ -39,6 +40,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
     private List<DadosTecMensais> dtms;
     private final List<Indicador> indicadores;
     private final GenericTableAreaEditor gtae;
+    private final FixedColumnTable fixedTable;
     
     /**
      * Creates new form VisualizarDadosTecnMensais
@@ -57,8 +59,11 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         
         super.setTitle("SGPL - " + atual.getNome() + " - Dados Técnicos Mensais");
         
+        fixedTable = new FixedColumnTable(1, jScrollPane1);
+        fixedTable.getFixedTable().setShowHorizontalLines(true);
+        fixedTable.getFixedTable().setDefaultRenderer(Object.class, new ColorRendererDadosTec(false));
+        
         tabelaDadosTecnicos.setDefaultRenderer(Object.class, new ColorRendererDadosTec(true));
-        tabelaDadosTecnicos.getColumnModel().getColumn(0).setCellRenderer(new ColorRendererDadosTec(false));
         
         dtmdao = new GenericDAO<>(DadosTecMensais.class);
         
@@ -236,6 +241,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tabelaDadosTecnicos.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         tabelaDadosTecnicos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tabelaDadosTecnicos.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tabelaDadosTecnicos);
@@ -304,18 +310,16 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
                         .addComponent(avancarBT, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(76, 76, 76)
                         .addComponent(textoEntrada)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 113, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 119, Short.MAX_VALUE)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(anoCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(adicionarAnoBT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(editarAnoBT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane1)
-                        .addContainerGap())))
+                        .addComponent(editarAnoBT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -412,12 +416,12 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         List<String> indColumnRows = new ArrayList<>(tabelaDadosTecnicos.getRowCount());
         
         for(int i = 0; i < tabelaDadosTecnicos.getRowCount(); i++) {
-            indColumnRows.add(Cast.toString(tabelaDadosTecnicos.getValueAt(i, 0).toString()));
+            indColumnRows.add(Cast.toString(fixedTable.getFixedTable().getValueAt(i, 0).toString()));
         }
         
         gtae.setName("GTAE Dados Técnicos Mensais");
-        gtae.addStringColumn(tabelaDadosTecnicos.getColumnModel().getColumn(0).getPreferredWidth(), "Indicador", indColumnRows, 
-                tabelaDadosTecnicos.getColumnModel().getColumn(0).getCellRenderer());
+        gtae.addStringColumn(fixedTable.getFixedTable().getColumnModel().getColumn(0).getPreferredWidth(), "Indicador", indColumnRows, 
+                fixedTable.getFixedTable().getDefaultRenderer(Object.class));
         
         gtae.setDefaultRenderer(tabelaDadosTecnicos.getDefaultRenderer(Object.class));
         
@@ -434,7 +438,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         gtae.setAllowEmptyRows(true);
         gtae.setAllowEmptyCells(true);
         
-        gtae.setColumnInterval(selected, selected);
+        gtae.setColumnInterval(selected-1, selected-1);
         
         gtae.setRowInterval(0, tabelaDadosTecnicos.getRowCount()-1);
         
@@ -470,12 +474,12 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
             int ano = Integer.parseInt(anoCombo.getSelectedItem().toString());
             
             for (Integer l : linhas) {
-                int mes = gtae.getStartColumn();
+                int mes = gtae.getStartColumn() + 1;
    
                 String valor = Cast.toString(areaData[l][0]);
                 double dado = (valor.isEmpty()? 0.0 : Double.parseDouble(valor));
                 
-                Indicador ind = dtmindao.retrieveByColumn("indicador", tabelaDadosTecnicos.getValueAt(l, 0)).get(0);
+                Indicador ind = dtmindao.retrieveByColumn("indicador", fixedTable.getFixedTable().getValueAt(l, 0)).get(0);
 
                 List<DadosTecMensais> dadosTec = dtmdao.retrieveByColumns(new String[]{"mes", "ano", "idDTM_indicadorFK", "idPerfilFK"}, 
                                                         new Object[]{mes, ano, ind.getId(), atual.getId()});
