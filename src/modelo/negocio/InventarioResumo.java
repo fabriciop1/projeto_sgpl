@@ -6,7 +6,6 @@
 package modelo.negocio;
 
 import flex.db.DatabaseObject;
-import flex.db.GenericDAO;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +20,6 @@ public class InventarioResumo extends DatabaseObject implements Serializable {
     private double custoOportunidade;
     private double atividadeLeiteira;
     private double salarioMinimo;
-    private int mes;
     private int ano;
     private int vidaUtilReprodutores;
     private int vidaUtilAnimaisServico;
@@ -32,13 +30,12 @@ public class InventarioResumo extends DatabaseObject implements Serializable {
         super("inventario_resumo", "idInventarioResumo");
     }
 
-    public InventarioResumo(double custoOportunidade, double atividadeLeiteira, double salarioMinimo, int mes, int ano,
+    public InventarioResumo(double custoOportunidade, double atividadeLeiteira, double salarioMinimo, int ano,
                 int vidaUtilReprodutores, int vidaUtilAnimaisServico, double valorGastoCompraAnimais, int idPerfil) {
         super("inventario_resumo", "idInventarioResumo");
         this.custoOportunidade = custoOportunidade;
         this.atividadeLeiteira = atividadeLeiteira;
         this.salarioMinimo = salarioMinimo;
-        this.mes = mes;
         this.ano = ano;
         this.vidaUtilReprodutores = vidaUtilReprodutores;
         this.vidaUtilAnimaisServico = vidaUtilAnimaisServico;
@@ -76,14 +73,6 @@ public class InventarioResumo extends DatabaseObject implements Serializable {
 
     public void setSalarioMinimo(double salarioMinimo) {
         this.salarioMinimo = salarioMinimo;
-    }
-
-    public int getMes() {
-        return mes;
-    }
-
-    public void setMes(int mes) {
-        this.mes = mes;
     }
 
     public int getAno() {
@@ -133,7 +122,6 @@ public class InventarioResumo extends DatabaseObject implements Serializable {
         m.put("custoOportunidade", custoOportunidade);
         m.put("atividadeLeiteira", atividadeLeiteira);
         m.put("salarioMinimo", salarioMinimo);
-        m.put("mes", mes);
         m.put("ano", ano);
         m.put("vidaUtilReprodutores", vidaUtilReprodutores);
         m.put("vidaUtilAnimaisServico", vidaUtilAnimaisServico);
@@ -148,7 +136,6 @@ public class InventarioResumo extends DatabaseObject implements Serializable {
         custoOportunidade = Cast.toDouble(data.get("custoOportunidade"));
         atividadeLeiteira = Cast.toDouble(data.get("atividadeLeiteira"));
         salarioMinimo = Cast.toDouble(data.get("salarioMinimo"));
-        mes = Cast.toInt(data.get("mes"));
         ano = Cast.toInt(data.get("ano"));
         vidaUtilReprodutores = Cast.toInt(data.get("vidaUtilReprodutores"));
         vidaUtilAnimaisServico = Cast.toInt(data.get("vidaUtilAnimaisServico"));

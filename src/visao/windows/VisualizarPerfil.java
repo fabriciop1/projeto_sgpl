@@ -58,8 +58,10 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         
         idPerfis = new ArrayList<>();
         
-        if (!usuario.getLogin().equals("adm")) { // Sabendo se o usuário é ou não o administrador pelo login
-            perfis = perfilDAO.retrieveByColumn("idRotaFK", usuario.getRota().getId());
+        if (usuario.getTipoUsuario() != 1) { // Sabendo se o usuário é ou não o administrador pelo tipo
+            perfis = perfilDAO.executeSQL("SELECT * "
+                                        + "FROM usuario_perfil AS up, perfil AS p "
+                                        + "WHERE up.idUsuarioFK = " + usuario.getId() + " AND up.idPerfilFK = p.idPerfil");
         } else {
        
             perfis = perfilDAO.retrieveAll();

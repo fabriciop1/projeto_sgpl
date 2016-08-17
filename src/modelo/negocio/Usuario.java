@@ -6,7 +6,6 @@
 package modelo.negocio;
 
 import flex.db.DatabaseObject;
-import flex.db.GenericDAO;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,20 +19,18 @@ public class Usuario extends DatabaseObject implements Serializable {
     
     private String login;
     private String senha;
-    private Rota rota;
-    
-    private static GenericDAO<Rota> rotaDAO = new GenericDAO<>(Rota.class);
+    private int tipoUsuario; // 1 - Adm    2 - Usuario comum    3 - Usuario com restrição
     
     public Usuario(){
        super("usuario", "idUsuario");
     }
 
-    public Usuario(String login, String senha, Rota rota) {
+    public Usuario(String login, String senha, int tipoUsuario) {
         super("usuario", "idUsuario");
         
         this.login = login;
         this.senha = senha;
-        this.rota = rota;
+        this.tipoUsuario = tipoUsuario;
     }
 
     public void setLogin(String login) {
@@ -52,13 +49,14 @@ public class Usuario extends DatabaseObject implements Serializable {
         return senha;
     }
 
-    public Rota getRota() {
-        return rota;
+    public int getTipoUsuario() {
+        return tipoUsuario;
     }
 
-    public void setRota(Rota rota) {
-        this.rota = rota;
+    public void setTipoUsuario(int tipoUsuario) {
+        this.tipoUsuario = tipoUsuario;
     }
+
 
     @Override
     public Map<String, Object> getObjectTableData() {
@@ -67,7 +65,7 @@ public class Usuario extends DatabaseObject implements Serializable {
         
         map.put("login", login);
         map.put("senha", senha);
-        map.put("idRotaFK", rota);
+        map.put("tipoUsuario", tipoUsuario);
         
         return map;
     }
@@ -76,6 +74,6 @@ public class Usuario extends DatabaseObject implements Serializable {
     public void setObjectData(Map<String, Object> data) {
             login = Cast.toString(data.get("login"));
             senha = Cast.toString(data.get("senha"));
-            rota = rotaDAO.retrieve(Cast.toInt(data.get("idRotaFK")));
+            tipoUsuario = Cast.toInt(data.get("tipoUsuario"));
     }  
 }

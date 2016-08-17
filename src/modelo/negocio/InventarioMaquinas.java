@@ -6,7 +6,6 @@
 package modelo.negocio;
 
 import flex.db.DatabaseObject;
-import flex.db.GenericDAO;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,13 +22,14 @@ public class InventarioMaquinas extends DatabaseObject implements Serializable {
     private double quantidade;
     private double valorUnitario;
     private int vidaUtil;
+    private int ano;
     private int idPerfil;
     
     public InventarioMaquinas() {
         super("inventario_maquinas", "idInventarioMaquinas");
     }
 
-    public InventarioMaquinas(String especificacao, String unidade, double quantidade, double valorUnitario, int vidaUtil, int idPerfil) {
+    public InventarioMaquinas(String especificacao, String unidade, double quantidade, double valorUnitario, int vidaUtil, int ano, int idPerfil) {
         super("inventario_maquinas", "idInventarioMaquinas");
         
         this.especificacao = especificacao;
@@ -37,6 +37,7 @@ public class InventarioMaquinas extends DatabaseObject implements Serializable {
         this.quantidade = quantidade;
         this.valorUnitario = valorUnitario;
         this.vidaUtil = vidaUtil;
+        this.ano = ano;
         this.idPerfil = idPerfil;
     }
 
@@ -80,6 +81,14 @@ public class InventarioMaquinas extends DatabaseObject implements Serializable {
         this.vidaUtil = vidaUtil;
     }
 
+    public int getAno() {
+        return ano;
+    }
+
+    public void setAno(int ano) {
+        this.ano = ano;
+    }
+
     public int getIdPerfil() {
         return idPerfil;
     }
@@ -98,6 +107,7 @@ public class InventarioMaquinas extends DatabaseObject implements Serializable {
         m.put("quantidade", quantidade);
         m.put("valorUnitario", valorUnitario);
         m.put("vidaUtil", vidaUtil);
+        m.put("ano", ano);
         m.put("idPerfilFK", idPerfil);
         
         return m;
@@ -110,6 +120,7 @@ public class InventarioMaquinas extends DatabaseObject implements Serializable {
             quantidade = Cast.toDouble(data.get("quantidade"));
             valorUnitario = Cast.toDouble(data.get("valorUnitario"));
             vidaUtil = Cast.toInt(data.get("vidaUtil"));
+            ano = Cast.toInt(data.get("ano"));
             idPerfil = Cast.toInt(data.get("idPerfilFK"));
     }
 }

@@ -6,7 +6,6 @@
 package modelo.negocio;
 
 import flex.db.DatabaseObject;
-import flex.db.GenericDAO;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,15 +22,14 @@ public class InventarioBenfeitorias extends DatabaseObject implements Serializab
     private double quantidade;
     private double valorUnitario;
     private int vidaUtil;
+    private int ano;
     private int idPerfil;
-    
-    private static GenericDAO<Perfil> perfilDAO = new GenericDAO<>(Perfil.class);
     
     public InventarioBenfeitorias() {
         super("inventario_benfeitorias", "idInventarioBenfeitorias");
     }
 
-    public InventarioBenfeitorias(String especificacao, String unidade, double quantidade, double valorUnitario, int vidaUtil, int idPerfil) {
+    public InventarioBenfeitorias(String especificacao, String unidade, double quantidade, double valorUnitario, int vidaUtil, int ano, int idPerfil) {
         super("inventario_benfeitorias", "idInventarioBenfeitorias");
         
         this.especificacao = especificacao;
@@ -39,6 +37,7 @@ public class InventarioBenfeitorias extends DatabaseObject implements Serializab
         this.quantidade = quantidade;
         this.valorUnitario = valorUnitario;
         this.vidaUtil = vidaUtil;
+        this.ano = ano;
         this.idPerfil = idPerfil;
     }
 
@@ -90,6 +89,14 @@ public class InventarioBenfeitorias extends DatabaseObject implements Serializab
         this.vidaUtil = vidaUtil;
     }
 
+    public int getAno() {
+        return ano;
+    }
+
+    public void setAno(int ano) {
+        this.ano = ano;
+    }
+
     @Override
     public Map<String, Object> getObjectTableData() {
         
@@ -100,6 +107,7 @@ public class InventarioBenfeitorias extends DatabaseObject implements Serializab
         m.put("quantidade", quantidade);
         m.put("valorUnitario", valorUnitario);
         m.put("vidaUtil", vidaUtil);
+        m.put("ano", ano);
         m.put("idPerfilFK", idPerfil);
         
         return m;
@@ -112,6 +120,7 @@ public class InventarioBenfeitorias extends DatabaseObject implements Serializab
             quantidade = Cast.toDouble(data.get("quantidade"));
             valorUnitario = Cast.toDouble(data.get("valorUnitario"));
             vidaUtil = Cast.toInt(data.get("vidaUtil"));
+            ano = Cast.toInt(data.get("ano"));
             idPerfil = Cast.toInt(data.get("idPerfilFK"));
     }
 }

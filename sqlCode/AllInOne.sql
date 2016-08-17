@@ -13,6 +13,7 @@ TRUNCATE TABLE projeto_pesquisa.inventario_terras;
 TRUNCATE TABLE projeto_pesquisa.perfil;
 TRUNCATE TABLE projeto_pesquisa.rota;
 TRUNCATE TABLE projeto_pesquisa.usuario;
+TRUNCATE TABLE projeto_pesquisa.usuario_perfil;
 SET FOREIGN_KEY_CHECKS = 1;
 
 /*===============================================================================================================================*/
@@ -24,12 +25,9 @@ INSERT INTO projeto_pesquisa.rota (rota) VALUES ("Miracica");
 
 /*===============================================================================================================================*/
 
-INSERT INTO projeto_pesquisa.usuario (login, senha, idRotaFK) VALUES ("adriana", "adriana", 1);
-INSERT INTO projeto_pesquisa.usuario (login, senha, idRotaFK) VALUES ("diniz", "diniz", 2);
-INSERT INTO projeto_pesquisa.usuario (login, senha, idRotaFK) VALUES ("adm", "adm", 1);
-INSERT INTO projeto_pesquisa.usuario (login, senha, idRotaFK) VALUES ("adm", "adm", 2);
-INSERT INTO projeto_pesquisa.usuario (login, senha, idRotaFK) VALUES ("adm", "adm", 3);
-INSERT INTO projeto_pesquisa.usuario (login, senha, idRotaFK) VALUES ("adm", "adm", 4);
+INSERT INTO projeto_pesquisa.usuario (login, senha, tipoUsuario) VALUES ("adriana", "adriana", 2);
+INSERT INTO projeto_pesquisa.usuario (login, senha, tipoUsuario) VALUES ("diniz", "diniz", 3);
+INSERT INTO projeto_pesquisa.usuario (login, senha, tipoUsuario) VALUES ("adm", "adm", 1);
 
 /*===============================================================================================================================*/
 
@@ -40,99 +38,106 @@ INSERT INTO projeto_pesquisa.perfil (nome, cidade, tamPropriedade, areaPecLeite,
 
 /*===============================================================================================================================*/
 
+INSERT INTO projeto_pesquisa.usuario_perfil (idUsuarioFK, idPerfilFK) VALUES (1, 1);
+INSERT INTO projeto_pesquisa.usuario_perfil (idUsuarioFK, idPerfilFK) VALUES (2, 2);
+INSERT INTO projeto_pesquisa.usuario_perfil (idUsuarioFK, idPerfilFK) VALUES (3, 1);
+INSERT INTO projeto_pesquisa.usuario_perfil (idUsuarioFK, idPerfilFK) VALUES (3, 2);
+
+/*===============================================================================================================================*/
+
 INSERT INTO projeto_pesquisa.inventario_terras (especificacao, areaArrendadaInicio, areaPropriaInicio, 
-		areaArrendadaFinal, areaPropriaFinal, valorTerraNuaPropria, idPerfilFK)
-        VALUES ("Pastagem Nativa", 	0, 2.8, 0, 	0, 10000,  1);
+		areaArrendadaFinal, areaPropriaFinal, valorTerraNuaPropria, ano, idPerfilFK)
+        VALUES ("Pastagem Nativa", 	0, 2.8, 0, 	0, 10000, 2015, 1);
 INSERT INTO projeto_pesquisa.inventario_terras (especificacao, areaArrendadaInicio, areaPropriaInicio, 
-		areaArrendadaFinal, areaPropriaFinal, valorTerraNuaPropria, idPerfilFK)
-        VALUES ("Pastagem Pangola", 	0, 3.0, 0, 	0, 10000, 1);
+		areaArrendadaFinal, areaPropriaFinal, valorTerraNuaPropria, ano, idPerfilFK)
+        VALUES ("Pastagem Pangola", 	0, 3.0, 0, 	0, 10000, 2015, 1);
 INSERT INTO projeto_pesquisa.inventario_terras (especificacao, areaArrendadaInicio, areaPropriaInicio, 
-		areaArrendadaFinal, areaPropriaFinal, valorTerraNuaPropria, idPerfilFK)
-        VALUES ("Palma",				0, 3.0, 0, 	0, 10000, 1);
+		areaArrendadaFinal, areaPropriaFinal, valorTerraNuaPropria, ano, idPerfilFK)
+        VALUES ("Palma",				0, 3.0, 0, 	0, 10000, 2015, 1);
 
 /*===============================================================================================================================*/
 
-INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, idPerfilFK)
-	VALUES ("Picadeira de Forragens",  "Ud", 1.0, 3000, 10, 1);
-INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, idPerfilFK)
-	VALUES ("Ordenhadeira Mecânica",   "Ud", 0.0, 5000, 10, 1);
-INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, idPerfilFK)
-	VALUES ("Pulverizador", 		    "Ud", 0.0, 100,  8,  1);
-INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, idPerfilFK)
-	VALUES ("Arado", 				    "Ud", 0.0, 3500, 10, 1);
-INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, idPerfilFK)
-	VALUES ("Carreta", 				"Ud", 0.0, 2300, 12, 1);
-INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, idPerfilFK) 
-	VALUES ("Moto", 				    "Ud", 0.0, 7000, 7,  1);
-INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, idPerfilFK) 
-	VALUES ("Adubadeira Tração Animal", "Ud", 0.0, 2500, 5,  1);
-INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, idPerfilFK) 
-	VALUES ("Plaina Traseira", 		    "Ud", 0.0, 3000, 10, 1);
-INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, idPerfilFK) 
-	VALUES ("Batedor de Cereais", 	    "Ud", 0.0, 3000, 10, 1);
-INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, idPerfilFK) 
-	VALUES ("Carroça", 				    "Ud", 2.0, 700,  8,  1);
-INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, idPerfilFK) 
-	VALUES ("Misturador", 			    "Ud", 0.0, 1600, 20, 1);
-INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, idPerfilFK)
-	VALUES ("Desintegrador",      	    "Ud", 0.0, 2000, 15, 1);
-INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, idPerfilFK) 
-	VALUES ("Arado Tração Animal", 		"Ud", 0.0, 500,  15, 1);
-INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, idPerfilFK) 
-	VALUES ("Bomba de Água", 		    "Ud", 0.0, 500,  6,  1);
-INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, idPerfilFK)
-	VALUES ("Eletrificador", 		    "Ud", 0.0, 60, 	 5,  1);
-INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, idPerfilFK) 
-	VALUES ("Caixa de Água", 		    "Ud", 0.0, 1500, 20, 1);
-INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, idPerfilFK) 
-	VALUES ("Roçadeira", 			    "Ud", 0.0, 700,  5,  1);
-INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, idPerfilFK) 
-	VALUES ("Computador", 			    "Ud", 0.0, 3500, 5,  1);
-INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, idPerfilFK)
-	VALUES ("Botijão de Sêmen", 	    "Ud", 1.0, 200,  8,  1);
-INSERT INTO projeto_pesquisa.inventario_maquinas  (especificacao, unidade, quantidade, valorUnitario, vidaUtil, idPerfilFK)
-	VALUES ("Outros", 				    "Ud", 0.0, 2000, 20, 1);
+INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, ano, idPerfilFK)
+	VALUES ("Picadeira de Forragens",  "Ud", 1.0, 3000, 10, 2015, 1);
+INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, ano, idPerfilFK)
+	VALUES ("Ordenhadeira Mecânica",   "Ud", 0.0, 5000, 10, 2015, 1);
+INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, ano, idPerfilFK)
+	VALUES ("Pulverizador", 		    "Ud", 0.0, 100,  8, 2015, 1);
+INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, ano, idPerfilFK)
+	VALUES ("Arado", 				    "Ud", 0.0, 3500, 10, 2015, 1);
+INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, ano, idPerfilFK)
+	VALUES ("Carreta", 				"Ud", 0.0, 2300, 12, 2015, 1);
+INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, ano, idPerfilFK) 
+	VALUES ("Moto", 				    "Ud", 0.0, 7000, 7, 2015, 1);
+INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, ano, idPerfilFK) 
+	VALUES ("Adubadeira Tração Animal", "Ud", 0.0, 2500, 5, 2015,1);
+INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, ano, idPerfilFK) 
+	VALUES ("Plaina Traseira", 		    "Ud", 0.0, 3000, 10, 2015, 1);
+INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, ano, idPerfilFK) 
+	VALUES ("Batedor de Cereais", 	    "Ud", 0.0, 3000, 10, 2015, 1);
+INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, ano, idPerfilFK) 
+	VALUES ("Carroça", 				    "Ud", 2.0, 700,  8, 2015,1);
+INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, ano, idPerfilFK) 
+	VALUES ("Misturador", 			    "Ud", 0.0, 1600, 20, 2015, 1);
+INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, ano, idPerfilFK)
+	VALUES ("Desintegrador",      	    "Ud", 0.0, 2000, 15, 2015, 1);
+INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, ano, idPerfilFK) 
+	VALUES ("Arado Tração Animal", 		"Ud", 0.0, 500,  15, 2015, 1);
+INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, ano, idPerfilFK) 
+	VALUES ("Bomba de Água", 		    "Ud", 0.0, 500,  6, 2015, 1);
+INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, ano, idPerfilFK)
+	VALUES ("Eletrificador", 		    "Ud", 0.0, 60, 	 5, 2015, 1);
+INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, ano, idPerfilFK) 
+	VALUES ("Caixa de Água", 		    "Ud", 0.0, 1500, 20, 2015, 1);
+INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, ano, idPerfilFK) 
+	VALUES ("Roçadeira", 			    "Ud", 0.0, 700,  5, 2015, 1);
+INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, ano, idPerfilFK) 
+	VALUES ("Computador", 			    "Ud", 0.0, 3500, 5, 2015, 1);
+INSERT INTO projeto_pesquisa.inventario_maquinas (especificacao, unidade, quantidade, valorUnitario, vidaUtil, ano, idPerfilFK)
+	VALUES ("Botijão de Sêmen", 	    "Ud", 1.0, 200,  8, 2015, 1);
+INSERT INTO projeto_pesquisa.inventario_maquinas  (especificacao, unidade, quantidade, valorUnitario, vidaUtil, ano, idPerfilFK)
+	VALUES ("Outros", 				    "Ud", 0.0, 2000, 20, 2015, 1);
 
 /*===============================================================================================================================*/
 
-INSERT INTO projeto_pesquisa.inventario_forrageiras (forrageirasNaoAnuais, custoFormacaoHectare, vidaUtil, idPerfilFK, idInventarioTerrasFK)
-	VALUES ("Pastagem Nativa", 0.0, 1, 1, 1);
-INSERT INTO projeto_pesquisa.inventario_forrageiras (forrageirasNaoAnuais, custoFormacaoHectare, vidaUtil, idPerfilFK, idInventarioTerrasFK)
-	VALUES ("Pastagem Pangola", 1000, 6, 1, 2);
-INSERT INTO projeto_pesquisa.inventario_forrageiras (forrageirasNaoAnuais, custoFormacaoHectare, vidaUtil, idPerfilFK, idInventarioTerrasFK)
-	VALUES ("Palma", 3000, 10, 1, 3);
+INSERT INTO projeto_pesquisa.inventario_forrageiras (forrageirasNaoAnuais, custoFormacaoHectare, vidaUtil, ano, idPerfilFK, idInventarioTerrasFK)
+	VALUES ("Pastagem Nativa", 0.0, 1, 2015, 1, 1);
+INSERT INTO projeto_pesquisa.inventario_forrageiras (forrageirasNaoAnuais, custoFormacaoHectare, vidaUtil, ano, idPerfilFK, idInventarioTerrasFK)
+	VALUES ("Pastagem Pangola", 1000, 6, 2015, 1, 2);
+INSERT INTO projeto_pesquisa.inventario_forrageiras (forrageirasNaoAnuais, custoFormacaoHectare, vidaUtil, ano, idPerfilFK, idInventarioTerrasFK)
+	VALUES ("Palma", 3000, 10, 2015, 1, 3);
 
 /*===============================================================================================================================*/
 
-INSERT INTO projeto_pesquisa.inventario_benfeitorias (especificacao, unidade, quantidade, valorUnitario, vidaUtil, idPerfilFK) 
-	VALUES ("Sala de Ordenha", 		"Ud", 1.0, 	1600, 	10, 1);
-INSERT INTO projeto_pesquisa.inventario_benfeitorias (especificacao, unidade, quantidade, valorUnitario, vidaUtil, idPerfilFK) 
-	VALUES ("Currais de Manejo", 	"Ud", 1.0, 	500, 	10, 1);
-INSERT INTO projeto_pesquisa.inventario_benfeitorias (especificacao, unidade, quantidade, valorUnitario, vidaUtil, idPerfilFK) 
-	VALUES ("Casa Sede", 			"Ud", 1.0, 	18000, 	10, 1);
-INSERT INTO projeto_pesquisa.inventario_benfeitorias (especificacao, unidade, quantidade, valorUnitario, vidaUtil, idPerfilFK) 
-	VALUES ("Cercas Convencional", 	"Km", 25.4, 3000, 	10, 1);
-INSERT INTO projeto_pesquisa.inventario_benfeitorias (especificacao, unidade, quantidade, valorUnitario, vidaUtil, idPerfilFK) 
-	VALUES ("Depósito de Ração", 	"Ud", 1.0, 	1000, 	10, 1);
-INSERT INTO projeto_pesquisa.inventario_benfeitorias (especificacao, unidade, quantidade, valorUnitario, vidaUtil, idPerfilFK) 
-	VALUES ("Cochos", 				"Ud", 1.0, 	300, 	10, 1);
-INSERT INTO projeto_pesquisa.inventario_benfeitorias (especificacao, unidade, quantidade, valorUnitario, vidaUtil, idPerfilFK) 
-	VALUES ("Açude", 				"Ud", 1.0, 	2500, 	20, 1);
-INSERT INTO projeto_pesquisa.inventario_benfeitorias (especificacao, unidade, quantidade, valorUnitario, vidaUtil, idPerfilFK)  
-	VALUES ("Armazém", 				"R$", 0.0, 	0.0, 	1, 	1);
+INSERT INTO projeto_pesquisa.inventario_benfeitorias (especificacao, unidade, quantidade, valorUnitario, vidaUtil, ano, idPerfilFK) 
+	VALUES ("Sala de Ordenha", 		"Ud", 1.0, 	1600, 	10, 2015, 1);
+INSERT INTO projeto_pesquisa.inventario_benfeitorias (especificacao, unidade, quantidade, valorUnitario, vidaUtil, ano, idPerfilFK) 
+	VALUES ("Currais de Manejo", 	"Ud", 1.0, 	500, 	10, 2015, 1);
+INSERT INTO projeto_pesquisa.inventario_benfeitorias (especificacao, unidade, quantidade, valorUnitario, vidaUtil, ano, idPerfilFK) 
+	VALUES ("Casa Sede", 			"Ud", 1.0, 	18000, 	10, 2015, 1);
+INSERT INTO projeto_pesquisa.inventario_benfeitorias (especificacao, unidade, quantidade, valorUnitario, vidaUtil, ano, idPerfilFK) 
+	VALUES ("Cercas Convencional", 	"Km", 25.4, 3000, 	10, 2015, 1);
+INSERT INTO projeto_pesquisa.inventario_benfeitorias (especificacao, unidade, quantidade, valorUnitario, vidaUtil, ano, idPerfilFK) 
+	VALUES ("Depósito de Ração", 	"Ud", 1.0, 	1000, 	10, 2015, 1);
+INSERT INTO projeto_pesquisa.inventario_benfeitorias (especificacao, unidade, quantidade, valorUnitario, vidaUtil, ano, idPerfilFK) 
+	VALUES ("Cochos", 				"Ud", 1.0, 	300, 	10, 2015, 1);
+INSERT INTO projeto_pesquisa.inventario_benfeitorias (especificacao, unidade, quantidade, valorUnitario, vidaUtil, ano, idPerfilFK) 
+	VALUES ("Açude", 				"Ud", 1.0, 	2500, 	20, 2015, 1);
+INSERT INTO projeto_pesquisa.inventario_benfeitorias (especificacao, unidade, quantidade, valorUnitario, vidaUtil, ano, idPerfilFK)  
+	VALUES ("Armazém", 				"R$", 0.0, 	0.0, 	1, 2015,  1);
 
 /*===============================================================================================================================*/
 
-INSERT INTO projeto_pesquisa.inventario_animais VALUES (0, "Touro", 			0, 0, 0, 0, 0, 0, 0, 	1, 1);
-INSERT INTO projeto_pesquisa.inventario_animais VALUES (0, "Vaca Parida", 		7, 0, 0, 0, 0, 0, 1500, 1, 1);
-INSERT INTO projeto_pesquisa.inventario_animais VALUES (0, "Vaca Falhada", 		2, 0, 0, 0, 0, 0, 1500, 1, 1);
-INSERT INTO projeto_pesquisa.inventario_animais VALUES (0, "Machos 0-1 ano", 	0, 0, 0, 0, 0, 0, 0, 	1, 1);
-INSERT INTO projeto_pesquisa.inventario_animais VALUES (0, "Fêmeas 0-1 ano", 	4, 0, 0, 0, 0, 0, 400,  1, 1);
-INSERT INTO projeto_pesquisa.inventario_animais VALUES (0, "Fêmeas 1-2 anos", 	3, 0, 0, 0, 0, 0, 600, 	1, 1);
-INSERT INTO projeto_pesquisa.inventario_animais VALUES (0, "Fêmeas 2-3 anos", 	4, 0, 0, 0, 0, 0, 800, 	1, 1);
-INSERT INTO projeto_pesquisa.inventario_animais VALUES (0, "Equinos", 			0, 0, 0, 0, 0, 0, 0, 	2, 1);
-INSERT INTO projeto_pesquisa.inventario_animais VALUES (0, "Muares", 			2, 0, 0, 0, 0, 0, 200, 	2, 1);
-INSERT INTO projeto_pesquisa.inventario_animais VALUES (0, "Boi de carro", 		0, 0, 0, 0, 0, 0, 0, 	2, 1);
+INSERT INTO projeto_pesquisa.inventario_animais VALUES (0, "Touro", 			0, 0, 0, 0, 0, 0, 0, 	1, 2015,1);
+INSERT INTO projeto_pesquisa.inventario_animais VALUES (0, "Vaca Parida", 		7, 0, 0, 0, 0, 0, 1500, 1, 2015, 1);
+INSERT INTO projeto_pesquisa.inventario_animais VALUES (0, "Vaca Falhada", 		2, 0, 0, 0, 0, 0, 1500, 1, 2015, 1);
+INSERT INTO projeto_pesquisa.inventario_animais VALUES (0, "Machos 0-1 ano", 	0, 0, 0, 0, 0, 0, 0, 	1, 2015, 1);
+INSERT INTO projeto_pesquisa.inventario_animais VALUES (0, "Fêmeas 0-1 ano", 	4, 0, 0, 0, 0, 0, 400,  1, 2015, 1);
+INSERT INTO projeto_pesquisa.inventario_animais VALUES (0, "Fêmeas 1-2 anos", 	3, 0, 0, 0, 0, 0, 600, 	1, 2015, 1);
+INSERT INTO projeto_pesquisa.inventario_animais VALUES (0, "Fêmeas 2-3 anos", 	4, 0, 0, 0, 0, 0, 800, 	1, 2015, 1);
+INSERT INTO projeto_pesquisa.inventario_animais VALUES (0, "Equinos", 			0, 0, 0, 0, 0, 0, 0, 	2, 2015, 1);
+INSERT INTO projeto_pesquisa.inventario_animais VALUES (0, "Muares", 			2, 0, 0, 0, 0, 0, 200, 	2, 2015, 1);
+INSERT INTO projeto_pesquisa.inventario_animais VALUES (0, "Boi de carro", 		0, 0, 0, 0, 0, 0, 0, 	2, 2015, 1);
 
 /*===============================================================================================================================*/
 

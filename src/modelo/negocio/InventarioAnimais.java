@@ -6,7 +6,6 @@
 package modelo.negocio;
 
 import flex.db.DatabaseObject;
-import flex.db.GenericDAO;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +26,7 @@ public class InventarioAnimais extends DatabaseObject implements Serializable {
     private int valorFinal;
     private double valorCabeca;
     private int tipoAnimal; // 1 - Produção ; 2 - Em Serviço
+    private int ano;
     private int idPerfil;
 
     public InventarioAnimais() {
@@ -34,7 +34,7 @@ public class InventarioAnimais extends DatabaseObject implements Serializable {
     }
         
     public InventarioAnimais(String categoria, int valorInicio, int nascimento, int morte, int venda, int compra, int valorFinal, 
-            double valorCabeca, int tipoAnimal, int idPerfil) {
+            double valorCabeca, int tipoAnimal, int ano, int idPerfil) {
         super("inventario_animais", "idInventarioAnimais");
         
         this.categoria = categoria;
@@ -46,6 +46,7 @@ public class InventarioAnimais extends DatabaseObject implements Serializable {
         this.valorFinal = valorFinal;
         this.valorCabeca = valorCabeca;
         this.tipoAnimal = tipoAnimal;
+        this.ano = ano;
         this.idPerfil = idPerfil;
     }
 
@@ -122,6 +123,14 @@ public class InventarioAnimais extends DatabaseObject implements Serializable {
         this.tipoAnimal = tipoAnimal;
     }
 
+    public int getAno() {
+        return ano;
+    }
+
+    public void setAno(int ano) {
+        this.ano = ano;
+    }
+
     public int getIdPerfil() {
         return idPerfil;
     }
@@ -144,6 +153,7 @@ public class InventarioAnimais extends DatabaseObject implements Serializable {
         m.put("final", valorFinal);
         m.put("valorCabeca", valorCabeca);
         m.put("tipoAnimal", tipoAnimal);
+        m.put("ano", ano);
         m.put("idPerfilFK", idPerfil);
         
         return m;
@@ -161,6 +171,7 @@ public class InventarioAnimais extends DatabaseObject implements Serializable {
             valorFinal = Cast.toInt(data.get("final"));
             valorCabeca = Cast.toDouble(data.get("valorCabeca"));
             tipoAnimal = Cast.toInt(data.get("tipoAnimal"));
+            ano = Cast.toInt(data.get("ano"));
             idPerfil = Cast.toInt(data.get("idPerfilFK"));
     }
 

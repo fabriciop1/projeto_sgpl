@@ -20,6 +20,7 @@ public class InventarioForrageiras extends DatabaseObject implements Serializabl
     private String forrageirasNaoAnuais;
     private int vidaUtil;
     private double custoFormacaoHectare;
+    private int ano;
     private int idPerfil;
     private InventarioTerras inventarioTerras;
     
@@ -29,12 +30,13 @@ public class InventarioForrageiras extends DatabaseObject implements Serializabl
         super("inventario_forrageiras", "idInventarioForrageiras");
     }
 
-    public InventarioForrageiras(String forrageirasNaoAnuais, int vidaUtil, double custoFormacaoHectare, int idPerfil, InventarioTerras inventarioTerras) {
+    public InventarioForrageiras(String forrageirasNaoAnuais, int vidaUtil, double custoFormacaoHectare,int ano, int idPerfil, InventarioTerras inventarioTerras) {
         super("inventario_forrageiras", "idInventarioForrageiras");
         
         this.forrageirasNaoAnuais = forrageirasNaoAnuais;
         this.vidaUtil = vidaUtil;
         this.custoFormacaoHectare = custoFormacaoHectare;
+        this.ano = ano;
         this.idPerfil = idPerfil;
         this.inventarioTerras = inventarioTerras;
     }
@@ -63,6 +65,14 @@ public class InventarioForrageiras extends DatabaseObject implements Serializabl
         this.custoFormacaoHectare = custoFormacaoHectare;
     }
 
+    public int getAno() {
+        return ano;
+    }
+
+    public void setAno(int ano) {
+        this.ano = ano;
+    }
+
     public int getIdPerfil() {
         return idPerfil;
     }
@@ -86,6 +96,7 @@ public class InventarioForrageiras extends DatabaseObject implements Serializabl
          m.put("forrageirasNaoAnuais", forrageirasNaoAnuais);
          m.put("custoFormacaoHectare", custoFormacaoHectare);
          m.put("vidaUtil", vidaUtil);
+         m.put("ano", ano);
          m.put("idPerfilFK", idPerfil);
          m.put("idInventarioTerrasFK", inventarioTerras.getId());
          
@@ -97,6 +108,7 @@ public class InventarioForrageiras extends DatabaseObject implements Serializabl
         forrageirasNaoAnuais = Cast.toString(data.get("forrageirasNaoAnuais"));
         custoFormacaoHectare = Cast.toDouble(data.get("custoFormacaoHectare"));
         vidaUtil = Cast.toInt(data.get("vidaUtil"));
+        ano = Cast.toInt(data.get("ano"));
         idPerfil = Cast.toInt(data.get("idPerfilFK"));
         inventarioTerras = invTerrasDAO.retrieve(Cast.toInt(data.get("idInventarioTerrasFK")));
     }

@@ -398,8 +398,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
             }
         });
         tabelaDadosEconomicos.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
-        tabelaDadosEconomicos.setCellSelectionEnabled(false);
-        tabelaDadosEconomicos.setRowSelectionAllowed(true);
+        tabelaDadosEconomicos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tabelaDadosEconomicos.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tabelaDadosEconomicos);
         tabelaDadosEconomicos.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);

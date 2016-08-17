@@ -44,6 +44,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
     private InventarioResumo resumo;
     private final Perfil perfilAtual;
+    private final int ano;
     
     private final GenericDAO<InventarioTerras> itdao;
     private final GenericDAO<InventarioAnimais> iadao;
@@ -62,8 +63,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         super.setResizable(false);
 
         Calendar cal = GregorianCalendar.getInstance();
-        int anoAtual = cal.get(Calendar.YEAR);
-        int mesAtual = cal.get(Calendar.MONTH);
+        ano = cal.get(Calendar.YEAR);
         
         setRenderers();
 
@@ -95,8 +95,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
             resumo = new InventarioResumo();
             resumo.setIdPerfil(perfilAtual.getId());
-            resumo.setMes(mesAtual);
-            resumo.setAno(anoAtual);
+            resumo.setAno(ano);                                    /* Verificar o ano e colocar aqui */
 
             irdao.insert(resumo);
 
@@ -2344,7 +2343,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 case TableModifiedEvent.ROW_INSERTED:
                 {
                     InventarioMaquinas inv = new InventarioMaquinas(Cast.toString(rowData[0]), Cast.toString(rowData[1]),
-                            Cast.toDouble(rowData[2]), Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfilAtual.getId());
+                            Cast.toDouble(rowData[2]), Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), ano, perfilAtual.getId());
                     
                     Object[] maquinasRowData = tabelaMaquinasGTRE.getSourceTableRowData(rowIndex);
                     
@@ -2357,7 +2356,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 case TableModifiedEvent.ROW_UPDATED:
                 {
                     InventarioMaquinas inv = new InventarioMaquinas(Cast.toString(rowData[0]), Cast.toString(rowData[1]),
-                            Cast.toDouble(rowData[2]), Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfilAtual.getId());
+                            Cast.toDouble(rowData[2]), Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), ano, perfilAtual.getId());
                     inv.setId(rowID);
                     
                     Object[] maquinasRowData = tabelaMaquinasGTRE.getSourceTableRowData(rowIndex);
@@ -2390,7 +2389,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 case TableModifiedEvent.ROW_INSERTED:
                 {
                     InventarioBenfeitorias inv = new InventarioBenfeitorias(Cast.toString(rowData[0]), Cast.toString(rowData[1]), Cast.toDouble(rowData[2]),
-                            Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfilAtual.getId());
+                            Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), ano, perfilAtual.getId());
                     
                     Object[] benfeitoriasRowData = tabelaBenfeitoriasGTRE.getSourceTableRowData(rowIndex);
                     calcularValoresInvBenfeitorias(benfeitoriasRowData, rowIndex);
@@ -2403,7 +2402,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 case TableModifiedEvent.ROW_UPDATED:
                 {
                     InventarioBenfeitorias inv = new InventarioBenfeitorias(Cast.toString(rowData[0]), Cast.toString(rowData[1]), Cast.toDouble(rowData[2]),
-                            Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), perfilAtual.getId());
+                            Cast.toDouble(rowData[3]), Cast.toInt(rowData[5]), ano, perfilAtual.getId());
                     inv.setId(rowID);
                     
                     Object[] benfeitoriasRowData = tabelaBenfeitoriasGTRE.getSourceTableRowData(rowIndex);
@@ -2435,7 +2434,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             if (modifType == TableModifiedEvent.ROW_INSERTED || modifType == TableModifiedEvent.ROW_UPDATED) {
                 
                 InventarioTerras terras = new InventarioTerras(Cast.toString(terrasRowData[0]), Cast.toDouble(terrasRowData[1]), Cast.toDouble(terrasRowData[2]),
-                        Cast.toDouble(terrasRowData[3]), Cast.toDouble(terrasRowData[4]), Cast.toDouble(terrasRowData[5]), perfilAtual.getId());
+                        Cast.toDouble(terrasRowData[3]), Cast.toDouble(terrasRowData[4]), Cast.toDouble(terrasRowData[5]), ano, perfilAtual.getId());
                 
                 if (modifType == TableModifiedEvent.ROW_INSERTED) {
                     
@@ -2445,7 +2444,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     
                     tabelaForrageirasGTRE.addSourceTableRow(new Object[]{terras.getEspecificacao(), null, ha }, terras.getId());
                     
-                    ifdao.insert( new InventarioForrageiras(terras.getEspecificacao(), 0, 0, perfilAtual.getId(), terras) );
+                    ifdao.insert( new InventarioForrageiras(terras.getEspecificacao(), 0, 0, ano, perfilAtual.getId(), terras) );
                     
                     modifier.setCustomRowData(rowIndex, terras.getId());
                     
@@ -2524,7 +2523,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 
                 InventarioAnimais inv = new InventarioAnimais(Cast.toString(rowData[0]), Cast.toInt(rowData[1]), Cast.toInt(rowData[2]),
                         Cast.toInt(rowData[3]), Cast.toInt(rowData[4]), Cast.toInt(rowData[5]), Cast.toInt(rowData[6]),
-                        Cast.toDouble(rowData[7]), tipoAnimal, perfilAtual.getId());
+                        Cast.toDouble(rowData[7]), tipoAnimal, ano, perfilAtual.getId());
                 
                 if (modifType == TableModifiedEvent.ROW_INSERTED) {
                     
