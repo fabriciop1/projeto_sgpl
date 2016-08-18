@@ -41,7 +41,7 @@ public class GenericTableRowEditor extends GenericTableModifier {
     public void refillEditTable(){
         
         if (editorType == GTRE_UPDATE) {
-            addEditTableRow( getSourceTableSelectedRowData() );
+            addEditTableRow( convertToEditTableValues( getSourceTableSelectedRowData() ) );
             
         } else if(editorType == GTRE_INSERT) {
             addEditTableRow(new Object[]{ });

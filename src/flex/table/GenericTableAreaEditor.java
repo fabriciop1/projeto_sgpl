@@ -83,7 +83,7 @@ public class GenericTableAreaEditor extends GenericTableModifier {
             
             for (int j = getStringColumnsOffset(); j < editTable.getColumnCount(); j++) {
                 
-                setEditTableValue( getSourceTableValue(startRow + i, startColumn + j - getStringColumnsOffset()), i, j);
+                setEditTableValue( convertToEditTableValue( getSourceTableValue(startRow + i, startColumn + j - getStringColumnsOffset()) ), i, j);
             }
         }
     }
@@ -235,20 +235,6 @@ public class GenericTableAreaEditor extends GenericTableModifier {
         
         return model;
     }
-    
-//    public void showArray(int length){ //Só pra testar as coisa
-//        
-//        System.out.println("");
-//        
-//        for(int i=0; i<length; i++){
-//            System.out.print("("+i+")");
-//            for(int j=0; j<getCellEditableMatrix().get(i).length; j++){
-//                System.out.print("["+getCellEditableMatrix().get(i)[j]+"]");
-//            }
-//            System.out.println("");
-//        }
-//        
-//    }
     
     @Override
     protected void copySourceTableEditors() {

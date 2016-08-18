@@ -8,10 +8,12 @@ package flex.table;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -522,6 +524,46 @@ public abstract class GenericTableModifier extends JDialog{
         return sourceRowData;
     }
     
+    
+    protected Object convertToEditTableValue(Object value){
+        
+        if(value != null && !value.toString().isEmpty()){
+            
+            Class valueClass = value.getClass();
+            
+            if(valueClass == Float.class || valueClass == Double.class){
+                
+                Locale hu3Locale = new Locale("pt", "BR");
+                NumberFormat nf = NumberFormat.getInstance(hu3Locale);
+                
+                return nf.format(value);
+                
+            } else {
+                
+                return value.toString();
+            }
+            
+        } else {
+            return null;
+        }
+        
+    }
+    
+    protected Object[] convertToEditTableValues(Object[] values){
+        
+        if(values == null){
+            throw new NullPointerException("O array de dados da linha da tabela passado é inválido.");
+        } 
+        else if(values.length != sourceTable.getColumnCount()){
+            throw new IllegalArgumentException("O número de valores do array passado é diferente no número de colunas da tabela.");
+        }
+        
+        for (int i = 0; i < values.length; i++) {
+            values[i] = convertToEditTableValue(values[i]);
+        }
+        
+        return values;
+    }
     
     protected void setEditTableValue(Object value, int row, int column){
         
