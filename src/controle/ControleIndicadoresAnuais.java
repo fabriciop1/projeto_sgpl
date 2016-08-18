@@ -456,71 +456,77 @@ public class ControleIndicadoresAnuais {
         return Calc.somarLista(maquinas, benfeitorias, reprodutores, animaisTrabalho, forragNaoAnuais);
     }
     
-    public Object[] getConteudoTecnico(List<DadosTecMensais> dados, int ano) {
+    public Object[] getConteudoTecnico(List<DadosTecMensais> dadosTec, List<DadosEconMensais> dadosEcon,int ano) {
         double totalLitros = 0.0, somaTotalVacas = 0.0, somaRebanhoMedio = 0.0, somaVacasLactacao = 0.0, somaVacasSecas = 0.0;
         double somaNovilhas = 0.0, somaBezerros = 0.0, somaBezerras = 0.0, somaTouros = 0.0, somaOutros = 0.0;
         double somaAbortos = 0.0, somaNatimortos = 0.0, somaRetPlac = 0.0, somaMorteBez = 0.0, somaBezDoentes = 0.0, somaMorteNov = 0.0;
-        double somaMorteVacas = 0.0, somaVacasMastCli = 0.0;
+        double somaMorteVacas = 0.0, somaVacasMastCli = 0.0, maoObraPerm = 0.0;
         
-        for(int i = 0; i < dados.size(); i++) {   
-            if (dados.get(i).getAno() == ano) {    
-                switch(dados.get(i).getIndicador().getId()) { 
+        for(int i = 0; i < dadosEcon.size(); i++) {
+            if(dadosEcon.get(i).getAno() == ano && dadosEcon.get(i).getEspecificacao().getId() == 7) { // MDO perm.
+                maoObraPerm += dadosEcon.get(i).getQuantidade();
+            }
+        }
+        
+        for(int i = 0; i < dadosTec.size(); i++) {   
+            if (dadosTec.get(i).getAno() == ano) {    
+                switch(dadosTec.get(i).getIndicador().getId()) { 
                     case 1: // Total Litros/Mês (L)
-                        totalLitros += dados.get(i).getDado();
+                        totalLitros += dadosTec.get(i).getDado();
                         break;
                     case 2:  // N. Vacas Lactacao
-                        somaTotalVacas += dados.get(i).getDado();
-                        somaVacasLactacao += dados.get(i).getDado();
-                        somaRebanhoMedio += dados.get(i).getDado();
+                        somaTotalVacas += dadosTec.get(i).getDado();
+                        somaVacasLactacao += dadosTec.get(i).getDado();
+                        somaRebanhoMedio += dadosTec.get(i).getDado();
                         break;
                     case 3:  // N. Vacas Secas
-                        somaTotalVacas += dados.get(i).getDado();
-                        somaVacasSecas += dados.get(i).getDado();
-                        somaRebanhoMedio += dados.get(i).getDado();
+                        somaTotalVacas += dadosTec.get(i).getDado();
+                        somaVacasSecas += dadosTec.get(i).getDado();
+                        somaRebanhoMedio += dadosTec.get(i).getDado();
                         break;           
                     case 4: // Novilhas
-                        somaNovilhas += dados.get(i).getDado();
-                        somaRebanhoMedio += dados.get(i).getDado();
+                        somaNovilhas += dadosTec.get(i).getDado();
+                        somaRebanhoMedio += dadosTec.get(i).getDado();
                         break;
                     case 5: // Bezerras
-                        somaBezerras += dados.get(i).getDado();
-                        somaRebanhoMedio += dados.get(i).getDado();
+                        somaBezerras += dadosTec.get(i).getDado();
+                        somaRebanhoMedio += dadosTec.get(i).getDado();
                         break; 
                     case 6: // Bezerros
-                        somaBezerros += dados.get(i).getDado();
-                        somaRebanhoMedio += dados.get(i).getDado();
+                        somaBezerros += dadosTec.get(i).getDado();
+                        somaRebanhoMedio += dadosTec.get(i).getDado();
                         break;
                     case 7: // Touro
-                        somaTouros += dados.get(i).getDado();
-                        somaRebanhoMedio += dados.get(i).getDado();
+                        somaTouros += dadosTec.get(i).getDado();
+                        somaRebanhoMedio += dadosTec.get(i).getDado();
                         break;
                     case 8: // Outros
-                        somaOutros += dados.get(i).getDado();
-                        somaRebanhoMedio += dados.get(i).getDado();
+                        somaOutros += dadosTec.get(i).getDado();
+                        somaRebanhoMedio += dadosTec.get(i).getDado();
                         break;    
                     case 12: // N. Abortos
-                        somaAbortos += dados.get(i).getDado();
+                        somaAbortos += dadosTec.get(i).getDado();
                         break;
                     case 13: // N. Natimortos
-                        somaNatimortos += dados.get(i).getDado();
+                        somaNatimortos += dadosTec.get(i).getDado();
                         break;
                     case 14: // N. de Retencao de Placenta
-                        somaRetPlac += dados.get(i).getDado();
+                        somaRetPlac += dadosTec.get(i).getDado();
                         break;
                     case 15: // N. de Mortes de Bezerros
-                        somaMorteBez += dados.get(i).getDado();
+                        somaMorteBez += dadosTec.get(i).getDado();
                         break;
                     case 16: // N. Bezerros Doentes
-                        somaBezDoentes += dados.get(i).getDado();
+                        somaBezDoentes += dadosTec.get(i).getDado();
                         break;
                     case 17: // N. Mortes de Novilhas
-                        somaMorteNov += dados.get(i).getDado();
+                        somaMorteNov += dadosTec.get(i).getDado();
                         break;
                     case 18: // N. Mortes de Vacas
-                        somaMorteVacas += dados.get(i).getDado();
+                        somaMorteVacas += dadosTec.get(i).getDado();
                         break;
                     case 19: // N. Vacas com Mastite Clínica
-                        somaVacasMastCli += dados.get(i).getDado();
+                        somaVacasMastCli += dadosTec.get(i).getDado();
                         break;
                 }
             }
@@ -542,9 +548,9 @@ public class ControleIndicadoresAnuais {
             Calc.dividir(somaVacasLactacao / 12.0, somaTotalVacas / 12.0), 
             Calc.dividir(somaVacasLactacao / 12.0, somaRebanhoMedio / 12.0),
             Calc.dividir(somaVacasLactacao / 12.0, ControlePerfil.getInstance().getPerfilSelecionado().getAreaPecLeite()),
-            Calc.dividir(somaVacasLactacao / 12.0, ControlePerfil.getInstance().getPerfilSelecionado().getEmpPermanentes()),
+            Calc.dividir(somaVacasLactacao / 12.0, maoObraPerm),
             Calc.dividir(totalLitros, somaVacasLactacao / 12.0), 
-            Calc.dividir(totalLitros, ControlePerfil.getInstance().getPerfilSelecionado().getEmpPermanentes()),
+            Calc.dividir(totalLitros, maoObraPerm),
             Calc.dividir(totalLitros, ControlePerfil.getInstance().getPerfilSelecionado().getAreaPecLeite()),
             "",
             "",

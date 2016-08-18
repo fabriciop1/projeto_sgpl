@@ -29,7 +29,7 @@ public class ColorRendererDadosTec extends DecimalFormatRenderer {
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
         super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column); 
         
-        if(column == 13 || row == 1 || row == 3 || row == 14) {
+        if(column == 12 || row == 1 || row == 3 || row == 15) {
             this.setBackground(COLOR);
             this.setFont(getFont().deriveFont(FONT));
         } else {

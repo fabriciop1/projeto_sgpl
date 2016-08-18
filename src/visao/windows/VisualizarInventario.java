@@ -2096,7 +2096,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 + Double.parseDouble(total47.getText().replace(',', '.'))
                 + Double.parseDouble(total48.getText().replace(',', '.')))));
         
-        total50.setText(String.format("R$ %.2f", ((Double.parseDouble(atividadeLeite.getText().replace(',', '.')) / 100)
+        total50.setText(String.format("R$ %.2f", ((Double.parseDouble(atividadeLeite.getText().replace(',', '.'))) / 100.0
                 * Double.parseDouble(total49.getText().substring(2).replace(',', '.')))));
 
         total51.setText(total9.getText().substring(2));
@@ -2110,7 +2110,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 + Double.parseDouble(total53.getText().replace(',', '.'))
                 + Double.parseDouble(total54.getText().replace(',', '.'))
                 + Double.parseDouble(total55.getText().replace(',', '.')))));
-        total57.setText(String.format("R$ %.2f", ((Double.parseDouble(custoOportunidade.getText().replace(',', '.'))) / 100
+        total57.setText(String.format("R$ %.2f", ((Double.parseDouble(atividadeLeite.getText().replace(',', '.'))) / 100.0
                 * Double.parseDouble(total56.getText().substring(2).replace(',', '.')))));
 
         total58.setText(salarioMinimo.getText());
@@ -2819,6 +2819,9 @@ public class VisualizarInventario extends javax.swing.JFrame {
             atividadeLeite.setText("" + temp);
             total50.setText(String.format("R$ %.2f", Double.parseDouble(total49.getText().substring(2).replace(',', '.'))
                     * (temp / 100)));
+            
+            total57.setText(String.format("R$ %.2f", Double.parseDouble(total56.getText().substring(2).replace(',', '.'))
+                    * (temp / 100)));
 
         } else {
             JOptionPane.showMessageDialog(null, "Insira um valor válido.", "Valor Inválido", JOptionPane.ERROR_MESSAGE);
@@ -2848,8 +2851,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
             }
 
             custoOportunidade.setText("" + temp);
-            total57.setText(String.format("R$ %.2f", Double.parseDouble(total56.getText().substring(2).replace(',', '.'))
-                    * (temp / 100)));
         } else {
             JOptionPane.showMessageDialog(this, "Insira um valor válido.", "Valor Inválido", JOptionPane.ERROR_MESSAGE);
         }

@@ -28,9 +28,9 @@ import util.FixedColumnTable;
 public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
 
     private final Perfil atual;
-    private List<DadosEconMensais> dems;
-    private List<DadosTecMensais>  dtms;
-    private GenericDAO<DadosEconMensais> demdao;
+    private final List<DadosEconMensais> dems;
+    private final List<DadosTecMensais>  dtms;
+    private final GenericDAO<DadosEconMensais> demdao;
     private final GenericDAO<DadosTecMensais> dtmdao;
     private final ControleIndicadoresAnuais cia;
     private FixedColumnTable fixedTable;
@@ -55,36 +55,29 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
         super.setResizable(false);
         
         dtmdao = new GenericDAO<>(DadosTecMensais.class);
-       
+        demdao = new GenericDAO<>(DadosEconMensais.class);
+            
+        dems = demdao.executeSQL("SELECT * "
+                            + "FROM dados_economicos_mensais AS dem "
+                            + "WHERE (dem.ano <= " + cia.getAnosSelecionados().get(0) + " AND "
+                                  + "dem.ano >= " + cia.getAnosSelecionados().get(cia.getAnosSelecionados().size()-1) + ") AND "
+                                  + "dem.idPerfilFK = " + atual.getId()
+                                  + " ORDER BY dem.ano");
+
+        dtms = dtmdao.executeSQL("SELECT * "
+                            + "FROM dados_tecnicos_mensais AS dtm "
+                            + "WHERE (dtm.ano <= " + cia.getAnosSelecionados().get(0) + " AND "
+                                  + "dtm.ano >= " + cia.getAnosSelecionados().get(cia.getAnosSelecionados().size()-1) + ") AND "
+                                  + "dtm.idPerfilFK = " + atual.getId()
+                                  + " ORDER BY dtm.ano");
+
         if (cia.getTipoIndicador() == 1) { //Tipo Indicadores Econômicos
-            demdao = new GenericDAO<>(DadosEconMensais.class);
-            
-            dems = demdao.executeSQL("SELECT * "
-                                + "FROM dados_economicos_mensais AS dem "
-                                + "WHERE (dem.ano <= " + cia.getAnosSelecionados().get(0) + " AND "
-                                      + "dem.ano >= " + cia.getAnosSelecionados().get(cia.getAnosSelecionados().size()-1) + ") AND "
-                                      + "dem.idPerfilFK = " + atual.getId()
-                                      + " ORDER BY dem.ano");
-            
-            dtms = dtmdao.executeSQL("SELECT * "
-                                + "FROM dados_tecnicos_mensais AS dtm "
-                                + "WHERE (dtm.ano <= " + cia.getAnosSelecionados().get(0) + " AND "
-                                      + "dtm.ano >= " + cia.getAnosSelecionados().get(cia.getAnosSelecionados().size()-1) + ") AND "
-                                      + "dtm.idPerfilFK = " + atual.getId()
-                                      + " ORDER BY dtm.ano");
             
             preencherTabelaIEA(dems, dtms);
             fixedTable = new FixedColumnTable(2, jScrollPane2);
         } else if(cia.getTipoIndicador() == 2) { // Tipo Indicadores Técnicos
-          
-            dtms = dtmdao.executeSQL("SELECT * "
-                                + "FROM dados_tecnicos_mensais AS dtm "
-                                + "WHERE (dtm.ano <= " + cia.getAnosSelecionados().get(0) + " AND "
-                                      + "dtm.ano >= " + cia.getAnosSelecionados().get(cia.getAnosSelecionados().size()-1) + ") AND "
-                                      + "dtm.idPerfilFK = " + atual.getId()
-                                      + " ORDER BY dtm.ano");
             
-            preencherTabelaITA(dtms);
+            preencherTabelaITA(dtms, dems);
             
             fixedTable = new FixedColumnTable(2, jScrollPane2);
             fixedTable.getFixedTable().setDefaultRenderer(Object.class, tabelaIndicadoresAnuais.getDefaultRenderer(Object.class));
@@ -119,7 +112,7 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
 
     }
 
-    private void preencherTabelaITA(List<DadosTecMensais> dtms) {
+    private void preencherTabelaITA(List<DadosTecMensais> dtms, List<DadosEconMensais> dems) {
         
         super.setTitle("SGPL - " + atual.getNome() + " - Indicadores Técnicos Anuais");
         textoEntrada.setText("INDICADORES TÉCNICOS ANUAIS");
@@ -131,7 +124,7 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
         modelIndicadores.addColumn("Unidade", cia.getUnidadesTecAnuais());
         
         for(int i = cia.getAnosSelecionados().size() - 1; i >= 0;  i--) {
-            modelIndicadores.addColumn(cia.getAnosSelecionados().get(i), cia.getConteudoTecnico(dtms, cia.getAnosSelecionados().get(i))); 
+            modelIndicadores.addColumn(cia.getAnosSelecionados().get(i), cia.getConteudoTecnico(dtms, dems, cia.getAnosSelecionados().get(i))); 
         }
         tabelaIndicadoresAnuais.getColumnModel().getColumn(0).setPreferredWidth(300);
         tabelaIndicadoresAnuais.setDefaultRenderer(Object.class, new DecimalFormatRenderer(false) {

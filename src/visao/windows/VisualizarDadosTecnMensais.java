@@ -92,7 +92,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
             if(i == 1)   { colunaIND[count] = "MÉDIA Litros/dia (L)"; count++;
                            colunaIND[count] = ""; count++;
                            colunaIND[count] = "INDICADORES PRODUTIVOS"; count++; }
-            if(i == 10)  { colunaIND[count] = ""; count++; 
+            if(i == 11)  { colunaIND[count] = ""; count++; 
                            colunaIND[count] = "INDICADORES SANITÁRIOS"; count++; }
            
             colunaIND[count] = ind.get(i).getIndicador();
@@ -429,9 +429,9 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
     
     private void configGTAE(int selected) {
         
-        List<Integer> rowsNotEditable = Arrays.asList(1, 2, 3, 13, 14);
+        List<Integer> rowsNotEditable = Arrays.asList(1, 2, 3, 14, 15);
         
-        gtae.setRowsDisplayed(14);
+        gtae.setRowsDisplayed(15);
         
         gtae.getEditTable().getTableHeader().setFont(super.getFont().deriveFont(Font.BOLD));
         
@@ -485,9 +485,11 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
                                                         new Object[]{mes, ano, ind.getId(), atual.getId()});
 
                 if (dadosTec.isEmpty()) {
-                    DadosTecMensais dadoTec = new DadosTecMensais(mes, ano, dado, ind, atual.getId());
+                    if (!valor.isEmpty()) {
+                        DadosTecMensais dadoTec = new DadosTecMensais(mes, ano, dado, ind, atual.getId());
 
-                    dtmdao.insert(dadoTec);
+                        dtmdao.insert(dadoTec);
+                    }
 
                 } else {
                     DadosTecMensais dtm = dadosTec.get(0);
