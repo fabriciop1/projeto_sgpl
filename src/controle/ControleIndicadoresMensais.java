@@ -118,7 +118,7 @@ public class ControleIndicadoresMensais {
             "Custo da mão-de-obra familiar",
             "Lucratividade",
             "Ponto de Resíduo ( RB = COT )",
-            "Ponto de Nivelamento ( RB = CT ) - Litros/dia",
+            "Ponto de Nivelamento ( RB = CT )",
             "Capital investido por litro de leite"
         };
         
@@ -133,10 +133,10 @@ public class ControleIndicadoresMensais {
             "R$/Mês",
             "R$/L",
             "R$/L",
-            "R$/Mês",
-            "L/Mês",
-            "L/Mês",
-            "L/Mês",
+            "R$/L",
+            "%",
+            "%",
+            "%",
             "%",
             "%",
             "%",
@@ -283,7 +283,7 @@ public class ControleIndicadoresMensais {
                 }
                 
                 if(dems.get(i).getEspecificacao().getId() >= 29 &&
-                        dems.get(i).getEspecificacao().getId() < 38){
+                        dems.get(i).getEspecificacao().getId() <= 38){
                     somaConcentrado += dems.get(i).getQuantidade() * dems.get(i).getValorUnitario();
                 }
             }
@@ -321,12 +321,12 @@ public class ControleIndicadoresMensais {
             Calc.dividir(coeLeite, litros), 
             Calc.dividir((coeLeite + maoObraFam + ( depreciacaoDoLeite/12.0 )),litros),
             Calc.dividir(custoTotalLeite,litros),
-            Calc.dividir(coeLeite,rendaBruta),
-            Calc.dividir((coeLeite + maoObraFam + ( depreciacaoDoLeite/12.0 )),rendaBruta),
-            Calc.dividir(custoTotalLeite,rendaBruta),
+            Calc.dividir(coeLeite,rendaBruta) * 100.0,
+            Calc.dividir((coeLeite + maoObraFam + ( depreciacaoDoLeite/12.0 )),rendaBruta) * 100.0,
+            Calc.dividir(custoTotalLeite,rendaBruta) * 100.0,
             Calc.dividir((maoObraPer * ativLeiteira), rendaBruta) * 100.0,
             Calc.dividir((maoObraPer + maoObraFam) * ativLeiteira, rendaBruta) * 100.0,
-            Calc.dividir((somaConcentrado * ativLeiteira),rendaBruta) * 100.0,
+            Calc.dividir(somaConcentrado * ativLeiteira,rendaBruta) * 100.0,
             rendaBruta - coeLeite,
             Calc.dividir((rendaBruta - coeLeite), litros),
             Calc.dividir((rendaBruta - coeLeite), (Calc.dividir(rendaBruta,litros))),

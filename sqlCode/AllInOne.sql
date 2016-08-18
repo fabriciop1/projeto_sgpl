@@ -254,9 +254,8 @@ INSERT INTO projeto_pesquisa.dados_economicos_mensais (mes, ano, quantidade, val
 /*===============================================================================================================================*/
 
 INSERT INTO projeto_pesquisa.dtm_indicador (indicador) VALUES ("Total Litros/Mês (L)");
-
 INSERT INTO projeto_pesquisa.dtm_indicador (indicador) VALUES ("Nº V. Lactação");
-INSERT INTO projeto_pesquisa.dtm_indicador (indicador) VALUES ("Nº V. Secas ");
+INSERT INTO projeto_pesquisa.dtm_indicador (indicador) VALUES ("Nº V. Secas");
 INSERT INTO projeto_pesquisa.dtm_indicador (indicador) VALUES ("Nº de Novilhas");
 INSERT INTO projeto_pesquisa.dtm_indicador (indicador) VALUES ("Nº de Bezerras");
 INSERT INTO projeto_pesquisa.dtm_indicador (indicador) VALUES ("Nº de Bezerros");

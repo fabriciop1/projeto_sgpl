@@ -205,7 +205,7 @@ public class ControleIndicadoresAnuais {
             "Cab.",
             "%",
             "%",
-            "Cab./ha",
+            "Cab./há",
             "Cab./dh",
             "L/Ano",
             "L/dh",
@@ -316,7 +316,7 @@ public class ControleIndicadoresAnuais {
         
         double ctUnitarioLeite = Calc.dividir(ctAtivLeiteira, producaoAnualLeite);
         double cotLeite = coeAtivLeite * ativLeiteira + custoMaoObra + depreciacaoLeite;
-                
+      
         return new Object[] {
             rendaLeite,                                                                 // renda bruta do leite
             rendaBrutaAtiv,                                                             // renda bruta da atividde
@@ -461,10 +461,12 @@ public class ControleIndicadoresAnuais {
         double somaNovilhas = 0.0, somaBezerros = 0.0, somaBezerras = 0.0, somaTouros = 0.0, somaOutros = 0.0;
         double somaAbortos = 0.0, somaNatimortos = 0.0, somaRetPlac = 0.0, somaMorteBez = 0.0, somaBezDoentes = 0.0, somaMorteNov = 0.0;
         double somaMorteVacas = 0.0, somaVacasMastCli = 0.0, maoObraPerm = 0.0;
+        int contMaoObra = 0;
         
         for(int i = 0; i < dadosEcon.size(); i++) {
             if(dadosEcon.get(i).getAno() == ano && dadosEcon.get(i).getEspecificacao().getId() == 7) { // MDO perm.
                 maoObraPerm += dadosEcon.get(i).getQuantidade();
+                contMaoObra++;
             }
         }
         
@@ -545,12 +547,12 @@ public class ControleIndicadoresAnuais {
             somaBezerros / 12.0,
             somaTouros / 12.0,
             somaOutros / 12.0,
-            Calc.dividir(somaVacasLactacao / 12.0, somaTotalVacas / 12.0), 
-            Calc.dividir(somaVacasLactacao / 12.0, somaRebanhoMedio / 12.0),
+            Calc.dividir(somaVacasLactacao / 12.0, somaTotalVacas / 12.0) * 100.0, 
+            Calc.dividir(somaVacasLactacao / 12.0, somaRebanhoMedio / 12.0) * 100.0,
             Calc.dividir(somaVacasLactacao / 12.0, ControlePerfil.getInstance().getPerfilSelecionado().getAreaPecLeite()),
-            Calc.dividir(somaVacasLactacao / 12.0, maoObraPerm),
+            Calc.dividir(somaVacasLactacao / 12.0, Calc.dividir(maoObraPerm, contMaoObra)),
             Calc.dividir(totalLitros, somaVacasLactacao / 12.0), 
-            Calc.dividir(totalLitros, maoObraPerm),
+            Calc.dividir(totalLitros, Calc.dividir(maoObraPerm, contMaoObra)),
             Calc.dividir(totalLitros, ControlePerfil.getInstance().getPerfilSelecionado().getAreaPecLeite()),
             "",
             "",
