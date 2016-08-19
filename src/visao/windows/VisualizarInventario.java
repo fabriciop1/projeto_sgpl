@@ -2288,15 +2288,15 @@ public class VisualizarInventario extends javax.swing.JFrame {
             totalDepreciacao += (depreciacao);
         }
 
-        total1.setText("" + (totalAreaArreInic));
-        total2.setText("" + Calc.somarLista(totalAreaPropInic));
-        total3.setText("" + (totalAreaArreFina));
-        total4.setText("" + Calc.somarLista(totalAreaPropFina));
-        total5.setText("" + (Double.parseDouble(total1.getText()) + Double.parseDouble(total2.getText())));
-        total6.setText("" + (Double.parseDouble(total3.getText()) + Double.parseDouble(total4.getText())));
-        total7.setText(String.format("R$ %.2f", Calc.somaPonderada(totalAreaPropInic, totalTerraNua)).replace(',', '.'));
-        total8.setText(String.format("R$ %.2f", Calc.somaPonderada(totalAreaPropFina, totalTerraNua)).replace(',', '.'));
-        total9.setText(String.format("R$ %.2f", Calc.mediaAritmetica(Double.parseDouble(total7.getText().substring(2)), Double.parseDouble(total8.getText().substring(2)))).replace(',', '.'));
+        total1.setText(String.format("%.2f", (totalAreaArreInic)));
+        total2.setText(String.format("%.2f", Calc.somarLista(totalAreaPropInic)));
+        total3.setText(String.format("%.2f", (totalAreaArreFina)));
+        total4.setText(String.format("%.2f", Calc.somarLista(totalAreaPropFina)));
+        total5.setText(("" + (Double.parseDouble(total1.getText().replace(',', '.')) + Double.parseDouble(total2.getText().replace(',', '.')))).replace('.', ','));
+        total6.setText(("" + (Double.parseDouble(total3.getText().replace(',', '.')) + Double.parseDouble(total4.getText().replace(',', '.')))).replace('.', ','));
+        total7.setText(String.format("R$ %.2f", Calc.somaPonderada(totalAreaPropInic, totalTerraNua)).replace('.', ','));
+        total8.setText(String.format("R$ %.2f", Calc.somaPonderada(totalAreaPropFina, totalTerraNua)).replace('.', ','));
+        total9.setText(String.format("R$ %.2f", Calc.mediaAritmetica(Double.parseDouble(total7.getText().substring(2).replace(',', '.')), Double.parseDouble(total8.getText().substring(2).replace(',', '.')))).replace(',', '.'));
         total10.setText("" + (totalHa));
         total11.setText(String.format("R$ %.2f", totalValorHa));
         total12.setText(String.format("R$ %.2f", totalDepreciacao));

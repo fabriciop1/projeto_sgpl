@@ -135,7 +135,7 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
             temp = crm.getConteudoEconomico(iem, itm, mesCont, anoCont);
             
             //----FINAL---------------------------------------------------------
-            modelIndicadores.addColumn(mesCont + "/" + anoCont, temp);
+            modelIndicadores.addColumn(Util.nomeMes(mesCont) + "/" + anoCont, temp);
             Util.clearVector(temp);
             mesCont++;
         }while(anoCont < anoFim || mesCont <= mesFim);
@@ -173,7 +173,7 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
             temp = crm.getConteudoTecnico(dtms, dems, mesCont, anoCont);
             
             //----FINAL---------------------------------------------------------
-            modelIndicadores.addColumn(mesCont + "/" + anoCont, temp);
+            modelIndicadores.addColumn(Util.nomeMes(mesCont) + "/" + anoCont, temp);
           
             Util.clearVector(temp);
             mesCont++;
