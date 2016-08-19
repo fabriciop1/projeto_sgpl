@@ -144,9 +144,11 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                         linhaTemp[indexCol ] = dem.get(j).getQuantidade();
                         linhaTemp[indexCol + 1] = dem.get(j).getValorUnitario();
                         linhaTemp[indexCol + 2] = dem.get(j).getQuantidade() * dem.get(j).getValorUnitario();
-
-                        tempTotais[indexCol] += dem.get(j).getQuantidade();
-                        tempTotais[indexCol + 2] += dem.get(j).getQuantidade() * dem.get(j).getValorUnitario();
+                             
+                        if (i != 1) {
+                            tempTotais[indexCol] += dem.get(j).getQuantidade();
+                            tempTotais[indexCol + 2] += dem.get(j).getQuantidade() * dem.get(j).getValorUnitario();
+                        }
 
                     }
 
@@ -404,7 +406,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         tabelaDadosEconomicos.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         if (tabelaDadosEconomicos.getColumnModel().getColumnCount() > 0) {
             tabelaDadosEconomicos.getColumnModel().getColumn(0).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(0).setPreferredWidth(325);
+            tabelaDadosEconomicos.getColumnModel().getColumn(0).setPreferredWidth(300);
             tabelaDadosEconomicos.getColumnModel().getColumn(1).setResizable(false);
             tabelaDadosEconomicos.getColumnModel().getColumn(2).setResizable(false);
             tabelaDadosEconomicos.getColumnModel().getColumn(3).setResizable(false);

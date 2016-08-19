@@ -164,7 +164,7 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
 //    
     
     public List<T> executeSQL(String sql){
-        
+        System.out.println(this.objectClass.getName());
         try {
             Connection connection = openConnection();
             

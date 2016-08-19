@@ -173,9 +173,11 @@ public class ControleIndicadoresAnuais {
             "Vacas em lactação / Rebanho",
             "Vacas em lactação / Área para pecuária",
             "Vacas em lactação / Funcionário",
+            "Vacas em lactação / M.D.O. permanente total (familiar+contratada)",
             "Produção / Vaca em lactação",
-            "Produção / Mão-de-obra permanente (contratada)",
+            "Produção / M.D.O. permanente (contratada)",
             "Produção / Área para pecuária",
+            "Produção / M.D.O. permanente total (familiar + contratada)",
             "",
             "SANITÁRIOS",
             "Nº Abortos",
@@ -207,9 +209,11 @@ public class ControleIndicadoresAnuais {
             "%",
             "Cab./há",
             "Cab./dh",
+            "Cab./h",
             "L/Ano",
             "L/dh",
             "L/ha/mês",
+            "L/h",
             "",
             "",
             "Cab.",
@@ -460,14 +464,17 @@ public class ControleIndicadoresAnuais {
         double totalLitros = 0.0, somaTotalVacas = 0.0, somaRebanhoMedio = 0.0, somaVacasLactacao = 0.0, somaVacasSecas = 0.0;
         double somaNovilhas = 0.0, somaBezerros = 0.0, somaBezerras = 0.0, somaTouros = 0.0, somaOutros = 0.0;
         double somaAbortos = 0.0, somaNatimortos = 0.0, somaRetPlac = 0.0, somaMorteBez = 0.0, somaBezDoentes = 0.0, somaMorteNov = 0.0;
-        double somaMorteVacas = 0.0, somaVacasMastCli = 0.0, maoObraPerm = 0.0;
-        int contMaoObra = 0;
+        double somaMorteVacas = 0.0, somaVacasMastCli = 0.0, maoObraPerm = 0.0, mdoFamiliar = 0.0;
         
         for(int i = 0; i < dadosEcon.size(); i++) {
-            if(dadosEcon.get(i).getAno() == ano && dadosEcon.get(i).getEspecificacao().getId() == 7) { // MDO perm.
-                maoObraPerm += dadosEcon.get(i).getQuantidade();
-                contMaoObra++;
-            }
+            if(dadosEcon.get(i).getAno() == ano) {
+                if(dadosEcon.get(i).getEspecificacao().getId() == 7) { // MDO perm.
+                    maoObraPerm += dadosEcon.get(i).getQuantidade();
+                }
+                if (dadosEcon.get(i).getEspecificacao().getId() == 70) { // MDO familiar
+                    mdoFamiliar += dadosEcon.get(i).getQuantidade();
+                }
+            }   
         }
         
         for(int i = 0; i < dadosTec.size(); i++) {   
@@ -550,10 +557,12 @@ public class ControleIndicadoresAnuais {
             Calc.dividir(somaVacasLactacao / 12.0, somaTotalVacas / 12.0) * 100.0, 
             Calc.dividir(somaVacasLactacao / 12.0, somaRebanhoMedio / 12.0) * 100.0,
             Calc.dividir(somaVacasLactacao / 12.0, ControlePerfil.getInstance().getPerfilSelecionado().getAreaPecLeite()),
-            Calc.dividir(somaVacasLactacao / 12.0, Calc.dividir(maoObraPerm, contMaoObra)),
+            Calc.dividir(somaVacasLactacao / 12.0, maoObraPerm / 12.0),
+            Calc.dividir(somaVacasLactacao / 12.0, (maoObraPerm / 12.0) + (mdoFamiliar / 12.0)),
             Calc.dividir(totalLitros, somaVacasLactacao / 12.0), 
-            Calc.dividir(totalLitros, Calc.dividir(maoObraPerm, contMaoObra)),
+            Calc.dividir(totalLitros, maoObraPerm / 12.0),
             Calc.dividir(totalLitros, ControlePerfil.getInstance().getPerfilSelecionado().getAreaPecLeite()),
+            Calc.dividir(totalLitros, (maoObraPerm / 12.0) + (mdoFamiliar / 12.0)),
             "",
             "",
             somaAbortos / 12.0,

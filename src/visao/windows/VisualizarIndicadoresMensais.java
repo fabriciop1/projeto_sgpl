@@ -28,8 +28,8 @@ import util.Util;
 public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
 
     private final Perfil atual;
-    private final List<DadosEconMensais> dems;
-    private final List<DadosTecMensais>  dtms;
+    private List<DadosEconMensais> dems;
+    private List<DadosTecMensais>  dtms;
     private final GenericDAO<DadosEconMensais> demdao;
     private final GenericDAO<DadosTecMensais>  dtmdao;
     private final ControleIndicadoresMensais crm;
@@ -52,8 +52,13 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
         super.setLocationRelativeTo(null);
         super.setResizable(false);
         
-        demdao = new GenericDAO<>(DadosEconMensais.class);
-        dems = demdao.executeSQL("SELECT * "
+        demdao = new GenericDAO<>(DadosEconMensais.class);          
+        dtmdao = new GenericDAO<>(DadosTecMensais.class);
+        
+        
+        if( crm.getTipoIndicador() == 1 ) { // Tipo Indicadores Econômicos  
+            
+            dems = demdao.executeSQL("SELECT ano, mes, quantidade, valorUnitario, idDEM_especificacaoFK "
                         + "FROM dados_economicos_mensais AS d "
                         + "WHERE (d.ano >= " + crm.getAnoIni() + "  AND "
                                + "d.ano <= " + crm.getAnoFim() + "  AND "
@@ -61,9 +66,31 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
                                + "d.mes <= " + crm.getMesFim() + ") AND "
                                + "d.idPerfilFK = " + atual.getId()
                         + " ORDER BY d.ano, d.mes");
-             
-        dtmdao = new GenericDAO<>(DadosTecMensais.class);
-        dtms = dtmdao.executeSQL("SELECT * "
+            
+            dtms = dtmdao.executeSQL("SELECT ano, idDTM_indicadorFK, dado, mes "
+                        + "FROM dados_tecnicos_mensais AS d "
+                        + "WHERE (d.ano >= " + crm.getAnoIni() + "  AND "
+                               + "d.ano <= " + crm.getAnoFim() + "  AND "
+                               + "d.mes >= " + crm.getMesIni() + "  AND "
+                               + "d.mes <= " + crm.getMesFim() + ") AND "
+                               + "d.idPerfilFK = " + atual.getId() + " AND d.idDTM_indicadorFK <= 3"
+                        + " ORDER BY d.ano, d.mes");
+            
+            preencherTabelaIEM(dems, dtms);   
+            
+            tabelaFixa = new FixedColumnTable(2, jScrollPane1);
+        } else if( crm.getTipoIndicador() == 2 ){ // Tipo Indicadores Técnicos
+            
+            dems = demdao.executeSQL("SELECT ano, mes, quantidade, idDEM_especificacaoFK "
+                        + "FROM dados_economicos_mensais AS d "
+                        + "WHERE (d.ano >= " + crm.getAnoIni() + "  AND "
+                               + "d.ano <= " + crm.getAnoFim() + "  AND "
+                               + "d.mes >= " + crm.getMesIni() + "  AND "
+                               + "d.mes <= " + crm.getMesFim() + ") AND "
+                               + "d.idPerfilFK = " + atual.getId() + " AND (d.idDEM_especificacaoFK = 7 OR d.idDEM_especificacaoFK = 70)"
+                        + " ORDER BY d.ano, d.mes");
+            
+            dtms = dtmdao.executeSQL("SELECT ano, mes, dado, idDTM_indicadorFK "
                         + "FROM dados_tecnicos_mensais AS d "
                         + "WHERE (d.ano >= " + crm.getAnoIni() + "  AND "
                                + "d.ano <= " + crm.getAnoFim() + "  AND "
@@ -71,14 +98,6 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
                                + "d.mes <= " + crm.getMesFim() + ") AND "
                                + "d.idPerfilFK = " + atual.getId()
                         + " ORDER BY d.ano, d.mes");
-        
-        
-        if( crm.getTipoIndicador() == 1 ) { // Tipo Indicadores Econômicos   
-            
-            preencherTabelaIEM(dems, dtms);   
-            
-            tabelaFixa = new FixedColumnTable(2, jScrollPane1);
-        } else if( crm.getTipoIndicador() == 2 ){ // Tipo Indicadores Técnicos
             
             preencherTabelaITM(dtms, dems);
             
@@ -160,7 +179,7 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
             mesCont++;
         }while(anoCont < anoFim || mesCont <= mesFim);
         
-        tabelaIndicadoresMensais.getColumnModel().getColumn(0).setPreferredWidth(300);
+        tabelaIndicadoresMensais.getColumnModel().getColumn(0).setPreferredWidth(380);
         tabelaIndicadoresMensais.setDefaultRenderer(Object.class, new DecimalFormatRenderer(false) {
             private final Color BG = null;
             
@@ -170,7 +189,7 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
                 
                 super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column); 
                 
-                if (row == 0 || row == 20) {
+                if (row == 0 || row == 22) {
                     this.setBackground(Color.LIGHT_GRAY);
                     this.setFont(getFont().deriveFont(Font.BOLD));
                 } else {

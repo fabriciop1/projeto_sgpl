@@ -180,9 +180,11 @@ public class ControleIndicadoresMensais {
             "Vacas em lactação / rebanho",
             "Vacas em lactação / área para pecuária",
             "Vacas em lactação / funcionário",
+            "Vacas em lactação/ M.D.O. permanente total (familiar + contratada)",
             "Produção / vaca em lactação",
-            "Produção / mão-de-obra permanente (contratada)",
+            "Produção / M.D.O. permanente (contratada)",
             "Produção / área para pecuária (1/2) x 365",
+            "Produção / M.D.O. permanente total (familiar + contratada)",
             "",
             "SANITÁRIOS",
             "Nº Abortos",
@@ -214,9 +216,11 @@ public class ControleIndicadoresMensais {
             "%",
             "Cab./ha",
             "Cab./dh",
+            "L/h",
             "L/dia",
             "L/dh",
             "L/ha/mês",
+            "Cab./h",
             "",
             "",
             "",
@@ -352,11 +356,15 @@ public class ControleIndicadoresMensais {
         double litros = 0.0,   totalVacas = 0.0, rebanhoMedio = 0.0, vacasLactacao = 0.0, vacaSeca = 0.0;
         double novilhas = 0.0, bezerros = 0.0,   bezerras = 0.0,     touros = 0.0,        outros = 0.0;
         double abortos = 0.0,  natimortos = 0.0, retenPlac = 0.0,    morteBez = 0.0,      bezDoentes = 0.0;
-        double morteNov = 0.0, morteVacas = 0.0, vacasMastCli = 0.0, maoObraPerm = 0.0 ;
+        double morteNov = 0.0, morteVacas = 0.0, vacasMastCli = 0.0, maoObraPerm = 0.0,   maoObraFam = 0.0 ;
         
         for(int i = 0; i < dems.size(); i++) {
-            if(dems.get(i).getAno() == ano && dems.get(i).getMes() == mes && dems.get(i).getEspecificacao().getId() == 7) { // MDO perm.
-                maoObraPerm = dems.get(i).getQuantidade();
+            if(dems.get(i).getAno() == ano && dems.get(i).getMes() == mes) {
+                if(dems.get(i).getEspecificacao().getId() == 7) { // MDO perm.
+                    maoObraPerm = dems.get(i).getQuantidade();
+                } else if (dems.get(i).getEspecificacao().getId() == 70) { // MDO Familiar
+                    maoObraFam = dems.get(i).getQuantidade();
+                }
             }
         }
         for(int i = 0; i < dados.size(); i++) {   
@@ -440,9 +448,11 @@ public class ControleIndicadoresMensais {
             Calc.dividir(vacasLactacao, rebanhoMedio) * 100.0,
             Calc.dividir(vacasLactacao, ControlePerfil.getInstance().getPerfilSelecionado().getAreaPecLeite()),
             Calc.dividir(vacasLactacao, maoObraPerm),
+            Calc.dividir(vacasLactacao, maoObraPerm + maoObraFam),
             Calc.dividir(litros, vacasLactacao) / 30.0, 
             Calc.dividir(litros, maoObraPerm),
             Calc.dividir(litros, ControlePerfil.getInstance().getPerfilSelecionado().getAreaPecLeite()),
+            Calc.dividir(litros, maoObraPerm + maoObraFam),
             "",
             "",
             abortos,

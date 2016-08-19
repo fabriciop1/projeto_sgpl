@@ -28,8 +28,8 @@ import util.FixedColumnTable;
 public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
 
     private final Perfil atual;
-    private final List<DadosEconMensais> dems;
-    private final List<DadosTecMensais>  dtms;
+    private List<DadosEconMensais> dems;
+    private List<DadosTecMensais>  dtms;
     private final GenericDAO<DadosEconMensais> demdao;
     private final GenericDAO<DadosTecMensais> dtmdao;
     private final ControleIndicadoresAnuais cia;
@@ -56,27 +56,39 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
         
         dtmdao = new GenericDAO<>(DadosTecMensais.class);
         demdao = new GenericDAO<>(DadosEconMensais.class);
-            
-        dems = demdao.executeSQL("SELECT * "
+
+        if (cia.getTipoIndicador() == 1) { //Tipo Indicadores Econômicos
+            dems = demdao.executeSQL("SELECT ano, quantidade, valorUnitario, idDEM_especificacaoFK "
                             + "FROM dados_economicos_mensais AS dem "
                             + "WHERE (dem.ano <= " + cia.getAnosSelecionados().get(0) + " AND "
                                   + "dem.ano >= " + cia.getAnosSelecionados().get(cia.getAnosSelecionados().size()-1) + ") AND "
                                   + "dem.idPerfilFK = " + atual.getId()
                                   + " ORDER BY dem.ano");
-
-        dtms = dtmdao.executeSQL("SELECT * "
+            
+            dtms = dtmdao.executeSQL("SELECT ano, dado, idDTM_indicadorFK "
                             + "FROM dados_tecnicos_mensais AS dtm "
                             + "WHERE (dtm.ano <= " + cia.getAnosSelecionados().get(0) + " AND "
                                   + "dtm.ano >= " + cia.getAnosSelecionados().get(cia.getAnosSelecionados().size()-1) + ") AND "
-                                  + "dtm.idPerfilFK = " + atual.getId()
+                                  + "dtm.idPerfilFK = " + atual.getId() + " AND dtm.idDTM_indicadorFK <= 3"
                                   + " ORDER BY dtm.ano");
-
-        if (cia.getTipoIndicador() == 1) { //Tipo Indicadores Econômicos
             
             preencherTabelaIEA(dems, dtms);
             fixedTable = new FixedColumnTable(2, jScrollPane2);
         } else if(cia.getTipoIndicador() == 2) { // Tipo Indicadores Técnicos
             
+            dems = demdao.executeSQL("SELECT ano, quantidade, idDEM_especificacaoFK "
+                            + "FROM dados_economicos_mensais AS dem "
+                            + "WHERE (dem.ano <= " + cia.getAnosSelecionados().get(0) + " AND "
+                                  + "dem.ano >= " + cia.getAnosSelecionados().get(cia.getAnosSelecionados().size()-1) + ") AND "
+                                  + "dem.idPerfilFK = " + atual.getId() + " AND (dem.idDEM_especificacaoFK = 7 OR dem.idDEM_especificacaoFK = 70)"
+                                  + " ORDER BY dem.ano");
+            
+            dtms = dtmdao.executeSQL("SELECT ano, dado, idDTM_indicadorFK "
+                            + "FROM dados_tecnicos_mensais AS dtm "
+                            + "WHERE (dtm.ano <= " + cia.getAnosSelecionados().get(0) + " AND "
+                                  + "dtm.ano >= " + cia.getAnosSelecionados().get(cia.getAnosSelecionados().size()-1) + ") AND "
+                                  + "dtm.idPerfilFK = " + atual.getId()
+                                  + " ORDER BY dtm.ano");
             preencherTabelaITA(dtms, dems);
             
             fixedTable = new FixedColumnTable(2, jScrollPane2);
@@ -126,7 +138,7 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
         for(int i = cia.getAnosSelecionados().size() - 1; i >= 0;  i--) {
             modelIndicadores.addColumn(cia.getAnosSelecionados().get(i), cia.getConteudoTecnico(dtms, dems, cia.getAnosSelecionados().get(i))); 
         }
-        tabelaIndicadoresAnuais.getColumnModel().getColumn(0).setPreferredWidth(300);
+        tabelaIndicadoresAnuais.getColumnModel().getColumn(0).setPreferredWidth(380);
         tabelaIndicadoresAnuais.setDefaultRenderer(Object.class, new DecimalFormatRenderer(false) {
             private final Color BG = null;
             
@@ -136,7 +148,7 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
                 
                 super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column); 
                 
-                if (row == 0 || row == 20) {
+                if (row == 0 || row == 22) {
                     this.setBackground(Color.LIGHT_GRAY);
                     this.setFont(getFont().deriveFont(Font.BOLD));
                 } else {

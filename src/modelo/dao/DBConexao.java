@@ -26,7 +26,7 @@ public class DBConexao {
         try {
             Class.forName(driverName);
 
-            String serverName = "172.20.20.173";
+            String serverName = "127.0.0.1";
             String portNumber = "3306";
             String database = "projeto_pesquisa";
             String url = "jdbc:mysql://" + serverName + ":" + portNumber + "/" + database;
