@@ -76,4 +76,11 @@ public class Usuario extends DatabaseObject implements Serializable {
             senha = Cast.toString(data.get("senha"));
             tipoUsuario = Cast.toInt(data.get("tipoUsuario"));
     }  
+
+    @Override
+    public String toString() {
+        return this.getLogin();
+    }
+    
+    
 }

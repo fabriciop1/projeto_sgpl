@@ -139,7 +139,9 @@ public class Perfil extends DatabaseObject implements Serializable {
             numFamiliares = Cast.toInt(data.get("numFamiliares"));
             rota = rotaDAO.retrieve( Cast.toInt(data.get("idRotaFK")) );
     }
-    
-    
 
+    @Override
+    public String toString() {
+        return this.getNome();
+    }
 }

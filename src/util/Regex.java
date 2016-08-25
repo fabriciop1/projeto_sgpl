@@ -5,6 +5,8 @@
  */
 package util;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Jefferson Sales
@@ -13,7 +15,9 @@ public final class Regex {
     
     private Regex(){ }
     
-    public static final String INTEGER_VALUE = "^\\s*[+-]?\\d{1,10}([\\.|\\,][eE][-+]?\\d+)?\\s*$";    
+    //^[0-9]{1,3}(,[0-9]{3})*\.[0-9]+$
+    //^\\s*[+-]?(\\d{1,3}(\\.\\d{3}){0,3})\\s*$  
+    public static final String INTEGER_VALUE = "^\\s*[+-]?(\\d{1,3}(\\.\\d{3}){0,3})\\s*$";
     
     public static final String UNSIGNED_INTEGER_VALUE = "^\\s*[+]?\\d{1,10}([\\,|\\.][eE][-+]?\\d+)?\\s*$";
     
@@ -49,4 +53,14 @@ public final class Regex {
         throw new IllegalArgumentException("Não existe regex definida para a classe " + type.getName());
     }
     
+    public static void main(String[] args) {
+        
+        final String number = JOptionPane.showInputDialog(null, "Insert the number"); 
+        
+        if(number.matches("^\\s*[+-]?(\\d{1,3}(\\.\\d{3}){0,3})\\s*$")){
+            System.out.println("Funfou");                        
+        } else {
+            System.out.println("Nao funfou");
+        }
+    }
 }
