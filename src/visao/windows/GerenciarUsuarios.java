@@ -10,6 +10,7 @@ import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultListModel;
+import javax.swing.ListModel;
 import modelo.negocio.Perfil;
 import modelo.negocio.Usuario;
 import util.Cast;
@@ -67,10 +68,10 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         listDisp = new javax.swing.JList();
         jScrollPane2 = new javax.swing.JScrollPane();
         listSele = new javax.swing.JList();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        btnDirTod = new javax.swing.JButton();
+        btnEsqUni = new javax.swing.JButton();
+        btnEsqTod = new javax.swing.JButton();
+        btnDirUni = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         btnSalvar = new javax.swing.JButton();
@@ -142,31 +143,31 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         listSele.setToolTipText("Perfis que o usuário terá acesso.");
         jScrollPane2.setViewportView(listSele);
 
-        jButton1.setText(">>");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnDirTod.setText(">>");
+        btnDirTod.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnDirTodActionPerformed(evt);
             }
         });
 
-        jButton2.setText("<");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnEsqUni.setText("<");
+        btnEsqUni.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnEsqUniActionPerformed(evt);
             }
         });
 
-        jButton4.setText("<<");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        btnEsqTod.setText("<<");
+        btnEsqTod.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                btnEsqTodActionPerformed(evt);
             }
         });
 
-        jButton5.setText(">");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        btnDirUni.setText(">");
+        btnDirUni.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                btnDirUniActionPerformed(evt);
             }
         });
 
@@ -196,14 +197,32 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         buttonGroupPermissao.add(radioVis);
         radioVis.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         radioVis.setText("Apenas visualização");
+        radioVis.setToolTipText("O usuário terá acesso aos perfis selecionados, porém não poderá editá-los");
+        radioVis.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioVisActionPerformed(evt);
+            }
+        });
 
         buttonGroupPermissao.add(radioCom);
         radioCom.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         radioCom.setText("Usuário comum");
+        radioCom.setToolTipText("O usuário terá acesso aos perfis selecionados");
+        radioCom.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioComActionPerformed(evt);
+            }
+        });
 
         buttonGroupPermissao.add(radioAdm);
         radioAdm.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         radioAdm.setText("Administrador");
+        radioAdm.setToolTipText("O administrador terá acesso à todos os perfis cadastrados");
+        radioAdm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioAdmActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -230,10 +249,10 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnEsqTod, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnEsqUni, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnDirTod, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnDirUni, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -265,13 +284,13 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createSequentialGroup()
                             .addGap(77, 77, 77)
-                            .addComponent(jButton5)
+                            .addComponent(btnDirUni)
                             .addGap(18, 18, 18)
-                            .addComponent(jButton1)
+                            .addComponent(btnDirTod)
                             .addGap(18, 18, 18)
-                            .addComponent(jButton2)
+                            .addComponent(btnEsqUni)
                             .addGap(18, 18, 18)
-                            .addComponent(jButton4)))
+                            .addComponent(btnEsqTod)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -297,24 +316,129 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_editPerfilBTActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btnDirTodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDirTodActionPerformed
+        
+        DefaultListModel listModelDisp = (DefaultListModel) listDisp.getModel();
+        DefaultListModel listModelSele = (DefaultListModel) listSele.getModel();
+        
+        List<Perfil> perfisSelecionados = new ArrayList<>();
+        
+        listDisp.setSelectionInterval(0, listModelDisp.size() - 1);
+        
+        perfisSelecionados = listDisp.getSelectedValuesList();
+        
+        for(int i = 0; i < perfisSelecionados.size(); i++){
+            
+            listModelSele.addElement(perfisSelecionados.get(i));
+            listModelDisp.removeElement(perfisSelecionados.get(i));
+            
+        }
+        
+        listDisp.setModel(listModelDisp);
+        listSele.setModel(listModelSele);
+        
+    }//GEN-LAST:event_btnDirTodActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void btnEsqUniActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEsqUniActionPerformed
+        
+        DefaultListModel listModelDisp = (DefaultListModel) listDisp.getModel();
+        DefaultListModel listModelSele = (DefaultListModel) listSele.getModel();
+        
+        List<Perfil> perfisSelecionados = new ArrayList<>();
+        
+        perfisSelecionados = listSele.getSelectedValuesList();
+        
+        for(int i = 0; i < perfisSelecionados.size(); i++){
+            
+            listModelDisp.addElement(perfisSelecionados.get(i));
+            listModelSele.removeElement(perfisSelecionados.get(i));
+            
+        }
+        
+        listDisp.setModel(listModelDisp);
+        listSele.setModel(listModelSele);
+        
+    }//GEN-LAST:event_btnEsqUniActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+    private void btnEsqTodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEsqTodActionPerformed
+        
+        DefaultListModel listModelDisp = (DefaultListModel) listDisp.getModel();
+        DefaultListModel listModelSele = (DefaultListModel) listSele.getModel();
+        
+        List<Perfil> perfisSelecionados = new ArrayList<>();
+        
+        listSele.setSelectionInterval(0, listModelSele.size() - 1);
+        
+        perfisSelecionados = listSele.getSelectedValuesList();
+        
+        for(int i = 0; i < perfisSelecionados.size(); i++){
+            
+            listModelDisp.addElement(perfisSelecionados.get(i));
+            listModelSele.removeElement(perfisSelecionados.get(i));
+            
+        }
+        
+        listDisp.setModel(listModelDisp);
+        listSele.setModel(listModelSele);
+        
+    }//GEN-LAST:event_btnEsqTodActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
+    private void btnDirUniActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDirUniActionPerformed
+        
+        DefaultListModel listModelDisp = (DefaultListModel) listDisp.getModel();
+        DefaultListModel listModelSele = (DefaultListModel) listSele.getModel();
+        
+        List<Perfil> perfisSelecionados = new ArrayList<>();
+        
+        perfisSelecionados = listDisp.getSelectedValuesList();
+        
+        for(int i = 0; i < perfisSelecionados.size(); i++){
+            
+            listModelSele.addElement(perfisSelecionados.get(i));
+            listModelDisp.removeElement(perfisSelecionados.get(i));
+            
+        }
+        
+        listDisp.setModel(listModelDisp);
+        listSele.setModel(listModelSele);
+                
+    }//GEN-LAST:event_btnDirUniActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        // TODO add your handling code here:
+        
+        List<Perfil> perfisAntigos = new ArrayList<>();
+        List<Perfil> perfisNovos   = new ArrayList<>();
+        
+        GenericDAO<Perfil> pdao = new GenericDAO<>(Perfil.class);
+        Usuario usuario = (Usuario) jComboBoxUsuario.getSelectedItem();
+        
+        DefaultListModel listModelSele = (DefaultListModel) listSele.getModel();
+        
+        perfisAntigos = pdao.executeSQL("SELECT * "
+                                        + "FROM usuario_perfil AS up, perfil AS p "
+                                        + "WHERE up.idUsuarioFK = " + usuario.getId() + " AND up.idPerfilFK = p.idPerfil");
+        
+        listSele.setSelectionInterval(0, listModelSele.size() - 1);
+        perfisNovos = listSele.getSelectedValuesList();
+        
+        for(int i = 0; i < perfisNovos.size(); i++){
+            
+            for(int j = 0; j < perfisAntigos.size(); j++){
+                
+                if( perfisNovos.get(i).getId() == perfisAntigos.get(j).getId() ){
+                    perfisNovos.remove(perfisNovos.get(i));
+                    perfisAntigos.remove(perfisAntigos.get(j));
+                }
+                
+            }
+            
+        }
+        
+        System.out.println("Size Antigos: " + perfisAntigos.size());
+        System.out.println("Size Novos:   " + perfisNovos.size());
+        
+        
+        
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -334,24 +458,39 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jComboBoxUsuarioItemStateChanged
 
+    private void radioAdmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioAdmActionPerformed
+        ativarComponentes(false);
+    }//GEN-LAST:event_radioAdmActionPerformed
+
+    private void radioComActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioComActionPerformed
+        ativarComponentes(true);
+    }//GEN-LAST:event_radioComActionPerformed
+
+    private void radioVisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioVisActionPerformed
+        ativarComponentes(true);
+    }//GEN-LAST:event_radioVisActionPerformed
+
     
     public void preencherListas(Usuario usuario) {
         
         //--RadioButton---------------------------
         int tipoUsu = usuario.getTipoUsuario();
         
-        if(tipoUsu == 1){
-            radioAdm.setSelected(true);
-            listDisp.setEnabled(false);
-            listSele.setEnabled(false);
-        } else if(tipoUsu == 2){
-            radioCom.setSelected(true);
-            listDisp.setEnabled(true);
-            listSele.setEnabled(true);
-        } else if(tipoUsu == 3){
-            radioVis.setSelected(true);
-            listDisp.setEnabled(true);
-            listSele.setEnabled(true);
+        switch (tipoUsu) {
+            case 1:
+                radioAdm.setSelected(true);
+                ativarComponentes(false);                
+                break;
+            case 2:
+                radioCom.setSelected(true);
+                ativarComponentes(true);
+                break;
+            case 3:
+                radioVis.setSelected(true);
+                ativarComponentes(true);
+                break;
+            default:
+                break;
         }
         
         //--Listas--------------------------------
@@ -361,45 +500,76 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         
         GenericDAO<Perfil> pdao = new GenericDAO<>(Perfil.class);
         
-        DefaultListModel listModelDisp = new DefaultListModel();
-        DefaultListModel listModelSele = new DefaultListModel();        
+        DefaultListModel listModelDisp;
+        DefaultListModel listModelSele;        
         
         List<Perfil> todosPerfis = new ArrayList<>();
         List<Perfil> perfisSelec = new ArrayList<>();
         
         todosPerfis = pdao.retrieveAll();
-        perfisSelec = pdao.executeSQL("SELECT * "
-                                    + "FROM usuario_perfil AS up, perfil AS p "
-                                    + "WHERE up.idUsuarioFK = " + usuario.getId() + " AND up.idPerfilFK = p.idPerfil");
-                
-        for(int i = 0; i < todosPerfis.size(); i++){
+        
+        if( tipoUsu == 1 ){
             
-            for(int j = 0; j < perfisSelec.size(); j++){
-            
-                if(todosPerfis.get(i).getNome().equals(perfisSelec.get(j).getNome())){
-                    listModelSele.addElement(todosPerfis.get(i));
-                    break;
-                } else {
-                    listModelDisp.addElement(todosPerfis.get(i));
-                }
+            listModelDisp = new DefaultListModel();
+            listModelSele = new DefaultListModel();
+                        
+            for(int i = 0; i < todosPerfis.size(); i++){
+                listModelSele.addElement(todosPerfis.get(i));
             }
             
+            
+        } else {
+            
+            listModelDisp = new DefaultListModel();
+            listModelSele = new DefaultListModel();
+            
+            perfisSelec = pdao.executeSQL("SELECT * "
+                                        + "FROM usuario_perfil AS up, perfil AS p "
+                                        + "WHERE up.idUsuarioFK = " + usuario.getId() + " AND up.idPerfilFK = p.idPerfil");
+            
+            for(int i = 0; i < todosPerfis.size(); i++){
+            
+                for(int j = 0; j < perfisSelec.size(); j++){
+
+                    if(todosPerfis.get(i).getId() == perfisSelec.get(j).getId()){
+                        listModelSele.addElement(todosPerfis.get(i));
+                        break;
+                    } else {
+                        listModelDisp.addElement(todosPerfis.get(i));
+                    }
+                }
+
+            }
+        
+        
         }
         
         listDisp.setModel(listModelDisp);
         listSele.setModel(listModelSele);
         
     }
+    
+    public void ativarComponentes(boolean estado){
+        
+        btnDirUni.setEnabled(estado);
+        btnDirTod.setEnabled(estado);
+        btnEsqUni.setEnabled(estado);
+        btnEsqTod.setEnabled(estado);
+        
+        listDisp.setEnabled(estado);
+        listSele.setEnabled(estado);
+                
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnDirTod;
+    private javax.swing.JButton btnDirUni;
+    private javax.swing.JButton btnEsqTod;
+    private javax.swing.JButton btnEsqUni;
     private javax.swing.JButton btnSalvar;
     private javax.swing.ButtonGroup buttonGroupPermissao;
     private javax.swing.JButton editPerfilBT;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JComboBox jComboBoxUsuario;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
