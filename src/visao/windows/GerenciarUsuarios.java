@@ -10,6 +10,7 @@ import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import javax.swing.ListModel;
 import modelo.negocio.Perfil;
 import modelo.negocio.Usuario;
@@ -406,37 +407,88 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         
-        List<Perfil> perfisAntigos = new ArrayList<>();
-        List<Perfil> perfisNovos   = new ArrayList<>();
+        if( jComboBoxUsuario.getSelectedIndex() != 0 ){
         
-        GenericDAO<Perfil> pdao = new GenericDAO<>(Perfil.class);
-        Usuario usuario = (Usuario) jComboBoxUsuario.getSelectedItem();
-        
-        DefaultListModel listModelSele = (DefaultListModel) listSele.getModel();
-        
-        perfisAntigos = pdao.executeSQL("SELECT * "
-                                        + "FROM usuario_perfil AS up, perfil AS p "
-                                        + "WHERE up.idUsuarioFK = " + usuario.getId() + " AND up.idPerfilFK = p.idPerfil");
-        
-        listSele.setSelectionInterval(0, listModelSele.size() - 1);
-        perfisNovos = listSele.getSelectedValuesList();
-        
-        for(int i = 0; i < perfisNovos.size(); i++){
+            Usuario usuario = (Usuario) jComboBoxUsuario.getSelectedItem();
+            int radioSelecionado = 0;
+
+            if(      radioAdm.isSelected() ) { radioSelecionado = 1; }
+            else if( radioCom.isSelected() ) { radioSelecionado = 2; }
+            else if( radioVis.isSelected() ) { radioSelecionado = 3; }
+
+            if( radioSelecionado == 1 ){
+                int escolha = JOptionPane.showOptionDialog(null, "Deseja realmente tornar " + usuario.getLogin() + " um administrador?\n"
+                        + " Ele(a) terá cesso à todos os perfis cadastrados.",
+                        "Confirmar seleção de administrador", JOptionPane.YES_NO_OPTION, 
+                        JOptionPane.QUESTION_MESSAGE, null, new String[]{"Sim", "Não"}, "Não");
+
+                if(escolha == 1){
+                    return;
+                }
+            }
+
+            List<Perfil> perfisAntigos = new ArrayList<>();
+            List<Perfil> perfisNovos   = new ArrayList<>();
+
+            GenericDAO<Perfil> pdao = new GenericDAO<>(Perfil.class);
             
-            for(int j = 0; j < perfisAntigos.size(); j++){
-                
-                if( perfisNovos.get(i).getId() == perfisAntigos.get(j).getId() ){
-                    perfisNovos.remove(perfisNovos.get(i));
-                    perfisAntigos.remove(perfisAntigos.get(j));
+            if( radioSelecionado != usuario.getTipoUsuario() && radioSelecionado != 0 ){
+                usuario.setTipoUsuario( radioSelecionado );
+                pdao.executeSQL("UPDATE usuario "
+                                + "SET tipoUsuario = " + radioSelecionado + " "
+                                + "WHERE idUsuario = " + usuario.getId());
+            }
+
+            DefaultListModel listModelSele = (DefaultListModel) listSele.getModel();
+
+            listSele.setSelectionInterval(0, listModelSele.size() - 1);
+            perfisNovos = listSele.getSelectedValuesList();
+
+            if( usuario.getTipoUsuario() != 1){
+
+                perfisAntigos = pdao.executeSQL("SELECT idPerfil, nome, cidade, tamPropriedade, areaPecLeite, prodLeiteDiario, empPermanentes, numFamiliares, idRotaFK "
+                                                + "FROM usuario_perfil AS up, perfil AS p "
+                                                + "WHERE up.idUsuarioFK = " + usuario.getId() + " AND up.idPerfilFK = p.idPerfil");
+
+                for(int i = 0; i < perfisNovos.size(); i++){
+
+                    for(int j = 0; j < perfisAntigos.size(); j++){
+
+                        if( perfisNovos.get(i).getId() == perfisAntigos.get(j).getId() ){
+                            perfisNovos.remove(perfisNovos.get(i));
+                            perfisAntigos.remove(perfisAntigos.get(j));
+                            
+                            System.out.println("Id Novo: " + perfisNovos.get(i).getId());
+                            System.out.println("Id Antigos: " + perfisAntigos.get(j).getId());
+                        }
+
+                    }
+
                 }
                 
+                for(int i = 0; i < perfisNovos.size(); i++){
+                    
+//                    pdao.executeSQL("INSERT INTO usuario_perfil (idUsuarioFK, idPerfilFK) "
+//                                    + "VALUES (" + usuario.getId() + ", " + perfisNovos.get(i).getId() + ")");
+                    
+                }
+                
+                for(int i = 0; i < perfisAntigos.size(); i++){
+                    
+//                    pdao.executeSQL("DELETE FROM usuario_perfil "
+//                                    + "WHERE idUsuarioFK = " + usuario.getId() + " "
+//                                    + "AND idPerfilFK = " + perfisAntigos.get(i).getId());
+                    
+                }
+
             }
+
+            JOptionPane.showMessageDialog(null, "As alterações foram salvas");
             
+            System.out.println("Novo tipo do usuario: " + usuario.getTipoUsuario());
+            System.out.println("Para excluir: " + perfisAntigos.size());
+            System.out.println("Para add:   " + perfisNovos.size());
         }
-        
-        System.out.println("Size Antigos: " + perfisAntigos.size());
-        System.out.println("Size Novos:   " + perfisNovos.size());
-        
         
         
     }//GEN-LAST:event_btnSalvarActionPerformed
@@ -454,6 +506,8 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
                 System.out.println("Entrou no item " + jComboBoxUsuario.getSelectedIndex());
 
                 preencherListas((Usuario) jComboBoxUsuario.getSelectedItem());
+            } else {
+                ativarComponentes(false);
             }
         }
     }//GEN-LAST:event_jComboBoxUsuarioItemStateChanged
@@ -523,20 +577,31 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
             listModelDisp = new DefaultListModel();
             listModelSele = new DefaultListModel();
             
-            perfisSelec = pdao.executeSQL("SELECT * "
+            perfisSelec = pdao.executeSQL("SELECT idPerfil, nome, cidade, tamPropriedade, areaPecLeite, prodLeiteDiario, empPermanentes, numFamiliares, idRotaFK "
                                         + "FROM usuario_perfil AS up, perfil AS p "
                                         + "WHERE up.idUsuarioFK = " + usuario.getId() + " AND up.idPerfilFK = p.idPerfil");
+            
+            System.out.println("Perfis recuperados: " + todosPerfis.size());
+            
+            for(int i = 0; i < todosPerfis.size(); i++){
+                listModelDisp.addElement(todosPerfis.get(i));
+            }
+            
+            for(int i = 0; i < perfisSelec.size(); i++){
+                listModelSele.addElement(perfisSelec.get(i));
+            }
             
             for(int i = 0; i < todosPerfis.size(); i++){
             
                 for(int j = 0; j < perfisSelec.size(); j++){
 
                     if(todosPerfis.get(i).getId() == perfisSelec.get(j).getId()){
-                        listModelSele.addElement(todosPerfis.get(i));
+                        listModelDisp.removeElement(todosPerfis.get(i));
+//                        todosPerfis.remove(todosPerfis.get(i));
+//                        perfisSelec.remove(perfisSelec.get(j));
                         break;
-                    } else {
-                        listModelDisp.addElement(todosPerfis.get(i));
-                    }
+                    } 
+                    
                 }
 
             }

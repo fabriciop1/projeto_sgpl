@@ -16,6 +16,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import util.Cast;
 
 /**
  * @version 1.7.16
@@ -91,7 +92,6 @@ public class GenericTableAreaEditor extends GenericTableModifier {
     @Override
     protected void updateSourceTable() {
         
-        //TODO Fix this shit
         Object[][] tableAreaData = new Object[editTable.getRowCount()][editTable.getColumnCount() - getStringColumnsOffset()];
         
         boolean[][] tableCellModified = new boolean[editTable.getRowCount()][editTable.getColumnCount() - getStringColumnsOffset()];
@@ -105,14 +105,26 @@ public class GenericTableAreaEditor extends GenericTableModifier {
             
             for (int j = getStringColumnsOffset(); j < editTable.getColumnCount(); j++) {
                 
-                int sourceStartColumn = startColumn + j - getStringColumnsOffset();
+                final int sourceStartColumn = startColumn + j - getStringColumnsOffset();
                 
                 Object editValue = getEditTableValue(i, j);
                 Object sourceValue = getSourceTableValue(startRow + i, sourceStartColumn);
                 
+                Class sourceColumnClass = sourceTable.getColumnClass(sourceStartColumn);
+                
+                if(editValue != null &&
+                   (sourceColumnClass == Float.class || sourceColumnClass == Double.class ||
+                   sourceColumnClass == Integer.class || sourceColumnClass == Short.class ||
+                   sourceColumnClass == Long.class)){
+                    
+                    editValue = Cast.toJavaValue(editValue.toString());
+                }
+                
                 tableAreaData[i][j - getStringColumnsOffset()] = editValue;
                 
-                if( !Objects.equals(editValue, sourceValue) ){
+                if( !Objects.equals(editValue, sourceValue.toString()) ){
+                    
+                    System.out.println("EV: " + editValue.toString() + " | SV: " + sourceValue.toString());
                     
                     tableCellModified[i][j - getStringColumnsOffset()] = true;
                     

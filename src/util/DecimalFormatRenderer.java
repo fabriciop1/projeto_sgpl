@@ -8,6 +8,7 @@ package util;
 import java.awt.Component;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.Locale;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -18,7 +19,7 @@ import javax.swing.table.DefaultTableCellRenderer;
  */
 public class DecimalFormatRenderer extends DefaultTableCellRenderer {
     
-    private static final NumberFormat FORMATTER = new DecimalFormat( "0.00" );
+    private static final NumberFormat FORMATTER = NumberFormat.getInstance(new Locale("pt", "BR"));
     
     public DecimalFormatRenderer(boolean alignment) {
         if(alignment) {  

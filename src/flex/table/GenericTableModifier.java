@@ -10,7 +10,6 @@ import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -529,19 +528,7 @@ public abstract class GenericTableModifier extends JDialog{
         
         if(value != null && !value.toString().isEmpty()){
             
-            Class valueClass = value.getClass();
-            
-            if(valueClass == Float.class || valueClass == Double.class){
-                
-                Locale hu3Locale = new Locale("pt", "BR");
-                NumberFormat nf = NumberFormat.getInstance(hu3Locale);
-                
-                return nf.format(value);
-                
-            } else {
-                
-                return value.toString();
-            }
+            return Cast.toBRLocaleValue(value);
             
         } else {
             return null;

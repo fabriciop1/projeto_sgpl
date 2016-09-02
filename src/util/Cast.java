@@ -5,6 +5,9 @@
  */
 package util;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 /**
  *
  * @author Jefferson Sales
@@ -46,6 +49,39 @@ public final class Cast {
         }
     }
     
+    public static String toJavaValue(String value){
+        
+        value = value.replaceAll("\\s", "");
+        
+        value = value.replaceAll("\\.", "");
+        value = value.replaceAll("\\,","\\.");
+        
+        return value;
+    }
+    
+    public static String toBRLocaleValue(Object value) {
+
+        if(value == null){
+            throw new NullPointerException("O valor passado para ser formatado é inválido (null)");
+        }
+        
+        Object valueClass = value.getClass();
+        
+        if (valueClass == Integer.class || valueClass == Short.class || valueClass == Long.class ||
+            valueClass == Double.class || valueClass == Float.class || valueClass == Byte.class) {
+            
+            Locale hu3Locale = new Locale("pt", "BR");
+            NumberFormat nf = NumberFormat.getInstance(hu3Locale);
+            
+            return nf.format(value);
+            
+        } else {
+            
+            return value.toString();
+        }
+
+    }
+    
     public static Object toPrimitiveType(String value, Class valueType){
         
         if(value == null){
@@ -53,23 +89,6 @@ public final class Cast {
         }
         else if(valueType == null){
             throw new NullPointerException("O tipo de valor passado é inválido");
-        }
-        
-        if (valueType == Double.class || valueType == Float.class) {
-            
-            value = value.replaceAll(",", ".");
-            
-            int counter = 0;
-            
-            for (int i = 0; i < value.length(); i++) {
-                if (value.charAt(i) == '.') {
-                    counter++;
-                }
-            }
-            
-            for (int i = 0; i < counter - 1; i++) {
-                value = value.replace(".", "");
-            }
         }
         
         if(valueType == Integer.class){ return Integer.parseInt(value); } else 
@@ -85,5 +104,9 @@ public final class Cast {
         else throw new ClassCastException("O objeto passado não é de um tipo primitivo.");
     }
     
-    //public static Object toPrimitiveTypeArray(o){ }
+    public static void main(String[] args) {
+        
+        System.out.println(toBRLocaleValue(3299.99));
+        
+    }
 }
