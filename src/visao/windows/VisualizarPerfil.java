@@ -11,11 +11,24 @@ import flex.db.GenericDAO;
 import flex.table.GenericTableModifier;
 import flex.table.GenericTableRowEditor;
 import flex.table.TableModifiedEvent;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
+import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import modelo.dao.DBConexao;
 import modelo.negocio.Perfil;
 import modelo.negocio.Rota;
 import modelo.negocio.Usuario;
@@ -221,11 +234,20 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         });
 
         btnBackup.setText("Restaurar Backup");
+        btnBackup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackupActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(41, 41, 41)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 918, Short.MAX_VALUE)
+                .addGap(41, 41, 41))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(layout.createSequentialGroup()
@@ -246,22 +268,16 @@ public class VisualizarPerfil extends javax.swing.JFrame {
                         .addComponent(btnAcessar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(412, 412, 412)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(41, 41, 41)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 918, Short.MAX_VALUE)))
-                .addGap(41, 41, 41))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(423, 423, 423))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(61, 61, 61)
+                .addGap(66, 66, 66)
                 .addComponent(jLabel1)
-                .addGap(39, 39, 39)
+                .addGap(34, 34, 34)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -371,6 +387,58 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnGereUsuariosActionPerformed
+
+    private void btnBackupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackupActionPerformed
+        JFileChooser fc = new JFileChooser();
+        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("Arquivos SQL", "sql");
+        fc.setFileFilter(filtro);
+        fc.setApproveButtonText("Abrir");
+        fc.setDialogTitle("Selecionar Arquivo de Backup");
+        fc.setAcceptAllFileFilterUsed(false);
+        
+        int retorno = fc.showOpenDialog(this);
+        
+        if (retorno == JFileChooser.APPROVE_OPTION) {
+            File arquivo = fc.getSelectedFile();
+            String caminho = arquivo.getAbsolutePath();
+            
+            int choice = JOptionPane.showOptionDialog(this, "O arquivo selecionado foi: " + arquivo.getName().toUpperCase()
+                    + "\nDeseja continuar? ", "Confirmar restauração", JOptionPane.YES_NO_OPTION, 
+                            JOptionPane.QUESTION_MESSAGE, null, new String[] {"Sim", "Não"}, "Não");
+            
+            if (choice == 0) {
+                String input = JOptionPane.showInputDialog(this, "O arquivo escolhido foi " + 
+                           arquivo.getName().toUpperCase() + ".\nDigite seu login para confirmação: ", 
+                           "Restauração do banco de dados", JOptionPane.OK_CANCEL_OPTION);
+               
+                if (usuario.getLogin().equals(input)) {
+                    String path = "mysql.exe";
+                    try {
+                        String comando = path + " --host=" + DBConexao.getServerName() + " --port=" + DBConexao.getPortNumber()
+                                + " --user=" + DBConexao.getUsername() + " --password=" + DBConexao.getPassword()
+                                + " " + DBConexao.getDatabase() + " < " + caminho;
+                        
+                        Process processo = Runtime.getRuntime().exec(new String[] { "cmd.exe", "/c", comando});
+                        int processComplete = processo.waitFor();
+                        if(processComplete == 0){
+                            JOptionPane.showMessageDialog(this, "Restauração realizada com sucesso.", "Restauração de Backup",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                            ControleLogin.getInstance().fazerLogout();
+                            new Login().setVisible(true);
+                            this.setVisible(false);
+                            this.dispose();
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Backup não restaurado.", "Falha no servidor.",
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
+                    } catch (InterruptedException | IOException ex) {
+                        Logger.getLogger(VisualizarPerfil.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }      
+        }
+    }//GEN-LAST:event_btnBackupActionPerformed
 
     private void verificaTabelaVazia() {
         if (listaPerfis.getRowCount() == 0) {

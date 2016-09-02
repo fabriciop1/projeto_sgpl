@@ -16,6 +16,13 @@ import javax.swing.JOptionPane;
  */
 public class DBConexao {
 
+    private static String serverName;
+    private static String portNumber;
+    private static String database;
+    private static String url;
+    private static String username;
+    private static String password;
+    
     public DBConexao() {
 
     }
@@ -26,12 +33,12 @@ public class DBConexao {
         try {
             Class.forName(driverName);
 
-            String serverName = "127.0.0.1";
-            String portNumber = "3306";
-            String database = "projeto_pesquisa";
-            String url = "jdbc:mysql://" + serverName + ":" + portNumber + "/" + database;
-            String username = "root";
-            String password = "root"; 
+            serverName = "127.0.0.1";
+            portNumber = "3306";
+            database = "projeto_pesquisa";
+            url = "jdbc:mysql://" + serverName + ":" + portNumber + "/" + database;
+            username = "root";
+            password = "root"; 
 
             connection = (Connection) DriverManager.getConnection(url, username, password);
 
@@ -58,4 +65,28 @@ public class DBConexao {
             System.out.println("Falha ao encerrar conexão com banco de dados." + ex.getMessage());
         }
     }
+
+    public static String getServerName() {
+        return serverName;
+    }
+
+    public static String getPortNumber() {
+        return portNumber;
+    }
+
+    public static String getDatabase() {
+        return database;
+    }
+
+    public static String getUrl() {
+        return url;
+    }
+
+    public static String getUsername() {
+        return username;
+    }
+
+    public static String getPassword() {
+        return password;
+    }   
 }
