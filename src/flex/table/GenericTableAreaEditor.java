@@ -122,7 +122,10 @@ public class GenericTableAreaEditor extends GenericTableModifier {
                 
                 tableAreaData[i][j - getStringColumnsOffset()] = editValue;
                 
-                if( !Objects.equals(editValue, sourceValue.toString()) ){
+                String editValueStr = (editValue != null ? editValue.toString() : "");
+                String sourceValueStr = (sourceValue != null ? sourceValue.toString() : "");
+                
+                if( !Objects.equals(editValueStr, sourceValueStr) ){
                     
                     System.out.println("EV: " + editValue.toString() + " | SV: " + sourceValue.toString());
                     

@@ -91,14 +91,15 @@ public final class Cast {
             throw new NullPointerException("O tipo de valor passado é inválido");
         }
         
-        if(valueType == Integer.class){ return Integer.parseInt(value); } else 
-        if(valueType == Float.class){ return Float.parseFloat(value); } else 
-        if(valueType == Double.class){ return Double.parseDouble(value); } else
+        if(valueType == Integer.class){ return Integer.parseInt( toJavaValue(value) ); } else 
+        if(valueType == Short.class){ return Short.parseShort( toJavaValue(value) ); } else 
+        if(valueType == Long.class){ return Long.parseLong( toJavaValue(value) ); } else 
+        if(valueType == Byte.class){ return Byte.parseByte( toJavaValue(value) ); } else 
+        if(valueType == Float.class){ return Float.parseFloat( toJavaValue(value )); } else 
+        if(valueType == Double.class){ return Double.parseDouble( toJavaValue(value) ); } else
+            
         if(valueType == String.class){ return value; } else 
         if(valueType == Boolean.class){ return Boolean.parseBoolean(value); } else 
-        if(valueType == Short.class){ return Short.parseShort(value); } else 
-        if(valueType == Long.class){ return Long.parseLong(value); } else 
-        if(valueType == Byte.class){ return Byte.parseByte(value); } else 
         if(valueType == Character.class){ return value.charAt(0); }
 
         else throw new ClassCastException("O objeto passado não é de um tipo primitivo.");
