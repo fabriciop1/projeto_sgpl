@@ -114,9 +114,4 @@ public final class Cast {
         else throw new ClassCastException("O objeto passado não é de um tipo primitivo.");
     }
     
-    public static void main(String[] args) {
-        
-        System.out.println(toBRLocaleValue(3299.99));
-        
-    }
 }

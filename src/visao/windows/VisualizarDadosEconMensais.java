@@ -520,7 +520,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                         .addComponent(editarValoresBT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 691, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 713, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -677,7 +677,6 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
             }
             
             for (Integer l : linhas) {
-
                 Especificacao espec = demespdao.retrieveByColumn("especificacao", fixedTable.getFixedTable().getValueAt(l, 0)).get(0);
                 int ano = Integer.parseInt(anoCombo.getSelectedItem().toString());
                 int mes = ( (gtae.getStartColumn() + 1) / 3 ) + 1;

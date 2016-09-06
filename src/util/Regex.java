@@ -53,7 +53,4 @@ public final class Regex {
         throw new IllegalArgumentException("Não existe regex definida para a classe " + type.getName());
     }
     
-    public static void main(String[] args) {
-        
-    }
 }

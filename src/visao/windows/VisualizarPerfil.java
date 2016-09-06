@@ -11,25 +11,14 @@ import flex.db.GenericDAO;
 import flex.table.GenericTableModifier;
 import flex.table.GenericTableRowEditor;
 import flex.table.TableModifiedEvent;
-import java.awt.Dimension;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
-import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -51,8 +40,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
     ArrayList<Integer> idPerfis;
     Usuario usuario;
     GenericTableRowEditor listaPerfisGTRE;
-    
-    
+       
     /**
      * Creates new form VisualizarPerfil
      */
@@ -185,7 +173,9 @@ public class VisualizarPerfil extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        listaPerfis.setColumnSelectionAllowed(true);
+        listaPerfis.setCellSelectionEnabled(false);
+        listaPerfis.setRowSelectionAllowed(true);
+        listaPerfis.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         listaPerfis.getTableHeader().setReorderingAllowed(false);
         listaPerfis.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -418,57 +408,51 @@ public class VisualizarPerfil extends javax.swing.JFrame {
                            "Restauração do banco de dados", JOptionPane.OK_CANCEL_OPTION);
                
                 if (usuario.getLogin().equals(input)) {
-                    
-                    String path = "mysql.exe";
-                    try {
-                        String comando = path + " --host=" + DBConexao.getServerName() + " --port=" + DBConexao.getPortNumber()
-                                + " --user=" + DBConexao.getUsername() + " --password=" + DBConexao.getPassword()
-                                + " " + DBConexao.getDatabase() + " < " + caminho;
-                        
-                        JDialog waitDialog = new JDialog(this);
-                        waitDialog.setMinimumSize(new Dimension(400,200));
-                        waitDialog.setLocationRelativeTo(null);
-                        waitDialog.setAlwaysOnTop(true);
-                        waitDialog.add(new JLabel("Fazendo Backup, Por Favor aguarde...."));
-                        
-                        SwingWorker backupWorker = new SwingWorker() {
-                            
-                            @Override
-                            protected Object doInBackground() throws Exception {
-                                
-                                Process processo = Runtime.getRuntime().exec(new String[] { "cmd.exe", "/c", comando});
-                                return processo.waitFor();
-                            }
-                            
-                            @Override
-                            protected void done(){
-                                waitDialog.dispose();
-                            }
-                        };
-                        
-                        backupWorker.execute();
-                        waitDialog.setVisible(true);
-                        
+                    String path = System.getProperty("user.dir") + "\\mysql.exe";
+              
+                    JOptionPane window = new JOptionPane("Restauração em andamento.\nAguarde...", JOptionPane.INFORMATION_MESSAGE,
+                            JOptionPane.DEFAULT_OPTION, null, new Object[] {}, null);
+                    JDialog dialog = window.createDialog(this, "Restauração de Backup");
+                    dialog.setContentPane(window);
+                    dialog.setLocationRelativeTo(null);
+                    dialog.setAlwaysOnTop(true);
+              
+                    String comando = path + " --host=" + DBConexao.getServerName() + " --port=" + DBConexao.getPortNumber()
+                            + " --user=" + DBConexao.getUsername() + " --password=" + DBConexao.getPassword()
+                            + " " + DBConexao.getDatabase() + " < " + caminho;
+
+                    SwingWorker backupWorker = new SwingWorker() {    
+                        @Override
+                        protected Object doInBackground() throws Exception {
+                            Process processo = Runtime.getRuntime().exec(new String[] { "cmd.exe", "/c", comando});
+                            return processo.waitFor();
+                        }
+
+                        @Override
+                        protected void done(){
+                            dialog.dispose();
+                        }
+                    };
+
+                    backupWorker.execute();
+                    dialog.setVisible(true);
+                    try {    
                         int processComplete = (int)backupWorker.get();
-                        
-                        
-                        if(processComplete == 0){
+
+                        if(processComplete == 0){                            
                             JOptionPane.showMessageDialog(this, "Restauração realizada com sucesso.", "Restauração de Backup",
-                                    
                                     JOptionPane.INFORMATION_MESSAGE);
                             ControleLogin.getInstance().fazerLogout();
                             new Login().setVisible(true);
                             this.setVisible(false);
                             this.dispose();
-                            
                         } else {
-                            
-                            JOptionPane.showMessageDialog(this, "Backup não restaurado.", "Falha no servidor.",
-                                    JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(this, "Backup não restaurado.", "Falha no servidor.", JOptionPane.ERROR_MESSAGE);
                         }
-                    } catch (ExecutionException | InterruptedException ex) {
-                        Logger.getLogger(VisualizarPerfil.class.getName()).log(Level.SEVERE, null, ex);
-                    } 
+                    } catch (InterruptedException | ExecutionException ex) {
+                        JOptionPane.showMessageDialog(this, "Backup não restaurado.", "Falha no sistema.\n" + ex.getMessage(), 
+                                JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             }      
         }
@@ -476,7 +460,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
 
     private void verificaTabelaVazia() {
         if (listaPerfis.getRowCount() == 0) {
-            if (usuario.getLogin().equals("adm")) {
+            if (usuario.getTipoUsuario() == 1) { // ADM
                 addPerfilBT.setEnabled(true);
                 removerPerfilBT.setEnabled(false);
                 editPerfilBT.setEnabled(false);
@@ -486,7 +470,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
                 editPerfilBT.setEnabled(false);
             }
         } else {
-            if (usuario.getLogin().equals("adm")) {
+            if (usuario.getTipoUsuario() == 1) { // ADM
                 addPerfilBT.setEnabled(true);
                 removerPerfilBT.setEnabled(true);
                 editPerfilBT.setEnabled(true);
