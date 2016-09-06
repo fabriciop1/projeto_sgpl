@@ -106,28 +106,21 @@ public class GenericTableAreaEditor extends GenericTableModifier {
             for (int j = getStringColumnsOffset(); j < editTable.getColumnCount(); j++) {
                 
                 final int sourceStartColumn = startColumn + j - getStringColumnsOffset();
+                final Class sourceColumnClass = sourceTable.getColumnClass(sourceStartColumn);
                 
                 Object editValue = getEditTableValue(i, j);
                 Object sourceValue = getSourceTableValue(startRow + i, sourceStartColumn);
                 
-                Class sourceColumnClass = sourceTable.getColumnClass(sourceStartColumn);
-                
-                if(editValue != null &&
-                   (sourceColumnClass == Float.class || sourceColumnClass == Double.class ||
-                   sourceColumnClass == Integer.class || sourceColumnClass == Short.class ||
-                   sourceColumnClass == Long.class)){
+                if(editValue != null && 
+                    sourceColumnClass != String.class &&
+                    sourceColumnClass != Object.class){
                     
-                    editValue = Cast.toJavaValue(editValue.toString());
+                    editValue = convertToSourceTableValue(editValue, sourceStartColumn);
                 }
                 
                 tableAreaData[i][j - getStringColumnsOffset()] = editValue;
                 
-                String editValueStr = (editValue != null ? editValue.toString() : "");
-                String sourceValueStr = (sourceValue != null ? sourceValue.toString() : "");
-                
-                if( !Objects.equals(editValueStr, sourceValueStr) ){
-                    
-                    System.out.println("EV: " + editValue.toString() + " | SV: " + sourceValue.toString());
+                if( !Objects.equals(editValue, sourceValue) ){
                     
                     tableCellModified[i][j - getStringColumnsOffset()] = true;
                     
@@ -152,19 +145,20 @@ public class GenericTableAreaEditor extends GenericTableModifier {
                         columnsModified.add(j);
                     }
                     
-                    setSourceTableValue( convertToSourceTableValue(editValue, sourceStartColumn), startRow + i, sourceStartColumn);
+                    setSourceTableValue( editValue, startRow + i, sourceStartColumn);
                 }
             }
         }
+        
+        //DEBUG
+        System.out.println("Rows Modified: " + rowsModified.size());
+        System.out.println("Columns Modified: " + columnsModified.size());
         
         if(rowsModified.size() > 0){
             
             notifyListeners(new TableModifiedEvent(this, sourceTable, rowsModified, columnsModified, tableAreaData, 
                     tableCellModified, TableModifiedEvent.AREA_CHANGED));
         }
-        
-//        System.out.println("Rows Modified: " + rowsModified.size());
-//        System.out.println("Columns Modified: " + columnsModified.size());
     }
     
     @Override
