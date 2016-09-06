@@ -427,9 +427,6 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
                 }
             }
 
-            List<Perfil> perfisAntigos = new ArrayList<>();
-            List<Perfil> perfisNovos   = new ArrayList<>();
-
             GenericDAO<Perfil> pdao = new GenericDAO<>(Perfil.class);
             
             if( radioSelecionado != usuario.getTipoUsuario() && radioSelecionado != 0 ){
@@ -439,33 +436,53 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
                                 + "WHERE idUsuario = " + usuario.getId());
             }
 
+            //----------------------------------------------------------------//
+
+            List<Perfil> perfisAntigos = new ArrayList<>();
+            List<Perfil> perfisNovos   = new ArrayList<>();
+            List<Perfil> perfisExcluir = new ArrayList<>();
+            List<Perfil> perfisAdd     = new ArrayList<>();
+            
             DefaultListModel listModelSele = (DefaultListModel) listSele.getModel();
 
             listSele.setSelectionInterval(0, listModelSele.size() - 1);
             perfisNovos = listSele.getSelectedValuesList();
 
+            System.out.println("Perfis recuperados da lista >>>> " + perfisNovos.size());
+            
             if( usuario.getTipoUsuario() != 1){
 
                 perfisAntigos = pdao.executeSQL("SELECT idPerfil, nome, cidade, tamPropriedade, areaPecLeite, prodLeiteDiario, empPermanentes, numFamiliares, idRotaFK "
                                                 + "FROM usuario_perfil AS up, perfil AS p "
                                                 + "WHERE up.idUsuarioFK = " + usuario.getId() + " AND up.idPerfilFK = p.idPerfil");
 
+                System.out.println("Perfis recuperados do banco >>>> " + perfisAntigos.size());
+                
+                perfisExcluir = perfisAntigos;
+                perfisAdd     = perfisNovos;
+                
                 for(int i = 0; i < perfisNovos.size(); i++){
 
                     for(int j = 0; j < perfisAntigos.size(); j++){
 
-                        if( perfisNovos.get(i).getId() == perfisAntigos.get(j).getId() ){
-                            perfisNovos.remove(perfisNovos.get(i));
-                            perfisAntigos.remove(perfisAntigos.get(j));
+                        System.out.println("Nome Novo: >>>>>> " + perfisNovos.get(i).getNome());
+                        System.out.println("Nome Antigo: >>>> " + perfisAntigos.get(j).getNome());
+                        
+                        if( perfisNovos.get(i).getNome().equals(perfisAntigos.get(j).getNome())){
+//                            perfisAdd.remove(perfisNovos.get(i));
+//                            perfisExcluir.remove(perfisAntigos.get(j));
                             
-                            System.out.println("Id Novo: " + perfisNovos.get(i).getId());
-                            System.out.println("Id Antigos: " + perfisAntigos.get(j).getId());
+                            System.out.println("Entrou");
+                            
+                            break;
+                            
+                            
                         }
 
                     }
 
                 }
-                
+                                
                 for(int i = 0; i < perfisNovos.size(); i++){
                     
 //                    pdao.executeSQL("INSERT INTO usuario_perfil (idUsuarioFK, idPerfilFK) "
@@ -485,9 +502,9 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
 
             JOptionPane.showMessageDialog(null, "As alterações foram salvas");
             
-            System.out.println("Novo tipo do usuario: " + usuario.getTipoUsuario());
-            System.out.println("Para excluir: " + perfisAntigos.size());
-            System.out.println("Para add:   " + perfisNovos.size());
+            System.out.println("Para excluir: " + perfisExcluir.size());
+            System.out.println("Para add:   " + perfisAdd.size());
+            System.out.println("---------------------------------------------");
         }
         
         
@@ -580,9 +597,7 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
             perfisSelec = pdao.executeSQL("SELECT idPerfil, nome, cidade, tamPropriedade, areaPecLeite, prodLeiteDiario, empPermanentes, numFamiliares, idRotaFK "
                                         + "FROM usuario_perfil AS up, perfil AS p "
                                         + "WHERE up.idUsuarioFK = " + usuario.getId() + " AND up.idPerfilFK = p.idPerfil");
-            
-            System.out.println("Perfis recuperados: " + todosPerfis.size());
-            
+                        
             for(int i = 0; i < todosPerfis.size(); i++){
                 listModelDisp.addElement(todosPerfis.get(i));
             }

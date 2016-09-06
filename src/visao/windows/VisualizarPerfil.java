@@ -11,6 +11,7 @@ import flex.db.GenericDAO;
 import flex.table.GenericTableModifier;
 import flex.table.GenericTableRowEditor;
 import flex.table.TableModifiedEvent;
+import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -20,13 +21,17 @@ import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import modelo.dao.DBConexao;
 import modelo.negocio.Perfil;
@@ -413,28 +418,57 @@ public class VisualizarPerfil extends javax.swing.JFrame {
                            "Restauração do banco de dados", JOptionPane.OK_CANCEL_OPTION);
                
                 if (usuario.getLogin().equals(input)) {
+                    
                     String path = "mysql.exe";
                     try {
                         String comando = path + " --host=" + DBConexao.getServerName() + " --port=" + DBConexao.getPortNumber()
                                 + " --user=" + DBConexao.getUsername() + " --password=" + DBConexao.getPassword()
                                 + " " + DBConexao.getDatabase() + " < " + caminho;
                         
-                        Process processo = Runtime.getRuntime().exec(new String[] { "cmd.exe", "/c", comando});
-                        int processComplete = processo.waitFor();
+                        JDialog waitDialog = new JDialog(this);
+                        waitDialog.setMinimumSize(new Dimension(400,200));
+                        waitDialog.setLocationRelativeTo(null);
+                        waitDialog.setAlwaysOnTop(true);
+                        waitDialog.add(new JLabel("Fazendo Backup, Por Favor aguarde...."));
+                        
+                        SwingWorker backupWorker = new SwingWorker() {
+                            
+                            @Override
+                            protected Object doInBackground() throws Exception {
+                                
+                                Process processo = Runtime.getRuntime().exec(new String[] { "cmd.exe", "/c", comando});
+                                return processo.waitFor();
+                            }
+                            
+                            @Override
+                            protected void done(){
+                                waitDialog.dispose();
+                            }
+                        };
+                        
+                        backupWorker.execute();
+                        waitDialog.setVisible(true);
+                        
+                        int processComplete = (int)backupWorker.get();
+                        
+                        
                         if(processComplete == 0){
                             JOptionPane.showMessageDialog(this, "Restauração realizada com sucesso.", "Restauração de Backup",
+                                    
                                     JOptionPane.INFORMATION_MESSAGE);
                             ControleLogin.getInstance().fazerLogout();
                             new Login().setVisible(true);
                             this.setVisible(false);
                             this.dispose();
+                            
                         } else {
+                            
                             JOptionPane.showMessageDialog(this, "Backup não restaurado.", "Falha no servidor.",
                                     JOptionPane.ERROR_MESSAGE);
                         }
-                    } catch (InterruptedException | IOException ex) {
+                    } catch (ExecutionException | InterruptedException ex) {
                         Logger.getLogger(VisualizarPerfil.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    } 
                 }
             }      
         }

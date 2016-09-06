@@ -480,7 +480,6 @@ public abstract class GenericTableModifier extends JDialog{
     }
     
     
-    
     protected Object convertToSourceTableValue(Object value, int sourceColumn){
 
         if (value != null && !value.toString().isEmpty()) {
@@ -496,6 +495,7 @@ public abstract class GenericTableModifier extends JDialog{
                 }
                 
             } else {
+
                 return sourceValue;
             } 
             

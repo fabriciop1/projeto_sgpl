@@ -111,16 +111,16 @@ public class GenericTableAreaEditor extends GenericTableModifier {
                 Object editValue = getEditTableValue(i, j);
                 Object sourceValue = getSourceTableValue(startRow + i, sourceStartColumn);
                 
-                if(editValue != null && 
-                    sourceColumnClass != String.class &&
-                    sourceColumnClass != Object.class){
+                if(sourceValue != null){
                     
-                    editValue = convertToSourceTableValue(editValue, sourceStartColumn);
+                    sourceValue = convertToEditTableValue(sourceValue);
                 }
-                
-                tableAreaData[i][j - getStringColumnsOffset()] = editValue;
+
+                tableAreaData[i][j - getStringColumnsOffset()] = Cast.toJavaValue(editValue != null ? editValue.toString() : null);
                 
                 if( !Objects.equals(editValue, sourceValue) ){
+                    
+                    System.out.println("\"" + editValue + "\" and \"" + sourceValue + "\" are different.");
                     
                     tableCellModified[i][j - getStringColumnsOffset()] = true;
                     

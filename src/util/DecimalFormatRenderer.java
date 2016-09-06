@@ -25,7 +25,7 @@ public class DecimalFormatRenderer extends DefaultTableCellRenderer {
         if(alignment) {  
             super.setHorizontalAlignment(JLabel.RIGHT);
         }
-        FORMATTER.setMinimumFractionDigits(1);
+        FORMATTER.setMaximumFractionDigits(2);
     }
     
     @Override

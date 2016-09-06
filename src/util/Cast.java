@@ -40,6 +40,10 @@ public final class Cast {
     
     public static String toSQLValue(Object o){
         
+        if(o == null){
+            return "";
+        }
+        
         if(o.getClass() == String.class){
             
             return "\"" + o.toString() + "\"";
@@ -50,6 +54,10 @@ public final class Cast {
     }
     
     public static String toJavaValue(String value){
+        
+        if(value == null){
+            return "";
+        }
         
         value = value.replaceAll("\\s", "");
         
@@ -62,7 +70,7 @@ public final class Cast {
     public static String toBRLocaleValue(Object value) {
 
         if(value == null){
-            throw new NullPointerException("O valor passado para ser formatado é inválido (null)");
+            return "";
         }
         
         Object valueClass = value.getClass();
@@ -72,6 +80,7 @@ public final class Cast {
             
             Locale hu3Locale = new Locale("pt", "BR");
             NumberFormat nf = NumberFormat.getInstance(hu3Locale);
+            nf.setMaximumFractionDigits(2);
             
             return nf.format(value);
             
