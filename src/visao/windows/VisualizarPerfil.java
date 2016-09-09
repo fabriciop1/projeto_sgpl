@@ -12,9 +12,15 @@ import flex.table.GenericTableModifier;
 import flex.table.GenericTableRowEditor;
 import flex.table.TableModifiedEvent;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -397,7 +403,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         if (retorno == JFileChooser.APPROVE_OPTION) {
             File arquivo = fc.getSelectedFile();
             String caminho = arquivo.getAbsolutePath();
-            
+                      
             int choice = JOptionPane.showOptionDialog(this, "O arquivo selecionado foi: " + arquivo.getName().toUpperCase()
                     + "\nDeseja continuar? ", "Confirmar restauração", JOptionPane.YES_NO_OPTION, 
                             JOptionPane.QUESTION_MESSAGE, null, new String[] {"Sim", "Não"}, "Não");
@@ -409,18 +415,19 @@ public class VisualizarPerfil extends javax.swing.JFrame {
                
                 if (usuario.getLogin().equals(input)) {
                     String path = System.getProperty("user.dir") + "\\mysql.exe";
-              
+                    
                     JOptionPane window = new JOptionPane("Restauração em andamento.\nAguarde...", JOptionPane.INFORMATION_MESSAGE,
                             JOptionPane.DEFAULT_OPTION, null, new Object[] {}, null);
                     JDialog dialog = window.createDialog(this, "Restauração de Backup");
                     dialog.setContentPane(window);
                     dialog.setLocationRelativeTo(null);
                     dialog.setAlwaysOnTop(true);
-              
-                    String comando = path + " --host=" + DBConexao.getServerName() + " --port=" + DBConexao.getPortNumber()
+                    dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+   
+                    String comando = "\"" + "\"" + path + "\" --host=" + DBConexao.getServerName() + " --port=" + DBConexao.getPortNumber()
                             + " --user=" + DBConexao.getUsername() + " --password=" + DBConexao.getPassword()
-                            + " " + DBConexao.getDatabase() + " < " + caminho;
-
+                            + " " + DBConexao.getDatabase() + " < \"" + caminho + "\"" + "\"";
+                    
                     SwingWorker backupWorker = new SwingWorker() {    
                         @Override
                         protected Object doInBackground() throws Exception {
@@ -433,7 +440,6 @@ public class VisualizarPerfil extends javax.swing.JFrame {
                             dialog.dispose();
                         }
                     };
-
                     backupWorker.execute();
                     dialog.setVisible(true);
                     try {    
