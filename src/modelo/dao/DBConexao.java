@@ -33,7 +33,7 @@ public class DBConexao {
         try {
             Class.forName(driverName);
 
-            serverName = "127.0.0.1";
+            serverName = "172.20.20.173";
             portNumber = "3306";
             database = "projeto_pesquisa";
             url = "jdbc:mysql://" + serverName + ":" + portNumber + "/" + database;

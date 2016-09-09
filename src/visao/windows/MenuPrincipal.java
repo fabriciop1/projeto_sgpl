@@ -5,8 +5,12 @@
  */
 package visao.windows;
 
+import controle.ControleLogin;
 import controle.ControlePerfil;
+import java.awt.event.ItemEvent;
 import modelo.negocio.Perfil;
+import modelo.negocio.Usuario;
+import util.Cast;
 
 /**
  *
@@ -23,6 +27,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
         
         Perfil atual = ControlePerfil.getInstance().getPerfilSelecionado();
         
+        Usuario usuario = ControleLogin.getInstance().getUsuario();
+        
+        if(usuario.getTipoUsuario() == 3) { // Apenas visualização
+            addAnoBT.setVisible(false);
+        }
+        
         super.setTitle("SGPL - " + atual.getNome() + " - Menu Principal");
         super.setLocationRelativeTo(null);
         super.setResizable(false);
@@ -30,6 +40,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
         nomProd.setText(atual.getNome());
         tamProp.setText("" + atual.getTamPropriedade());
         nomCida.setText(atual.getCidade());
+        
+        anoCombo.addItem(Cast.toString(ControlePerfil.getInstance().getAno()));
     }
 
     /**
@@ -55,17 +67,23 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btnDadosEconMensais = new javax.swing.JButton();
         btnIndicEconAnuais = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
+        anoCombo = new javax.swing.JComboBox<>();
+        jLabel5 = new javax.swing.JLabel();
+        addAnoBT = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         textoEntrada.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         textoEntrada.setForeground(new java.awt.Color(0, 38, 255));
+        textoEntrada.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         textoEntrada.setText("Grupo de Estudo em Gestão Rural");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Produtor:");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Tamanho:");
 
         nomProd.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -73,6 +91,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         nomProd.setText("nome_produtor");
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("Cidade:");
 
         tamProp.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -133,12 +152,36 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 38, 255));
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Pecuária Leiteira");
+
+        anoCombo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        anoCombo.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                anoComboItemStateChanged(evt);
+            }
+        });
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(153, 0, 0));
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setText("Ano:");
+
+        addAnoBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/add.png"))); // NOI18N
+        addAnoBT.setToolTipText("Adicionar ano");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(355, 355, 355)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(textoEntrada, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGap(67, 67, 67)
+                        .addComponent(jLabel3)))
+                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(152, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -167,20 +210,25 @@ public class MenuPrincipal extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(nomProd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(tamProp, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(296, 296, 296))))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(355, 355, 355)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(textoEntrada, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(67, 67, 67)
-                        .addComponent(jLabel3)))
-                .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(296, 296, 296))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(anoCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(addAnoBT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(16, 16, 16))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(46, 46, 46)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(addAnoBT, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(anoCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel5)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(textoEntrada)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
@@ -208,7 +256,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnIndicEconAnuais, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnIndicEconMensais, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(157, Short.MAX_VALUE))
+                .addGap(154, 154, 154))
         );
 
         pack();
@@ -246,8 +294,16 @@ public class MenuPrincipal extends javax.swing.JFrame {
         new MultipleYearSelector(this, true).setVisible(true);
     }//GEN-LAST:event_btnIndicEconAnuaisActionPerformed
 
+    private void anoComboItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_anoComboItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            
+        }
+    }//GEN-LAST:event_anoComboItemStateChanged
+
    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addAnoBT;
+    private javax.swing.JComboBox<String> anoCombo;
     private javax.swing.JButton btnDadosEconMensais;
     private javax.swing.JButton btnDadosTecnMensais;
     private javax.swing.JButton btnIndicEconAnuais;
@@ -258,6 +314,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel nomCida;
     private javax.swing.JLabel nomProd;
     private javax.swing.JLabel tamProp;

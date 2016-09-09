@@ -31,7 +31,11 @@ public class DecimalFormatRenderer extends DefaultTableCellRenderer {
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
      
-        if (value != null && !value.toString().isEmpty() && (value instanceof Double) ) {
+        if (value != null && !value.toString().isEmpty() && 
+           ( (value instanceof Double) || (value instanceof Float) ||
+             (value instanceof Short) || (value instanceof Long) ||
+             (value instanceof Integer) ) ) {
+            
             value = FORMATTER.format(value);
         }    
         

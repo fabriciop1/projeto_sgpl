@@ -10,12 +10,11 @@ package controle;
  * @author Alexandre
  */
 import java.io.Serializable;
-import java.util.List;
 import modelo.negocio.Perfil;
 
 public class ControlePerfil implements Serializable {
      
-    private List<Perfil> perfis;
+    private int ano;
     private Perfil perfilSelecionado;
  
     public ControlePerfil() {}
@@ -27,14 +26,6 @@ public class ControlePerfil implements Serializable {
     public static ControlePerfil getInstance() {
             return PerfilSelecionadoHolder.instance;
     }
-    
-    public List<Perfil> getPerfis() {
-        return perfis;
-    }
-
-    public void setPerfis(List<Perfil> perfis) {
-        this.perfis = perfis;
-    }
 
     public Perfil getPerfilSelecionado() {
         return perfilSelecionado;
@@ -42,6 +33,14 @@ public class ControlePerfil implements Serializable {
 
     public void setPerfilSelecionado(Perfil perfilSelecionado) {
         this.perfilSelecionado = perfilSelecionado;
+    }
+
+    public int getAno() {
+        return ano;
+    }
+
+    public void setAno(int ano) {
+        this.ano = ano;
     }
     
 }

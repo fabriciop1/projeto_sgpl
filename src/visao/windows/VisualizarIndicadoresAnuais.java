@@ -50,6 +50,7 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
         cia = ControleIndicadoresAnuais.getInstance();
         
         atual = ControlePerfil.getInstance().getPerfilSelecionado();
+        perfilLabel.setText(atual.getNome());
         
         super.setLocationRelativeTo(null);
         super.setResizable(false);
@@ -178,11 +179,13 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
         tabelaIndicadoresAnuais = new javax.swing.JTable();
         retornarBT = new javax.swing.JButton();
         avancarBT = new javax.swing.JButton();
+        perfilLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         textoEntrada.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         textoEntrada.setForeground(new java.awt.Color(0, 38, 255));
+        textoEntrada.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         textoEntrada.setText("INDICADORES ANUAIS");
 
         btnVoltar.setText("Voltar");
@@ -230,6 +233,11 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
             }
         });
 
+        perfilLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        perfilLabel.setForeground(new java.awt.Color(0, 38, 255));
+        perfilLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        perfilLabel.setText("jLabel1");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -247,7 +255,9 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(avancarBT, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(79, 79, 79)
-                        .addComponent(textoEntrada)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(perfilLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(textoEntrada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(402, 402, 402))))
         );
         layout.setVerticalGroup(
@@ -261,9 +271,11 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(retornarBT, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(avancarBT, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(1, 1, 1)
+                .addComponent(perfilLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 691, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 702, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -290,6 +302,7 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
     private javax.swing.JButton avancarBT;
     private javax.swing.JButton btnVoltar;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel perfilLabel;
     private javax.swing.JButton retornarBT;
     private javax.swing.JTable tabelaIndicadoresAnuais;
     private javax.swing.JLabel textoEntrada;

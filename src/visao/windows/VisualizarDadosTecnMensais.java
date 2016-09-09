@@ -52,6 +52,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         super.setResizable(false);
       
         atual = ControlePerfil.getInstance().getPerfilSelecionado();
+        perfilLabel.setText(atual.getNome());
         
         tabelaDadosTecnicos.setShowGrid(true);
         tabelaDadosTecnicos.setShowHorizontalLines(true);
@@ -168,6 +169,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         editarAnoBT = new javax.swing.JButton();
         retornarBT = new javax.swing.JButton();
         avancarBT = new javax.swing.JButton();
+        perfilLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -181,6 +183,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
 
         textoEntrada.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         textoEntrada.setForeground(new java.awt.Color(0, 38, 255));
+        textoEntrada.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         textoEntrada.setText("DADOS TÉCNICOS MENSAIS");
 
         jLabel1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
@@ -242,6 +245,8 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
             }
         });
         tabelaDadosTecnicos.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        tabelaDadosTecnicos.setCellSelectionEnabled(false);
+        tabelaDadosTecnicos.setRowSelectionAllowed(true);
         tabelaDadosTecnicos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tabelaDadosTecnicos.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tabelaDadosTecnicos);
@@ -295,6 +300,11 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
             }
         });
 
+        perfilLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        perfilLabel.setForeground(new java.awt.Color(0, 38, 255));
+        perfilLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        perfilLabel.setText("jLabel2");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -309,7 +319,9 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(avancarBT, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(76, 76, 76)
-                        .addComponent(textoEntrada)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(perfilLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(textoEntrada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 119, Short.MAX_VALUE)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -329,14 +341,18 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
                     .addComponent(adicionarAnoBT, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(anoCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(editarAnoBT, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(textoEntrada)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(retornarBT, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(avancarBT, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE))
+                    .addComponent(avancarBT, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(textoEntrada)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(perfilLabel)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 492, Short.MAX_VALUE)
+                .addGap(33, 33, 33))
         );
 
         pack();
@@ -533,6 +549,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
     private javax.swing.JButton editarAnoBT;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel perfilLabel;
     private javax.swing.JButton retornarBT;
     private javax.swing.JTable tabelaDadosTecnicos;
     private javax.swing.JLabel textoEntrada;

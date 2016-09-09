@@ -12,15 +12,11 @@ import flex.table.GenericTableModifier;
 import flex.table.GenericTableRowEditor;
 import flex.table.TableModifiedEvent;
 import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -33,6 +29,7 @@ import modelo.negocio.Perfil;
 import modelo.negocio.Rota;
 import modelo.negocio.Usuario;
 import util.Cast;
+import util.DecimalFormatRenderer;
 
 /**
  *
@@ -65,8 +62,13 @@ public class VisualizarPerfil extends javax.swing.JFrame {
       
         listaPerfis.setColumnSelectionAllowed(false);
         
+        listaPerfis.setDefaultRenderer(Object.class, new DecimalFormatRenderer(false));
+        
         rotaDAO = new GenericDAO<>(Rota.class);
         perfilDAO = new GenericDAO<>(Perfil.class);
+        
+        Calendar cal = GregorianCalendar.getInstance();
+        ControlePerfil.getInstance().setAno(cal.get(Calendar.YEAR)); // ano atual
         
         usuario = ControleLogin.getInstance().getUsuario();
         
@@ -140,6 +142,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 38, 255));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Perfis disponíveis");
 
         btnSair.setText("Sair");
@@ -179,8 +182,6 @@ public class VisualizarPerfil extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        listaPerfis.setCellSelectionEnabled(false);
-        listaPerfis.setRowSelectionAllowed(true);
         listaPerfis.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         listaPerfis.getTableHeader().setReorderingAllowed(false);
         listaPerfis.addMouseListener(new java.awt.event.MouseAdapter() {

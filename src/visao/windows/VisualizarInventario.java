@@ -2080,42 +2080,43 @@ public class VisualizarInventario extends javax.swing.JFrame {
     private void calcularTotaisResumo(){
         
         if (resumo != null) {
-            atividadeLeite.setText(String.format("%.2f", resumo.getAtividadeLeiteira()));
-            custoOportunidade.setText(String.format("%.2f", resumo.getCustoOportunidade()));
-            salarioMinimo.setText(String.format("%.2f", resumo.getSalarioMinimo()));
+            atividadeLeite.setText(Cast.toBRLocaleValue(resumo.getAtividadeLeiteira()));
+            custoOportunidade.setText(Cast.toBRLocaleValue(resumo.getCustoOportunidade()));
+            salarioMinimo.setText(Cast.toBRLocaleValue(resumo.getSalarioMinimo()));
         }
 
         total44.setText(total12.getText().substring(2));
         total45.setText(total39.getText());
         total46.setText(total36.getText());
-        total47.setText(String.format("%.2f", (Double.parseDouble(total41.getText().substring(2).replace(',', '.')))));
+        total47.setText(Cast.toBRLocaleValue((Double.parseDouble(total41.getText().substring(2).replace(',', '.')))));
         total48.setText(total43.getText().substring(2));
-        total49.setText(String.format("R$ %.2f", (Double.parseDouble(total44.getText().replace(',', '.'))
-                + Double.parseDouble(total45.getText().replace(',', '.'))
+        total49.setText("R$ " + Cast.toBRLocaleValue((Double.parseDouble(total44.getText().replace(',', '.'))
+                + Double.parseDouble(total45.getText().substring(2).replace(',', '.'))
                 + Double.parseDouble(total46.getText().replace(',', '.'))
                 + Double.parseDouble(total47.getText().replace(',', '.'))
                 + Double.parseDouble(total48.getText().replace(',', '.')))));
         
-        total50.setText(String.format("R$ %.2f", ((Double.parseDouble(atividadeLeite.getText().replace(',', '.'))) / 100.0
+        total50.setText("R$ " + Cast.toBRLocaleValue(((Double.parseDouble(atividadeLeite.getText().replace(',', '.'))) / 100.0
                 * Double.parseDouble(total49.getText().substring(2).replace(',', '.')))));
 
         total51.setText(total9.getText().substring(2));
         total52.setText(total12.getText().substring(2));
         total53.setText(total31.getText().substring(2));
-        total54.setText(total40.getText().substring(2));
+        total54.setText(Cast.toBRLocaleValue(Double.parseDouble(total40.getText().substring(2).replace(',', '.'))));
         total55.setText(total42.getText().substring(2));
         
-        total56.setText(String.format("R$ %.2f", (Double.parseDouble(total51.getText())
+        total56.setText("R$ " + Cast.toBRLocaleValue((Double.parseDouble(total51.getText())
                 + Double.parseDouble(total52.getText().replace(',', '.'))
                 + Double.parseDouble(total53.getText().replace(',', '.'))
                 + Double.parseDouble(total54.getText().replace(',', '.'))
                 + Double.parseDouble(total55.getText().replace(',', '.')))));
-        total57.setText(String.format("R$ %.2f", ((Double.parseDouble(atividadeLeite.getText().replace(',', '.'))) / 100.0
+        
+        total57.setText("R$ " + Cast.toBRLocaleValue(((Double.parseDouble(atividadeLeite.getText().replace(',', '.'))) / 100.0
                 * Double.parseDouble(total56.getText().substring(2).replace(',', '.')))));
 
         total58.setText(salarioMinimo.getText());
-        total59.setText(String.format("%.2f", (Double.parseDouble(salarioMinimo.getText().replace(',', '.')) * 0.3)));
-        total60.setText(String.format("R$ %.2f", ((Double.parseDouble(total58.getText().replace(',', '.')) * 13
+        total59.setText(Cast.toBRLocaleValue((Double.parseDouble(salarioMinimo.getText().replace(',', '.')) * 0.3)));
+        total60.setText("R$ " + Cast.toBRLocaleValue(((Double.parseDouble(total58.getText().replace(',', '.')) * 13
                 + (Double.parseDouble(total58.getText().replace(',', '.'))) * 0.3)) / 12));
     }
     
@@ -2133,8 +2134,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
             totalDeprecMaquin += (depreciacao);
         }
 
-        total42.setText(String.format("R$ %.2f", totalValorMaquin));
-        total43.setText(String.format("R$ %.2f", totalDeprecMaquin));
+        total42.setText("R$ " + Cast.toBRLocaleValue(totalValorMaquin));
+        total43.setText("R$ " + Cast.toBRLocaleValue(totalDeprecMaquin));
     }
     
     private void calcularTotaisBenfeitorias(List<InventarioBenfeitorias> benfeitorias){
@@ -2187,7 +2188,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     capitalReprod += Calc.mediaAritmetica(valorInicio, valorFinal);
                 }
                 
-                total34.setText(String.format("R$ %.2f", capitalReprod));
+                total34.setText("R$ " + Cast.toBRLocaleValue(capitalReprod));
 
                 totalValInicProd += (animais.get(i).getValorInicio() * 1.0);
                 totalNascProd += (animais.get(i).getNascimento() * 1.0);
@@ -2209,50 +2210,56 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 totalValCabeServ.add(animais.get(i).getValorCabeca() * 1.0);
             }
         }
-        total13.setText("" + (totalValInicProd));
-        total14.setText("" + (totalNascProd));
-        total15.setText("" + (totalMorteProd));
-        total16.setText("" + (totalVendaProd));
-        total17.setText("" + (totalCompraProd));
-        total18.setText("" + (totalValFinaProd));
+        total13.setText(Cast.toBRLocaleValue(totalValInicProd));
+        total14.setText(Cast.toBRLocaleValue(totalNascProd));
+        total15.setText(Cast.toBRLocaleValue(totalMorteProd));
+        total16.setText(Cast.toBRLocaleValue(totalVendaProd));
+        total17.setText(Cast.toBRLocaleValue(totalCompraProd));
+        total18.setText(Cast.toBRLocaleValue(totalValFinaProd));
 
-        total19.setText(String.format("R$ %.2f", totalValorInicio));
-        total20.setText(String.format("R$ %.2f", totalValorFinal));
-        total21.setText("" + (totalValInicServ));
-        total22.setText("" + (totalNascServ));
-        total23.setText("" + (totalMorteServ));
-        total24.setText("" + (totalVendaServ));
-        total25.setText("" + (totalCompraServ));
-        total26.setText("" + Calc.somarLista(totalValFinaServ));
+        total19.setText("R$ " + Cast.toBRLocaleValue(totalValorInicio));
+        total20.setText("R$ " + Cast.toBRLocaleValue(totalValorFinal));
+        total21.setText(Cast.toBRLocaleValue(totalValInicServ));
+        total22.setText(Cast.toBRLocaleValue(totalNascServ));
+        total23.setText(Cast.toBRLocaleValue(totalMorteServ));
+        total24.setText(Cast.toBRLocaleValue(totalVendaServ));
+        total25.setText(Cast.toBRLocaleValue(totalCompraServ));
+        total26.setText(Cast.toBRLocaleValue(Calc.somarLista(totalValFinaServ)));
 
-        total28.setText("" + (Double.parseDouble(total13.getText().replace(',', '.'))
-                + Double.parseDouble(total21.getText().replace(',', '.'))));
-        total29.setText("" + (Double.parseDouble(total26.getText().replace(',', '.'))
-                + Double.parseDouble(total18.getText().replace(',', '.'))));
+        Double valorTotal13 = Double.parseDouble(total13.getText().replace(',', '.'));
+        Double valorTotal21 = Double.parseDouble(total21.getText().replace(',', '.'));
+        total28.setText(Cast.toBRLocaleValue(valorTotal13 + valorTotal21));
+        
+        Double valorTotal26 = Double.parseDouble(total26.getText().replace(',', '.'));
+        Double valorTotal18 = Double.parseDouble(total18.getText().replace(',', '.'));
+        total29.setText(Cast.toBRLocaleValue(valorTotal26 + valorTotal18));
 
-        total31.setText(String.format("R$ %.2f", ((Double.parseDouble(total19.getText().substring(2).replace(',', '.'))
-                + Double.parseDouble(total20.getText().substring(2).replace(',', '.'))) / 2)));
+        Double valorTotal19 = Double.parseDouble(total19.getText().substring(2).replace(',', '.'));
+        Double valorTotal20 = Double.parseDouble(total20.getText().substring(2).replace(',', '.'));
+        total31.setText("R$ " + Calc.mediaAritmetica(valorTotal19 + valorTotal20));
 
         if (resumo != null) {
-            total32.setText(String.format("R$ %.2f", resumo.getValorGastoCompraAnimais()));
-            total35.setText(String.format("%d", resumo.getVidaUtilReprodutores()));
+            total32.setText("R$ " + Cast.toBRLocaleValue(resumo.getValorGastoCompraAnimais()));
+            total35.setText("R$ " + Cast.toBRLocaleValue(resumo.getVidaUtilReprodutores()));
         }
 
-        total33.setText(String.format("R$ %.2f", (Double.parseDouble(total20.getText().substring(2).replace(',', '.'))
-                - Double.parseDouble(total19.getText().substring(2).replace(',', '.')) - Double.parseDouble(total32.getText().substring(2).replace(',', '.')))));
+        Double valorTotal32 = Double.parseDouble(total32.getText().substring(2).replace(',', '.'));
+        total33.setText("R$ " + Cast.toBRLocaleValue(valorTotal20 - valorTotal19 - valorTotal32));
 
         
-        total36.setText(String.format("%.2f", Calc.dividir(Double.parseDouble(total34.getText().substring(2).replace(',', '.')),
-                    Double.parseDouble(total35.getText().replace(',', '.')))));
+        Double valorTotal34 = Double.parseDouble(total34.getText().substring(2).replace(',', '.'));
+        Double valorTotal35 = Double.parseDouble(total35.getText().substring(2).replace(',', '.'));
+        total36.setText(Cast.toBRLocaleValue(Calc.dividir(valorTotal34,valorTotal35)));
         
-        total37.setText(String.format("R$ %.2f", Calc.somaPonderada(totalValFinaServ, totalValCabeServ)));
+        total37.setText("R$ " + Cast.toBRLocaleValue(Calc.somaPonderada(totalValFinaServ, totalValCabeServ)));
 
         if (resumo != null) {
-            total38.setText(String.format("%d", resumo.getVidaUtilAnimaisServico()));
+            total38.setText("R$ " + Cast.toBRLocaleValue(resumo.getVidaUtilAnimaisServico()));
         }
-
-        total39.setText(String.format("%.2f", Calc.dividir(Double.parseDouble(total37.getText().substring(2).replace(',', '.')),
-            Double.parseDouble(total38.getText().replace(',', '.')))));
+        
+        Double valorTotal37 = Double.parseDouble(total37.getText().substring(2).replace(',', '.'));
+        Double valorTotal38 = Double.parseDouble(total38.getText().substring(2).replace(',', '.'));
+        total39.setText("R$ " + Cast.toBRLocaleValue(Calc.dividir(valorTotal37,valorTotal38)));
     }
     
     private void calcularTotaisTerras(List<InventarioForrageiras> forrageiras, List<InventarioTerras> terras){
@@ -2288,18 +2295,30 @@ public class VisualizarInventario extends javax.swing.JFrame {
             totalDepreciacao += (depreciacao);
         }
 
-        total1.setText(String.format("%.2f", (totalAreaArreInic)));
-        total2.setText(String.format("%.2f", Calc.somarLista(totalAreaPropInic)));
-        total3.setText(String.format("%.2f", (totalAreaArreFina)));
-        total4.setText(String.format("%.2f", Calc.somarLista(totalAreaPropFina)));
-        total5.setText(("" + (Double.parseDouble(total1.getText().replace(',', '.')) + Double.parseDouble(total2.getText().replace(',', '.')))).replace('.', ','));
-        total6.setText(("" + (Double.parseDouble(total3.getText().replace(',', '.')) + Double.parseDouble(total4.getText().replace(',', '.')))).replace('.', ','));
-        total7.setText(String.format("R$ %.2f", Calc.somaPonderada(totalAreaPropInic, totalTerraNua)).replace('.', ','));
-        total8.setText(String.format("R$ %.2f", Calc.somaPonderada(totalAreaPropFina, totalTerraNua)).replace('.', ','));
-        total9.setText(String.format("R$ %.2f", Calc.mediaAritmetica(Double.parseDouble(total7.getText().substring(2).replace(',', '.')), Double.parseDouble(total8.getText().substring(2).replace(',', '.')))).replace(',', '.'));
-        total10.setText("" + (totalHa));
-        total11.setText(String.format("R$ %.2f", totalValorHa));
-        total12.setText(String.format("R$ %.2f", totalDepreciacao));
+        total1.setText(Cast.toBRLocaleValue(totalAreaArreInic));
+        total2.setText(Cast.toBRLocaleValue(Calc.somarLista(totalAreaPropInic)));
+        total3.setText(Cast.toBRLocaleValue(totalAreaArreFina));
+        total4.setText(Cast.toBRLocaleValue(Calc.somarLista(totalAreaPropFina)));
+        
+        Double valorTotal1 = Double.parseDouble(total1.getText().replace(',', '.'));
+        Double valorTotal2 = Double.parseDouble(total2.getText().replace(',', '.'));
+        total5.setText(Cast.toBRLocaleValue(valorTotal1 + valorTotal2));
+        
+        Double valorTotal3 = Double.parseDouble(total3.getText().replace(',', '.'));
+        Double valorTotal4 = Double.parseDouble(total4.getText().replace(',', '.'));
+        total6.setText(Cast.toBRLocaleValue(valorTotal3 + valorTotal4));
+        
+        
+        total7.setText("R$ " + Cast.toBRLocaleValue(Calc.somaPonderada(totalAreaPropInic, totalTerraNua)));
+        total8.setText("R$ " + Cast.toBRLocaleValue(Calc.somaPonderada(totalAreaPropFina, totalTerraNua)));
+        
+        Double valorTotal7 = Double.parseDouble(total7.getText().substring(2).replace(',', '.'));
+        Double valorTotal8 = Double.parseDouble(total8.getText().substring(2).replace(',', '.'));
+        total9.setText("R$" + Cast.toBRLocaleValue(Calc.mediaAritmetica(valorTotal7, valorTotal8)));
+        
+        total10.setText(Cast.toBRLocaleValue(totalHa));
+        total11.setText(Cast.toBRLocaleValue(totalValorHa));
+        total12.setText(Cast.toBRLocaleValue(totalDepreciacao));
     }
     
     private void inicializarGTRE() {

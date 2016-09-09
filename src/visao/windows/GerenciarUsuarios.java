@@ -11,10 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
-import javax.swing.ListModel;
 import modelo.negocio.Perfil;
 import modelo.negocio.Usuario;
-import util.Cast;
 
 /**
  *
@@ -31,6 +29,7 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
     public GerenciarUsuarios() {
         initComponents();
         
+        super.setTitle("SGPL - Gerenciar Usuários");
         super.setLocationRelativeTo(null);
         super.setResizable(false);
         
@@ -45,6 +44,10 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         
         listDisp.setEnabled(false);
         listSele.setEnabled(false);
+        
+        radioAdm.setEnabled(false);
+        radioCom.setEnabled(false);
+        radioVis.setEnabled(false);
         
         
     }
@@ -63,7 +66,7 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         textoEntrada = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        editPerfilBT = new javax.swing.JButton();
+        addUsuarioBT = new javax.swing.JButton();
         jComboBoxUsuario = new javax.swing.JComboBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         listDisp = new javax.swing.JList();
@@ -101,10 +104,10 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel1.add(jLabel1, gridBagConstraints);
 
-        editPerfilBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/add.png"))); // NOI18N
-        editPerfilBT.addActionListener(new java.awt.event.ActionListener() {
+        addUsuarioBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/add.png"))); // NOI18N
+        addUsuarioBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editPerfilBTActionPerformed(evt);
+                addUsuarioBTActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -112,10 +115,11 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.ipadx = -24;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 10);
-        jPanel1.add(editPerfilBT, gridBagConstraints);
+        jPanel1.add(addUsuarioBT, gridBagConstraints);
 
         jComboBoxUsuario.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         jComboBoxUsuario.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Selecione um usuário..." }));
+        ativarComponentes(false);
         jComboBoxUsuario.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jComboBoxUsuarioItemStateChanged(evt);
@@ -313,9 +317,15 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void editPerfilBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editPerfilBTActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_editPerfilBTActionPerformed
+    private void addUsuarioBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addUsuarioBTActionPerformed
+        AddUsuario telaAddUsu = new AddUsuario(this, true);
+        telaAddUsu.setTitle("SGPL - Cadastro de Usuário");
+        telaAddUsu.setVisible(true);
+        
+        jComboBoxUsuario.addItem(telaAddUsu.getNovoUsuario());
+        
+        
+    }//GEN-LAST:event_addUsuarioBTActionPerformed
 
     private void btnDirTodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDirTodActionPerformed
         
@@ -418,7 +428,7 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
 
             if( radioSelecionado == 1 ){
                 int escolha = JOptionPane.showOptionDialog(null, "Deseja realmente tornar " + usuario.getLogin() + " um administrador?\n"
-                        + " Ele(a) terá cesso à todos os perfis cadastrados.",
+                        + " Ele(a) terá acesso à todos os perfis cadastrados.",
                         "Confirmar seleção de administrador", JOptionPane.YES_NO_OPTION, 
                         JOptionPane.QUESTION_MESSAGE, null, new String[]{"Sim", "Não"}, "Não");
 
@@ -440,42 +450,34 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
 
             List<Perfil> perfisAntigos = new ArrayList<>();
             List<Perfil> perfisNovos   = new ArrayList<>();
-            List<Perfil> perfisExcluir = new ArrayList<>();
-            List<Perfil> perfisAdd     = new ArrayList<>();
+            Boolean[] perfisExcluir, perfisAdd;
             
             DefaultListModel listModelSele = (DefaultListModel) listSele.getModel();
 
             listSele.setSelectionInterval(0, listModelSele.size() - 1);
             perfisNovos = listSele.getSelectedValuesList();
-
-            System.out.println("Perfis recuperados da lista >>>> " + perfisNovos.size());
             
             if( usuario.getTipoUsuario() != 1){
 
                 perfisAntigos = pdao.executeSQL("SELECT idPerfil, nome, cidade, tamPropriedade, areaPecLeite, prodLeiteDiario, empPermanentes, numFamiliares, idRotaFK "
                                                 + "FROM usuario_perfil AS up, perfil AS p "
                                                 + "WHERE up.idUsuarioFK = " + usuario.getId() + " AND up.idPerfilFK = p.idPerfil");
-
-                System.out.println("Perfis recuperados do banco >>>> " + perfisAntigos.size());
                 
-                perfisExcluir = perfisAntigos;
-                perfisAdd     = perfisNovos;
+                perfisExcluir = new Boolean[perfisAntigos.size()];
+                perfisAdd     = new Boolean[perfisNovos.size()];
                 
                 for(int i = 0; i < perfisNovos.size(); i++){
 
                     for(int j = 0; j < perfisAntigos.size(); j++){
-
-                        System.out.println("Nome Novo: >>>>>> " + perfisNovos.get(i).getNome());
-                        System.out.println("Nome Antigo: >>>> " + perfisAntigos.get(j).getNome());
                         
                         if( perfisNovos.get(i).getNome().equals(perfisAntigos.get(j).getNome())){
-//                            perfisAdd.remove(perfisNovos.get(i));
-//                            perfisExcluir.remove(perfisAntigos.get(j));
                             
-                            System.out.println("Entrou");
+                            perfisAdd[i] = true;
+                            perfisExcluir[j] = true;
                             
                             break;
                             
+                        } else {
                             
                         }
 
@@ -483,28 +485,30 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
 
                 }
                                 
-                for(int i = 0; i < perfisNovos.size(); i++){
+                for(int i = 0; i < perfisAdd.length; i++){
                     
-//                    pdao.executeSQL("INSERT INTO usuario_perfil (idUsuarioFK, idPerfilFK) "
-//                                    + "VALUES (" + usuario.getId() + ", " + perfisNovos.get(i).getId() + ")");
+                    if(perfisAdd[i] == null){
+                        pdao.executeSQL("INSERT INTO usuario_perfil (idUsuarioFK, idPerfilFK) "
+                                      + "VALUES (" + usuario.getId() + ", " + perfisNovos.get(i).getId() + ")");
+                    }
+                    
+
                     
                 }
                 
-                for(int i = 0; i < perfisAntigos.size(); i++){
-                    
-//                    pdao.executeSQL("DELETE FROM usuario_perfil "
-//                                    + "WHERE idUsuarioFK = " + usuario.getId() + " "
-//                                    + "AND idPerfilFK = " + perfisAntigos.get(i).getId());
-                    
+                for(int i = 0; i < perfisExcluir.length; i++){
+                
+                    if(perfisExcluir[i] == null){
+                    pdao.executeSQL("DELETE FROM usuario_perfil "
+                                    + "WHERE idUsuarioFK = " + usuario.getId() + " "
+                                    + "AND idPerfilFK = " + perfisAntigos.get(i).getId());
+                    }
                 }
 
             }
 
             JOptionPane.showMessageDialog(null, "As alterações foram salvas");
             
-            System.out.println("Para excluir: " + perfisExcluir.size());
-            System.out.println("Para add:   " + perfisAdd.size());
-            System.out.println("---------------------------------------------");
         }
         
         
@@ -521,10 +525,17 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         if(evt.getStateChange() == ItemEvent.SELECTED) { 
             if(jComboBoxUsuario.getSelectedIndex() != 0){
                 System.out.println("Entrou no item " + jComboBoxUsuario.getSelectedIndex());
+                
+                radioAdm.setEnabled(true);
+                radioCom.setEnabled(true);
+                radioVis.setEnabled(true);
 
                 preencherListas((Usuario) jComboBoxUsuario.getSelectedItem());
             } else {
                 ativarComponentes(false);
+                radioAdm.setEnabled(false);
+                radioCom.setEnabled(false);
+                radioVis.setEnabled(false);
             }
         }
     }//GEN-LAST:event_jComboBoxUsuarioItemStateChanged
@@ -609,7 +620,6 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
             for(int i = 0; i < todosPerfis.size(); i++){
             
                 for(int j = 0; j < perfisSelec.size(); j++){
-
                     if(todosPerfis.get(i).getId() == perfisSelec.get(j).getId()){
                         listModelDisp.removeElement(todosPerfis.get(i));
 //                        todosPerfis.remove(todosPerfis.get(i));
@@ -642,6 +652,7 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addUsuarioBT;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnDirTod;
     private javax.swing.JButton btnDirUni;
@@ -649,7 +660,6 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
     private javax.swing.JButton btnEsqUni;
     private javax.swing.JButton btnSalvar;
     private javax.swing.ButtonGroup buttonGroupPermissao;
-    private javax.swing.JButton editPerfilBT;
     private javax.swing.JComboBox jComboBoxUsuario;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
