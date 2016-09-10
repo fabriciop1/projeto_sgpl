@@ -53,7 +53,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
       
         atual = ControlePerfil.getInstance().getPerfilSelecionado();
         perfilLabel.setText(atual.getNome());
-        
+        anoLabel.setText("Ano: " + ControlePerfil.getInstance().getAno());
         tabelaDadosTecnicos.setShowGrid(true);
         tabelaDadosTecnicos.setShowHorizontalLines(true);
         tabelaDadosTecnicos.getTableHeader().setFont(super.getFont().deriveFont(Font.BOLD));
@@ -73,9 +73,12 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         
         gtae = new GenericTableAreaEditor(this, tabelaDadosTecnicos, false);
       
+        dtms = dtmdao.retrieveByColumns(new String[]{"idPerfilFK", "ano"}, new Object[]{atual.getId(), 
+                    ControlePerfil.getInstance().getAno()});
+        
         PreencherColunaIND(indicadores);
         
-        fillComboBox();
+        PreencherTabelaDTM(dtms);
         
         initGTAE();
         
@@ -110,7 +113,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         int indexCol;
         double dadoTemp, tempMedia, divisao;
         
-        int ano = Integer.parseInt(anoCombo.getSelectedItem().toString());
+        int ano = ControlePerfil.getInstance().getAno();
         DefaultTableModel modelDadosTecnicos = (DefaultTableModel) tabelaDadosTecnicos.getModel();
         
         Object[] linhaTemp = new Object[14];
@@ -137,7 +140,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
                     }
                 }
             }
-            divisao = calcularMedia(linhaTemp);
+            divisao = Calc.calcularMedia(linhaTemp);
             
             if (divisao != 0.0) { 
                 linhaTemp[13] = divisao; 
@@ -161,15 +164,13 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
 
         btnVoltar = new javax.swing.JButton();
         textoEntrada = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        anoCombo = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaDadosTecnicos = new javax.swing.JTable();
-        adicionarAnoBT = new javax.swing.JButton();
         editarAnoBT = new javax.swing.JButton();
         retornarBT = new javax.swing.JButton();
         avancarBT = new javax.swing.JButton();
         perfilLabel = new javax.swing.JLabel();
+        anoLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -185,15 +186,6 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         textoEntrada.setForeground(new java.awt.Color(0, 38, 255));
         textoEntrada.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         textoEntrada.setText("DADOS TÉCNICOS MENSAIS");
-
-        jLabel1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel1.setText("Ano:");
-
-        anoCombo.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                anoComboItemStateChanged(evt);
-            }
-        });
 
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
@@ -245,8 +237,6 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
             }
         });
         tabelaDadosTecnicos.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
-        tabelaDadosTecnicos.setCellSelectionEnabled(false);
-        tabelaDadosTecnicos.setRowSelectionAllowed(true);
         tabelaDadosTecnicos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tabelaDadosTecnicos.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tabelaDadosTecnicos);
@@ -270,14 +260,6 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
             tabelaDadosTecnicos.getColumnModel().getColumn(13).setResizable(false);
         }
 
-        adicionarAnoBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/add.png"))); // NOI18N
-        adicionarAnoBT.setToolTipText("Adicionar novo ano");
-        adicionarAnoBT.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                adicionarAnoBTActionPerformed(evt);
-            }
-        });
-
         editarAnoBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit.png"))); // NOI18N
         editarAnoBT.setToolTipText("Inserir/Editar dados ");
         editarAnoBT.addActionListener(new java.awt.event.ActionListener() {
@@ -287,6 +269,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         });
 
         retornarBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/left_arrow.png"))); // NOI18N
+        retornarBT.setToolTipText("Retornar");
         retornarBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 retornarBTActionPerformed(evt);
@@ -294,6 +277,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         });
 
         avancarBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/right_arrow.png"))); // NOI18N
+        avancarBT.setToolTipText("Avançar");
         avancarBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 avancarBTActionPerformed(evt);
@@ -304,6 +288,10 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         perfilLabel.setForeground(new java.awt.Color(0, 38, 255));
         perfilLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         perfilLabel.setText("jLabel2");
+
+        anoLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        anoLabel.setForeground(new java.awt.Color(0, 38, 255));
+        anoLabel.setText("Ano: <ano>");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -322,13 +310,9 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(perfilLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(textoEntrada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 119, Short.MAX_VALUE)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(anoCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(adicionarAnoBT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 212, Short.MAX_VALUE)
+                        .addComponent(anoLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(editarAnoBT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
@@ -338,21 +322,19 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(adicionarAnoBT, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(anoCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(editarAnoBT, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(retornarBT, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(avancarBT, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(textoEntrada)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(editarAnoBT, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(anoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(perfilLabel)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 492, Short.MAX_VALUE)
-                .addGap(33, 33, 33))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(77, 77, 77))
         );
 
         pack();
@@ -364,38 +346,10 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
 
-    private void adicionarAnoBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarAnoBTActionPerformed
-        boolean existe = false;
-        
-        SingleYearSelector telaNovoAno = new SingleYearSelector(this, true);
-        telaNovoAno.setTitle("SGPL - DTM - Seleção de ano");
-        telaNovoAno.setVisible(true);
-        
-        String ano = telaNovoAno.getSelected();
-        
-        if (ano == null) {
-            return;
-        }
-        
-        for(int i = 0; i < anoCombo.getItemCount(); i++) {
-            if (anoCombo.getItemAt(i).equals(ano)) {
-                existe = true;
-                break;
-            }
-        }
-        if (existe == true) {
-            JOptionPane.showMessageDialog(this, "Este ano já foi inserido para o perfil de " + atual.getNome()
-                    + ".", "Alerta - Inserção de ano já cadastrado", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        anoCombo.addItem(ano);
-        anoCombo.setSelectedItem(ano);
-    }//GEN-LAST:event_adicionarAnoBTActionPerformed
-
     private void editarAnoBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarAnoBTActionPerformed
         MonthSelector telaMes = new MonthSelector(this, true);
         
-        telaMes.setTitle("SGPL - DTM - Seleção de Trimestre");
+        telaMes.setTitle("SGPL - DTM - Seleção de Mês");
         telaMes.setVisible(true);
         
         int selecionado = telaMes.getSelected(); 
@@ -409,14 +363,6 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
             gtae.showEditor(evt);
         }
     }//GEN-LAST:event_editarAnoBTActionPerformed
-
-    private void anoComboItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_anoComboItemStateChanged
-        if(evt.getStateChange() == ItemEvent.SELECTED) { 
-            dtms = dtmdao.retrieveByColumns(new String[]{"idPerfilFK", "ano"}, new Object[]{atual.getId(), 
-                    Integer.parseInt(anoCombo.getSelectedItem().toString())});
-            PreencherTabelaDTM(dtms);
-        }
-    }//GEN-LAST:event_anoComboItemStateChanged
 
     private void retornarBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_retornarBTActionPerformed
         JScrollBar barPanel = jScrollPane1.getHorizontalScrollBar();
@@ -466,20 +412,6 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
          
     }
     
-    private void fillComboBox() {
-        
-        List<DadosTecMensais> dados = dtmdao.retrieveByColumn("idPerfilFK", atual.getId(), "ano", "ano DESC");
-        
-        if (dados.isEmpty()) {
-            Calendar cal = GregorianCalendar.getInstance();
-            anoCombo.addItem(Cast.toString(cal.get(Calendar.YEAR)));
-        }
-
-        for(int i = 0; i < dados.size(); i++) {
-            anoCombo.addItem(Cast.toString(dados.get(i).getAno()));
-        }    
-    }
-    
     private void definirBDListeners() {
         
          gtae.addTableModifyListener((TableModifiedEvent evt) -> {
@@ -487,7 +419,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
             Object[][] areaData = evt.getTableAreaData();
             List<Integer> linhas = evt.getRowsModified();
                     
-            int ano = Integer.parseInt(anoCombo.getSelectedItem().toString());
+            int ano = ControlePerfil.getInstance().getAno();
             
             for (Integer l : linhas) {
                 int mes = gtae.getStartColumn() + 1;
@@ -521,33 +453,17 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
                 }
             }
             dtms = dtmdao.retrieveByColumns(new String[]{"idPerfilFK", "ano"}, new Object[]{atual.getId(), 
-                    Integer.parseInt(anoCombo.getSelectedItem().toString())});
+                    ControlePerfil.getInstance().getAno()});
             PreencherTabelaDTM(dtms);
          });
     }
     
-    public static double calcularMedia(Object[] vetor){
-        
-        int cont = 0;
-        double soma = 0.0;
-        
-        for (Object vetor1 : vetor) {
-            if (vetor1 != null) {
-                soma += (Double) vetor1;
-                cont++;
-            }
-        }
-                
-        return Calc.dividir(soma, cont);
-    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton adicionarAnoBT;
-    private javax.swing.JComboBox<String> anoCombo;
+    private javax.swing.JLabel anoLabel;
     private javax.swing.JButton avancarBT;
     private javax.swing.JButton btnVoltar;
     private javax.swing.JButton editarAnoBT;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel perfilLabel;
     private javax.swing.JButton retornarBT;

@@ -7,7 +7,13 @@ package visao.windows;
 
 import controle.ControleLogin;
 import controle.ControlePerfil;
+import flex.db.GenericDAO;
 import java.awt.event.ItemEvent;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+import javax.swing.JOptionPane;
+import modelo.negocio.InventarioResumo;
 import modelo.negocio.Perfil;
 import modelo.negocio.Usuario;
 import util.Cast;
@@ -17,7 +23,8 @@ import util.Cast;
  * @author Alexandre
  */
 public class MenuPrincipal extends javax.swing.JFrame {
-
+    
+    private final Perfil atual;
     /**
      * Creates new form MenuPrincipal
      */
@@ -25,7 +32,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         
         initComponents();
         
-        Perfil atual = ControlePerfil.getInstance().getPerfilSelecionado();
+        atual = ControlePerfil.getInstance().getPerfilSelecionado();
         
         Usuario usuario = ControleLogin.getInstance().getUsuario();
         
@@ -41,7 +48,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
         tamProp.setText("" + atual.getTamPropriedade());
         nomCida.setText(atual.getCidade());
         
-        anoCombo.addItem(Cast.toString(ControlePerfil.getInstance().getAno()));
+        fillComboBox();
+        
+        anoCombo.setSelectedItem(Cast.toString(ControlePerfil.getInstance().getAno()));
     }
 
     /**
@@ -155,6 +164,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Pecuária Leiteira");
 
+        anoCombo.setBackground(new java.awt.Color(255, 0, 0));
         anoCombo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         anoCombo.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -162,13 +172,18 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
         });
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(153, 0, 0));
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(0, 38, 255));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("Ano:");
 
         addAnoBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/add.png"))); // NOI18N
         addAnoBT.setToolTipText("Adicionar ano");
+        addAnoBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addAnoBTActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -296,10 +311,62 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     private void anoComboItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_anoComboItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
-            
+            ControlePerfil.getInstance().setAno(Integer.parseInt(anoCombo.getSelectedItem().toString()));
+            System.out.println(ControlePerfil.getInstance().getAno());
         }
     }//GEN-LAST:event_anoComboItemStateChanged
 
+    private void addAnoBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addAnoBTActionPerformed
+        boolean existe = false;
+        
+        SingleYearSelector telaNovoAno = new SingleYearSelector(this, true);
+        telaNovoAno.setTitle("SGPL - Adicionar novo ano");
+        telaNovoAno.setVisible(true);
+        
+        String ano = telaNovoAno.getSelected();
+        
+        if (ano == null) {
+            return;
+        }
+        
+        for(int i = 0; i < anoCombo.getItemCount(); i++) {
+            if (anoCombo.getItemAt(i).equals(ano)) {
+                existe = true;
+                break;
+            }
+        }
+        if (existe == true) {
+            JOptionPane.showMessageDialog(this, "Este ano já foi inserido para o perfil de " + atual.getNome()
+                    + ".", "Alerta - Inserção de ano já cadastrado", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        anoCombo.addItem(ano);
+        anoCombo.setSelectedItem(ano);
+    }//GEN-LAST:event_addAnoBTActionPerformed
+
+    private void fillComboBox() {
+        GenericDAO<InventarioResumo> dao = new GenericDAO<>(InventarioResumo.class);
+        List<InventarioResumo> listaAnos = dao.executeSQL("" + 
+                "SELECT ano FROM inventario_terras        AS it  WHERE it.idPerfilFK  = " + atual.getId() + " UNION " + 
+                "SELECT ano FROM inventario_forrageiras   AS ifo WHERE ifo.idPerfilFK = " + atual.getId() + " UNION " +
+                "SELECT ano FROM inventario_maquinas      AS im  WHERE im.idPerfilFK  = " + atual.getId() + " UNION " + 
+                "SELECT ano FROM inventario_benfeitorias  AS ib  WHERE ib.idPerfilFK  = " + atual.getId() + " UNION " + 
+                "SELECT ano FROM inventario_animais       AS ia  WHERE ia.idPerfilFK  = " + atual.getId() + " UNION " + 
+                "SELECT ano FROM inventario_resumo        AS ir  WHERE ir.idPerfilFK  = " + atual.getId() + " UNION " +
+                "SELECT ano FROM dados_economicos_mensais AS dem WHERE dem.idPerfilFK = " + atual.getId() + " UNION " +
+                "SELECT ano FROM dados_tecnicos_mensais   AS dtm WHERE dtm.idPerfilFK = " + atual.getId() +
+                " ORDER BY ano");
+        
+        if (listaAnos.isEmpty()) {
+            Calendar cal = GregorianCalendar.getInstance();
+            anoCombo.addItem(Cast.toString(cal.get(Calendar.YEAR)));
+        }
+        
+        for(int i = listaAnos.size() - 1; i >= 0; i--) {
+            this.anoCombo.addItem(Cast.toString(listaAnos.get(i).getAno()));
+        }
+    }
    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addAnoBT;

@@ -10,8 +10,6 @@ import controle.ControlePerfil;
 import flex.db.GenericDAO;
 import flex.table.*;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -62,12 +60,14 @@ public class VisualizarInventario extends javax.swing.JFrame {
         super.setLocationRelativeTo(null);
         super.setResizable(false);
 
-        Calendar cal = GregorianCalendar.getInstance();
-        ano = cal.get(Calendar.YEAR);
+        ano = ControlePerfil.getInstance().getAno();
         
         setRenderers();
 
         perfilAtual = ControlePerfil.getInstance().getPerfilSelecionado();
+       
+        perfilLabel.setText(perfilAtual.getNome());
+        anoLabel.setText("Ano: " + ControlePerfil.getInstance().getAno());
         
         super.setTitle("SGPL - " + perfilAtual.getNome() + " - Inventário");
 
@@ -78,12 +78,12 @@ public class VisualizarInventario extends javax.swing.JFrame {
         irdao = new GenericDAO<>(InventarioResumo.class);
         ifdao = new GenericDAO<>(InventarioForrageiras.class);
         
-        List<InventarioTerras> terras = itdao.retrieveByColumn("idPerfilFK", perfilAtual.getId());
-        List<InventarioForrageiras> forrageiras = ifdao.retrieveByColumn("idPerfilFK", perfilAtual.getId());
-        List<InventarioAnimais> animais = iadao.retrieveByColumn("idPerfilFK", perfilAtual.getId());
-        List<InventarioBenfeitorias> benfeitorias = ibdao.retrieveByColumn("idPerfilFK", perfilAtual.getId());
-        List<InventarioMaquinas> maquinas = imdao.retrieveByColumn("idPerfilFK", perfilAtual.getId());
-        List<InventarioResumo> resumos = irdao.retrieveByColumn("idPerfilFK", perfilAtual.getId());
+        List<InventarioTerras> terras = itdao.retrieveByColumns(new String[] {"idPerfilFK", "ano"}, new Object[] { perfilAtual.getId(), ano});
+        List<InventarioForrageiras> forrageiras = ifdao.retrieveByColumns(new String[] {"idPerfilFK", "ano"}, new Object[] {perfilAtual.getId(), ano});
+        List<InventarioAnimais> animais = iadao.retrieveByColumns(new String[] {"idPerfilFK", "ano"}, new Object[] {perfilAtual.getId(), ano});
+        List<InventarioBenfeitorias> benfeitorias = ibdao.retrieveByColumns(new String[]{"idPerfilFK", "ano"}, new Object[] { perfilAtual.getId(), ano});
+        List<InventarioMaquinas> maquinas = imdao.retrieveByColumns(new String[] {"idPerfilFK", "ano"}, new Object[] { perfilAtual.getId(), ano});
+        List<InventarioResumo> resumos = irdao.retrieveByColumns(new String[] {"idPerfilFK", "ano"}, new Object[] { perfilAtual.getId(), ano});
 
         inicializarGTRE();
         
@@ -95,7 +95,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
             resumo = new InventarioResumo();
             resumo.setIdPerfil(perfilAtual.getId());
-            resumo.setAno(ano);                                    /* Verificar o ano e colocar aqui */
+            resumo.setAno(ano);                               
 
             irdao.insert(resumo);
 
@@ -414,6 +414,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
         salarioMinimo = new javax.swing.JLabel();
         btnVoltar = new javax.swing.JButton();
         textoEntrada = new javax.swing.JLabel();
+        perfilLabel = new javax.swing.JLabel();
+        anoLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -703,7 +705,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     .addComponent(total10)
                     .addComponent(total11)
                     .addComponent(total12))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(adicionarInvTerrasBT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(editarInvTerrasBT, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1509,7 +1511,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                     .addComponent(total43)
                     .addComponent(total42)
                     .addComponent(jLabel25))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(removerInvMaquinasBT, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(editarInvMaquinasBT, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -1999,19 +2001,33 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
         textoEntrada.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         textoEntrada.setForeground(new java.awt.Color(0, 38, 255));
+        textoEntrada.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         textoEntrada.setText("INVENTÁRIO");
+
+        perfilLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        perfilLabel.setForeground(new java.awt.Color(0, 38, 255));
+        perfilLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        perfilLabel.setText("jLabel8");
+
+        anoLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        anoLabel.setForeground(new java.awt.Color(0, 38, 255));
+        anoLabel.setText("Ano: <ano>");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(textoEntrada)
-                .addGap(381, 381, 381))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(perfilLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(textoEntrada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(324, 324, 324)
+                .addComponent(anoLabel)
+                .addGap(23, 23, 23))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2019,9 +2035,13 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnVoltar)
-                    .addComponent(textoEntrada))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 584, Short.MAX_VALUE))
+                    .addComponent(textoEntrada)
+                    .addComponent(anoLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(perfilLabel)
+                .addGap(5, 5, 5)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 569, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -2084,7 +2104,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             custoOportunidade.setText(Cast.toBRLocaleValue(resumo.getCustoOportunidade()));
             salarioMinimo.setText(Cast.toBRLocaleValue(resumo.getSalarioMinimo()));
         }
-
+        
         total44.setText(total12.getText().substring(2));
         total45.setText(total39.getText());
         total46.setText(total36.getText());
@@ -2105,19 +2125,23 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total54.setText(Cast.toBRLocaleValue(Double.parseDouble(total40.getText().substring(2).replace(',', '.'))));
         total55.setText(total42.getText().substring(2));
         
-        total56.setText("R$ " + Cast.toBRLocaleValue((Double.parseDouble(total51.getText())
+        total56.setText("R$ " + Cast.toBRLocaleValue(
+                Double.parseDouble(Cast.toJavaValue(total51.getText().substring(2)))
                 + Double.parseDouble(total52.getText().replace(',', '.'))
                 + Double.parseDouble(total53.getText().replace(',', '.'))
                 + Double.parseDouble(total54.getText().replace(',', '.'))
-                + Double.parseDouble(total55.getText().replace(',', '.')))));
+                + Double.parseDouble(total55.getText().replace(',', '.'))) );
         
         total57.setText("R$ " + Cast.toBRLocaleValue(((Double.parseDouble(atividadeLeite.getText().replace(',', '.'))) / 100.0
                 * Double.parseDouble(total56.getText().substring(2).replace(',', '.')))));
 
         total58.setText(salarioMinimo.getText());
         total59.setText(Cast.toBRLocaleValue((Double.parseDouble(salarioMinimo.getText().replace(',', '.')) * 0.3)));
-        total60.setText("R$ " + Cast.toBRLocaleValue(((Double.parseDouble(total58.getText().replace(',', '.')) * 13
-                + (Double.parseDouble(total58.getText().replace(',', '.'))) * 0.3)) / 12));
+        
+        Double valorTotal60_1 = Double.parseDouble(total58.getText().replace(',', '.')) * 13.0;
+        Double valorTotal60_2 = Double.parseDouble(total58.getText().replace(',', '.')) * 0.3 ;
+        total60.setText("R$ " + Cast.toBRLocaleValue( (valorTotal60_1 + valorTotal60_2) / 12.0) );
+        
     }
     
     private void calcularTotaisMaquinas(List<InventarioMaquinas> maquinas){
@@ -2246,7 +2270,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
         Double valorTotal32 = Double.parseDouble(total32.getText().substring(2).replace(',', '.'));
         total33.setText("R$ " + Cast.toBRLocaleValue(valorTotal20 - valorTotal19 - valorTotal32));
 
-        
         Double valorTotal34 = Double.parseDouble(total34.getText().substring(2).replace(',', '.'));
         Double valorTotal35 = Double.parseDouble(total35.getText().substring(2).replace(',', '.'));
         total36.setText(Cast.toBRLocaleValue(Calc.dividir(valorTotal34,valorTotal35)));
@@ -2308,17 +2331,17 @@ public class VisualizarInventario extends javax.swing.JFrame {
         Double valorTotal4 = Double.parseDouble(total4.getText().replace(',', '.'));
         total6.setText(Cast.toBRLocaleValue(valorTotal3 + valorTotal4));
         
-        
         total7.setText("R$ " + Cast.toBRLocaleValue(Calc.somaPonderada(totalAreaPropInic, totalTerraNua)));
         total8.setText("R$ " + Cast.toBRLocaleValue(Calc.somaPonderada(totalAreaPropFina, totalTerraNua)));
         
         Double valorTotal7 = Double.parseDouble(total7.getText().substring(2).replace(',', '.'));
         Double valorTotal8 = Double.parseDouble(total8.getText().substring(2).replace(',', '.'));
-        total9.setText("R$" + Cast.toBRLocaleValue(Calc.mediaAritmetica(valorTotal7, valorTotal8)));
+        total9.setText("R$ " + Cast.toBRLocaleValue(Calc.mediaAritmetica(valorTotal7, valorTotal8)));
         
         total10.setText(Cast.toBRLocaleValue(totalHa));
         total11.setText(Cast.toBRLocaleValue(totalValorHa));
-        total12.setText(Cast.toBRLocaleValue(totalDepreciacao));
+        total12.setText("R$ " + Cast.toBRLocaleValue(totalDepreciacao));
+    
     }
     
     private void inicializarGTRE() {
@@ -3016,6 +3039,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
     private javax.swing.JButton adicionarInvBenfeitoriasBT;
     private javax.swing.JButton adicionarInvMaquinasBT;
     private javax.swing.JButton adicionarInvTerrasBT;
+    private javax.swing.JLabel anoLabel;
     private javax.swing.JLabel atividadeLeite;
     private javax.swing.JButton atividadeLeiteBT;
     private javax.swing.JButton btnVoltar;
@@ -3086,6 +3110,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JLabel perfilLabel;
     private javax.swing.JButton removerInvAnimaisBT;
     private javax.swing.JButton removerInvBenfeitoriasBT;
     private javax.swing.JButton removerInvMaquinasBT;

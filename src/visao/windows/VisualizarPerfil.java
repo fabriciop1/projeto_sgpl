@@ -67,9 +67,6 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         rotaDAO = new GenericDAO<>(Rota.class);
         perfilDAO = new GenericDAO<>(Perfil.class);
         
-        Calendar cal = GregorianCalendar.getInstance();
-        ControlePerfil.getInstance().setAno(cal.get(Calendar.YEAR)); // ano atual
-        
         usuario = ControleLogin.getInstance().getUsuario();
         
         if(usuario.getTipoUsuario() == 1){

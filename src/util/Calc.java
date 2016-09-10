@@ -196,4 +196,19 @@ public final class Calc {
         
         return dividir(result , denominador);
     }
+    
+    public static double calcularMedia(Object[] vetor){
+        
+        int cont = 0;
+        double soma = 0.0;
+        
+        for (Object vetor1 : vetor) {
+            if (vetor1 != null) {
+                soma += (Double) vetor1;
+                cont++;
+            }
+        }
+                
+        return Calc.dividir(soma, cont);
+    }
 }

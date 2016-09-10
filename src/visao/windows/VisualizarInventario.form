@@ -24,12 +24,17 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Component id="jTabbedPane1" alignment="0" max="32767" attributes="0"/>
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="btnVoltar" min="-2" pref="120" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
-              <Component id="textoEntrada" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="381" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                  <Component id="perfilLabel" max="32767" attributes="0"/>
+                  <Component id="textoEntrada" max="32767" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="324" max="-2" attributes="0"/>
+              <Component id="anoLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -40,9 +45,13 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="btnVoltar" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="textoEntrada" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="anoLabel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="jTabbedPane1" pref="584" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="perfilLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+              <Component id="jTabbedPane1" pref="569" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -171,7 +180,7 @@
                           <Component id="total11" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="total12" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="23" max="32767" attributes="0"/>
+                      <EmptySpace pref="9" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="adicionarInvTerrasBT" max="32767" attributes="0"/>
                           <Component id="editarInvTerrasBT" alignment="1" max="32767" attributes="0"/>
@@ -1564,7 +1573,7 @@
                           <Component id="total42" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel25" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="13" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="removerInvMaquinasBT" alignment="1" min="-2" max="-2" attributes="0"/>
                           <Component id="editarInvMaquinasBT" alignment="1" min="-2" max="-2" attributes="0"/>
@@ -2314,7 +2323,31 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="26" red="0" type="rgb"/>
         </Property>
+        <Property name="horizontalAlignment" type="int" value="0"/>
         <Property name="text" type="java.lang.String" value="INVENT&#xc1;RIO"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="perfilLabel">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="12" style="1"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ff" green="26" red="0" type="rgb"/>
+        </Property>
+        <Property name="horizontalAlignment" type="int" value="0"/>
+        <Property name="text" type="java.lang.String" value="jLabel8"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="anoLabel">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="14" style="1"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ff" green="26" red="0" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Ano: &lt;ano&gt;"/>
       </Properties>
     </Component>
   </SubComponents>

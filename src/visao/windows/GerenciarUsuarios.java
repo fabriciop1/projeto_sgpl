@@ -332,7 +332,7 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         DefaultListModel listModelDisp = (DefaultListModel) listDisp.getModel();
         DefaultListModel listModelSele = (DefaultListModel) listSele.getModel();
         
-        List<Perfil> perfisSelecionados = new ArrayList<>();
+        List<Perfil> perfisSelecionados;
         
         listDisp.setSelectionInterval(0, listModelDisp.size() - 1);
         
@@ -355,7 +355,7 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         DefaultListModel listModelDisp = (DefaultListModel) listDisp.getModel();
         DefaultListModel listModelSele = (DefaultListModel) listSele.getModel();
         
-        List<Perfil> perfisSelecionados = new ArrayList<>();
+        List<Perfil> perfisSelecionados;
         
         perfisSelecionados = listSele.getSelectedValuesList();
         
@@ -376,7 +376,7 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         DefaultListModel listModelDisp = (DefaultListModel) listDisp.getModel();
         DefaultListModel listModelSele = (DefaultListModel) listSele.getModel();
         
-        List<Perfil> perfisSelecionados = new ArrayList<>();
+        List<Perfil> perfisSelecionados;
         
         listSele.setSelectionInterval(0, listModelSele.size() - 1);
         
@@ -399,7 +399,7 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         DefaultListModel listModelDisp = (DefaultListModel) listDisp.getModel();
         DefaultListModel listModelSele = (DefaultListModel) listSele.getModel();
         
-        List<Perfil> perfisSelecionados = new ArrayList<>();
+        List<Perfil> perfisSelecionados;
         
         perfisSelecionados = listDisp.getSelectedValuesList();
         
