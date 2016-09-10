@@ -2105,38 +2105,38 @@ public class VisualizarInventario extends javax.swing.JFrame {
             salarioMinimo.setText(Cast.toBRLocaleValue(resumo.getSalarioMinimo()));
         }
         
-        total44.setText(total12.getText().substring(2));
-        total45.setText(total39.getText());
-        total46.setText(total36.getText());
-        total47.setText(Cast.toBRLocaleValue((Double.parseDouble(total41.getText().substring(2).replace(',', '.')))));
-        total48.setText(total43.getText().substring(2));
-        total49.setText("R$ " + Cast.toBRLocaleValue((Double.parseDouble(total44.getText().replace(',', '.'))
-                + Double.parseDouble(total45.getText().substring(2).replace(',', '.'))
-                + Double.parseDouble(total46.getText().replace(',', '.'))
-                + Double.parseDouble(total47.getText().replace(',', '.'))
-                + Double.parseDouble(total48.getText().replace(',', '.')))));
+        total44.setText(Cast.toBRLocaleValue(total12.getText().substring(2)));
+        total45.setText(Cast.toBRLocaleValue(total39.getText()));
+        total46.setText(Cast.toBRLocaleValue(total36.getText()));
+        total47.setText(Cast.toBRLocaleValue(Double.parseDouble(Cast.toJavaValue(total41.getText().substring(2)))));
+        total48.setText(Cast.toBRLocaleValue(total43.getText().substring(2)));
+        total49.setText("R$ " + Cast.toBRLocaleValue((Double.parseDouble(Cast.toJavaValue(total44.getText()))
+                + Double.parseDouble(Cast.toJavaValue(total45.getText().substring(2)))
+                + Double.parseDouble(Cast.toJavaValue(total46.getText()))
+                + Double.parseDouble(Cast.toJavaValue(total47.getText()))
+                + Double.parseDouble(Cast.toJavaValue(total48.getText())))));
         
-        total50.setText("R$ " + Cast.toBRLocaleValue(((Double.parseDouble(atividadeLeite.getText().replace(',', '.'))) / 100.0
-                * Double.parseDouble(total49.getText().substring(2).replace(',', '.')))));
+        total50.setText("R$ " + Cast.toBRLocaleValue(((Double.parseDouble(Cast.toJavaValue(atividadeLeite.getText()))) / 100.0
+                * Double.parseDouble(Cast.toJavaValue(total49.getText().substring(2))))));
 
-        total51.setText(total9.getText().substring(2));
-        total52.setText(total12.getText().substring(2));
-        total53.setText(total31.getText().substring(2));
-        total54.setText(Cast.toBRLocaleValue(Double.parseDouble(total40.getText().substring(2).replace(',', '.'))));
-        total55.setText(total42.getText().substring(2));
+        total51.setText(Cast.toBRLocaleValue(total9.getText().substring(2)));
+        total52.setText(Cast.toBRLocaleValue(total12.getText().substring(2)));
+        total53.setText(Cast.toBRLocaleValue(total31.getText().substring(2)));
+        total54.setText(Cast.toBRLocaleValue(Double.parseDouble(Cast.toJavaValue(total40.getText().substring(2)))));
+        total55.setText(Cast.toBRLocaleValue(total42.getText().substring(2)));
         
         total56.setText("R$ " + Cast.toBRLocaleValue(
                 Double.parseDouble(Cast.toJavaValue(total51.getText().substring(2)))
-                + Double.parseDouble(total52.getText().replace(',', '.'))
-                + Double.parseDouble(total53.getText().replace(',', '.'))
-                + Double.parseDouble(total54.getText().replace(',', '.'))
-                + Double.parseDouble(total55.getText().replace(',', '.'))) );
+                + Double.parseDouble(Cast.toJavaValue(total52.getText()))
+                + Double.parseDouble(Cast.toJavaValue(total53.getText()))
+                + Double.parseDouble(Cast.toJavaValue(total54.getText()))
+                + Double.parseDouble(Cast.toJavaValue(total55.getText())) ));
         
-        total57.setText("R$ " + Cast.toBRLocaleValue(((Double.parseDouble(atividadeLeite.getText().replace(',', '.'))) / 100.0
-                * Double.parseDouble(total56.getText().substring(2).replace(',', '.')))));
+        total57.setText("R$ " + Cast.toBRLocaleValue(((Double.parseDouble(Cast.toJavaValue(atividadeLeite.getText()))) / 100.0
+                * Double.parseDouble(Cast.toJavaValue(total56.getText().substring(2))) )) );
 
-        total58.setText(salarioMinimo.getText());
-        total59.setText(Cast.toBRLocaleValue((Double.parseDouble(salarioMinimo.getText().replace(',', '.')) * 0.3)));
+        total58.setText(Cast.toBRLocaleValue(salarioMinimo.getText()));
+        total59.setText(Cast.toBRLocaleValue((Double.parseDouble(Cast.toJavaValue(salarioMinimo.getText())) * 0.3)));
         
         Double valorTotal60_1 = Double.parseDouble(total58.getText().replace(',', '.')) * 13.0;
         Double valorTotal60_2 = Double.parseDouble(total58.getText().replace(',', '.')) * 0.3 ;
@@ -2176,8 +2176,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
             totalDeprecBenfeit += (depreciacao);
         }
 
-        total40.setText(String.format("R$ %.2f", totalValorBenfeit));
-        total41.setText(String.format("R$ %.2f", totalDeprecBenfeit));
+        total40.setText("R$ " + Cast.toBRLocaleValue(totalValorBenfeit));
+        total41.setText("R$ " + Cast.toBRLocaleValue(totalDeprecBenfeit));
     }
     
     private void calcularTotaisAnimais(List<InventarioAnimais> animais){
@@ -2334,8 +2334,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total7.setText("R$ " + Cast.toBRLocaleValue(Calc.somaPonderada(totalAreaPropInic, totalTerraNua)));
         total8.setText("R$ " + Cast.toBRLocaleValue(Calc.somaPonderada(totalAreaPropFina, totalTerraNua)));
         
-        Double valorTotal7 = Double.parseDouble(total7.getText().substring(2).replace(',', '.'));
-        Double valorTotal8 = Double.parseDouble(total8.getText().substring(2).replace(',', '.'));
+        Double valorTotal7 = Double.parseDouble(Cast.toJavaValue(total7.getText().substring(2)));
+        Double valorTotal8 = Double.parseDouble(Cast.toJavaValue(total8.getText().substring(2)));
         total9.setText("R$ " + Cast.toBRLocaleValue(Calc.mediaAritmetica(valorTotal7, valorTotal8)));
         
         total10.setText(Cast.toBRLocaleValue(totalHa));
