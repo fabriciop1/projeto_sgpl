@@ -140,6 +140,10 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
             modelIndicadores.addColumn(cia.getAnosSelecionados().get(i), cia.getConteudoTecnico(dtms, dems, cia.getAnosSelecionados().get(i))); 
         }
         tabelaIndicadoresAnuais.getColumnModel().getColumn(0).setPreferredWidth(380);
+        
+        for(int i = 2; i < tabelaIndicadoresAnuais.getColumnCount(); i++) {
+            tabelaIndicadoresAnuais.getColumnModel().getColumn(i).setPreferredWidth(100);
+        }
         tabelaIndicadoresAnuais.setDefaultRenderer(Object.class, new DecimalFormatRenderer(false) {
             private final Color BG = null;
             

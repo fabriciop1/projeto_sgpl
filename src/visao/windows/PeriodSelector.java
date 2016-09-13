@@ -327,5 +327,4 @@ public class PeriodSelector extends javax.swing.JDialog {
         this.tipoSelecionado = tipoSelecionado;
     }
     
-    
 }

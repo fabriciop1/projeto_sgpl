@@ -67,7 +67,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         perfilAtual = ControlePerfil.getInstance().getPerfilSelecionado();
        
         perfilLabel.setText(perfilAtual.getNome());
-        anoLabel.setText("Ano: " + ControlePerfil.getInstance().getAno());
+        anoLabel.setText("Ano: " + ano);
         
         super.setTitle("SGPL - " + perfilAtual.getNome() + " - Inventário");
 

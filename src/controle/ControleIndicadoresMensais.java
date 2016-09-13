@@ -234,6 +234,49 @@ public class ControleIndicadoresMensais {
         };    
     }
     
+    private boolean existeAno(Perfil perfil, int ano) {
+        GenericDAO<InventarioResumo> dao = new GenericDAO<>(InventarioResumo.class);
+                
+        boolean existeAno = false;
+        
+        List<InventarioResumo> listaAnos = dao.executeSQL("" + 
+                "SELECT ano FROM inventario_terras        AS it  WHERE it.idPerfilFK  = " + perfil.getId() + " UNION " + 
+                "SELECT ano FROM inventario_forrageiras   AS ifo WHERE ifo.idPerfilFK = " + perfil.getId() + " UNION " +
+                "SELECT ano FROM inventario_maquinas      AS im  WHERE im.idPerfilFK  = " + perfil.getId() + " UNION " + 
+                "SELECT ano FROM inventario_benfeitorias  AS ib  WHERE ib.idPerfilFK  = " + perfil.getId() + " UNION " + 
+                "SELECT ano FROM inventario_animais       AS ia  WHERE ia.idPerfilFK  = " + perfil.getId() + " UNION " + 
+                "SELECT ano FROM inventario_resumo        AS ir  WHERE ir.idPerfilFK  = " + perfil.getId() + " UNION " +
+                "SELECT ano FROM dados_economicos_mensais AS dem WHERE dem.idPerfilFK = " + perfil.getId() + " UNION " +
+                "SELECT ano FROM dados_tecnicos_mensais   AS dtm WHERE dtm.idPerfilFK = " + perfil.getId() +
+                " ORDER BY ano");
+        
+        for(int i = 0; i < listaAnos.size(); i++) {
+            if (ano == listaAnos.get(i).getAno()) {
+                existeAno = true;
+                break;
+            }
+        }           
+        return existeAno;
+    }
+    
+    private boolean existeMes(Perfil perfil, int ano, int mes) {
+        GenericDAO<DadosEconMensais> dao = new GenericDAO<>(DadosEconMensais.class);
+        
+        boolean existeMes = false;
+        
+        List<DadosEconMensais> listaAnos = dao.executeSQL("" + 
+                "SELECT mes FROM dados_economicos_mensais AS dem WHERE dem.idPerfilFK = " + perfil.getId() + " AND ano = " + ano + " UNION " +
+                "SELECT mes FROM dados_tecnicos_mensais   AS dtm WHERE dtm.idPerfilFK = " + perfil.getId() + " AND ano = " + ano);
+        
+        for (int i = 0; i < listaAnos.size(); i++) {
+            if (mes == listaAnos.get(i).getMes()) {
+                existeMes = true;
+                break;
+            }
+        }
+        return existeMes;
+    }
+    
     public Object[] getConteudoEconomico(List<DadosEconMensais> dems, List<DadosTecMensais> dtms, int mes, int ano){
         
         double rendaBruta = 0.0, litros = 0.0, coeLeite = 0.0, lactacao = 0.0;
@@ -244,22 +287,27 @@ public class ControleIndicadoresMensais {
         InventarioResumo resumo = null;
         
         GenericDAO<InventarioResumo> irdao = new GenericDAO<>(InventarioResumo.class);
-        List<InventarioResumo> resumos = irdao.retrieveByColumn("idPerfilFK", perfil.getId());
+        
+        if (!existeAno(perfil, ano) || !existeMes(perfil, ano, mes)) {
+            return null;
+        }
+        
+        List<InventarioResumo> resumos = irdao.retrieveByColumns(new String[] {"idPerfilFK", "ano"}, new Object[] { perfil.getId(), ano});
         
         GenericDAO<InventarioTerras> itdao = new GenericDAO<>(InventarioTerras.class);
-        List<InventarioTerras> terras = itdao.retrieveByColumn("idPerfilFK", perfil.getId());
+        List<InventarioTerras> terras = itdao.retrieveByColumns(new String[] {"idPerfilFK", "ano"}, new Object[] { perfil.getId(), ano});
         
         GenericDAO<InventarioForrageiras> ifdao = new GenericDAO<>(InventarioForrageiras.class);
-        List<InventarioForrageiras> forrageiras = ifdao.retrieveByColumn("idPerfilFK", perfil.getId());
+        List<InventarioForrageiras> forrageiras = ifdao.retrieveByColumns(new String[] {"idPerfilFK", "ano"}, new Object[] { perfil.getId(), ano});
         
         GenericDAO<InventarioAnimais> iadao = new GenericDAO<>(InventarioAnimais.class);
-        List<InventarioAnimais> animais = iadao.retrieveByColumn("idPerfilFK", perfil.getId());
+        List<InventarioAnimais> animais = iadao.retrieveByColumns(new String[] {"idPerfilFK", "ano"}, new Object[] { perfil.getId(), ano});
         
         GenericDAO<InventarioMaquinas> imdao = new GenericDAO<>(InventarioMaquinas.class);
-        List<InventarioMaquinas> maquinas = imdao.retrieveByColumn("idPerfilFK", perfil.getId());
+        List<InventarioMaquinas> maquinas = imdao.retrieveByColumns(new String[] {"idPerfilFK", "ano"}, new Object[] { perfil.getId(), ano});
         
         GenericDAO<InventarioBenfeitorias> ibdao = new GenericDAO<>(InventarioBenfeitorias.class);
-        List<InventarioBenfeitorias> benfeitorias = ibdao.retrieveByColumn("idPerfilFK", perfil.getId());
+        List<InventarioBenfeitorias> benfeitorias = ibdao.retrieveByColumns(new String[] {"idPerfilFK", "ano"}, new Object[] { perfil.getId(), ano});
         
         if(resumos != null && !resumos.isEmpty()) {
             resumo = resumos.get(0);
@@ -358,6 +406,12 @@ public class ControleIndicadoresMensais {
         double abortos = 0.0,  natimortos = 0.0, retenPlac = 0.0,    morteBez = 0.0,      bezDoentes = 0.0;
         double morteNov = 0.0, morteVacas = 0.0, vacasMastCli = 0.0, maoObraPerm = 0.0,   maoObraFam = 0.0 ;
         
+        Perfil perfil = ControlePerfil.getInstance().getPerfilSelecionado();
+        
+        if (!existeAno(perfil, ano) || !existeMes(perfil, ano, mes)) {
+            return null;
+        }
+         
         for(int i = 0; i < dems.size(); i++) {
             if(dems.get(i).getAno() == ano && dems.get(i).getMes() == mes) {
                 if(dems.get(i).getEspecificacao().getId() == 7) { // MDO perm.
@@ -434,7 +488,7 @@ public class ControleIndicadoresMensais {
         return new Object[] {
             "",
             litros,
-            ControlePerfil.getInstance().getPerfilSelecionado().getAreaPecLeite(),
+            perfil.getAreaPecLeite(),
             rebanhoMedio,
             totalVacas,
             vacasLactacao,
@@ -446,12 +500,12 @@ public class ControleIndicadoresMensais {
             outros,
             Calc.dividir(vacasLactacao, totalVacas) * 100.0, 
             Calc.dividir(vacasLactacao, rebanhoMedio) * 100.0,
-            Calc.dividir(vacasLactacao, ControlePerfil.getInstance().getPerfilSelecionado().getAreaPecLeite()),
+            Calc.dividir(vacasLactacao, perfil.getAreaPecLeite()),
             Calc.dividir(vacasLactacao, maoObraPerm),
             Calc.dividir(vacasLactacao, maoObraPerm + maoObraFam),
             Calc.dividir(litros, vacasLactacao) / 30.0, 
             Calc.dividir(litros, maoObraPerm),
-            Calc.dividir(litros, ControlePerfil.getInstance().getPerfilSelecionado().getAreaPecLeite()),
+            Calc.dividir(litros, perfil.getAreaPecLeite()),
             Calc.dividir(litros, maoObraPerm + maoObraFam),
             "",
             "",

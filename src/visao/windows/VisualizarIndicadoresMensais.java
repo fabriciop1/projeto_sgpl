@@ -56,7 +56,6 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
         demdao = new GenericDAO<>(DadosEconMensais.class);          
         dtmdao = new GenericDAO<>(DadosTecMensais.class);
         
-        
         if( crm.getTipoIndicador() == 1 ) { // Tipo Indicadores Econômicos  
             
             dems = demdao.executeSQL("SELECT ano, mes, quantidade, valorUnitario, idDEM_especificacaoFK "
@@ -122,7 +121,7 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
         int anoCont = crm.getAnoIni();
         int anoFim  = crm.getAnoFim();
         int mesCont = crm.getMesIni();
-        int mesFim  = crm.getMesFim();
+        int mesFim  = crm.getMesFim(); 
         Object[] temp;        
         modelIndicadores.addColumn("Indicadores", crm.getIndEconomMensais());
         modelIndicadores.addColumn("Unidade", crm.getUniEconomMensais());
@@ -136,10 +135,16 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
             temp = crm.getConteudoEconomico(iem, itm, mesCont, anoCont);
             
             //----FINAL---------------------------------------------------------
-            modelIndicadores.addColumn(Util.nomeMes(mesCont) + "/" + anoCont, temp);
-            Util.clearVector(temp);
+            if (temp != null) {
+                modelIndicadores.addColumn(Util.nomeMes(mesCont) + "/" + anoCont, temp);
+                Util.clearVector(temp);
+            }
             mesCont++;
         }while(anoCont < anoFim || mesCont <= mesFim);
+        
+        for(int i = 2; i < tabelaIndicadoresMensais.getColumnCount(); i++) {
+            tabelaIndicadoresMensais.getColumnModel().getColumn(i).setPreferredWidth(100);
+        }
         
         tabelaIndicadoresMensais.setModel(modelIndicadores);
         tabelaIndicadoresMensais.getColumnModel().getColumn(0).setPreferredWidth(390);
@@ -174,11 +179,17 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
             temp = crm.getConteudoTecnico(dtms, dems, mesCont, anoCont);
             
             //----FINAL---------------------------------------------------------
-            modelIndicadores.addColumn(Util.nomeMes(mesCont) + "/" + anoCont, temp);
-          
-            Util.clearVector(temp);
+            if(temp != null) {
+                modelIndicadores.addColumn(Util.nomeMes(mesCont) + "/" + anoCont, temp);
+
+                Util.clearVector(temp);
+            }
             mesCont++;
         }while(anoCont < anoFim || mesCont <= mesFim);
+        
+        for(int i = 2; i < tabelaIndicadoresMensais.getColumnCount(); i++) {
+            tabelaIndicadoresMensais.getColumnModel().getColumn(i).setPreferredWidth(100);
+        }
         
         tabelaIndicadoresMensais.getColumnModel().getColumn(0).setPreferredWidth(380);
         tabelaIndicadoresMensais.setDefaultRenderer(Object.class, new DecimalFormatRenderer(false) {

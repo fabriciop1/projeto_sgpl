@@ -457,6 +457,8 @@ public class VisualizarPerfil extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(this, "Backup não restaurado.", "Falha no sistema.\n" + ex.getMessage(), 
                                 JOptionPane.ERROR_MESSAGE);
                     }
+                } else { 
+                    JOptionPane.showMessageDialog(this, "Login incorreto.", "Backup não restaurado.", JOptionPane.WARNING_MESSAGE);
                 }
             }      
         }

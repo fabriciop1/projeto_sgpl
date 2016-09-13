@@ -48,7 +48,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
         tamProp.setText("" + atual.getTamPropriedade());
         nomCida.setText(atual.getCidade());
         
+        int anoAnterior = ControlePerfil.getInstance().getAno();
+        
         fillComboBox();
+        
+        if (anoAnterior != ControlePerfil.getInstance().getAno() && anoAnterior != 0) {
+            ControlePerfil.getInstance().setAno(anoAnterior);
+        }
         
         anoCombo.setSelectedItem(Cast.toString(ControlePerfil.getInstance().getAno()));
     }
@@ -312,7 +318,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private void anoComboItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_anoComboItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             ControlePerfil.getInstance().setAno(Integer.parseInt(anoCombo.getSelectedItem().toString()));
-            System.out.println(ControlePerfil.getInstance().getAno());
         }
     }//GEN-LAST:event_anoComboItemStateChanged
 
@@ -347,6 +352,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     private void fillComboBox() {
         GenericDAO<InventarioResumo> dao = new GenericDAO<>(InventarioResumo.class);
+        
         List<InventarioResumo> listaAnos = dao.executeSQL("" + 
                 "SELECT ano FROM inventario_terras        AS it  WHERE it.idPerfilFK  = " + atual.getId() + " UNION " + 
                 "SELECT ano FROM inventario_forrageiras   AS ifo WHERE ifo.idPerfilFK = " + atual.getId() + " UNION " +

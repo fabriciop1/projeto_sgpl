@@ -236,22 +236,22 @@ public class ControleIndicadoresAnuais {
         Perfil perfil = ControlePerfil.getInstance().getPerfilSelecionado();
         
         GenericDAO<InventarioTerras> itdao = new GenericDAO<>(InventarioTerras.class);
-        List<InventarioTerras> it = itdao.retrieveByColumn("idPerfilFK", perfil.getId());
+        List<InventarioTerras> it = itdao.retrieveByColumns(new String[] {"idPerfilFK", "ano"}, new Object[] {perfil.getId(), ano});
         
         GenericDAO<InventarioForrageiras> ifdao = new GenericDAO<>(InventarioForrageiras.class);
-        List<InventarioForrageiras> ifo = ifdao.retrieveByColumn("idPerfilFK", perfil.getId());
+        List<InventarioForrageiras> ifo = ifdao.retrieveByColumns(new String[] {"idPerfilFK", "ano"}, new Object[] {perfil.getId(), ano});
         
         GenericDAO<InventarioAnimais> invAnimaisDAO = new GenericDAO<>(InventarioAnimais.class);
-        List<InventarioAnimais> listInvAnimais = invAnimaisDAO.retrieveByColumn("idPerfilFK", perfil.getId());
+        List<InventarioAnimais> listInvAnimais = invAnimaisDAO.retrieveByColumns(new String[] {"idPerfilFK", "ano"}, new Object[] {perfil.getId(), ano});
         
         GenericDAO<InventarioBenfeitorias> ibdao = new GenericDAO<>(InventarioBenfeitorias.class);
-        List<InventarioBenfeitorias> ib = ibdao.retrieveByColumn("idPerfilFK", perfil.getId());
+        List<InventarioBenfeitorias> ib = ibdao.retrieveByColumns(new String[] {"idPerfilFK", "ano"}, new Object[] {perfil.getId(), ano});
         
         GenericDAO<InventarioMaquinas> imdao = new GenericDAO<>(InventarioMaquinas.class);
-        List<InventarioMaquinas> im = imdao.retrieveByColumn("idPerfilFK", perfil.getId());
+        List<InventarioMaquinas> im = imdao.retrieveByColumns(new String[] {"idPerfilFK", "ano"}, new Object[] {perfil.getId(), ano});
         
         GenericDAO<InventarioResumo> irdao = new GenericDAO<>(InventarioResumo.class);
-        List<InventarioResumo> ir = irdao.retrieveByColumn("idPerfilFK", ControlePerfil.getInstance().getPerfilSelecionado().getId());
+        List<InventarioResumo> ir = irdao.retrieveByColumns(new String[] {"idPerfilFK", "ano"}, new Object[] {perfil.getId(), ano});
         
         if(ir != null && !ir.isEmpty()) {
             custoOportunidade = ir.get(0).getCustoOportunidade() / 100.0;

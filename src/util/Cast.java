@@ -55,8 +55,8 @@ public final class Cast {
     
     public static String toJavaValue(String value){
         
-        if(value == null || value.isEmpty()){
-            return "0";
+        if(value == null){
+            return "";
         }
         
         value = value.replaceAll("\\s", "");
