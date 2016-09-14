@@ -216,7 +216,7 @@ public class AddUsuario extends javax.swing.JDialog {
             return;
         }
         
-        Usuario usuario = new Usuario(campoLogin.getText(), Cast.toString(campoSenha.getPassword()), radioSelecionado);
+        Usuario usuario = new Usuario(campoLogin.getText(), senhaToString(campoSenha.getPassword()), radioSelecionado);
         udao.insert(usuario);
         
         this.setNovoUsuario(usuario);
@@ -239,7 +239,17 @@ public class AddUsuario extends javax.swing.JDialog {
         this.novoUsuario = novoUsuario;
     }
     
-    
+    public String senhaToString(char[] senhaVet){
+        
+        String senhaStr = "";
+        
+        for(int i = 0; i < senhaVet.length; i++){
+            senhaStr += senhaVet[i];
+        }
+        
+        return senhaStr;
+        
+    }
     
     public boolean verificarSenhas(char[] senha1, char[] senha2){
         
