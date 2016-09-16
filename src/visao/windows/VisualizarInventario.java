@@ -5,6 +5,7 @@
  */
 package visao.windows;
 
+import controle.ControleLogin;
 import static flex.table.GenericTableRowEditor.*;
 import controle.ControlePerfil;
 import flex.db.GenericDAO;
@@ -22,6 +23,7 @@ import modelo.negocio.InventarioMaquinas;
 import modelo.negocio.InventarioResumo;
 import modelo.negocio.InventarioTerras;
 import modelo.negocio.Perfil;
+import modelo.negocio.Usuario;
 import util.Calc;
 import util.Pair;
 import util.Cast;
@@ -43,6 +45,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
     private InventarioResumo resumo;
     private final Perfil perfilAtual;
     private final int ano;
+    private final Usuario usuario;
     
     private final GenericDAO<InventarioTerras> itdao;
     private final GenericDAO<InventarioAnimais> iadao;
@@ -55,6 +58,10 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
         initComponents();
 
+        usuario = ControleLogin.getInstance().getUsuario();
+        
+        verificaTipoUsuario(usuario);
+        
         showTableLines();
 
         super.setLocationRelativeTo(null);
@@ -87,13 +94,17 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
         inicializarGTRE();
         
+        System.out.println("Inventario >>>>> " + perfilAtual.getId());
+        
         if(!resumos.isEmpty()) {
-            resumo = resumos.get(0);          
-        }
+            resumo = resumos.get(0);    
+            
+        } 
         
         if (resumo == null) {
 
             resumo = new InventarioResumo();
+            
             resumo.setIdPerfil(perfilAtual.getId());
             resumo.setAno(ano);                               
 
@@ -3183,4 +3194,33 @@ public class VisualizarInventario extends javax.swing.JFrame {
     private javax.swing.JButton vidaUtilReprodBT;
     private javax.swing.JButton vidaUtilServBT;
     // End of variables declaration//GEN-END:variables
+
+    private void verificaTipoUsuario(Usuario usuario) {
+        
+        if( usuario.getTipoUsuario() == 3 ){ //Usuário apenas visualização
+            adicionarInvAnimaisBT.setEnabled(false);
+            adicionarInvBenfeitoriasBT.setEnabled(false);
+            adicionarInvMaquinasBT.setEnabled(false);
+            adicionarInvTerrasBT.setEnabled(false);
+            
+            editarInvAnimaisBT.setEnabled(false);
+            editarInvBenfeitoriasBT.setEnabled(false);
+            editarInvMaquinasBT.setEnabled(false);
+            editarInvTerrasBT.setEnabled(false);
+            
+            removerInvAnimaisBT.setEnabled(false);
+            removerInvBenfeitoriasBT.setEnabled(false);
+            removerInvMaquinasBT.setEnabled(false);
+            removerInvTerrasBT.setEnabled(false);
+            
+            atividadeLeiteBT.setEnabled(false);
+            custoOportBT.setEnabled(false);
+            salarioMinimoBT.setEnabled(false);
+            
+            valorGastoAnimaisBT.setEnabled(false);
+            vidaUtilReprodBT.setEnabled(false);
+            vidaUtilServBT.setEnabled(false);
+        }
+        
+    }
 }

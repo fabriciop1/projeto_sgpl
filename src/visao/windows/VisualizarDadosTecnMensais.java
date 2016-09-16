@@ -5,6 +5,7 @@
  */
 package visao.windows;
 
+import controle.ControleLogin;
 import controle.ControlePerfil;
 import flex.db.GenericDAO;
 import flex.table.GenericTableAreaEditor;
@@ -22,6 +23,7 @@ import javax.swing.table.DefaultTableModel;
 import modelo.negocio.DadosTecMensais;
 import modelo.negocio.Indicador;
 import modelo.negocio.Perfil;
+import modelo.negocio.Usuario;
 import util.Calc;
 import util.Cast;
 import util.ColorRendererDadosTec;
@@ -41,12 +43,19 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
     private final List<Indicador> indicadores;
     private final GenericTableAreaEditor gtae;
     private final FixedColumnTable fixedTable;
+    private final Usuario usuario;
     
     /**
      * Creates new form VisualizarDadosTecnMensais
      */
     public VisualizarDadosTecnMensais() {
         initComponents();
+        
+        usuario = ControleLogin.getInstance().getUsuario();
+        
+        if( usuario.getTipoUsuario() == 3 ){ //Usuário apenas visualização
+            editarValoresBT.setEnabled(false);
+        }
         
         super.setLocationRelativeTo(null);
         super.setResizable(false);
@@ -166,7 +175,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         textoEntrada = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaDadosTecnicos = new javax.swing.JTable();
-        editarAnoBT = new javax.swing.JButton();
+        editarValoresBT = new javax.swing.JButton();
         retornarBT = new javax.swing.JButton();
         avancarBT = new javax.swing.JButton();
         perfilLabel = new javax.swing.JLabel();
@@ -260,11 +269,11 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
             tabelaDadosTecnicos.getColumnModel().getColumn(13).setResizable(false);
         }
 
-        editarAnoBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit.png"))); // NOI18N
-        editarAnoBT.setToolTipText("Inserir/Editar dados ");
-        editarAnoBT.addActionListener(new java.awt.event.ActionListener() {
+        editarValoresBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit.png"))); // NOI18N
+        editarValoresBT.setToolTipText("Inserir/Editar dados ");
+        editarValoresBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editarAnoBTActionPerformed(evt);
+                editarValoresBTActionPerformed(evt);
             }
         });
 
@@ -313,7 +322,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 212, Short.MAX_VALUE)
                         .addComponent(anoLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(editarAnoBT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(editarValoresBT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
@@ -328,7 +337,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(textoEntrada)
-                            .addComponent(editarAnoBT, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(editarValoresBT, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(anoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(perfilLabel)))
@@ -346,7 +355,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
 
-    private void editarAnoBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarAnoBTActionPerformed
+    private void editarValoresBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarValoresBTActionPerformed
         MonthSelector telaMes = new MonthSelector(this, true);
         
         telaMes.setTitle("SGPL - DTM - Seleção de Mês");
@@ -362,7 +371,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
             
             gtae.showEditor(evt);
         }
-    }//GEN-LAST:event_editarAnoBTActionPerformed
+    }//GEN-LAST:event_editarValoresBTActionPerformed
 
     private void retornarBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_retornarBTActionPerformed
         JScrollBar barPanel = jScrollPane1.getHorizontalScrollBar();
@@ -463,7 +472,7 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
     private javax.swing.JLabel anoLabel;
     private javax.swing.JButton avancarBT;
     private javax.swing.JButton btnVoltar;
-    private javax.swing.JButton editarAnoBT;
+    private javax.swing.JButton editarValoresBT;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel perfilLabel;
     private javax.swing.JButton retornarBT;

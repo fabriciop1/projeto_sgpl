@@ -111,7 +111,7 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.ipadx = -24;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 5);
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 15);
         jPanel1.add(addUsuarioBT, gridBagConstraints);
 
         jComboBoxUsuario.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
@@ -127,7 +127,7 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.ipadx = 143;
         gridBagConstraints.ipady = 11;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 5);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 15);
         jPanel1.add(jComboBoxUsuario, gridBagConstraints);
 
         editUsuarioBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit.png"))); // NOI18N
@@ -140,7 +140,7 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.ipadx = -24;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 5);
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 15);
         jPanel1.add(editUsuarioBT, gridBagConstraints);
 
         deleteUsuarioBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/delete.png"))); // NOI18N

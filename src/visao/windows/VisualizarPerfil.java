@@ -80,7 +80,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         idPerfis = new ArrayList<>();
         
         if (usuario.getTipoUsuario() != 1) { // Sabendo se o usuário é ou não o administrador pelo tipo
-            perfis = perfilDAO.executeSQL("SELECT * "
+            perfis = perfilDAO.executeSQL("SELECT idPerfil, nome, cidade, tamPropriedade, areaPecLeite, prodLeiteDiario, empPermanentes, numFamiliares, idRotaFK "
                                         + "FROM usuario_perfil AS up, perfil AS p "
                                         + "WHERE up.idUsuarioFK = " + usuario.getId() + " AND up.idPerfilFK = p.idPerfil");
         } else {
@@ -97,6 +97,8 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         for(int i = 0; i < perfis.size(); i++){
             
             idPerfis.add(perfis.get(i).getId());
+            
+            System.out.println("for >>>>>>>> " + perfis.get(i).getId());
             
             listaPerfisGTRE.addSourceTableRow(new Object[]{
                 perfis.get(i).getNome(),
@@ -309,6 +311,8 @@ public class VisualizarPerfil extends javax.swing.JFrame {
             atual.setEmpPermanentes((int) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 6));
             atual.setNumFamiliares((int) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 7));
         
+            System.out.println("VisualizarPerfil >>>>> " + atual.getId());
+            
             ControlePerfil.getInstance().setPerfilSelecionado(atual);
 
             new MenuPrincipal().setVisible(true);
@@ -476,14 +480,22 @@ public class VisualizarPerfil extends javax.swing.JFrame {
                 editPerfilBT.setEnabled(false);
             }
         } else {
-            if (usuario.getTipoUsuario() == 1) { // ADM
-                addPerfilBT.setEnabled(true);
-                removerPerfilBT.setEnabled(true);
-                editPerfilBT.setEnabled(true);
-            } else {
-                addPerfilBT.setEnabled(false);
-                editPerfilBT.setEnabled(true);
-                removerPerfilBT.setEnabled(false);
+            switch (usuario.getTipoUsuario()) {
+                case 1: //ADM
+                    addPerfilBT.setEnabled(true);
+                    removerPerfilBT.setEnabled(true);
+                    editPerfilBT.setEnabled(true);
+                    break;
+                case 2: //Comum
+                    addPerfilBT.setEnabled(false);
+                    editPerfilBT.setEnabled(true);
+                    removerPerfilBT.setEnabled(false);
+                    break;
+                default: //Visualização
+                    addPerfilBT.setEnabled(false);
+                    editPerfilBT.setEnabled(false);
+                    removerPerfilBT.setEnabled(false);
+                    break;
             }
          }
     }

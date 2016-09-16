@@ -5,6 +5,7 @@
  */
 package visao.windows;
 
+import controle.ControleLogin;
 import controle.ControlePerfil;
 import flex.db.GenericDAO;
 import flex.table.GenericTableAreaEditor;
@@ -23,6 +24,7 @@ import modelo.negocio.DadosEconMensais;
 import modelo.negocio.Especificacao;
 import modelo.negocio.InventarioResumo;
 import modelo.negocio.Perfil;
+import modelo.negocio.Usuario;
 import util.Cast;
 import util.ColorRendererDadosEcon;
 import util.FixedColumnTable;
@@ -40,6 +42,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
     private final GenericDAO<Especificacao> demespdao;
     private final GenericTableAreaEditor gtae;
     private final Perfil atual;
+    private final Usuario usuario;
     private double salarioMensal;
     private final FixedColumnTable fixedTable;
     
@@ -50,6 +53,12 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         
         initComponents();
        
+        usuario = ControleLogin.getInstance().getUsuario();
+        
+        if( usuario.getTipoUsuario() == 3 ){ //Usuário apenas visualização
+            editarValoresBT.setEnabled(false);
+        }
+        
         atual = ControlePerfil.getInstance().getPerfilSelecionado();
         perfilLabel.setText(atual.getNome());
         anoLabel.setText("Ano: " + ControlePerfil.getInstance().getAno());

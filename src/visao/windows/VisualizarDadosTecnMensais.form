@@ -40,7 +40,7 @@
                       <EmptySpace pref="212" max="32767" attributes="0"/>
                       <Component id="anoLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="editarAnoBT" min="-2" pref="47" max="-2" attributes="0"/>
+                      <Component id="editarValoresBT" min="-2" pref="47" max="-2" attributes="0"/>
                   </Group>
                   <Component id="jScrollPane1" alignment="1" max="32767" attributes="0"/>
               </Group>
@@ -59,7 +59,7 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="btnVoltar" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
                           <Component id="textoEntrada" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="editarAnoBT" min="-2" pref="30" max="-2" attributes="0"/>
+                          <Component id="editarValoresBT" min="-2" pref="30" max="-2" attributes="0"/>
                           <Component id="anoLabel" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -208,7 +208,7 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JButton" name="editarAnoBT">
+    <Component class="javax.swing.JButton" name="editarValoresBT">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/visao/images/edit.png"/>
@@ -216,7 +216,7 @@
         <Property name="toolTipText" type="java.lang.String" value="Inserir/Editar dados "/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editarAnoBTActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editarValoresBTActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="retornarBT">
