@@ -69,8 +69,8 @@ public final class Cast {
     
     public static String toBRLocaleValue(Object value) {
 
-        if(value == null){
-            return "";
+        if(value == null || value.toString().isEmpty()){
+            return "0";
         }
         
         Object valueClass = value.getClass();

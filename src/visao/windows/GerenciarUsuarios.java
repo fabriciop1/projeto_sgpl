@@ -5,6 +5,7 @@
  */
 package visao.windows;
 
+import controle.ControleLogin;
 import flex.db.GenericDAO;
 import java.awt.event.ItemEvent;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
 
     private final GenericDAO<Usuario> udao;
     private List<Usuario> usuarios;
+    private final Usuario usuarioAtual;
     
     /**
      * Creates new form GerenciarUsuarios
@@ -32,6 +34,8 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         super.setTitle("SGPL - Gerenciar Usuários");
         super.setLocationRelativeTo(null);
         super.setResizable(false);
+        
+        usuarioAtual = ControleLogin.getInstance().getUsuario();
         
         udao = new GenericDAO<>(Usuario.class);
         usuarios = new ArrayList<>();
@@ -44,11 +48,6 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         
         listDisp.setEnabled(false);
         listSele.setEnabled(false);
-        
-        radioAdm.setEnabled(false);
-        radioCom.setEnabled(false);
-        radioVis.setEnabled(false);
-        
         
     }
 
@@ -68,6 +67,8 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         addUsuarioBT = new javax.swing.JButton();
         jComboBoxUsuario = new javax.swing.JComboBox();
+        editUsuarioBT = new javax.swing.JButton();
+        deleteUsuarioBT = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         listDisp = new javax.swing.JList();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -80,10 +81,6 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         btnSalvar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
-        jLabel5 = new javax.swing.JLabel();
-        radioVis = new javax.swing.JRadioButton();
-        radioCom = new javax.swing.JRadioButton();
-        radioAdm = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -114,7 +111,7 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.ipadx = -24;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 5);
         jPanel1.add(addUsuarioBT, gridBagConstraints);
 
         jComboBoxUsuario.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
@@ -132,6 +129,32 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         gridBagConstraints.ipady = 11;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 5);
         jPanel1.add(jComboBoxUsuario, gridBagConstraints);
+
+        editUsuarioBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit.png"))); // NOI18N
+        editUsuarioBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editUsuarioBTActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = -24;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 5);
+        jPanel1.add(editUsuarioBT, gridBagConstraints);
+
+        deleteUsuarioBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/delete.png"))); // NOI18N
+        deleteUsuarioBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteUsuarioBTActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = -24;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 10);
+        jPanel1.add(deleteUsuarioBT, gridBagConstraints);
 
         listDisp.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Selecione um usuário" };
@@ -196,82 +219,40 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
             }
         });
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        jLabel5.setText("Permissão do usuário:");
-
-        buttonGroupPermissao.add(radioVis);
-        radioVis.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        radioVis.setText("Apenas visualização");
-        radioVis.setToolTipText("O usuário terá acesso aos perfis selecionados, porém não poderá editá-los");
-        radioVis.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                radioVisActionPerformed(evt);
-            }
-        });
-
-        buttonGroupPermissao.add(radioCom);
-        radioCom.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        radioCom.setText("Usuário comum");
-        radioCom.setToolTipText("O usuário terá acesso aos perfis selecionados");
-        radioCom.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                radioComActionPerformed(evt);
-            }
-        });
-
-        buttonGroupPermissao.add(radioAdm);
-        radioAdm.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        radioAdm.setText("Administrador");
-        radioAdm.setToolTipText("O administrador terá acesso à todos os perfis cadastrados");
-        radioAdm.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                radioAdmActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnEsqTod, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnEsqUni, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnDirTod, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnDirUni, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(204, 204, 204))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 985, Short.MAX_VALUE)
-                    .addComponent(textoEntrada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(58, 58, 58)
-                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(55, 55, 55))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 985, Short.MAX_VALUE)
+                            .addComponent(textoEntrada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnEsqTod, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnEsqUni, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnDirTod, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnDirUni, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(202, 202, 202))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addGap(18, 18, 18)
-                        .addComponent(radioAdm)
-                        .addGap(18, 18, 18)
-                        .addComponent(radioCom)
-                        .addGap(18, 18, 18)
-                        .addComponent(radioVis)
-                        .addGap(162, 162, 162))))
+                        .addGap(50, 50, 50)
+                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(49, 49, 49))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -280,7 +261,7 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
                 .addComponent(textoEntrada)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(48, 48, 48)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -300,18 +281,11 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(radioAdm)
-                        .addComponent(radioCom)
-                        .addComponent(radioVis))
-                    .addComponent(jLabel5))
-                .addGap(87, 87, 87)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(45, 45, 45))
+                .addGap(31, 31, 31))
         );
 
         pack();
@@ -322,8 +296,10 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         telaAddUsu.setTitle("SGPL - Cadastro de Usuário");
         telaAddUsu.setVisible(true);
         
-        jComboBoxUsuario.addItem(telaAddUsu.getNovoUsuario());
-        
+        if(telaAddUsu.getUsuarioSelecionado() != null){
+            jComboBoxUsuario.addItem(telaAddUsu.getUsuarioSelecionado());
+            jComboBoxUsuario.setSelectedIndex(jComboBoxUsuario.getItemCount() - 1);
+        }
         
     }//GEN-LAST:event_addUsuarioBTActionPerformed
 
@@ -420,34 +396,9 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         if( jComboBoxUsuario.getSelectedIndex() != 0 ){
         
             Usuario usuario = (Usuario) jComboBoxUsuario.getSelectedItem();
-            int radioSelecionado = 0;
-
-            if(      radioAdm.isSelected() ) { radioSelecionado = 1; }
-            else if( radioCom.isSelected() ) { radioSelecionado = 2; }
-            else if( radioVis.isSelected() ) { radioSelecionado = 3; }
-
-            if( radioSelecionado == 1 ){
-                int escolha = JOptionPane.showOptionDialog(null, "Deseja realmente tornar " + usuario.getLogin() + " um administrador?\n"
-                        + " Ele(a) terá acesso à todos os perfis cadastrados.",
-                        "Confirmar seleção de administrador", JOptionPane.YES_NO_OPTION, 
-                        JOptionPane.QUESTION_MESSAGE, null, new String[]{"Sim", "Não"}, "Não");
-
-                if(escolha == 1){
-                    return;
-                }
-            }
-
+            
             GenericDAO<Perfil> pdao = new GenericDAO<>(Perfil.class);
             
-            if( radioSelecionado != usuario.getTipoUsuario() && radioSelecionado != 0 ){
-                usuario.setTipoUsuario( radioSelecionado );
-                pdao.executeSQL("UPDATE usuario "
-                                + "SET tipoUsuario = " + radioSelecionado + " "
-                                + "WHERE idUsuario = " + usuario.getId());
-            }
-
-            //----------------------------------------------------------------//
-
             List<Perfil> perfisAntigos = new ArrayList<>();
             List<Perfil> perfisNovos   = new ArrayList<>();
             Boolean[] perfisExcluir, perfisAdd;
@@ -526,31 +477,59 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
             if(jComboBoxUsuario.getSelectedIndex() != 0){
                 System.out.println("Entrou no item " + jComboBoxUsuario.getSelectedIndex());
                 
-                radioAdm.setEnabled(true);
-                radioCom.setEnabled(true);
-                radioVis.setEnabled(true);
-
                 preencherListas((Usuario) jComboBoxUsuario.getSelectedItem());
             } else {
                 ativarComponentes(false);
-                radioAdm.setEnabled(false);
-                radioCom.setEnabled(false);
-                radioVis.setEnabled(false);
             }
         }
     }//GEN-LAST:event_jComboBoxUsuarioItemStateChanged
 
-    private void radioAdmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioAdmActionPerformed
-        ativarComponentes(false);
-    }//GEN-LAST:event_radioAdmActionPerformed
+    private void editUsuarioBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editUsuarioBTActionPerformed
+        if( jComboBoxUsuario.getSelectedIndex() == 0 ){
+            JOptionPane.showMessageDialog(null, "Selecione um usuário!");
+        } else {
+            AddUsuario telaAddUsu = new AddUsuario(this, true);
+            telaAddUsu.setTitle("SGPL - Cadastro de Usuário");
+            telaAddUsu.prepararParaEdicao((Usuario) jComboBoxUsuario.getSelectedItem());
+            telaAddUsu.setVisible(true); 
+        }
+        
+        preencherListas((Usuario) jComboBoxUsuario.getSelectedItem());
+    }//GEN-LAST:event_editUsuarioBTActionPerformed
 
-    private void radioComActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioComActionPerformed
-        ativarComponentes(true);
-    }//GEN-LAST:event_radioComActionPerformed
-
-    private void radioVisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioVisActionPerformed
-        ativarComponentes(true);
-    }//GEN-LAST:event_radioVisActionPerformed
+    private void deleteUsuarioBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteUsuarioBTActionPerformed
+        GenericDAO<Usuario> udao = new GenericDAO<>(Usuario.class);
+        
+        if(jComboBoxUsuario.getSelectedIndex() != 0) {
+            int escolha = JOptionPane.showOptionDialog(null, "Deseja realmente excluir o usuário " 
+                    + jComboBoxUsuario.getSelectedItem().toString().toUpperCase() + " ?", "Exclusão de Usuário", 
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[] {"Sim", "Não"}, "Não");
+           
+            if(escolha == 0)  {
+                String input = JOptionPane.showInputDialog(this, "Exclusão do usuário " + 
+                        jComboBoxUsuario.getSelectedItem().toString().toUpperCase() + ".\nDigite seu login para confirmação: ", 
+                        "Confirmar Exclusão de Perfil", JOptionPane.OK_CANCEL_OPTION);
+ 
+                if (usuarioAtual.getLogin().equals(input)) {
+                     Usuario usuario = (Usuario) jComboBoxUsuario.getSelectedItem();
+                     jComboBoxUsuario.removeItem(usuario);
+                     
+                     udao.executeSQL("DELETE FROM usuario_perfil "
+                                    + "WHERE idUsuarioFK = " + usuario.getId());
+                     
+                     udao.remove(usuario.getId());
+                     
+                     JOptionPane.showMessageDialog(null, "O usuário " + usuario.getLogin().toUpperCase() + " foi removido.");
+                     
+                } else if (!usuarioAtual.getLogin().equals(input) && input != null){
+                    JOptionPane.showMessageDialog(this, "Login Incorreto.", "Login inválido", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecione um usuário!", "Remover - Nenhuma usuário selecionada", 
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_deleteUsuarioBTActionPerformed
 
     
     public void preencherListas(Usuario usuario) {
@@ -560,15 +539,12 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         
         switch (tipoUsu) {
             case 1:
-                radioAdm.setSelected(true);
                 ativarComponentes(false);                
                 break;
             case 2:
-                radioCom.setSelected(true);
                 ativarComponentes(true);
                 break;
             case 3:
-                radioVis.setSelected(true);
                 ativarComponentes(true);
                 break;
             default:
@@ -622,8 +598,6 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
                 for(int j = 0; j < perfisSelec.size(); j++){
                     if(todosPerfis.get(i).getId() == perfisSelec.get(j).getId()){
                         listModelDisp.removeElement(todosPerfis.get(i));
-//                        todosPerfis.remove(todosPerfis.get(i));
-//                        perfisSelec.remove(perfisSelec.get(j));
                         break;
                     } 
                     
@@ -660,19 +634,17 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
     private javax.swing.JButton btnEsqUni;
     private javax.swing.JButton btnSalvar;
     private javax.swing.ButtonGroup buttonGroupPermissao;
+    private javax.swing.JButton deleteUsuarioBT;
+    private javax.swing.JButton editUsuarioBT;
     private javax.swing.JComboBox jComboBoxUsuario;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JList listDisp;
     private javax.swing.JList listSele;
-    private javax.swing.JRadioButton radioAdm;
-    private javax.swing.JRadioButton radioCom;
-    private javax.swing.JRadioButton radioVis;
     private javax.swing.JLabel textoEntrada;
     // End of variables declaration//GEN-END:variables
 }

@@ -818,7 +818,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Categoria", "Início", "Nasci/to", "Morte", "Venda", "Compra", "Final", "Valor (R$/Cab)", "Valor Inicial(R$))", "Valor Final(R$)"
+                "Categoria", "Início", "Nasci/to", "Morte", "Venda", "Compra", "Final", "Valor (R$/Cab)", "Valor Inicial(R$)", "Valor Final(R$)"
             }
         ) {
             Class[] types = new Class [] {
@@ -2111,7 +2111,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total47.setText(Cast.toBRLocaleValue(Double.parseDouble(Cast.toJavaValue(total41.getText().substring(2)))));
         total48.setText(Cast.toBRLocaleValue(total43.getText().substring(2)));
         total49.setText("R$ " + Cast.toBRLocaleValue((Double.parseDouble(Cast.toJavaValue(total44.getText()))
-                + Double.parseDouble(Cast.toJavaValue(total45.getText().substring(2)))
+                + Double.parseDouble(Cast.toJavaValue(total45.getText()))
                 + Double.parseDouble(Cast.toJavaValue(total46.getText()))
                 + Double.parseDouble(Cast.toJavaValue(total47.getText()))
                 + Double.parseDouble(Cast.toJavaValue(total48.getText())))));
@@ -2119,7 +2119,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total50.setText("R$ " + Cast.toBRLocaleValue(((Double.parseDouble(Cast.toJavaValue(atividadeLeite.getText()))) / 100.0
                 * Double.parseDouble(Cast.toJavaValue(total49.getText().substring(2))))));
 
-        total51.setText(Cast.toBRLocaleValue(total9.getText().substring(2)));
+        total51.setText("R$ " + Cast.toBRLocaleValue(total9.getText().substring(2)));
         total52.setText(Cast.toBRLocaleValue(total12.getText().substring(2)));
         total53.setText(Cast.toBRLocaleValue(total31.getText().substring(2)));
         total54.setText(Cast.toBRLocaleValue(Double.parseDouble(Cast.toJavaValue(total40.getText().substring(2)))));
@@ -2138,8 +2138,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total58.setText(Cast.toBRLocaleValue(salarioMinimo.getText()));
         total59.setText(Cast.toBRLocaleValue((Double.parseDouble(Cast.toJavaValue(salarioMinimo.getText())) * 0.3)));
         
-        Double valorTotal60_1 = Double.parseDouble(total58.getText().replace(',', '.')) * 13.0;
-        Double valorTotal60_2 = Double.parseDouble(total58.getText().replace(',', '.')) * 0.3 ;
+        Double valorTotal60_1 = Double.parseDouble(Cast.toJavaValue(total58.getText())) * 13.0;
+        Double valorTotal60_2 = Double.parseDouble(Cast.toJavaValue(total58.getText())) * 0.3 ;
         total60.setText("R$ " + Cast.toBRLocaleValue( (valorTotal60_1 + valorTotal60_2) / 12.0) );
         
     }
@@ -2250,39 +2250,39 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total25.setText(Cast.toBRLocaleValue(totalCompraServ));
         total26.setText(Cast.toBRLocaleValue(Calc.somarLista(totalValFinaServ)));
 
-        Double valorTotal13 = Double.parseDouble(total13.getText().replace(',', '.'));
-        Double valorTotal21 = Double.parseDouble(total21.getText().replace(',', '.'));
+        Double valorTotal13 = Double.parseDouble(Cast.toJavaValue(total13.getText()));
+        Double valorTotal21 = Double.parseDouble(Cast.toJavaValue(total21.getText()));
         total28.setText(Cast.toBRLocaleValue(valorTotal13 + valorTotal21));
         
-        Double valorTotal26 = Double.parseDouble(total26.getText().replace(',', '.'));
-        Double valorTotal18 = Double.parseDouble(total18.getText().replace(',', '.'));
+        Double valorTotal26 = Double.parseDouble(Cast.toJavaValue(total26.getText()));
+        Double valorTotal18 = Double.parseDouble(Cast.toJavaValue(total18.getText()));
         total29.setText(Cast.toBRLocaleValue(valorTotal26 + valorTotal18));
 
-        Double valorTotal19 = Double.parseDouble(total19.getText().substring(2).replace(',', '.'));
-        Double valorTotal20 = Double.parseDouble(total20.getText().substring(2).replace(',', '.'));
-        total31.setText("R$ " + Calc.mediaAritmetica(valorTotal19 + valorTotal20));
+        Double valorTotal19 = Double.parseDouble(Cast.toJavaValue(total19.getText().substring(2)));
+        Double valorTotal20 = Double.parseDouble(Cast.toJavaValue(total20.getText().substring(2)));
+        total31.setText("R$ " + Cast.toBRLocaleValue(Calc.mediaAritmetica(valorTotal19 + valorTotal20)));
 
         if (resumo != null) {
             total32.setText("R$ " + Cast.toBRLocaleValue(resumo.getValorGastoCompraAnimais()));
-            total35.setText("R$ " + Cast.toBRLocaleValue(resumo.getVidaUtilReprodutores()));
+            total35.setText(Cast.toBRLocaleValue(resumo.getVidaUtilReprodutores()));
         }
 
-        Double valorTotal32 = Double.parseDouble(total32.getText().substring(2).replace(',', '.'));
+        Double valorTotal32 = Double.parseDouble(Cast.toJavaValue(total32.getText().substring(2)));
         total33.setText("R$ " + Cast.toBRLocaleValue(valorTotal20 - valorTotal19 - valorTotal32));
 
-        Double valorTotal34 = Double.parseDouble(total34.getText().substring(2).replace(',', '.'));
-        Double valorTotal35 = Double.parseDouble(total35.getText().substring(2).replace(',', '.'));
+        Double valorTotal34 = Double.parseDouble(Cast.toJavaValue(total34.getText().substring(2)));
+        Double valorTotal35 = Double.parseDouble(Cast.toJavaValue(total35.getText()));
         total36.setText(Cast.toBRLocaleValue(Calc.dividir(valorTotal34,valorTotal35)));
         
         total37.setText("R$ " + Cast.toBRLocaleValue(Calc.somaPonderada(totalValFinaServ, totalValCabeServ)));
 
         if (resumo != null) {
-            total38.setText("R$ " + Cast.toBRLocaleValue(resumo.getVidaUtilAnimaisServico()));
+            total38.setText(Cast.toBRLocaleValue(resumo.getVidaUtilAnimaisServico()));
         }
         
-        Double valorTotal37 = Double.parseDouble(total37.getText().substring(2).replace(',', '.'));
-        Double valorTotal38 = Double.parseDouble(total38.getText().substring(2).replace(',', '.'));
-        total39.setText("R$ " + Cast.toBRLocaleValue(Calc.dividir(valorTotal37,valorTotal38)));
+        Double valorTotal37 = Double.parseDouble(Cast.toJavaValue(total37.getText().substring(2)));
+        Double valorTotal38 = Double.parseDouble(Cast.toJavaValue(total38.getText()));
+        total39.setText(Cast.toBRLocaleValue(Calc.dividir(valorTotal37,valorTotal38)));
     }
     
     private void calcularTotaisTerras(List<InventarioForrageiras> forrageiras, List<InventarioTerras> terras){
@@ -2323,12 +2323,12 @@ public class VisualizarInventario extends javax.swing.JFrame {
         total3.setText(Cast.toBRLocaleValue(totalAreaArreFina));
         total4.setText(Cast.toBRLocaleValue(Calc.somarLista(totalAreaPropFina)));
         
-        Double valorTotal1 = Double.parseDouble(total1.getText().replace(',', '.'));
-        Double valorTotal2 = Double.parseDouble(total2.getText().replace(',', '.'));
+        Double valorTotal1 = Double.parseDouble(Cast.toJavaValue(total1.getText()));
+        Double valorTotal2 = Double.parseDouble(Cast.toJavaValue(total2.getText()));
         total5.setText(Cast.toBRLocaleValue(valorTotal1 + valorTotal2));
         
-        Double valorTotal3 = Double.parseDouble(total3.getText().replace(',', '.'));
-        Double valorTotal4 = Double.parseDouble(total4.getText().replace(',', '.'));
+        Double valorTotal3 = Double.parseDouble(Cast.toJavaValue(total3.getText()));
+        Double valorTotal4 = Double.parseDouble(Cast.toJavaValue(total4.getText()));
         total6.setText(Cast.toBRLocaleValue(valorTotal3 + valorTotal4));
         
         total7.setText("R$ " + Cast.toBRLocaleValue(Calc.somaPonderada(totalAreaPropInic, totalTerraNua)));
@@ -2634,17 +2634,17 @@ public class VisualizarInventario extends javax.swing.JFrame {
             }
   
             try {
-                temp = Double.parseDouble(input);
+                temp = Double.parseDouble(Cast.toJavaValue(input));
             } catch(NumberFormatException e) {
                 JOptionPane.showMessageDialog(this, "Insira um valor válido!", "Valor Inválido", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
             if (temp >= 0.0) {
-                total32.setText(String.format("R$ %.2f", temp));
-                total33.setText(String.format("R$ %.2f", (Double.parseDouble(total20.getText().substring(2).replace(',', '.'))
-                        - Double.parseDouble(total19.getText().substring(2).replace(',', '.')) 
-                        - Double.parseDouble(total32.getText().substring(2).replace(',', '.')))));
+                total32.setText("R$ " + Cast.toBRLocaleValue(temp));
+                total33.setText("R$ " + Cast.toBRLocaleValue((Double.parseDouble(Cast.toJavaValue(total20.getText().substring(2)))
+                        - Double.parseDouble(Cast.toJavaValue(total19.getText().substring(2)))
+                        - Double.parseDouble(Cast.toJavaValue(total32.getText().substring(2))) )) );
 
                 if (resumo != null) {
                     resumo.setValorGastoCompraAnimais(temp);
@@ -2839,13 +2839,13 @@ public class VisualizarInventario extends javax.swing.JFrame {
     private void atividadeLeiteBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atividadeLeiteBTActionPerformed
         double temp;
         
-        String input = JOptionPane.showInputDialog(this, "Inserir atividade leiteira (%): ", "Valor Inválido", JOptionPane.INFORMATION_MESSAGE);
+        String input = JOptionPane.showInputDialog(this, "Inserir atividade leiteira (%): ", "Valor da Atividade Leiteira", JOptionPane.INFORMATION_MESSAGE);
         
         if (input == null) {
             return;
         }
         try {
-            temp = Double.parseDouble(input);
+            temp = Double.parseDouble(Cast.toJavaValue(input));
         } catch(NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Insira um valor válido.", "Valor Inválido", JOptionPane.ERROR_MESSAGE);
             return;
@@ -2858,12 +2858,10 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 irdao.update(resumo);
             }
 
-            atividadeLeite.setText("" + temp);
-            total50.setText(String.format("R$ %.2f", Double.parseDouble(total49.getText().substring(2).replace(',', '.'))
-                    * (temp / 100)));
+            atividadeLeite.setText(Cast.toBRLocaleValue(temp));
             
-            total57.setText(String.format("R$ %.2f", Double.parseDouble(total56.getText().substring(2).replace(',', '.'))
-                    * (temp / 100)));
+            total50.setText(String.format("R$ ", Cast.toBRLocaleValue(Double.parseDouble(total49.getText().substring(2)) * (temp / 100)) ));
+            total57.setText(String.format("R$ ", Cast.toBRLocaleValue(Double.parseDouble(total56.getText().substring(2)) * (temp / 100)) ));
 
         } else {
             JOptionPane.showMessageDialog(null, "Insira um valor válido.", "Valor Inválido", JOptionPane.ERROR_MESSAGE);
@@ -2880,7 +2878,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
         }
         
         try {
-            temp = Double.parseDouble(input);
+            temp = Double.parseDouble(Cast.toJavaValue(input));
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Insira um valor válido.", "Valor Inválido", JOptionPane.ERROR_MESSAGE);
             return;
@@ -2892,7 +2890,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 irdao.update(resumo);
             }
 
-            custoOportunidade.setText("" + temp);
+            custoOportunidade.setText(Cast.toBRLocaleValue(temp));
         } else {
             JOptionPane.showMessageDialog(this, "Insira um valor válido.", "Valor Inválido", JOptionPane.ERROR_MESSAGE);
         }
@@ -2906,23 +2904,22 @@ public class VisualizarInventario extends javax.swing.JFrame {
             return;
         } 
         try {
-            temp = Double.parseDouble(input.replace(",", "."));
+            temp = Double.parseDouble(Cast.toJavaValue(input));
         } catch(NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Insira um valor válido.", "Valor Inválido", JOptionPane.ERROR_MESSAGE);
             return;
         }
         if (temp >= 0.0) {
-            salarioMinimo.setText(String.format("%.2f", temp));
-            total58.setText(String.format("%.2f", temp));
-            total59.setText(String.format("%.2f", Calc.multiplicar(Double.parseDouble(salarioMinimo.getText()
-                    .replace(',', '.')), 0.3)));
+            salarioMinimo.setText(Cast.toBRLocaleValue(temp));
+            total58.setText(Cast.toBRLocaleValue(temp));
+            total59.setText(Cast.toBRLocaleValue(Calc.multiplicar(Double.parseDouble(Cast.toJavaValue(salarioMinimo.getText())), 0.3)));
 
             if (resumo != null) {
                 resumo.setSalarioMinimo(temp);
                 irdao.update(resumo);
             }
 
-            total60.setText(String.format("R$ %.2f", (temp * 13 + temp * 0.3) / 12));
+            total60.setText("R$ " + Cast.toBRLocaleValue((temp * 13 + temp * 0.3) / 12));
 
         } else {
             JOptionPane.showMessageDialog(null, "Insira um valor válido.", "Valor Inválido", JOptionPane.ERROR_MESSAGE);
@@ -2944,15 +2941,15 @@ public class VisualizarInventario extends javax.swing.JFrame {
         } 
         
         try {
-            temp = Integer.parseInt(input);
+            temp = Integer.parseInt(Cast.toJavaValue(input));
         } catch(NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Insira um valor válido.", "Valor Inválido.", JOptionPane.ERROR_MESSAGE);
             return;
         }
         if (temp >= 0) {
-            total35.setText("" + temp);
-            total36.setText(String.format("%.2f", Calc.dividir(Double.parseDouble(total34.getText().substring(2).replace(',', '.')),
-                    Double.parseDouble(total35.getText().replace(',', '.')))));
+            total35.setText(Cast.toBRLocaleValue(temp));
+            total36.setText(Cast.toBRLocaleValue(Calc.dividir(Double.parseDouble(Cast.toJavaValue(total34.getText().substring(2))),
+                    Double.parseDouble(Cast.toJavaValue(total35.getText())))));
 
             if (resumo != null) {
                 resumo.setVidaUtilReprodutores(temp);
@@ -2974,16 +2971,16 @@ public class VisualizarInventario extends javax.swing.JFrame {
         }
         
         try {
-            temp = Integer.parseInt(input);
+            temp = Integer.parseInt(Cast.toJavaValue(input));
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Insira um valor válido!", "Valor Inválido", JOptionPane.ERROR_MESSAGE);
             return;
         }
         
         if (temp >= 0) {
-            total38.setText("" + temp);
-            total39.setText(String.format("%.2f", Calc.dividir(Double.parseDouble(total37.getText().substring(2).replace(',', '.')),
-                    Double.parseDouble(total38.getText().replace(',', '.')))));
+            total38.setText(Cast.toBRLocaleValue(temp));
+            total39.setText(Cast.toBRLocaleValue(Calc.dividir(Double.parseDouble(Cast.toJavaValue(total37.getText().substring(2))),
+                    Double.parseDouble(Cast.toJavaValue(total38.getText())))));
 
             if (resumo != null) {
                 resumo.setVidaUtilAnimaisServico(temp);

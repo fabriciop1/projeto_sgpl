@@ -944,7 +944,7 @@
                         <Column editable="false" title="Compra" type="java.lang.Integer"/>
                         <Column editable="false" title="Final" type="java.lang.Integer"/>
                         <Column editable="false" title="Valor (R$/Cab)" type="java.lang.Double"/>
-                        <Column editable="false" title="Valor Inicial(R$))" type="java.lang.Double"/>
+                        <Column editable="false" title="Valor Inicial(R$)" type="java.lang.Double"/>
                         <Column editable="false" title="Valor Final(R$)" type="java.lang.Double"/>
                       </Table>
                     </Property>

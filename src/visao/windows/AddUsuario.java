@@ -6,11 +6,9 @@
 package visao.windows;
 
 import flex.db.GenericDAO;
-import java.util.Arrays;
 import java.util.List;
 import javax.swing.JOptionPane;
 import modelo.negocio.Usuario;
-import util.Cast;
 
 /**
  *
@@ -18,7 +16,8 @@ import util.Cast;
  */
 public class AddUsuario extends javax.swing.JDialog {
     
-    private Usuario novoUsuario; 
+    private Usuario usuarioSelecionado; 
+    private boolean isNew;
     
     /**
      * Creates new form AddUsuario
@@ -26,6 +25,8 @@ public class AddUsuario extends javax.swing.JDialog {
     public AddUsuario(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+                
+        this.setIsNew(true);
         
         super.setLocationRelativeTo(null);
         super.setResizable(false);
@@ -178,23 +179,25 @@ public class AddUsuario extends javax.swing.JDialog {
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
 
+        GenericDAO<Usuario> udao = new GenericDAO<>(Usuario.class);
+        
         //VERICA SE OS CAMPOS DE SENHA ESTÃO IGUAIS
         if(!verificarSenhas( campoSenha.getPassword() , campoSenhaNovam.getPassword() )){
             JOptionPane.showMessageDialog(null, "As senhas estão diferentes! Verifique.");
             return;
         }
-        
-        //VERIFICA SE JÁ EXISTE UM USUÁRIO CADASTRADO COM O LOGIN
-        GenericDAO<Usuario> udao = new GenericDAO<>(Usuario.class);
-        List<Usuario> resultado = udao.executeSQL("SELECT * "
-                                                + "FROM usuario AS u "
-                                                + "WHERE u.login = \"" + campoLogin.getText() + "\"");
-        
-        if( !resultado.isEmpty() ){
-            JOptionPane.showMessageDialog(null, "Já existe um usuário cadastrado como " + campoLogin.getText());
-            return;
+                
+        if( isNew ){
+            //VERIFICA SE JÁ EXISTE UM USUÁRIO CADASTRADO COM O LOGIN
+            List<Usuario> resultado = udao.executeSQL("SELECT * "
+                                                    + "FROM usuario AS u "
+                                                    + "WHERE u.login = \"" + campoLogin.getText() + "\"");
+            if( !resultado.isEmpty() ){
+                JOptionPane.showMessageDialog(null, "Já existe um usuário cadastrado como " + campoLogin.getText());
+                return;
+            }
         }
-        
+                
         //VERIFICA O TIPO DE USUÁRIO. CASO "ADMINISTRADOR" ESTEJA MARCADO, O USUÁRIO PRECISARÁ CONFIRMAR A ESCOLHA
         int radioSelecionado;
 
@@ -206,7 +209,7 @@ public class AddUsuario extends javax.swing.JDialog {
         int escolha = 0;
         
         if( radioSelecionado == 1 ){
-            escolha = JOptionPane.showOptionDialog(null, "Deseja realmente tornar " + campoLogin.getText() + " um administrador?\n"
+            escolha = JOptionPane.showOptionDialog(null, "Deseja realmente tornar " + campoLogin.getText().toUpperCase() + " um administrador?\n"
                     + " Ele(a) terá acesso à todos os perfis cadastrados.",
                     "Confirmar seleção de administrador", JOptionPane.YES_NO_OPTION, 
                     JOptionPane.QUESTION_MESSAGE, null, new String[]{"Sim", "Não"}, "Não");
@@ -216,10 +219,24 @@ public class AddUsuario extends javax.swing.JDialog {
             return;
         }
         
-        Usuario usuario = new Usuario(campoLogin.getText(), senhaToString(campoSenha.getPassword()), radioSelecionado);
-        udao.insert(usuario);
+        Usuario usuario;
         
-        this.setNovoUsuario(usuario);
+        if( isNew ){
+            usuario = new Usuario(campoLogin.getText(), senhaToString(campoSenha.getPassword()), radioSelecionado);
+            udao.insert(usuario);
+            
+            JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!");
+        } else {
+            usuario = this.getUsuarioSelecionado();
+            usuario.setLogin(campoLogin.getText());
+            usuario.setSenha(senhaToString(campoSenha.getPassword()));
+            usuario.setTipoUsuario(radioSelecionado);
+            
+            udao.update(usuario);
+            JOptionPane.showMessageDialog(null, "Usuário atualizado com sucesso!");
+        }
+        
+        this.setUsuarioSelecionado(usuario);
         
         this.setVisible(false);
         this.dispose();
@@ -231,14 +248,22 @@ public class AddUsuario extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    public Usuario getNovoUsuario() {
-        return novoUsuario;
+    public Usuario getUsuarioSelecionado() {
+        return usuarioSelecionado;
     }
 
-    public void setNovoUsuario(Usuario novoUsuario) {
-        this.novoUsuario = novoUsuario;
+    public void setUsuarioSelecionado(Usuario usuarioSelecionado) {
+        this.usuarioSelecionado = usuarioSelecionado;
     }
-    
+
+    public boolean isIsNew() {
+        return isNew;
+    }
+
+    public void setIsNew(boolean isNew) {
+        this.isNew = isNew;
+    }
+        
     public String senhaToString(char[] senhaVet){
         
         String senhaStr = "";
@@ -258,16 +283,45 @@ public class AddUsuario extends javax.swing.JDialog {
         }
         
         for( int i = 0; i < senha1.length; i++ ){
-            
             if(senha1[i] != senha2[i]){
                 return false;
             }
-            
         }
         
         return true;
         
     }
+    
+    public void prepararParaEdicao(Usuario usuario){
+        
+        this.setIsNew(false);
+        this.setUsuarioSelecionado(usuario);
+        
+        textoEntrada.setText("EDIÇÃO DE USUÁRIO");
+        
+        campoLogin.setText( usuario.getLogin() );
+        campoSenha.setText( usuario.getSenha() );
+        
+        //--RadioButton---------------------------
+        int tipoUsu = usuario.getTipoUsuario();
+        
+        switch (tipoUsu) {
+            case 1:
+                radioAdm.setSelected(true);              
+                break;
+            case 2:
+                radioCom.setSelected(true);
+                break;
+            case 3:
+                radioVis.setSelected(true);
+                break;
+            default:
+                break;
+        }
+        
+    }
+    
+    
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
