@@ -181,7 +181,10 @@ public class AddUsuario extends javax.swing.JDialog {
 
         GenericDAO<Usuario> udao = new GenericDAO<>(Usuario.class);
         
-        //VERICA SE OS CAMPOS DE SENHA ESTÃO IGUAIS
+        //VERIFICA SE ALGUM CAMPO ESTÁ VAZIO
+        
+        
+        //VERIFICA SE OS CAMPOS DE SENHA ESTÃO IGUAIS
         if(!verificarSenhas( campoSenha.getPassword() , campoSenhaNovam.getPassword() )){
             JOptionPane.showMessageDialog(null, "As senhas estão diferentes! Verifique.");
             return;

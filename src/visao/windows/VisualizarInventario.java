@@ -2426,7 +2426,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 default:
                     break;
             }
-            calcularTotaisMaquinas(imdao.retrieveByColumn("idPerfilFK", perfilAtual.getId()));
+            calcularTotaisMaquinas(imdao.retrieveByColumns(new String[]{"idPerfilFK", "ano"}, new Object[]{perfilAtual.getId(), ano}));
             calcularTotaisResumo();
         });
 
@@ -2471,7 +2471,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 default:
                     break;
             }
-            calcularTotaisBenfeitorias(ibdao.retrieveByColumn("idPerfilFK", perfilAtual.getId()));
+            calcularTotaisBenfeitorias(ibdao.retrieveByColumns(new String[]{"idPerfilFK", "ano"}, new Object[]{perfilAtual.getId(), ano}));
             calcularTotaisResumo();
         });
 
@@ -2525,8 +2525,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 itdao.remove(terrasRowID);
             }
             
-            calcularTotaisTerras(ifdao.retrieveByColumn("idPerfilFK", perfilAtual.getId()),
-                    itdao.retrieveByColumn("idPerfilFK", perfilAtual.getId()));
+            calcularTotaisTerras(ifdao.retrieveByColumns(new String[]{"idPerfilFK", "ano"}, new Object[]{perfilAtual.getId(), ano}),
+                    itdao.retrieveByColumns(new String[]{"idPerfilFK", "ano"}, new Object[]{perfilAtual.getId(), ano}));
             calcularTotaisResumo();
         });
         
@@ -2549,8 +2549,8 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 
                 ifdao.update(forrageiras);
                 
-                calcularTotaisTerras(ifdao.retrieveByColumn("idPerfilFK", perfilAtual.getId()), 
-                        itdao.retrieveByColumn("idPerfilFK", perfilAtual.getId()));
+                calcularTotaisTerras(ifdao.retrieveByColumns(new String[]{"idPerfilFK", "ano"}, new Object[]{perfilAtual.getId(), ano}), 
+                        itdao.retrieveByColumns(new String[]{"idPerfilFK", "ano"}, new Object[]{perfilAtual.getId(), ano}));
                 calcularTotaisResumo();
             }
         });
@@ -2602,7 +2602,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
             } else if (modifType == TableModifiedEvent.ROW_DELETED) {
                 iadao.remove(rowID);
             }
-            calcularTotaisAnimais(iadao.retrieveByColumn("idPerfilFK", perfilAtual.getId()));
+            calcularTotaisAnimais(iadao.retrieveByColumns(new String[]{"idPerfilFK", "ano"}, new Object[]{perfilAtual.getId(), ano}));
             calcularTotaisResumo();
         };
         

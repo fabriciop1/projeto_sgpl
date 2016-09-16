@@ -54,7 +54,6 @@ public class Login extends javax.swing.JFrame {
 
         btnEntrar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         btnEntrar.setText("Entrar");
-        btnEntrar.setToolTipText("");
         btnEntrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEntrarActionPerformed(evt);
