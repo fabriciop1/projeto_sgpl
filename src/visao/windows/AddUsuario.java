@@ -55,6 +55,7 @@ public class AddUsuario extends javax.swing.JDialog {
         textoEntrada = new javax.swing.JLabel();
         btnSalvar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
+        textoDescricao = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -79,17 +80,29 @@ public class AddUsuario extends javax.swing.JDialog {
         buttonGroupPermissao.add(radioAdm);
         radioAdm.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         radioAdm.setText("Administrador");
-        radioAdm.setToolTipText("O administrador terá acesso à todos os perfis cadastrados");
+        radioAdm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioAdmActionPerformed(evt);
+            }
+        });
 
         buttonGroupPermissao.add(radioCom);
         radioCom.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         radioCom.setText("Usuário comum");
-        radioCom.setToolTipText("O usuário terá acesso aos perfis selecionados");
+        radioCom.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioComActionPerformed(evt);
+            }
+        });
 
         buttonGroupPermissao.add(radioVis);
         radioVis.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         radioVis.setText("Apenas visualização");
-        radioVis.setToolTipText("O usuário terá acesso aos perfis selecionados, porém não poderá editá-los");
+        radioVis.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioVisActionPerformed(evt);
+            }
+        });
 
         textoEntrada.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         textoEntrada.setForeground(new java.awt.Color(0, 38, 255));
@@ -109,6 +122,8 @@ public class AddUsuario extends javax.swing.JDialog {
                 btnCancelarActionPerformed(evt);
             }
         });
+
+        textoDescricao.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -132,14 +147,15 @@ public class AddUsuario extends javax.swing.JDialog {
                             .addComponent(radioCom)
                             .addComponent(radioAdm))))
                 .addContainerGap(49, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(textoEntrada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 145, Short.MAX_VALUE)
-                        .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(textoDescricao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -167,7 +183,9 @@ public class AddUsuario extends javax.swing.JDialog {
                 .addComponent(radioCom)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(radioVis)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(textoDescricao)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -250,6 +268,18 @@ public class AddUsuario extends javax.swing.JDialog {
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void radioAdmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioAdmActionPerformed
+        textoDescricao.setText("O administrador terá acesso à todos os perfis cadastrados");
+    }//GEN-LAST:event_radioAdmActionPerformed
+
+    private void radioComActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioComActionPerformed
+        textoDescricao.setText("O usuário terá acesso aos perfis selecionados");
+    }//GEN-LAST:event_radioComActionPerformed
+
+    private void radioVisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioVisActionPerformed
+        textoDescricao.setText("O usuário terá acesso aos perfis apenas para visualização");
+    }//GEN-LAST:event_radioVisActionPerformed
 
     public Usuario getUsuarioSelecionado() {
         return usuarioSelecionado;
@@ -340,6 +370,7 @@ public class AddUsuario extends javax.swing.JDialog {
     private javax.swing.JRadioButton radioAdm;
     private javax.swing.JRadioButton radioCom;
     private javax.swing.JRadioButton radioVis;
+    private javax.swing.JLabel textoDescricao;
     private javax.swing.JLabel textoEntrada;
     // End of variables declaration//GEN-END:variables
 }

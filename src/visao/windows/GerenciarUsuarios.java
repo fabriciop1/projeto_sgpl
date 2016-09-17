@@ -102,6 +102,7 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         jPanel1.add(jLabel1, gridBagConstraints);
 
         addUsuarioBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/add.png"))); // NOI18N
+        addUsuarioBT.setToolTipText("Novo Usuário.");
         addUsuarioBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addUsuarioBTActionPerformed(evt);
@@ -131,6 +132,7 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         jPanel1.add(jComboBoxUsuario, gridBagConstraints);
 
         editUsuarioBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit.png"))); // NOI18N
+        editUsuarioBT.setToolTipText("Editar Usuário.");
         editUsuarioBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editUsuarioBTActionPerformed(evt);
@@ -144,6 +146,7 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         jPanel1.add(editUsuarioBT, gridBagConstraints);
 
         deleteUsuarioBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/delete.png"))); // NOI18N
+        deleteUsuarioBT.setToolTipText("Deletar Usuário.");
         deleteUsuarioBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteUsuarioBTActionPerformed(evt);
@@ -486,15 +489,16 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
 
     private void editUsuarioBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editUsuarioBTActionPerformed
         if( jComboBoxUsuario.getSelectedIndex() == 0 ){
-            JOptionPane.showMessageDialog(null, "Selecione um usuário!");
+            JOptionPane.showMessageDialog(null, "Selecione um usuário!", "Editar - Nenhum usuário selecionado", 
+                    JOptionPane.INFORMATION_MESSAGE);
         } else {
             AddUsuario telaAddUsu = new AddUsuario(this, true);
             telaAddUsu.setTitle("SGPL - Cadastro de Usuário");
             telaAddUsu.prepararParaEdicao((Usuario) jComboBoxUsuario.getSelectedItem());
             telaAddUsu.setVisible(true); 
+            
+            preencherListas((Usuario) jComboBoxUsuario.getSelectedItem());
         }
-        
-        preencherListas((Usuario) jComboBoxUsuario.getSelectedItem());
     }//GEN-LAST:event_editUsuarioBTActionPerformed
 
     private void deleteUsuarioBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteUsuarioBTActionPerformed
@@ -526,7 +530,7 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
                 }
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Selecione um usuário!", "Remover - Nenhuma usuário selecionada", 
+            JOptionPane.showMessageDialog(null, "Selecione um usuário!", "Remover - Nenhum usuário selecionado", 
                     JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_deleteUsuarioBTActionPerformed

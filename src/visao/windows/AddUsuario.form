@@ -50,7 +50,7 @@
               </Group>
               <EmptySpace pref="49" max="32767" attributes="0"/>
           </Group>
-          <Group type="102" alignment="1" attributes="0">
+          <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="textoEntrada" max="32767" attributes="0"/>
@@ -59,6 +59,7 @@
                       <EmptySpace pref="145" max="32767" attributes="0"/>
                       <Component id="btnSalvar" min="-2" pref="110" max="-2" attributes="0"/>
                   </Group>
+                  <Component id="textoDescricao" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -89,7 +90,9 @@
               <Component id="radioCom" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="radioVis" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="72" max="32767" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="textoDescricao" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="65" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="btnSalvar" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                   <Component id="btnCancelar" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
@@ -162,8 +165,10 @@
           <Font name="Tahoma" size="16" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Administrador"/>
-        <Property name="toolTipText" type="java.lang.String" value="O administrador ter&#xe1; acesso &#xe0; todos os perfis cadastrados"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="radioAdmActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JRadioButton" name="radioCom">
       <Properties>
@@ -174,8 +179,10 @@
           <Font name="Tahoma" size="16" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Usu&#xe1;rio comum"/>
-        <Property name="toolTipText" type="java.lang.String" value="O usu&#xe1;rio ter&#xe1; acesso aos perfis selecionados"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="radioComActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JRadioButton" name="radioVis">
       <Properties>
@@ -186,8 +193,10 @@
           <Font name="Tahoma" size="16" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Apenas visualiza&#xe7;&#xe3;o"/>
-        <Property name="toolTipText" type="java.lang.String" value="O usu&#xe1;rio ter&#xe1; acesso aos perfis selecionados, por&#xe9;m n&#xe3;o poder&#xe1; edit&#xe1;-los"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="radioVisActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="textoEntrada">
       <Properties>
@@ -216,6 +225,11 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCancelarActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="textoDescricao">
+      <Properties>
+        <Property name="horizontalAlignment" type="int" value="0"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>
