@@ -11,14 +11,9 @@ import flex.db.GenericDAO;
 import flex.table.GenericTableAreaEditor;
 import flex.table.TableModifiedEvent;
 import java.awt.Font;
-import java.awt.event.ItemEvent;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
-import javax.swing.JOptionPane;
 import javax.swing.JScrollBar;
 import javax.swing.table.DefaultTableModel;
 import modelo.negocio.DadosEconMensais;
@@ -405,11 +400,6 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         tabelaDadosEconomicos.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         tabelaDadosEconomicos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tabelaDadosEconomicos.getTableHeader().setReorderingAllowed(false);
-        tabelaDadosEconomicos.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                tabelaDadosEconomicosKeyPressed(evt);
-            }
-        });
         jScrollPane1.setViewportView(tabelaDadosEconomicos);
         tabelaDadosEconomicos.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         if (tabelaDadosEconomicos.getColumnModel().getColumnCount() > 0) {
@@ -604,14 +594,6 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         barPanelMeses.setValue(barPanelMeses.getValue() - 675);
     }//GEN-LAST:event_retornarBTActionPerformed
 
-    private void tabelaDadosEconomicosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabelaDadosEconomicosKeyPressed
-        if(evt.getKeyCode() == KeyEvent.VK_LEFT) {
-            retornarBTActionPerformed(null);
-        } else if (evt.getKeyCode() == KeyEvent.VK_RIGHT) {
-            avancarBTActionPerformed(null);
-        }
-    }//GEN-LAST:event_tabelaDadosEconomicosKeyPressed
-
     
     private void moveScrollBar(java.awt.event.MouseWheelEvent evt) {
         JScrollBar barPanel3 = jScrollPane1.getVerticalScrollBar();     
@@ -693,7 +675,8 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         
         GenericDAO<InventarioResumo> irdao = new GenericDAO<>(InventarioResumo.class);
         
-        List<InventarioResumo> ir = irdao.retrieveByColumn("idPerfilFK", atual.getId());
+        List<InventarioResumo> ir = irdao.retrieveByColumns(new String[]{"idPerfilFK", "ano"}, new Object[]{atual.getId(), 
+            ControlePerfil.getInstance().getAno()});
         
         if (ir.size() > 0) {
              salarioMin = ir.get(0).getSalarioMinimo();

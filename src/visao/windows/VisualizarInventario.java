@@ -90,27 +90,9 @@ public class VisualizarInventario extends javax.swing.JFrame {
         List<InventarioAnimais> animais = iadao.retrieveByColumns(new String[] {"idPerfilFK", "ano"}, new Object[] {perfilAtual.getId(), ano});
         List<InventarioBenfeitorias> benfeitorias = ibdao.retrieveByColumns(new String[]{"idPerfilFK", "ano"}, new Object[] { perfilAtual.getId(), ano});
         List<InventarioMaquinas> maquinas = imdao.retrieveByColumns(new String[] {"idPerfilFK", "ano"}, new Object[] { perfilAtual.getId(), ano});
-        List<InventarioResumo> resumos = irdao.retrieveByColumns(new String[] {"idPerfilFK", "ano"}, new Object[] { perfilAtual.getId(), ano});
 
         inicializarGTRE();
         
-        System.out.println("Inventario >>>>> " + perfilAtual.getId());
-        
-        if(!resumos.isEmpty()) {
-            resumo = resumos.get(0);    
-            
-        } 
-        
-        if (resumo == null) {
-
-            resumo = new InventarioResumo();
-            
-            resumo.setIdPerfil(perfilAtual.getId());
-            resumo.setAno(ano);                               
-
-            irdao.insert(resumo);
-
-        }
 
         //------------------------------------------------------------------------------------------------------
         //Preencher Tabela Inventario Terras

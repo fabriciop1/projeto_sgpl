@@ -98,8 +98,6 @@ public class VisualizarPerfil extends javax.swing.JFrame {
             
             idPerfis.add(perfis.get(i).getId());
             
-            System.out.println("for >>>>>>>> " + perfis.get(i).getId());
-            
             listaPerfisGTRE.addSourceTableRow(new Object[]{
                 perfis.get(i).getNome(),
                 perfis.get(i).getCidade(),
@@ -310,8 +308,6 @@ public class VisualizarPerfil extends javax.swing.JFrame {
             atual.setProdLeiteDiario((double) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 5));
             atual.setEmpPermanentes((int) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 6));
             atual.setNumFamiliares((int) listaPerfis.getModel().getValueAt(listaPerfis.getSelectedRow(), 7));
-        
-            System.out.println("VisualizarPerfil >>>>> " + atual.getId());
             
             ControlePerfil.getInstance().setPerfilSelecionado(atual);
 
@@ -357,6 +353,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
                if (usuario.getLogin().equals(input)) {
                     listaPerfisGTRE.removeSourceTableRow(listaPerfis.getSelectedRow());
                     verificaTabelaVazia();
+                    JOptionPane.showMessageDialog(this, "O perfil foi removido com sucesso. ", "Exclusão realizada.", JOptionPane.INFORMATION_MESSAGE);
                } else if (!usuario.getLogin().equals(input) && input != null){
                    JOptionPane.showMessageDialog(this, "Login Incorreto.", "Login inválido", JOptionPane.ERROR_MESSAGE);
                }

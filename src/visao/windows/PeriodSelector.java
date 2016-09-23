@@ -245,13 +245,22 @@ public class PeriodSelector extends javax.swing.JDialog {
         anoFimCombo.removeAllItems();
         
         dadosTec = new GenericDAO(DadosTecMensais.class);
-        List<DadosTecMensais> dados = dadosTec.retrieveByColumn("idPerfilFK", atual.getId(), "ano", "ano DESC");
-            
+        
+        List<DadosTecMensais> dados = dadosTec.executeSQL("" + 
+                "SELECT ano FROM inventario_terras        AS it  WHERE it.idPerfilFK  = " + atual.getId() + " UNION " + 
+                "SELECT ano FROM inventario_forrageiras   AS ifo WHERE ifo.idPerfilFK = " + atual.getId() + " UNION " +
+                "SELECT ano FROM inventario_maquinas      AS im  WHERE im.idPerfilFK  = " + atual.getId() + " UNION " + 
+                "SELECT ano FROM inventario_benfeitorias  AS ib  WHERE ib.idPerfilFK  = " + atual.getId() + " UNION " + 
+                "SELECT ano FROM inventario_animais       AS ia  WHERE ia.idPerfilFK  = " + atual.getId() + " UNION " + 
+                "SELECT ano FROM inventario_resumo        AS ir  WHERE ir.idPerfilFK  = " + atual.getId() + " UNION " +
+                "SELECT ano FROM dados_economicos_mensais AS dem WHERE dem.idPerfilFK = " + atual.getId() + " UNION " +
+                "SELECT ano FROM dados_tecnicos_mensais   AS dtm WHERE dtm.idPerfilFK = " + atual.getId() +
+                " ORDER BY ano");
+
         if (dados.isEmpty()) {
             Calendar cal = GregorianCalendar.getInstance();
             anoIniCombo.addItem(Cast.toString(cal.get(Calendar.YEAR)));
             anoFimCombo.addItem(Cast.toString(cal.get(Calendar.YEAR)));
-        
         }
 
         for(int i = 0; i < dados.size(); i++) {
@@ -262,21 +271,7 @@ public class PeriodSelector extends javax.swing.JDialog {
     }//GEN-LAST:event_tipoTecnicoActionPerformed
 
     private void tipoEconomicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tipoEconomicoActionPerformed
-        anoIniCombo.removeAllItems();
-        anoFimCombo.removeAllItems();
-        
-        dadosEcon = new GenericDAO(DadosEconMensais.class);
-        List<DadosEconMensais> dados = dadosEcon.retrieveByColumn("idPerfilFK", atual.getId(), "ano", "ano DESC");
-
-        if (dados.isEmpty()) {
-            Calendar cal = GregorianCalendar.getInstance();
-            anoIniCombo.addItem(Cast.toString(cal.get(Calendar.YEAR)));
-            anoFimCombo.addItem(Cast.toString(cal.get(Calendar.YEAR)));
-        }
-        for(int i = 0; i < dados.size(); i++) {
-            anoIniCombo.addItem(Cast.toString(dados.get(i).getAno()));
-            anoFimCombo.addItem(Cast.toString(dados.get(i).getAno()));
-        }
+        tipoTecnicoActionPerformed(evt);
     }//GEN-LAST:event_tipoEconomicoActionPerformed
 
 

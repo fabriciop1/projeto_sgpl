@@ -119,9 +119,7 @@ public class GenericTableAreaEditor extends GenericTableModifier {
                 tableAreaData[i][j - getStringColumnsOffset()] = Cast.toJavaValue(editValue != null ? editValue.toString() : null);
                 
                 if( !Objects.equals(editValue, sourceValue) ){
-                    
-                    System.out.println("\"" + editValue + "\" and \"" + sourceValue + "\" are different.");
-                    
+                                       
                     tableCellModified[i][j - getStringColumnsOffset()] = true;
                     
                     if(!rowModified){
@@ -151,8 +149,8 @@ public class GenericTableAreaEditor extends GenericTableModifier {
         }
         
         //DEBUG
-        System.out.println("Rows Modified: " + rowsModified.size());
-        System.out.println("Columns Modified: " + columnsModified.size());
+        // System.out.println("Rows Modified: " + rowsModified.size());
+        // System.out.println("Columns Modified: " + columnsModified.size());
         
         if(rowsModified.size() > 0){
             

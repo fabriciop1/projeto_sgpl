@@ -180,7 +180,18 @@ public class MultipleYearSelector extends javax.swing.JDialog {
         DefaultListModel listModel = new DefaultListModel();
         
         GenericDAO<DadosTecMensais> dadosTecDAO = new GenericDAO(DadosTecMensais.class);
-        List<DadosTecMensais> dados = dadosTecDAO.retrieveByColumn("idPerfilFK", atual.getId(), "ano", "ano DESC");
+        
+        List<DadosTecMensais> dados = dadosTecDAO.executeSQL("" + 
+                "SELECT ano FROM inventario_terras        AS it  WHERE it.idPerfilFK  = " + atual.getId() + " UNION " + 
+                "SELECT ano FROM inventario_forrageiras   AS ifo WHERE ifo.idPerfilFK = " + atual.getId() + " UNION " +
+                "SELECT ano FROM inventario_maquinas      AS im  WHERE im.idPerfilFK  = " + atual.getId() + " UNION " + 
+                "SELECT ano FROM inventario_benfeitorias  AS ib  WHERE ib.idPerfilFK  = " + atual.getId() + " UNION " + 
+                "SELECT ano FROM inventario_animais       AS ia  WHERE ia.idPerfilFK  = " + atual.getId() + " UNION " + 
+                "SELECT ano FROM inventario_resumo        AS ir  WHERE ir.idPerfilFK  = " + atual.getId() + " UNION " +
+                "SELECT ano FROM dados_economicos_mensais AS dem WHERE dem.idPerfilFK = " + atual.getId() + " UNION " +
+                "SELECT ano FROM dados_tecnicos_mensais   AS dtm WHERE dtm.idPerfilFK = " + atual.getId() +
+                " ORDER BY ano");
+
 
         if (dados.isEmpty()) {
             listModel.addElement("Nenhum ano cadastrado.");
@@ -194,22 +205,7 @@ public class MultipleYearSelector extends javax.swing.JDialog {
     }//GEN-LAST:event_tipoTecnicoActionPerformed
 
     private void tipoEconomicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tipoEconomicoActionPerformed
-        listaAnos.removeAll();
-        
-        DefaultListModel listModel = new DefaultListModel();
-        
-        GenericDAO<DadosEconMensais> dadosEconDAO = new GenericDAO(DadosEconMensais.class);
-        List<DadosEconMensais> dados = dadosEconDAO.retrieveByColumn("idPerfilFK", atual.getId(), "ano", "ano DESC");
-
-        if (dados.isEmpty()) {
-            listModel.addElement("Nenhum ano cadastrado.");
-        }
-        
-        for(int i = 0; i < dados.size(); i++) {
-            listModel.addElement(Cast.toString(dados.get(i).getAno()));
-        }
-        
-        listaAnos.setModel(listModel);        
+        tipoTecnicoActionPerformed(evt);
     }//GEN-LAST:event_tipoEconomicoActionPerformed
 
     private void cancelarBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarBTActionPerformed

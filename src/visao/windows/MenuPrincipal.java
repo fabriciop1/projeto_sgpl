@@ -325,6 +325,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     private void addAnoBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addAnoBTActionPerformed
         boolean existe = false;
+        InventarioResumo resumo = null;
         
         SingleYearSelector telaNovoAno = new SingleYearSelector(this, true);
         telaNovoAno.setTitle("SGPL - Adicionar novo ano");
@@ -332,24 +333,36 @@ public class MenuPrincipal extends javax.swing.JFrame {
         
         String ano = telaNovoAno.getSelected();
         
-        if (ano == null) {
-            return;
-        }
-        
-        for(int i = 0; i < anoCombo.getItemCount(); i++) {
-            if (anoCombo.getItemAt(i).equals(ano)) {
-                existe = true;
-                break;
+        if (ano != null) {
+            GenericDAO<InventarioResumo> irdao = new GenericDAO<>(InventarioResumo.class);
+            List<InventarioResumo> resumos = irdao.retrieveByColumns(new String[] {"idPerfilFK", "ano"}, new Object[] { atual.getId(), ano});
+
+            if(!resumos.isEmpty()) {
+                resumo = resumos.get(0);         
+            }         
+
+            if (resumo == null) {
+                resumo = new InventarioResumo();
+                resumo.setIdPerfil(atual.getId());
+                resumo.setAno(Integer.parseInt(ano));                               
+                irdao.insert(resumo);
             }
+
+            for(int i = 0; i < anoCombo.getItemCount(); i++) {
+                if (anoCombo.getItemAt(i).equals(ano)) {
+                    existe = true;
+                    break;
+                }
+            }
+            if (existe == true) {
+                JOptionPane.showMessageDialog(this, "Este ano já foi inserido para o perfil de " + atual.getNome()
+                        + ".", "Alerta - Inserção de ano já cadastrado", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            anoCombo.addItem(ano);
+            anoCombo.setSelectedItem(ano);
         }
-        if (existe == true) {
-            JOptionPane.showMessageDialog(this, "Este ano já foi inserido para o perfil de " + atual.getNome()
-                    + ".", "Alerta - Inserção de ano já cadastrado", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        anoCombo.addItem(ano);
-        anoCombo.setSelectedItem(ano);
     }//GEN-LAST:event_addAnoBTActionPerformed
 
     private void fillComboBox() {
