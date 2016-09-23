@@ -5,6 +5,7 @@
  */
 package visao.windows;
 
+import controle.ControleLogin;
 import flex.db.GenericDAO;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -229,7 +230,7 @@ public class AddUsuario extends javax.swing.JDialog {
 
         int escolha = 0;
         
-        if( radioSelecionado == 1 ){
+        if( radioSelecionado == 1 && this.getUsuarioSelecionado().getTipoUsuario() != 1 ){
             escolha = JOptionPane.showOptionDialog(null, "Deseja realmente tornar " + campoLogin.getText().toUpperCase() + " um administrador?\n"
                     + " Ele(a) terá acesso à todos os perfis cadastrados.",
                     "Confirmar seleção de administrador", JOptionPane.YES_NO_OPTION, 
@@ -248,13 +249,30 @@ public class AddUsuario extends javax.swing.JDialog {
             
             JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!");
         } else {
+            Usuario usuarioAtual = ControleLogin.getInstance().getUsuario();
             usuario = this.getUsuarioSelecionado();
-            usuario.setLogin(campoLogin.getText());
-            usuario.setSenha(senhaToString(campoSenha.getPassword()));
-            usuario.setTipoUsuario(radioSelecionado);
             
-            udao.update(usuario);
-            JOptionPane.showMessageDialog(null, "Usuário atualizado com sucesso!");
+            String input = JOptionPane.showInputDialog(this, "Edição do usuário " + 
+                        usuario.getLogin().toUpperCase() + ".\nDigite seu login para confirmação: ", 
+                        "Confirmar Exclusão de Perfil", JOptionPane.OK_CANCEL_OPTION);
+             
+            if (usuarioAtual.getLogin().equals(input)) {
+
+                usuario.setLogin(campoLogin.getText());
+                usuario.setSenha(senhaToString(campoSenha.getPassword()));
+                usuario.setTipoUsuario(radioSelecionado);
+
+                udao.update(usuario);
+                JOptionPane.showMessageDialog(null, "Usuário atualizado com sucesso!");
+
+            } else if (!usuarioAtual.getLogin().equals(input) && input != null){
+                JOptionPane.showMessageDialog(this, "Login Incorreto.", "Login inválido", JOptionPane.ERROR_MESSAGE);
+                return;
+            } else if (input == null){
+                return;
+            }
+            
+                     
         }
         
         this.setUsuarioSelecionado(usuario);
@@ -334,6 +352,7 @@ public class AddUsuario extends javax.swing.JDialog {
         
         campoLogin.setText( usuario.getLogin() );
         campoSenha.setText( usuario.getSenha() );
+        campoSenhaNovam.setText( usuario.getSenha() );
         
         //--RadioButton---------------------------
         int tipoUsu = usuario.getTipoUsuario();
