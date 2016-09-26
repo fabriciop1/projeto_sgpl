@@ -299,7 +299,7 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(textoEntrada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(382, Short.MAX_VALUE))
+                .addContainerGap(486, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1)
@@ -333,12 +333,12 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
 
     private void retornarBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_retornarBTActionPerformed
         JScrollBar barPanel = jScrollPane1.getHorizontalScrollBar();
-        barPanel.setValue(barPanel.getValue() - 400);
+        barPanel.setValue(barPanel.getValue() - 600);
     }//GEN-LAST:event_retornarBTActionPerformed
 
     private void avancarBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_avancarBTActionPerformed
         JScrollBar barPanel = jScrollPane1.getHorizontalScrollBar();
-        barPanel.setValue(barPanel.getValue() + 400);
+        barPanel.setValue(barPanel.getValue() + 600);
     }//GEN-LAST:event_avancarBTActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

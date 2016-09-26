@@ -250,7 +250,7 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane2)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1070, Short.MAX_VALUE)
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -293,12 +293,12 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
 
     private void retornarBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_retornarBTActionPerformed
         JScrollBar barPanel = jScrollPane2.getHorizontalScrollBar();
-        barPanel.setValue(barPanel.getValue() - 595);
+        barPanel.setValue(barPanel.getValue() - 600);
     }//GEN-LAST:event_retornarBTActionPerformed
 
     private void avancarBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_avancarBTActionPerformed
         JScrollBar barPanel = jScrollPane2.getHorizontalScrollBar();
-        barPanel.setValue(barPanel.getValue() + 595);
+        barPanel.setValue(barPanel.getValue() + 600);
     }//GEN-LAST:event_avancarBTActionPerformed
 
   
