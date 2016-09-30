@@ -6,6 +6,8 @@
 package visao.windows;
 
 import controle.ControleLogin;
+import javax.swing.JOptionPane;
+import modelo.dao.DBConexao;
 
 /**
  *
@@ -94,17 +96,22 @@ public class Login extends javax.swing.JFrame {
 
     private void btnEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntrarActionPerformed
         
-        ControleLogin controleLogin = ControleLogin.getInstance();
-        boolean logado;
-         
-        logado = controleLogin.fazerLogin(campoLogin.getText(), campoSenha.getPassword());
+        DBConexao.openGlobalConnection();
         
-        if(logado == true){
-            new VisualizarPerfil().setVisible(true);
-            this.setVisible(false);
-            this.dispose();
-        }
-
+        if (!DBConexao.isGlobalConnectionClosed()) {
+            
+            ControleLogin controleLogin = ControleLogin.getInstance();
+            boolean logado;
+            
+            logado = controleLogin.fazerLogin(campoLogin.getText(), campoSenha.getPassword());
+            
+            if (logado == true) {
+                new VisualizarPerfil().setVisible(true);
+                this.setVisible(false);
+                this.dispose();
+            }
+            
+        } 
     }//GEN-LAST:event_btnEntrarActionPerformed
 
     /**

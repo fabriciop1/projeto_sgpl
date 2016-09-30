@@ -28,17 +28,19 @@ public class DAO {
     
     protected Connection openConnection(){
         
-        if(isConnectionOwner()){
-            return DBConexao.openConnection();
-        } else {
-            return connection;
-        }
+//        if(isConnectionOwner()){
+//            return DBConexao.openConnection();
+//        } else {
+//            return connection;
+//        }
+
+        return DBConexao.getGlobalConnection();
     }
     
     protected void closeConnection(Connection connection){
         
-        if(isConnectionOwner()){
-            DBConexao.closeConnection(connection);
-        }
+//        if(isConnectionOwner()){
+//            DBConexao.closeConnection(connection);
+//        }
     }
 }

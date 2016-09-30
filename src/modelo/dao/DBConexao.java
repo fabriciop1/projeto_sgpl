@@ -8,6 +8,8 @@ package modelo.dao;
 import com.mysql.jdbc.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -23,17 +25,55 @@ public class DBConexao {
     private static String username;
     private static String password;
     
+    private static Connection globalConn = null;
+    
     public DBConexao() {
 
     }
 
+    public static Connection openGlobalConnection(){
+        
+        if(isGlobalConnectionClosed()){
+            
+            globalConn = openConnection();
+            System.out.println("Conexao global aberta :P");
+        }
+        
+        return globalConn;
+    }
+    
+    public static boolean isGlobalConnectionClosed(){
+        
+        try {        
+            return (globalConn == null || globalConn.isClosed());
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(DBConexao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    
+    public static Connection getGlobalConnection(){
+        
+        return globalConn;        
+    }
+    
+    public static void closeGlobalConnection(){
+        
+        if (!isGlobalConnectionClosed()) {
+            
+            closeConnection(globalConn);
+            System.out.println("Conexao global fechada :)");
+        }
+    }
+    
     public static Connection openConnection() {
         Connection connection;
         String driverName = "com.mysql.jdbc.Driver";
         try {
             Class.forName(driverName);
 
-            serverName = "127.0.0.1";
+            serverName = "172.20.20.173";
             portNumber = "3306";
             database = "projeto_pesquisa";
             url = "jdbc:mysql://" + serverName + ":" + portNumber + "/" + database;

@@ -230,7 +230,7 @@ public class AddUsuario extends javax.swing.JDialog {
 
         int escolha = 0;
         
-        if( radioSelecionado == 1 && this.getUsuarioSelecionado().getTipoUsuario() != 1 ){
+        if( radioSelecionado == 1 ){
             escolha = JOptionPane.showOptionDialog(null, "Deseja realmente tornar " + campoLogin.getText().toUpperCase() + " um administrador?\n"
                     + " Ele(a) terá acesso à todos os perfis cadastrados.",
                     "Confirmar seleção de administrador", JOptionPane.YES_NO_OPTION, 
