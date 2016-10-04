@@ -41,7 +41,9 @@
                           <Component id="perfilLabel" max="32767" attributes="0"/>
                           <Component id="textoEntrada" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="402" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="excelBT" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="106" max="-2" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -53,13 +55,14 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="textoEntrada" alignment="0" max="32767" attributes="0"/>
+                      <Component id="textoEntrada" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="btnVoltar" alignment="0" pref="32" max="32767" attributes="0"/>
                   </Group>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="retornarBT" alignment="0" min="-2" pref="32" max="-2" attributes="0"/>
                       <Component id="avancarBT" alignment="1" min="-2" pref="32" max="-2" attributes="0"/>
                   </Group>
+                  <Component id="excelBT" alignment="0" min="-2" pref="32" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
               <Component id="perfilLabel" min="-2" max="-2" attributes="0"/>
@@ -166,6 +169,14 @@
         <Property name="horizontalAlignment" type="int" value="0"/>
         <Property name="text" type="java.lang.String" value="jLabel1"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="excelBT">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Exportar para Excel"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="excelBTActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

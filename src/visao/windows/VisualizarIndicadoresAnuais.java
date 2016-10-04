@@ -20,6 +20,7 @@ import modelo.negocio.DadosTecMensais;
 import modelo.negocio.Perfil;
 import util.DecimalFormatRenderer;
 import util.FixedColumnTable;
+import util.Util;
 
 /**
  *
@@ -184,6 +185,7 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
         retornarBT = new javax.swing.JButton();
         avancarBT = new javax.swing.JButton();
         perfilLabel = new javax.swing.JLabel();
+        excelBT = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -242,6 +244,13 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
         perfilLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         perfilLabel.setText("jLabel1");
 
+        excelBT.setText("Exportar para Excel");
+        excelBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                excelBTActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -262,7 +271,9 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(perfilLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(textoEntrada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(402, 402, 402))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(excelBT)
+                        .addGap(106, 106, 106))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -270,11 +281,12 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(textoEntrada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(textoEntrada)
                         .addComponent(btnVoltar, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(retornarBT, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(avancarBT, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(avancarBT, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(excelBT, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(1, 1, 1)
                 .addComponent(perfilLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -301,10 +313,15 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
         barPanel.setValue(barPanel.getValue() + 600);
     }//GEN-LAST:event_avancarBTActionPerformed
 
+    private void excelBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_excelBTActionPerformed
+        Util.CSVWriter(tabelaIndicadoresAnuais, textoEntrada.getText());
+    }//GEN-LAST:event_excelBTActionPerformed
+
   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton avancarBT;
     private javax.swing.JButton btnVoltar;
+    private javax.swing.JButton excelBT;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel perfilLabel;
     private javax.swing.JButton retornarBT;

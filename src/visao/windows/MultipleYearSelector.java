@@ -9,6 +9,7 @@ import controle.ControleIndicadoresAnuais;
 import controle.ControlePerfil;
 import flex.db.GenericDAO;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultListModel;
@@ -240,6 +241,9 @@ public class MultipleYearSelector extends javax.swing.JDialog {
         
         ControleIndicadoresAnuais controle = ControleIndicadoresAnuais.getInstance();
         controle.gerarIndicadores(getTipoIndicador(), getSelectedYears());
+        
+        Cursor wait = new Cursor(Cursor.WAIT_CURSOR);
+        this.setCursor(wait);
         
         new VisualizarIndicadoresAnuais().setVisible(true);
         

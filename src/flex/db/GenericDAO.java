@@ -210,7 +210,7 @@ public class GenericDAO<T extends DatabaseObject> extends DAO {
             
             return objects;
             
-        } catch (SQLException | InstantiationException | IllegalAccessException ex) {
+        } catch (SQLException | InstantiationException | IllegalAccessException | NullPointerException ex) {
             Logger.getLogger(GenericDAO.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }

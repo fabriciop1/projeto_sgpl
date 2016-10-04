@@ -56,8 +56,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         }
         
         atual = ControlePerfil.getInstance().getPerfilSelecionado();
-        perfilLabel.setText(atual.getNome());
-        anoLabel.setText("Ano: " + ControlePerfil.getInstance().getAno());
+        perfilLabel.setText(atual.getNome() + ControlePerfil.getInstance().getAno() );
         
         super.setLocationRelativeTo(null);
         super.setResizable(false);
@@ -224,7 +223,6 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
     private void initComponents() {
 
         btnVoltar = new javax.swing.JButton();
-        anoLabel = new javax.swing.JLabel();
         textoEntrada = new javax.swing.JLabel();
         avancarBT = new javax.swing.JButton();
         retornarBT = new javax.swing.JButton();
@@ -234,6 +232,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         tabelaMeses = new javax.swing.JTable();
         perfilLabel = new javax.swing.JLabel();
+        excelBT = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addMouseWheelListener(new java.awt.event.MouseWheelListener() {
@@ -249,10 +248,6 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                 btnVoltarActionPerformed(evt);
             }
         });
-
-        anoLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        anoLabel.setForeground(new java.awt.Color(0, 38, 255));
-        anoLabel.setText("Ano: <ano>");
 
         textoEntrada.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         textoEntrada.setForeground(new java.awt.Color(0, 38, 255));
@@ -404,7 +399,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         tabelaDadosEconomicos.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         if (tabelaDadosEconomicos.getColumnModel().getColumnCount() > 0) {
             tabelaDadosEconomicos.getColumnModel().getColumn(0).setResizable(false);
-            tabelaDadosEconomicos.getColumnModel().getColumn(0).setPreferredWidth(320);
+            tabelaDadosEconomicos.getColumnModel().getColumn(0).setPreferredWidth(330);
             tabelaDadosEconomicos.getColumnModel().getColumn(1).setResizable(false);
             tabelaDadosEconomicos.getColumnModel().getColumn(2).setResizable(false);
             tabelaDadosEconomicos.getColumnModel().getColumn(3).setResizable(false);
@@ -467,7 +462,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         jScrollPane2.setViewportView(tabelaMeses);
         if (tabelaMeses.getColumnModel().getColumnCount() > 0) {
             tabelaMeses.getColumnModel().getColumn(0).setResizable(false);
-            tabelaMeses.getColumnModel().getColumn(0).setPreferredWidth(227);
+            tabelaMeses.getColumnModel().getColumn(0).setPreferredWidth(223);
             tabelaMeses.getColumnModel().getColumn(1).setResizable(false);
             tabelaMeses.getColumnModel().getColumn(1).setPreferredWidth(223);
             tabelaMeses.getColumnModel().getColumn(2).setResizable(false);
@@ -497,6 +492,13 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         perfilLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         perfilLabel.setText("jLabel2");
 
+        excelBT.setText("Exportar para Excel");
+        excelBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                excelBTActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -515,13 +517,13 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(textoEntrada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(perfilLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 214, Short.MAX_VALUE)
-                        .addComponent(anoLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 104, Short.MAX_VALUE)
+                        .addComponent(excelBT)
+                        .addGap(78, 78, 78)
                         .addComponent(editarValoresBT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 695, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 693, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -538,8 +540,9 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
                             .addComponent(retornarBT, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(avancarBT, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(btnVoltar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(anoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(editarValoresBT, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(excelBT, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(editarValoresBT, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(23, 23, 23)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -594,6 +597,10 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         barPanelMeses.setValue(barPanelMeses.getValue() - 675);
     }//GEN-LAST:event_retornarBTActionPerformed
 
+    private void excelBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_excelBTActionPerformed
+        Util.CSVWriter(tabelaDadosEconomicos, textoEntrada.getText());
+    }//GEN-LAST:event_excelBTActionPerformed
+
     
     private void moveScrollBar(java.awt.event.MouseWheelEvent evt) {
         JScrollBar barPanel3 = jScrollPane1.getVerticalScrollBar();     
@@ -608,7 +615,7 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
     private void definirBDListeners() {
         
         gtae.addTableModifyListener((TableModifiedEvent evt) -> {
-       
+            
             Object[][] areaData = evt.getTableAreaData();
             List<Integer> linhas = evt.getRowsModified();
             
@@ -662,7 +669,6 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
             dems = demdao.retrieveByColumns(new String[]{"idPerfilFK", "ano"}, new Object[]{atual.getId(),
                     ControlePerfil.getInstance().getAno()});
             PreencherTabelaDEM(dems);
-            
         });
     }
     
@@ -736,10 +742,10 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel anoLabel;
     private javax.swing.JButton avancarBT;
     private javax.swing.JButton btnVoltar;
     private javax.swing.JButton editarValoresBT;
+    private javax.swing.JButton excelBT;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel perfilLabel;

@@ -8,6 +8,7 @@ package visao.windows;
 import controle.ControleLogin;
 import controle.ControlePerfil;
 import flex.db.GenericDAO;
+import java.awt.Cursor;
 import java.awt.event.ItemEvent;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -172,6 +173,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         anoCombo.setBackground(new java.awt.Color(0, 153, 255));
         anoCombo.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        anoCombo.setMaximumRowCount(5);
         anoCombo.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 anoComboItemStateChanged(evt);
@@ -286,24 +288,36 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerfilActionPerformed
+        Cursor wait = new Cursor(Cursor.WAIT_CURSOR);
+        this.setCursor(wait);
+        
         new VisualizarPerfil().setVisible(true);
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnPerfilActionPerformed
 
     private void btnDadosTecnMensaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDadosTecnMensaisActionPerformed
+        Cursor wait = new Cursor(Cursor.WAIT_CURSOR);
+        this.setCursor(wait);
+        
         new VisualizarDadosTecnMensais().setVisible(true);
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnDadosTecnMensaisActionPerformed
 
     private void btnInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInventarioActionPerformed
+        Cursor wait = new Cursor(Cursor.WAIT_CURSOR);
+        this.setCursor(wait);
+        
         new VisualizarInventario().setVisible(true);
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btnInventarioActionPerformed
 
     private void btnDadosEconMensaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDadosEconMensaisActionPerformed
+        Cursor wait = new Cursor(Cursor.WAIT_CURSOR);
+        this.setCursor(wait);
+        
         new VisualizarDadosEconMensais().setVisible(true); 
         this.setVisible(false);
         this.dispose();

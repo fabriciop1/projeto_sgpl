@@ -35,7 +35,9 @@
                   <Component id="jLabel1" max="32767" attributes="0"/>
                   <Component id="textoEntrada" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace pref="486" max="32767" attributes="0"/>
+              <EmptySpace pref="271" max="32767" attributes="0"/>
+              <Component id="excelBT" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="86" max="-2" attributes="0"/>
           </Group>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
@@ -53,7 +55,10 @@
                       <Component id="retornarBT" alignment="0" min="-2" pref="32" max="-2" attributes="0"/>
                       <Component id="avancarBT" alignment="1" min="-2" pref="32" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="textoEntrada" alignment="0" max="32767" attributes="0"/>
+                  <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                      <Component id="textoEntrada" alignment="3" max="32767" attributes="0"/>
+                      <Component id="excelBT" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
+                  </Group>
                   <Component id="btnVoltar" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
@@ -147,6 +152,14 @@
         <Property name="horizontalAlignment" type="int" value="0"/>
         <Property name="text" type="java.lang.String" value="jLabel1"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="excelBT">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Exportar para Excel"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="excelBTActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

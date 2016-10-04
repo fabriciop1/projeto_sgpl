@@ -36,7 +36,6 @@ public class DBConexao {
         if(isGlobalConnectionClosed()){
             
             globalConn = openConnection();
-            System.out.println("Conexao global aberta :P");
         }
         
         return globalConn;
@@ -63,7 +62,6 @@ public class DBConexao {
         if (!isGlobalConnectionClosed()) {
             
             closeConnection(globalConn);
-            System.out.println("Conexao global fechada :)");
         }
     }
     
@@ -73,7 +71,7 @@ public class DBConexao {
         try {
             Class.forName(driverName);
 
-            serverName = "172.20.20.173";
+            serverName = "127.0.0.1";
             portNumber = "3306";
             database = "projeto_pesquisa";
             url = "jdbc:mysql://" + serverName + ":" + portNumber + "/" + database;

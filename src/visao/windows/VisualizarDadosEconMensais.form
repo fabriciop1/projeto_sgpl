@@ -41,14 +41,14 @@
                           <Component id="textoEntrada" max="32767" attributes="0"/>
                           <Component id="perfilLabel" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="214" max="32767" attributes="0"/>
-                      <Component id="anoLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace pref="104" max="32767" attributes="0"/>
+                      <Component id="excelBT" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="78" max="-2" attributes="0"/>
                       <Component id="editarValoresBT" min="-2" pref="47" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      <Component id="jScrollPane2" min="-2" pref="695" max="-2" attributes="0"/>
+                      <Component id="jScrollPane2" min="-2" pref="693" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -72,8 +72,10 @@
                       </Group>
                       <Component id="btnVoltar" alignment="1" min="-2" pref="32" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="anoLabel" alignment="0" min="-2" pref="30" max="-2" attributes="0"/>
-                  <Component id="editarValoresBT" alignment="0" min="-2" pref="30" max="-2" attributes="0"/>
+                  <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                      <Component id="excelBT" alignment="0" min="-2" pref="32" max="-2" attributes="0"/>
+                      <Component id="editarValoresBT" alignment="0" min="-2" pref="30" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
               <Component id="jScrollPane2" min="-2" pref="25" max="-2" attributes="0"/>
@@ -93,17 +95,6 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnVoltarActionPerformed"/>
       </Events>
-    </Component>
-    <Component class="javax.swing.JLabel" name="anoLabel">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Tahoma" size="14" style="1"/>
-        </Property>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="ff" green="26" red="0" type="rgb"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Ano: &lt;ano&gt;"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="textoEntrada">
       <Properties>
@@ -206,7 +197,7 @@
             <Property name="autoResizeMode" type="int" value="0"/>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
               <TableColumnModel selectionModel="1">
-                <Column maxWidth="-1" minWidth="-1" prefWidth="320" resizable="false">
+                <Column maxWidth="-1" minWidth="-1" prefWidth="330" resizable="false">
                   <Title/>
                   <Editor/>
                   <Renderer/>
@@ -435,7 +426,7 @@
             <Property name="autoResizeMode" type="int" value="0"/>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
               <TableColumnModel selectionModel="0">
-                <Column maxWidth="-1" minWidth="-1" prefWidth="227" resizable="false">
+                <Column maxWidth="-1" minWidth="-1" prefWidth="223" resizable="false">
                   <Title/>
                   <Editor/>
                   <Renderer/>
@@ -515,6 +506,14 @@
         <Property name="horizontalAlignment" type="int" value="0"/>
         <Property name="text" type="java.lang.String" value="jLabel2"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="excelBT">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Exportar para Excel"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="excelBTActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

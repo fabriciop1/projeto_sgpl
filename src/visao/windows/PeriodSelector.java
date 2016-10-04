@@ -8,6 +8,7 @@ package visao.windows;
 import controle.ControlePerfil;
 import controle.ControleIndicadoresMensais;
 import flex.db.GenericDAO;
+import java.awt.Cursor;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -227,6 +228,9 @@ public class PeriodSelector extends javax.swing.JDialog {
         
         ControleIndicadoresMensais controleRelatorios = ControleIndicadoresMensais.getInstance();
         controleRelatorios.gerarIndicadores(getTipoSelecionado(), getStartMonth(), getEndMonth(), getStartYear(), getEndYear());
+        
+        Cursor wait = new Cursor(Cursor.WAIT_CURSOR);
+        this.setCursor(wait);
         
         new VisualizarIndicadoresMensais().setVisible(true);
         this.getOwner().setVisible(false);
