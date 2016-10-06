@@ -7,7 +7,9 @@ package visao.windows;
 
 import controle.ControleLogin;
 import flex.db.GenericDAO;
+import java.awt.Image;
 import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import modelo.negocio.Usuario;
 
@@ -26,6 +28,9 @@ public class AddUsuario extends javax.swing.JDialog {
     public AddUsuario(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        Image image = new ImageIcon(getClass().getResource("/visao/images/cattle.png")).getImage();
+        this.setIconImage(image);
                 
         this.setIsNew(true);
         

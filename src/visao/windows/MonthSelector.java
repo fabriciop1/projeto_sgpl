@@ -5,8 +5,10 @@
  */
 package visao.windows;
 
+import java.awt.Image;
 import java.util.Arrays;
 import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 
 /**
@@ -24,6 +26,9 @@ public class MonthSelector extends javax.swing.JDialog {
     public MonthSelector(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        Image image = new ImageIcon(getClass().getResource("/visao/images/cattle.png")).getImage();
+        this.setIconImage(image);
         
         super.setLocationRelativeTo(null);
         super.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);

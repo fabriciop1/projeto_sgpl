@@ -5,6 +5,18 @@
  */
 package visao.windows;
 
+import controle.ControlePerfil;
+import flex.db.GenericDAO;
+import java.awt.Image;
+import java.util.List;
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import modelo.negocio.InventarioResumo;
+import modelo.negocio.Perfil;
+import modelo.negocio.Rota;
+import util.Cast;
+
 /**
  *
  * @author Usuário
@@ -19,6 +31,13 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
     public GerenciarAnoRota(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        //Image image = new ImageIcon(getClass().getResource("/visao/images/cattle.png")).getImage();
+        //this.setIconImage(image);
+        
+        super.setLocationRelativeTo(null);
+        super.setResizable(false);
+        
     }
 
     /**
@@ -32,7 +51,9 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
 
         textoEntrada = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        listDados = new javax.swing.JList<>();
+        addAnoRotaBT = new javax.swing.JButton();
+        removerAnoRotaBT = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -41,7 +62,22 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
         textoEntrada.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         textoEntrada.setText("GERENCIAR ANO");
 
-        jScrollPane1.setViewportView(jList1);
+        listDados.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane1.setViewportView(listDados);
+
+        addAnoRotaBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/add.png"))); // NOI18N
+        addAnoRotaBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addAnoRotaBTActionPerformed(evt);
+            }
+        });
+
+        removerAnoRotaBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/delete.png"))); // NOI18N
+        removerAnoRotaBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removerAnoRotaBTActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -53,7 +89,12 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
                     .addComponent(textoEntrada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(addAnoRotaBT, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(removerAnoRotaBT, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -62,12 +103,67 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(textoEntrada)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(343, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(removerAnoRotaBT)
+                    .addComponent(addAnoRotaBT))
+                .addContainerGap(66, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void addAnoRotaBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addAnoRotaBTActionPerformed
+        
+        DefaultListModel listModel = (DefaultListModel) listDados.getModel();
+        
+        if( isAno ){
+            
+        } else {
+            String novaRota = JOptionPane.showInputDialog("Insira o nome da nova Rota: ");
+            Rota rota = new Rota(novaRota);
+            
+            GenericDAO<Rota> dao = new GenericDAO<>(Rota.class);
+            dao.insert(rota);
+            
+            listModel.addElement(rota.getRota());
+            
+            listDados.setModel(listModel);
+        }
+        
+    }//GEN-LAST:event_addAnoRotaBTActionPerformed
+
+    private void removerAnoRotaBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerAnoRotaBTActionPerformed
+        
+        DefaultListModel listModel = (DefaultListModel) listDados.getModel();
+        
+        if( isAno ){
+            
+        } else {
+            String rotaSelecionada = listDados.getSelectedValue();
+                        
+            GenericDAO<Rota> dao = new GenericDAO<>(Rota.class);
+            GenericDAO<Perfil> daop = new GenericDAO<>(Perfil.class);
+            
+            int id = dao.executeSQL("SELECT idRota FROM rota AS r WHERE r.rota = '" + rotaSelecionada + "'" ).get(0).getId();
+            
+            List<Perfil> temp = daop.executeSQL("SELECT idPerfil FROM perfil WHERE idRotaFK = " + id);
+            
+            if( !temp.isEmpty() ){
+                JOptionPane.showMessageDialog(null, "Existem perfis cadastrados nessa rota. Altere antes de excluir.");
+            } else {
+                dao.remove(id);
+                
+                listModel.removeElement(rotaSelecionada);
+            
+                listDados.setModel(listModel);
+            }
+            
+            
+        }
+        
+    }//GEN-LAST:event_removerAnoRotaBTActionPerformed
     
     public boolean isIsAno() {
         return isAno;
@@ -77,19 +173,61 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
         this.isAno = isAno;
     }
 
-    public void prepararTela(boolean isAno){
+    public void prepararTela(){
+                
+        DefaultListModel listModel = new DefaultListModel();
         
         if( isAno ){
             
+            super.setTitle("SGPL - Gerenciar Anos");
+            
+            GenericDAO<InventarioResumo> dao = new GenericDAO<>(InventarioResumo.class);
+        
+            List<InventarioResumo> listaAnos = dao.executeSQL("" + 
+                    "SELECT ano FROM inventario_terras        UNION " + 
+                    "SELECT ano FROM inventario_forrageiras   UNION " +
+                    "SELECT ano FROM inventario_maquinas      UNION " + 
+                    "SELECT ano FROM inventario_benfeitorias  UNION " + 
+                    "SELECT ano FROM inventario_animais       UNION " + 
+                    "SELECT ano FROM inventario_resumo        UNION " +
+                    "SELECT ano FROM dados_economicos_mensais UNION " +
+                    "SELECT ano FROM dados_tecnicos_mensais   " +
+                    "ORDER BY ano");
+
+            if (listaAnos.isEmpty()) {
+                listModel.addElement("Nenhum ano cadastrado.");
+            }
+
+            for(int i = listaAnos.size() - 1; i >= 0; i--) {
+                listModel.addElement(Cast.toString(listaAnos.get(i).getAno()));
+            }
+            
         } else {
             
+            super.setTitle("SGPL - Gerenciar Rotas");
+            
+            GenericDAO<Rota> dao = new GenericDAO<>(Rota.class);
+            
+            List<Rota> listaRotas = dao.retrieveAll();
+            
+            if (listaRotas.isEmpty()) {
+                listModel.addElement("Nenhuma rota cadastrado.");
+            }
+
+            for(int i = 0; i < listaRotas.size(); i++) {
+                listModel.addElement(listaRotas.get(i).getRota());
+            }
         }
+        
+        listDados.setModel(listModel);
         
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JList<String> jList1;
+    private javax.swing.JButton addAnoRotaBT;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JList<String> listDados;
+    private javax.swing.JButton removerAnoRotaBT;
     private javax.swing.JLabel textoEntrada;
     // End of variables declaration//GEN-END:variables
 }

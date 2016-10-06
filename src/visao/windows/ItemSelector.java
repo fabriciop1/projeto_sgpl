@@ -7,10 +7,12 @@ package visao.windows;
 
 import java.awt.Frame;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
@@ -34,6 +36,9 @@ public class ItemSelector< T > extends JDialog {
         this.radioList = new ArrayList<>();
         
         initComponents();
+        
+        Image image = new ImageIcon(getClass().getResource("/visao/images/cattle.png")).getImage();
+        this.setIconImage(image);
         
         panel.setLayout(new GridLayout(optionList.size(), 1));
         

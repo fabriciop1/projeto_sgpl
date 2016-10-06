@@ -10,8 +10,10 @@ import static flex.table.GenericTableRowEditor.*;
 import controle.ControlePerfil;
 import flex.db.GenericDAO;
 import flex.table.*;
+import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -57,6 +59,9 @@ public class VisualizarInventario extends javax.swing.JFrame {
     public VisualizarInventario() {
 
         initComponents();
+        
+        Image image = new ImageIcon(getClass().getResource("/visao/images/cattle.png")).getImage();
+        this.setIconImage(image);
 
         usuario = ControleLogin.getInstance().getUsuario();
         
@@ -73,8 +78,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
 
         perfilAtual = ControlePerfil.getInstance().getPerfilSelecionado();
        
-        perfilLabel.setText(perfilAtual.getNome());
-        anoLabel.setText("Ano: " + ano);
+        perfilLabel.setText(perfilAtual.getNome() + " " + ano );
         
         super.setTitle("SGPL - " + perfilAtual.getNome() + " - Inventário");
 
@@ -408,7 +412,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
         btnVoltar = new javax.swing.JButton();
         textoEntrada = new javax.swing.JLabel();
         perfilLabel = new javax.swing.JLabel();
-        anoLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -2002,10 +2005,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
         perfilLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         perfilLabel.setText("jLabel8");
 
-        anoLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        anoLabel.setForeground(new java.awt.Color(0, 38, 255));
-        anoLabel.setText("Ano: <ano>");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -2018,9 +2017,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(perfilLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(textoEntrada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(324, 324, 324)
-                .addComponent(anoLabel)
-                .addGap(23, 23, 23))
+                .addGap(432, 432, 432))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2028,8 +2025,7 @@ public class VisualizarInventario extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnVoltar)
-                    .addComponent(textoEntrada)
-                    .addComponent(anoLabel))
+                    .addComponent(textoEntrada))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(perfilLabel)
                 .addGap(5, 5, 5)
@@ -3029,7 +3025,6 @@ public class VisualizarInventario extends javax.swing.JFrame {
     private javax.swing.JButton adicionarInvBenfeitoriasBT;
     private javax.swing.JButton adicionarInvMaquinasBT;
     private javax.swing.JButton adicionarInvTerrasBT;
-    private javax.swing.JLabel anoLabel;
     private javax.swing.JLabel atividadeLeite;
     private javax.swing.JButton atividadeLeiteBT;
     private javax.swing.JButton btnVoltar;

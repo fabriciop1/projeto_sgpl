@@ -10,13 +10,14 @@ import controle.ControlePerfil;
 import flex.db.GenericDAO;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
-import modelo.negocio.DadosEconMensais;
 import modelo.negocio.DadosTecMensais;
 import modelo.negocio.Perfil;
 import util.Cast;
@@ -38,6 +39,9 @@ public class MultipleYearSelector extends javax.swing.JDialog {
     public MultipleYearSelector(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        Image image = new ImageIcon(getClass().getResource("/visao/images/cattle.png")).getImage();
+        this.setIconImage(image);
         
         atual = ControlePerfil.getInstance().getPerfilSelecionado();
         

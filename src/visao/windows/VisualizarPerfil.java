@@ -11,13 +11,13 @@ import flex.db.GenericDAO;
 import flex.table.GenericTableModifier;
 import flex.table.GenericTableRowEditor;
 import flex.table.TableModifiedEvent;
+import java.awt.Image;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import javax.swing.DefaultCellEditor;
+import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -55,7 +55,10 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         super.setResizable(false);
         
         super.setTitle("SGPL - Perfis disponíveis");
-                
+        
+        Image image = new ImageIcon(getClass().getResource("/visao/images/cattle.png")).getImage();
+        this.setIconImage(image);
+        
         listaPerfis.getSelectionModel().clearSelection();
         
         listaPerfis.setShowHorizontalLines(true);
@@ -497,6 +500,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         GerenciarAnoRota telaGereARA = new GerenciarAnoRota(this, true);
         telaGereARA.setTitle("SGPL - Gerenciar Rotas");
         telaGereARA.setIsAno(false);
+        telaGereARA.prepararTela();
         telaGereARA.setVisible(true); 
     }//GEN-LAST:event_btnGereRotaActionPerformed
 
@@ -504,6 +508,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         GerenciarAnoRota telaGereARA = new GerenciarAnoRota(this, true);
         telaGereARA.setTitle("SGPL - Gerenciar Anos");
         telaGereARA.setIsAno(true);
+        telaGereARA.prepararTela();
         telaGereARA.setVisible(true); 
     }//GEN-LAST:event_btnGereAnosActionPerformed
 

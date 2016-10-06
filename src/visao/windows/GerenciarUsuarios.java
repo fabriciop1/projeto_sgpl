@@ -7,10 +7,12 @@ package visao.windows;
 
 import controle.ControleLogin;
 import flex.db.GenericDAO;
+import java.awt.Image;
 import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import modelo.negocio.Perfil;
 import modelo.negocio.Usuario;
@@ -30,6 +32,9 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
      */
     public GerenciarUsuarios() {
         initComponents();
+        
+        Image image = new ImageIcon(getClass().getResource("/visao/images/cattle.png")).getImage();
+        this.setIconImage(image);
         
         super.setTitle("SGPL - Gerenciar Usuários");
         super.setLocationRelativeTo(null);

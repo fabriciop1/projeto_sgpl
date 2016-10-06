@@ -9,9 +9,11 @@ import controle.ControlePerfil;
 import controle.ControleIndicadoresMensais;
 import flex.db.GenericDAO;
 import java.awt.Cursor;
+import java.awt.Image;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import modelo.negocio.DadosEconMensais;
@@ -37,6 +39,9 @@ public class PeriodSelector extends javax.swing.JDialog {
     public PeriodSelector(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        Image image = new ImageIcon(getClass().getResource("/visao/images/cattle.png")).getImage();
+        this.setIconImage(image);
         
         super.setTitle("SGPL - Relatório de Indicadores Mensais");
         atual = ControlePerfil.getInstance().getPerfilSelecionado();

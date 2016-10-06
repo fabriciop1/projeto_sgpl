@@ -9,10 +9,12 @@ import controle.ControleLogin;
 import controle.ControlePerfil;
 import flex.db.GenericDAO;
 import java.awt.Cursor;
+import java.awt.Image;
 import java.awt.event.ItemEvent;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import modelo.negocio.InventarioResumo;
 import modelo.negocio.Perfil;
@@ -32,6 +34,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public MenuPrincipal() {
         
         initComponents();
+        
+        Image image = new ImageIcon(getClass().getResource("/visao/images/cattle.png")).getImage();
+        this.setIconImage(image);
         
         atual = ControlePerfil.getInstance().getPerfilSelecionado();
         

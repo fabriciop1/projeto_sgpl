@@ -6,7 +6,8 @@
 package visao.windows;
 
 import controle.ControleLogin;
-import javax.swing.JOptionPane;
+import java.awt.Image;
+import javax.swing.ImageIcon;
 import modelo.dao.DBConexao;
 
 /**
@@ -20,8 +21,12 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
+        
+        Image image = new ImageIcon(getClass().getResource("/visao/images/cattle.png")).getImage();
+        this.setIconImage(image);
+        
         super.setTitle("SGPL - Fazer Login");
-        super.setSize(520, 330);
+        super.setSize(520, 350);
         super.setLocationRelativeTo(null);
         super.setResizable(false);
         
