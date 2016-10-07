@@ -6,8 +6,11 @@
 package visao.windows;
 
 import controle.ControleLogin;
+import java.awt.BorderLayout;
 import java.awt.Image;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import modelo.dao.DBConexao;
 
 /**
@@ -24,6 +27,7 @@ public class Login extends javax.swing.JFrame {
         
         Image image = new ImageIcon(getClass().getResource("/visao/images/cattle.png")).getImage();
         this.setIconImage(image);
+        
         
         super.setTitle("SGPL - Fazer Login");
         super.setSize(520, 350);
@@ -51,6 +55,7 @@ public class Login extends javax.swing.JFrame {
         campoSenha = new javax.swing.JPasswordField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Login");
@@ -94,6 +99,9 @@ public class Login extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Dialog", 0, 9)); // NOI18N
         jLabel5.setText("Orientação: Prof. Dr. Tiago Buarque");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 290, -1, -1));
+
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/cattle.png"))); // NOI18N
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 60, 260, 160));
 
         pack();
         setLocationRelativeTo(null);
@@ -161,5 +169,6 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     // End of variables declaration//GEN-END:variables
 }

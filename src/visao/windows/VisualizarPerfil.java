@@ -43,6 +43,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
     ArrayList<Integer> idPerfis;
     Usuario usuario;
     GenericTableRowEditor listaPerfisGTRE;
+    JComboBox comboRotas;
        
     /**
      * Creates new form VisualizarPerfil
@@ -58,6 +59,8 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         
         Image image = new ImageIcon(getClass().getResource("/visao/images/cattle.png")).getImage();
         this.setIconImage(image);
+        
+        comboRotas = new JComboBox();
         
         listaPerfis.getSelectionModel().clearSelection();
         
@@ -140,7 +143,12 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         btnGereRota = new javax.swing.JButton();
         btnGereAnos = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 38, 255));
@@ -502,6 +510,9 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         telaGereARA.setIsAno(false);
         telaGereARA.prepararTela();
         telaGereARA.setVisible(true); 
+        
+        comboRotas.removeAllItems();
+        setRotasCombo();
     }//GEN-LAST:event_btnGereRotaActionPerformed
 
     private void btnGereAnosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGereAnosActionPerformed
@@ -511,6 +522,11 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         telaGereARA.prepararTela();
         telaGereARA.setVisible(true); 
     }//GEN-LAST:event_btnGereAnosActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        
+        btnSairActionPerformed(null);
+    }//GEN-LAST:event_formWindowClosing
 
     private void verificaTabelaVazia() {
         if (listaPerfis.getRowCount() == 0) {
@@ -545,7 +561,6 @@ public class VisualizarPerfil extends javax.swing.JFrame {
     }
     
     private void setRotasCombo() {
-        JComboBox comboRotas = new JComboBox();
         
         List<Rota> rotas = rotaDAO.retrieveAll();
         

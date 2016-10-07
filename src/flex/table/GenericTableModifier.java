@@ -861,6 +861,9 @@ public abstract class GenericTableModifier extends JDialog{
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);
             }
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
         });
 
         editTable.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
@@ -949,9 +952,7 @@ public abstract class GenericTableModifier extends JDialog{
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        cancelCellEditing();
-        hideEditor();
-        clearEditTable();
+        //cancelButtonActionPerformed(null);
     }//GEN-LAST:event_formWindowClosed
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
@@ -965,6 +966,12 @@ public abstract class GenericTableModifier extends JDialog{
             hideEditor();
         }
     }//GEN-LAST:event_saveButtonActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        cancelCellEditing();
+        hideEditor();
+        clearEditTable();
+    }//GEN-LAST:event_formWindowClosing
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;

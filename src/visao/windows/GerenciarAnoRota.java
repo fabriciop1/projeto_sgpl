@@ -5,6 +5,7 @@
  */
 package visao.windows;
 
+import controle.ControleLogin;
 import controle.ControlePerfil;
 import flex.db.GenericDAO;
 import java.awt.Image;
@@ -15,6 +16,7 @@ import javax.swing.JOptionPane;
 import modelo.negocio.InventarioResumo;
 import modelo.negocio.Perfil;
 import modelo.negocio.Rota;
+import modelo.negocio.Usuario;
 import util.Cast;
 
 /**
@@ -32,8 +34,8 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        //Image image = new ImageIcon(getClass().getResource("/visao/images/cattle.png")).getImage();
-        //this.setIconImage(image);
+        Image image = new ImageIcon(getClass().getResource("/visao/images/cattle.png")).getImage();
+        this.setIconImage(image);
         
         super.setLocationRelativeTo(null);
         super.setResizable(false);
@@ -54,6 +56,7 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
         listDados = new javax.swing.JList<>();
         addAnoRotaBT = new javax.swing.JButton();
         removerAnoRotaBT = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -79,6 +82,13 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
             }
         });
 
+        btnCancelar.setText("Voltar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -87,14 +97,15 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(textoEntrada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(addAnoRotaBT, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(removerAnoRotaBT, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(removerAnoRotaBT, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -105,10 +116,11 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(removerAnoRotaBT)
-                    .addComponent(addAnoRotaBT))
-                .addContainerGap(66, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(removerAnoRotaBT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(addAnoRotaBT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -119,6 +131,29 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
         DefaultListModel listModel = (DefaultListModel) listDados.getModel();
         
         if( isAno ){
+            int novoAno = Integer.parseInt(JOptionPane.showInputDialog("Insira o novo ano: "));
+            
+            for(int i = 0; i < listModel.size(); i++){
+                if(novoAno == Integer.parseInt(listModel.getElementAt(i).toString())){
+                    JOptionPane.showMessageDialog(null, "Esse ano já está cadastrado no sistema!");
+                    return;
+                }
+            }
+            
+            GenericDAO<InventarioResumo> irdao = new GenericDAO<>(InventarioResumo.class);
+            GenericDAO<Perfil> daop = new GenericDAO<>(Perfil.class);
+            List<Perfil> perfis = daop.retrieveAll();
+
+            for(int i = 0; i < perfis.size(); i++){
+                InventarioResumo resumo = new InventarioResumo();
+                resumo.setIdPerfil(perfis.get(0).getId());
+                resumo.setAno(novoAno);                               
+                irdao.insert(resumo);
+            }
+            
+            listModel.addElement(novoAno);
+            
+            listDados.setModel(listModel);
             
         } else {
             String novaRota = JOptionPane.showInputDialog("Insira o nome da nova Rota: ");
@@ -136,34 +171,93 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
 
     private void removerAnoRotaBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerAnoRotaBTActionPerformed
         
-        DefaultListModel listModel = (DefaultListModel) listDados.getModel();
-        
-        if( isAno ){
-            
-        } else {
-            String rotaSelecionada = listDados.getSelectedValue();
-                        
-            GenericDAO<Rota> dao = new GenericDAO<>(Rota.class);
-            GenericDAO<Perfil> daop = new GenericDAO<>(Perfil.class);
-            
-            int id = dao.executeSQL("SELECT idRota FROM rota AS r WHERE r.rota = '" + rotaSelecionada + "'" ).get(0).getId();
-            
-            List<Perfil> temp = daop.executeSQL("SELECT idPerfil FROM perfil WHERE idRotaFK = " + id);
-            
-            if( !temp.isEmpty() ){
-                JOptionPane.showMessageDialog(null, "Existem perfis cadastrados nessa rota. Altere antes de excluir.");
-            } else {
-                dao.remove(id);
+        if(listDados.getSelectedIndex() != -1 ){
+            DefaultListModel listModel = (DefaultListModel) listDados.getModel();
+
+            if( isAno ){
+                int novoAno = Integer.parseInt(JOptionPane.showInputDialog("Insira o novo ano: "));
                 
-                listModel.removeElement(rotaSelecionada);
-            
-                listDados.setModel(listModel);
+                if( listDados.getSelectedIndex() != -1 ) {
+                    int escolha = JOptionPane.showOptionDialog(null, "Deseja realmente trocar o ano " 
+                            + listDados.getSelectedValue() + " pelo ano " + novoAno + "?", "Edição de Ano", 
+                            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[] {"Sim", "Não"}, "Não");
+           
+                    if(escolha == 0)  {
+                        
+                        Usuario usuarioAtual = ControleLogin.getInstance().getUsuario();
+                        
+                        String input = JOptionPane.showInputDialog(this, "O ano " + listDados.getSelectedValue() +  
+                                " será editado para " + novoAno + ".\nDigite seu login para confirmação: ", 
+                                "Confirmar Edição de Ano", JOptionPane.OK_CANCEL_OPTION);
+
+                        if (usuarioAtual.getLogin().equals(input)) {
+                            
+                            int anoTemp = Integer.parseInt(listDados.getSelectedValue());
+                            listModel.removeElement(anoTemp);
+                            
+                            GenericDAO<InventarioResumo> irdao = new GenericDAO<>(InventarioResumo.class);
+                            List<InventarioResumo> resumos = irdao.retrieveByColumn("ano", anoTemp);
+
+                            for(int i = 0; i < resumos.size(); i++){
+                                resumos.get(i).setAno(novoAno);                               
+                                irdao.update(resumos.get(i));
+                            }
+
+                            listModel.addElement(novoAno);
+
+                            listDados.setModel(listModel);
+                            
+
+                        } else if (!usuarioAtual.getLogin().equals(input) && input != null){
+                            JOptionPane.showMessageDialog(this, "Login Incorreto.", "Login inválido", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Selecione um ano na lista!", "Editar - Nenhum ano selecionado", 
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
+                
+
+            } else {
+                String rotaSelecionada = listDados.getSelectedValue();
+
+                GenericDAO<Rota> dao = new GenericDAO<>(Rota.class);
+                GenericDAO<Perfil> daop = new GenericDAO<>(Perfil.class);
+
+                int id = dao.executeSQL("SELECT idRota FROM rota AS r WHERE r.rota = '" + rotaSelecionada + "'" ).get(0).getId();
+
+                List<Perfil> temp = daop.executeSQL("SELECT idPerfil FROM perfil WHERE idRotaFK = " + id);
+
+                if( !temp.isEmpty() ){
+                    JOptionPane.showMessageDialog(null, "Existem perfis cadastrados nessa rota. Altere antes de excluir.");
+                } else {
+
+                    int escolha = JOptionPane.showOptionDialog(null, "Deseja realmente excluir a rota " 
+                        + rotaSelecionada.toUpperCase() + " ?", "Exclusão de Rota", 
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[] {"Sim", "Não"}, "Não");
+
+                    if(escolha == 0)  {
+                        dao.remove(id);
+
+                        listModel.removeElement(rotaSelecionada);
+
+                        listDados.setModel(listModel);
+
+                    }
+
+                }
+
+
             }
-            
-            
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecione um item na lista antes de deletar!");
         }
-        
     }//GEN-LAST:event_removerAnoRotaBTActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
     
     public boolean isIsAno() {
         return isAno;
@@ -180,6 +274,7 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
         if( isAno ){
             
             super.setTitle("SGPL - Gerenciar Anos");
+            textoEntrada.setText("GERENCIAR ANOS");
             
             GenericDAO<InventarioResumo> dao = new GenericDAO<>(InventarioResumo.class);
         
@@ -202,9 +297,12 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
                 listModel.addElement(Cast.toString(listaAnos.get(i).getAno()));
             }
             
+            removerAnoRotaBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit.png")));
+            
         } else {
             
             super.setTitle("SGPL - Gerenciar Rotas");
+            textoEntrada.setText("GERENCIAR ROTAS");
             
             GenericDAO<Rota> dao = new GenericDAO<>(Rota.class);
             
@@ -225,6 +323,7 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addAnoRotaBT;
+    private javax.swing.JButton btnCancelar;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JList<String> listDados;
     private javax.swing.JButton removerAnoRotaBT;

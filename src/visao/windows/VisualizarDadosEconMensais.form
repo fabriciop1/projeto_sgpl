@@ -37,11 +37,9 @@
                           <Component id="textoEntrada" max="32767" attributes="0"/>
                           <Component id="perfilLabel" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
-                      <Component id="excelBT" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="editarValoresBT" min="-2" pref="47" max="-2" attributes="0"/>
-                      <EmptySpace pref="37" max="32767" attributes="0"/>
+                      <EmptySpace pref="197" max="32767" attributes="0"/>
                       <Component id="retornarBT" min="-2" pref="43" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="avancarBT" min="-2" pref="43" max="-2" attributes="0"/>
@@ -68,21 +66,18 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="perfilLabel" min="-2" max="-2" attributes="0"/>
                           </Group>
+                          <Component id="editarValoresBT" alignment="0" min="-2" pref="30" max="-2" attributes="0"/>
                       </Group>
+                      <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="retornarBT" alignment="1" min="-2" pref="30" max="-2" attributes="0"/>
-                          <Component id="avancarBT" alignment="1" min="-2" pref="30" max="-2" attributes="0"/>
-                          <Group type="103" alignment="1" groupAlignment="0" attributes="0">
-                              <Component id="excelBT" alignment="0" min="-2" pref="30" max="-2" attributes="0"/>
-                              <Component id="editarValoresBT" min="-2" pref="30" max="-2" attributes="0"/>
-                          </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="avancarBT" min="-2" pref="30" max="-2" attributes="0"/>
+                          <Component id="retornarBT" min="-2" pref="30" max="-2" attributes="0"/>
                       </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
               <Component id="jScrollPane2" min="-2" pref="25" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="jScrollPane1" pref="599" max="32767" attributes="0"/>
@@ -511,15 +506,6 @@
         <Property name="horizontalAlignment" type="int" value="0"/>
         <Property name="text" type="java.lang.String" value="jLabel2"/>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="excelBT">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Exportar para Excel"/>
-        <Property name="toolTipText" type="java.lang.String" value="Exporta&#xe7;&#xe3;o para arquivo .csv"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="excelBTActionPerformed"/>
-      </Events>
     </Component>
   </SubComponents>
 </Form>

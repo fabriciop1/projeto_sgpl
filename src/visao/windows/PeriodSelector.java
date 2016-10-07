@@ -50,7 +50,7 @@ public class PeriodSelector extends javax.swing.JDialog {
         super.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         super.setResizable(false);
     
-        super.getRootPane().setDefaultButton(cancelaBT);
+        super.getRootPane().setDefaultButton(confirmaBT);
     }
 
     /**

@@ -50,7 +50,7 @@ public class MultipleYearSelector extends javax.swing.JDialog {
         super.setLocationRelativeTo(null);
         super.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         super.setResizable(false);
-        super.getRootPane().setDefaultButton(cancelarBT);
+        super.getRootPane().setDefaultButton(confirmaBT);
         
         listaAnos.setBackground(Color.WHITE);
         listaAnos.setSelectionBackground(Color.GRAY);
