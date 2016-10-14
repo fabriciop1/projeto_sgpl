@@ -6,7 +6,6 @@
 package visao.windows;
 
 import controle.ControleLogin;
-import controle.ControlePerfil;
 import flex.db.GenericDAO;
 import java.awt.Image;
 import java.util.List;
@@ -26,13 +25,18 @@ import util.Cast;
 public class GerenciarAnoRota extends javax.swing.JDialog {
 
     private boolean isAno = false;
+    private java.awt.Frame parent;
     
     /**
      * Creates new form GerenciarAnoRota
+     * @param parent
+     * @param modal
      */
     public GerenciarAnoRota(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        this.parent = parent;
         
         Image image = new ImageIcon(getClass().getResource("/visao/images/cattle.png")).getImage();
         this.setIconImage(image);
@@ -69,6 +73,7 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
         jScrollPane1.setViewportView(listDados);
 
         addAnoRotaBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/add.png"))); // NOI18N
+        addAnoRotaBT.setToolTipText("Adicionar");
         addAnoRotaBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addAnoRotaBTActionPerformed(evt);
@@ -76,6 +81,7 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
         });
 
         removerAnoRotaBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/delete.png"))); // NOI18N
+        removerAnoRotaBT.setToolTipText("Remover/Editar");
         removerAnoRotaBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removerAnoRotaBTActionPerformed(evt);
@@ -131,40 +137,49 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
         DefaultListModel listModel = (DefaultListModel) listDados.getModel();
         
         if( isAno ){
-            int novoAno = Integer.parseInt(JOptionPane.showInputDialog("Insira o novo ano: "));
+            SingleYearSelector telaNovoAno = new SingleYearSelector(this.parent, true);
+            telaNovoAno.setTitle("SGPL - Adicionar novo ano");
+            telaNovoAno.setVisible(true);
+        
+            String ano = telaNovoAno.getSelected();
             
-            for(int i = 0; i < listModel.size(); i++){
-                if(novoAno == Integer.parseInt(listModel.getElementAt(i).toString())){
-                    JOptionPane.showMessageDialog(null, "Esse ano já está cadastrado no sistema!");
-                    return;
+            if (ano != null) { 
+                int novoAno = Integer.parseInt(ano);
+                for(int i = 0; i < listModel.size(); i++){
+                    if(novoAno == Integer.parseInt(listModel.getElementAt(i).toString())){
+                        JOptionPane.showMessageDialog(null, "Esse ano já está cadastrado no sistema!");
+                        return;
+                    }
                 }
-            }
-            
-            GenericDAO<InventarioResumo> irdao = new GenericDAO<>(InventarioResumo.class);
-            GenericDAO<Perfil> daop = new GenericDAO<>(Perfil.class);
-            List<Perfil> perfis = daop.retrieveAll();
 
-            for(int i = 0; i < perfis.size(); i++){
-                InventarioResumo resumo = new InventarioResumo();
-                resumo.setIdPerfil(perfis.get(0).getId());
-                resumo.setAno(novoAno);                               
-                irdao.insert(resumo);
+                GenericDAO<InventarioResumo> irdao = new GenericDAO<>(InventarioResumo.class);
+                GenericDAO<Perfil> daop = new GenericDAO<>(Perfil.class);
+                List<Perfil> perfis = daop.retrieveAll();
+
+                for(int i = 0; i < perfis.size(); i++){
+                    InventarioResumo resumo = new InventarioResumo();
+                    resumo.setIdPerfil(perfis.get(0).getId());
+                    resumo.setAno(novoAno);                               
+                    irdao.insert(resumo);
+                }
+
+                listModel.addElement(novoAno);
+
+                listDados.setModel(listModel);
             }
-            
-            listModel.addElement(novoAno);
-            
-            listDados.setModel(listModel);
-            
         } else {
             String novaRota = JOptionPane.showInputDialog("Insira o nome da nova Rota: ");
-            Rota rota = new Rota(novaRota);
             
-            GenericDAO<Rota> dao = new GenericDAO<>(Rota.class);
-            dao.insert(rota);
-            
-            listModel.addElement(rota.getRota());
-            
-            listDados.setModel(listModel);
+            if (novaRota != null) { 
+                Rota rota = new Rota(novaRota);
+
+                GenericDAO<Rota> dao = new GenericDAO<>(Rota.class);
+                dao.insert(rota);
+
+                listModel.addElement(rota.getRota());
+
+                listDados.setModel(listModel);
+            }
         }
         
     }//GEN-LAST:event_addAnoRotaBTActionPerformed
@@ -175,49 +190,57 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
             DefaultListModel listModel = (DefaultListModel) listDados.getModel();
 
             if( isAno ){
-                int novoAno = Integer.parseInt(JOptionPane.showInputDialog("Insira o novo ano: "));
+                SingleYearSelector telaNovoAno = new SingleYearSelector(this.parent, true);
+                telaNovoAno.setTitle("SGPL - Adicionar novo ano");
+                telaNovoAno.setVisible(true);
+        
+                String ano = telaNovoAno.getSelected();
                 
-                if( listDados.getSelectedIndex() != -1 ) {
-                    int escolha = JOptionPane.showOptionDialog(null, "Deseja realmente trocar o ano " 
-                            + listDados.getSelectedValue() + " pelo ano " + novoAno + "?", "Edição de Ano", 
-                            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[] {"Sim", "Não"}, "Não");
-           
-                    if(escolha == 0)  {
-                        
-                        Usuario usuarioAtual = ControleLogin.getInstance().getUsuario();
-                        
-                        String input = JOptionPane.showInputDialog(this, "O ano " + listDados.getSelectedValue() +  
-                                " será editado para " + novoAno + ".\nDigite seu login para confirmação: ", 
-                                "Confirmar Edição de Ano", JOptionPane.OK_CANCEL_OPTION);
+                if (ano != null) {
 
-                        if (usuarioAtual.getLogin().equals(input)) {
-                            
-                            int anoTemp = Integer.parseInt(listDados.getSelectedValue());
-                            listModel.removeElement(anoTemp);
-                            
-                            GenericDAO<InventarioResumo> irdao = new GenericDAO<>(InventarioResumo.class);
-                            List<InventarioResumo> resumos = irdao.retrieveByColumn("ano", anoTemp);
+                    int novoAno = Integer.parseInt(ano);
 
-                            for(int i = 0; i < resumos.size(); i++){
-                                resumos.get(i).setAno(novoAno);                               
-                                irdao.update(resumos.get(i));
+                    if( listDados.getSelectedIndex() != -1 ) {
+                        int escolha = JOptionPane.showOptionDialog(null, "Deseja realmente trocar o ano " 
+                                + listDados.getSelectedValue() + " pelo ano " + novoAno + "?", "Edição de Ano", 
+                                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[] {"Sim", "Não"}, "Não");
+
+                        if(escolha == 0)  {
+
+                            Usuario usuarioAtual = ControleLogin.getInstance().getUsuario();
+
+                            String input = JOptionPane.showInputDialog(this, "O ano " + listDados.getSelectedValue() +  
+                                    " será editado para " + novoAno + ".\nDigite seu login para confirmação: ", 
+                                    "Confirmar Edição de Ano", JOptionPane.OK_CANCEL_OPTION);
+
+                            if (usuarioAtual.getLogin().equals(input)) {
+
+                                int anoTemp = Integer.parseInt(listDados.getSelectedValue());
+                                listModel.removeElement(anoTemp);
+
+                                GenericDAO<InventarioResumo> irdao = new GenericDAO<>(InventarioResumo.class);
+                                List<InventarioResumo> resumos = irdao.retrieveByColumn("ano", anoTemp);
+
+                                for(int i = 0; i < resumos.size(); i++){
+                                    resumos.get(i).setAno(novoAno);                               
+                                    irdao.update(resumos.get(i));
+                                }
+
+                                listModel.addElement(novoAno);
+
+                                listDados.setModel(listModel);
+
+
+                            } else if (!usuarioAtual.getLogin().equals(input) && input != null){
+                                JOptionPane.showMessageDialog(this, "Login Incorreto.", "Login inválido", JOptionPane.ERROR_MESSAGE);
                             }
-
-                            listModel.addElement(novoAno);
-
-                            listDados.setModel(listModel);
-                            
-
-                        } else if (!usuarioAtual.getLogin().equals(input) && input != null){
-                            JOptionPane.showMessageDialog(this, "Login Incorreto.", "Login inválido", JOptionPane.ERROR_MESSAGE);
                         }
+                    
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Selecione um ano na lista!", "Editar - Nenhum ano selecionado", 
+                                JOptionPane.INFORMATION_MESSAGE);
                     }
-                } else {
-                    JOptionPane.showMessageDialog(null, "Selecione um ano na lista!", "Editar - Nenhum ano selecionado", 
-                            JOptionPane.INFORMATION_MESSAGE);
                 }
-                
-
             } else {
                 String rotaSelecionada = listDados.getSelectedValue();
 
@@ -242,15 +265,11 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
                         listModel.removeElement(rotaSelecionada);
 
                         listDados.setModel(listModel);
-
                     }
-
                 }
-
-
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Selecione um item na lista antes de deletar!");
+            JOptionPane.showMessageDialog(null, "Selecione um item na lista antes de editar/remover!");
         }
     }//GEN-LAST:event_removerAnoRotaBTActionPerformed
 

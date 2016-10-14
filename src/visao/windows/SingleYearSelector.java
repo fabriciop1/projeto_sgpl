@@ -125,6 +125,7 @@ public class SingleYearSelector extends JDialog {
         
        this.selected = String.valueOf(ano);
        this.setVisible(false);
+       this.dispose();
     }//GEN-LAST:event_confirmaBTActionPerformed
 
     private void cancelaBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelaBTActionPerformed
@@ -135,6 +136,7 @@ public class SingleYearSelector extends JDialog {
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_formWindowClosed
 
     public String getSelected() {

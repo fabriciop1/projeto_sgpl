@@ -40,12 +40,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         
         atual = ControlePerfil.getInstance().getPerfilSelecionado();
         
-        Usuario usuario = ControleLogin.getInstance().getUsuario();
-        
-        if(usuario.getTipoUsuario() == 3) { // Apenas visualização
-            addAnoBT.setVisible(false);
-        }
-        
         super.setTitle("SGPL - " + atual.getNome() + " - Menu Principal");
         super.setLocationRelativeTo(null);
         super.setResizable(false);
@@ -90,7 +84,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         anoCombo = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
-        addAnoBT = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -176,8 +169,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Pecuária Leiteira");
 
-        anoCombo.setBackground(new java.awt.Color(0, 153, 255));
+        anoCombo.setBackground(new java.awt.Color(0, 69, 0));
         anoCombo.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        anoCombo.setForeground(new java.awt.Color(0, 38, 255));
         anoCombo.setMaximumRowCount(5);
         anoCombo.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -190,48 +184,40 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("Ano:");
 
-        addAnoBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/add.png"))); // NOI18N
-        addAnoBT.setToolTipText("Adicionar ano");
-        addAnoBT.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addAnoBTActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap(152, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnIndicEconMensais, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnDadosEconMensais, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(btnInventario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnDadosTecnMensais, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnIndicEconAnuais, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(150, 150, 150))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addGap(36, 36, 36)
-                                .addComponent(nomCida, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel1))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(nomProd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(tamProp, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(296, 296, 296))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(btnIndicEconMensais, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnDadosEconMensais, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(18, 18, 18)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(btnInventario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnDadosTecnMensais, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnIndicEconAnuais, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(150, 150, 150))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(jLabel4)
+                                    .addGap(36, 36, 36)
+                                    .addComponent(nomCida, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel2)
+                                        .addComponent(jLabel1))
+                                    .addGap(18, 18, 18)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(nomProd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(tamProp, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGap(296, 296, 296))
                         .addGroup(layout.createSequentialGroup()
                             .addGap(203, 203, 203)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -239,25 +225,20 @@ public class MenuPrincipal extends javax.swing.JFrame {
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                     .addGap(67, 67, 67)
                                     .addComponent(jLabel3)))
-                            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addGap(0, 0, Short.MAX_VALUE)
-                            .addComponent(jLabel5)
-                            .addGap(10, 10, 10)
-                            .addComponent(anoCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(addAnoBT, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(19, 19, 19)))))
+                            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addGap(10, 10, 10)
+                        .addComponent(anoCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(anoCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel5))
-                    .addComponent(addAnoBT, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(anoCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(textoEntrada)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -342,60 +323,18 @@ public class MenuPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_anoComboItemStateChanged
 
-    private void addAnoBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addAnoBTActionPerformed
-        boolean existe = false;
-        InventarioResumo resumo = null;
-        
-        SingleYearSelector telaNovoAno = new SingleYearSelector(this, true);
-        telaNovoAno.setTitle("SGPL - Adicionar novo ano");
-        telaNovoAno.setVisible(true);
-        
-        String ano = telaNovoAno.getSelected();
-        
-        if (ano != null) {
-            GenericDAO<InventarioResumo> irdao = new GenericDAO<>(InventarioResumo.class);
-            List<InventarioResumo> resumos = irdao.retrieveByColumns(new String[] {"idPerfilFK", "ano"}, new Object[] { atual.getId(), ano});
-
-            if(!resumos.isEmpty()) {
-                resumo = resumos.get(0);         
-            }         
-
-            if (resumo == null) {
-                resumo = new InventarioResumo();
-                resumo.setIdPerfil(atual.getId());
-                resumo.setAno(Integer.parseInt(ano));                               
-                irdao.insert(resumo);
-            }
-
-            for(int i = 0; i < anoCombo.getItemCount(); i++) {
-                if (anoCombo.getItemAt(i).equals(ano)) {
-                    existe = true;
-                    break;
-                }
-            }
-            if (existe == true) {
-                JOptionPane.showMessageDialog(this, "Este ano já foi inserido para o perfil de " + atual.getNome()
-                        + ".", "Alerta - Inserção de ano já cadastrado", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            anoCombo.addItem(ano);
-            anoCombo.setSelectedItem(ano);
-        }
-    }//GEN-LAST:event_addAnoBTActionPerformed
-
     private void fillComboBox() {
         GenericDAO<InventarioResumo> dao = new GenericDAO<>(InventarioResumo.class);
         
         List<InventarioResumo> listaAnos = dao.executeSQL("" + 
-                "SELECT ano FROM inventario_terras        AS it  WHERE it.idPerfilFK  = " + atual.getId() + " UNION " + 
-                "SELECT ano FROM inventario_forrageiras   AS ifo WHERE ifo.idPerfilFK = " + atual.getId() + " UNION " +
-                "SELECT ano FROM inventario_maquinas      AS im  WHERE im.idPerfilFK  = " + atual.getId() + " UNION " + 
-                "SELECT ano FROM inventario_benfeitorias  AS ib  WHERE ib.idPerfilFK  = " + atual.getId() + " UNION " + 
-                "SELECT ano FROM inventario_animais       AS ia  WHERE ia.idPerfilFK  = " + atual.getId() + " UNION " + 
-                "SELECT ano FROM inventario_resumo        AS ir  WHERE ir.idPerfilFK  = " + atual.getId() + " UNION " +
-                "SELECT ano FROM dados_economicos_mensais AS dem WHERE dem.idPerfilFK = " + atual.getId() + " UNION " +
-                "SELECT ano FROM dados_tecnicos_mensais   AS dtm WHERE dtm.idPerfilFK = " + atual.getId() +
+                "SELECT ano FROM inventario_terras        UNION " + 
+                "SELECT ano FROM inventario_forrageiras   UNION " +
+                "SELECT ano FROM inventario_maquinas      UNION " + 
+                "SELECT ano FROM inventario_benfeitorias  UNION " + 
+                "SELECT ano FROM inventario_animais       UNION " + 
+                "SELECT ano FROM inventario_resumo        UNION " +
+                "SELECT ano FROM dados_economicos_mensais UNION " +
+                "SELECT ano FROM dados_tecnicos_mensais         " +
                 " ORDER BY ano");
         
         if (listaAnos.isEmpty()) {
@@ -409,7 +348,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }
    
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addAnoBT;
     private javax.swing.JComboBox<String> anoCombo;
     private javax.swing.JButton btnDadosEconMensais;
     private javax.swing.JButton btnDadosTecnMensais;
