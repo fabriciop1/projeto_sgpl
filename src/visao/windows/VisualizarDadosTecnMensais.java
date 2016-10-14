@@ -181,7 +181,12 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         avancarBT = new javax.swing.JButton();
         perfilLabel = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         btnVoltar.setText("Voltar");
         btnVoltar.setToolTipText("Menu Principal");
@@ -377,6 +382,12 @@ public class VisualizarDadosTecnMensais extends javax.swing.JFrame {
         barPanel.setValue(barPanel.getValue() + 225);
     }//GEN-LAST:event_avancarBTActionPerformed
 
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        this.dispose();
+        new MenuPrincipal().setVisible(true);
+    }//GEN-LAST:event_formWindowClosing
+
+    
     private void initGTAE() {
         List<String> indColumnRows = new ArrayList<>(tabelaDadosTecnicos.getRowCount());
         

@@ -413,7 +413,12 @@ public class VisualizarInventario extends javax.swing.JFrame {
         textoEntrada = new javax.swing.JLabel();
         perfilLabel = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jTabbedPane1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTabbedPane1.setMinimumSize(new java.awt.Dimension(38, 81));
@@ -2979,6 +2984,12 @@ public class VisualizarInventario extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Insira um valor válido!", "Valor Inválido", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_vidaUtilServBTActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        
+        this.dispose();
+        new MenuPrincipal().setVisible(true);
+    }//GEN-LAST:event_formWindowClosing
 
     
     private void verificaTabelaVazia(DefaultTableModel table, JButton editarBtn, JButton removerBtn) {

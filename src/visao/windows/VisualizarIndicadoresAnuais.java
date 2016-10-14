@@ -192,7 +192,12 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
         perfilLabel = new javax.swing.JLabel();
         excelBT = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         textoEntrada.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         textoEntrada.setForeground(new java.awt.Color(0, 38, 255));
@@ -321,6 +326,12 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
     private void excelBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_excelBTActionPerformed
         Util.CSVWriter(tabelaIndicadoresAnuais, textoEntrada.getText());
     }//GEN-LAST:event_excelBTActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        this.dispose();
+        new MenuPrincipal().setVisible(true);
+    }//GEN-LAST:event_formWindowClosing
+
 
   
     // Variables declaration - do not modify//GEN-BEGIN:variables

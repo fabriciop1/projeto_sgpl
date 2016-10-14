@@ -88,7 +88,12 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
         btnCancelar = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         textoEntrada.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         textoEntrada.setForeground(new java.awt.Color(0, 38, 255));
@@ -558,6 +563,11 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
                     JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_deleteUsuarioBTActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        this.dispose();
+        new VisualizarPerfil().setVisible(true);
+    }//GEN-LAST:event_formWindowClosing
 
     
     public void preencherListas(Usuario usuario) {

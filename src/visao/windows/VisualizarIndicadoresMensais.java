@@ -147,6 +147,10 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
             mesCont++;
         }while(anoCont < anoFim || mesCont <= mesFim);
         
+        if (tabelaIndicadoresMensais.getColumnCount() <= 2) {
+            modelIndicadores.setRowCount(0);
+        }
+        
         for(int i = 2; i < tabelaIndicadoresMensais.getColumnCount(); i++) {
             tabelaIndicadoresMensais.getColumnModel().getColumn(i).setPreferredWidth(100);
         }
@@ -192,6 +196,10 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
             mesCont++;
         }while(anoCont < anoFim || mesCont <= mesFim);
         
+        if (tabelaIndicadoresMensais.getColumnCount() <= 2) {
+            modelIndicadores.setRowCount(0);
+        }
+        
         for(int i = 2; i < tabelaIndicadoresMensais.getColumnCount(); i++) {
             tabelaIndicadoresMensais.getColumnModel().getColumn(i).setPreferredWidth(100);
         }
@@ -235,7 +243,12 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
         perfilLabel = new javax.swing.JLabel();
         excelBT = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         btnVoltar.setText("Voltar");
         btnVoltar.addActionListener(new java.awt.event.ActionListener() {
@@ -366,6 +379,11 @@ public class VisualizarIndicadoresMensais extends javax.swing.JFrame {
     private void excelBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_excelBTActionPerformed
         Util.CSVWriter(tabelaIndicadoresMensais, textoEntrada.getText());
     }//GEN-LAST:event_excelBTActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        this.dispose();
+        new MenuPrincipal().setVisible(true);
+    }//GEN-LAST:event_formWindowClosing
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton avancarBT;

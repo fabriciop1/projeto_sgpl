@@ -238,10 +238,15 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         tabelaMeses = new javax.swing.JTable();
         perfilLabel = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         addMouseWheelListener(new java.awt.event.MouseWheelListener() {
             public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
                 formMouseWheelMoved(evt);
+            }
+        });
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
             }
         });
 
@@ -593,6 +598,12 @@ public class VisualizarDadosEconMensais extends javax.swing.JFrame {
         barPanelMeses.setValue(barPanelMeses.getValue() - 675);
     }//GEN-LAST:event_retornarBTActionPerformed
 
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        
+        this.dispose();
+        new MenuPrincipal().setVisible(true);    }//GEN-LAST:event_formWindowClosing
+
+   
     
     private void moveScrollBar(java.awt.event.MouseWheelEvent evt) {
         JScrollBar barPanel3 = jScrollPane1.getVerticalScrollBar();     

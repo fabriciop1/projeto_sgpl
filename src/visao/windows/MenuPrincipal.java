@@ -85,7 +85,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
         anoCombo = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         textoEntrada.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         textoEntrada.setForeground(new java.awt.Color(0, 38, 255));
@@ -322,6 +327,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
             ControlePerfil.getInstance().setAno(Integer.parseInt(anoCombo.getSelectedItem().toString()));
         }
     }//GEN-LAST:event_anoComboItemStateChanged
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        this.dispose();
+        new VisualizarPerfil().setVisible(true);
+    }//GEN-LAST:event_formWindowClosing
 
     private void fillComboBox() {
         GenericDAO<InventarioResumo> dao = new GenericDAO<>(InventarioResumo.class);
