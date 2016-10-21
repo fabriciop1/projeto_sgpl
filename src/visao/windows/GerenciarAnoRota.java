@@ -61,6 +61,7 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
         addAnoRotaBT = new javax.swing.JButton();
         removerAnoRotaBT = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
+        editAnoRotaBT = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -95,6 +96,14 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
             }
         });
 
+        editAnoRotaBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit.png"))); // NOI18N
+        editAnoRotaBT.setToolTipText("Editar Usuário.");
+        editAnoRotaBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editAnoRotaBTActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -107,6 +116,8 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
                         .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(addAnoRotaBT, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(editAnoRotaBT, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(removerAnoRotaBT, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
@@ -122,10 +133,12 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(removerAnoRotaBT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(addAnoRotaBT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(removerAnoRotaBT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(addAnoRotaBT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(editAnoRotaBT))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -160,9 +173,14 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
                     resumo.setAno(novoAno);                               
                     irdao.insert(resumo);
                 }
-
+                
                 listModel.addElement(novoAno);
-
+                
+                if(!listDados.isEnabled()){
+                    listModel.remove(0);
+                    listDados.setEnabled(true);
+                }
+                
                 listDados.setModel(listModel);
             }
         } else {
@@ -176,6 +194,11 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
 
                 listModel.addElement(rota.getRota());
 
+                if(!listDados.isEnabled()){
+                    listModel.remove(0);
+                    listDados.setEnabled(true);
+                }
+                
                 listDados.setModel(listModel);
             }
         }
@@ -188,7 +211,91 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
             DefaultListModel listModel = (DefaultListModel) listDados.getModel();
 
             if( isAno ){
+                int anoSelecionado = Integer.parseInt(listDados.getSelectedValue());
+
+                GenericDAO<InventarioResumo> irdao = new GenericDAO<>(InventarioResumo.class);
+
+                List<InventarioResumo> listaAnos = irdao.executeSQL("" + 
+                    "SELECT ano FROM inventario_terras        WHERE ano = " + anoSelecionado + " UNION " + 
+                    "SELECT ano FROM inventario_forrageiras   WHERE ano = " + anoSelecionado + " UNION " +
+                    "SELECT ano FROM inventario_maquinas      WHERE ano = " + anoSelecionado + " UNION " + 
+                    "SELECT ano FROM inventario_benfeitorias  WHERE ano = " + anoSelecionado + " UNION " + 
+                    "SELECT ano FROM inventario_animais       WHERE ano = " + anoSelecionado + " UNION " + 
+                    "SELECT ano FROM dados_economicos_mensais WHERE ano = " + anoSelecionado + " UNION " +
+                    "SELECT ano FROM dados_tecnicos_mensais   WHERE ano = " + anoSelecionado +
+                    " ORDER BY ano");
+
+
+                if( !listaAnos.isEmpty() ){
+                    JOptionPane.showMessageDialog(null, "Existem dados cadastrados nesse ano. Altere antes de excluir.");
+                } else {
+
+                    int escolha = JOptionPane.showOptionDialog(null, "Deseja realmente excluir o ano " 
+                        + anoSelecionado + " ?", "Exclusão de Ano", 
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[] {"Sim", "Não"}, "Não");
+
+                    if(escolha == 0)  {
+                        irdao.executeSQL("DELETE FROM inventario_resumo WHERE ano = " + anoSelecionado);
+
+                        listModel.removeElement("" + anoSelecionado);
+
+                        if(listModel.isEmpty()){
+                            listModel.addElement("Nenhum ano cadastrado");
+                            listDados.setEnabled(false);
+                        }
+                        
+                        listDados.setModel(listModel);
+                    }
+                }
                 
+            } else {
+                String rotaSelecionada = listDados.getSelectedValue();
+
+                GenericDAO<Rota> dao = new GenericDAO<>(Rota.class);
+                GenericDAO<Perfil> daop = new GenericDAO<>(Perfil.class);
+
+                int id = dao.executeSQL("SELECT idRota FROM rota AS r WHERE r.rota = '" + rotaSelecionada + "'" ).get(0).getId();
+
+                List<Perfil> temp = daop.executeSQL("SELECT idPerfil FROM perfil WHERE idRotaFK = " + id);
+
+                if( !temp.isEmpty() ){
+                    JOptionPane.showMessageDialog(null, "Existem perfis cadastrados nessa rota. Altere antes de excluir.");
+                } else {
+
+                    int escolha = JOptionPane.showOptionDialog(null, "Deseja realmente excluir a rota " 
+                        + rotaSelecionada.toUpperCase() + " ?", "Exclusão de Rota", 
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[] {"Sim", "Não"}, "Não");
+
+                    if(escolha == 0)  {
+                        dao.remove(id);
+
+                        listModel.removeElement(rotaSelecionada);
+
+                        if(listModel.isEmpty()){
+                            listModel.addElement("Nenhuma rota cadastrada");
+                            listDados.setEnabled(false);
+                        }
+                        
+                        listDados.setModel(listModel);
+                    }
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecione um item na lista antes de continuar!");
+        }
+    }//GEN-LAST:event_removerAnoRotaBTActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void editAnoRotaBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editAnoRotaBTActionPerformed
+        
+        if(listDados.getSelectedIndex() != -1 ){
+            DefaultListModel listModel = (DefaultListModel) listDados.getModel();
+            
+            if( isAno ){
                 SingleYearSelector telaNovoAno = new SingleYearSelector(this.parent, true);
                 telaNovoAno.setTitle("SGPL - Adicionar novo ano");
                 telaNovoAno.setVisible(true);
@@ -239,42 +346,58 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
                     }
                     
                 }
-            } else {
-                String rotaSelecionada = listDados.getSelectedValue();
-
-                GenericDAO<Rota> dao = new GenericDAO<>(Rota.class);
-                GenericDAO<Perfil> daop = new GenericDAO<>(Perfil.class);
-
-                int id = dao.executeSQL("SELECT idRota FROM rota AS r WHERE r.rota = '" + rotaSelecionada + "'" ).get(0).getId();
-
-                List<Perfil> temp = daop.executeSQL("SELECT idPerfil FROM perfil WHERE idRotaFK = " + id);
-
-                if( !temp.isEmpty() ){
-                    JOptionPane.showMessageDialog(null, "Existem perfis cadastrados nessa rota. Altere antes de excluir.");
-                } else {
-
-                    int escolha = JOptionPane.showOptionDialog(null, "Deseja realmente excluir a rota " 
-                        + rotaSelecionada.toUpperCase() + " ?", "Exclusão de Rota", 
-                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[] {"Sim", "Não"}, "Não");
-
-                    if(escolha == 0)  {
-                        dao.remove(id);
-
-                        listModel.removeElement(rotaSelecionada);
-
-                        listDados.setModel(listModel);
-                    }
-                }
-            }
+            } //else {
+//                String novaRota = JOptionPane.showInputDialog("Insira a nova rota: ");
+//                
+//                if (novaRota != null) {
+//
+//                    //if( rotaJaCadastrado(novaRota) ){
+//                    //    return;
+//                    //}
+//                    
+//                    int escolha = JOptionPane.showOptionDialog(null, "Deseja realmente trocar a rota " 
+//                            + listDados.getSelectedValue() + " pela rota " + novaRota + "?", "Edição de Rota", 
+//                            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[] {"Sim", "Não"}, "Não");
+//
+//                    if(escolha == 0)  {
+//
+//                        Usuario usuarioAtual = ControleLogin.getInstance().getUsuario();
+//
+//                        String input = JOptionPane.showInputDialog(this, "A rota " + listDados.getSelectedValue() +  
+//                                " será editada para " + novaRota + ".\nDigite seu login para confirmação: ", 
+//                                "Confirmar Edição de Rota", JOptionPane.OK_CANCEL_OPTION);
+//
+//                        if (usuarioAtual.getLogin().equals(input)) {
+//
+//                            String rotaTemp = listDados.getSelectedValue();
+//                            
+//                            GenericDAO<Rota> rdao = new GenericDAO<>(Rota.class);
+//                            List<Rota> rotas = rdao.retrieveByColumn("rota", rotaTemp);
+//
+//                            for(int i = 0; i < rotas.size(); i++){
+//                                rotas.get(i).setRota(novaRota);                               
+//                                rdao.update(rotas.get(i));
+//                            }
+//
+//                            listModel.removeElement(rotaTemp);
+//                            listModel.addElement(novaRota);
+//
+//                            listDados.setModel(listModel);
+//
+//
+//                        } else if (!usuarioAtual.getLogin().equals(input) && input != null){
+//                            JOptionPane.showMessageDialog(this, "Login Incorreto.", "Login inválido", JOptionPane.ERROR_MESSAGE);
+//                        }
+//                    }
+//                    
+//                }
+//            }
+            
         } else {
             JOptionPane.showMessageDialog(null, "Selecione um item na lista antes de continuar!");
         }
-    }//GEN-LAST:event_removerAnoRotaBTActionPerformed
-
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        this.setVisible(false);
-        this.dispose();
-    }//GEN-LAST:event_btnCancelarActionPerformed
+               
+    }//GEN-LAST:event_editAnoRotaBTActionPerformed
     
     public boolean isIsAno() {
         return isAno;
@@ -307,15 +430,14 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
                     "ORDER BY ano");
 
             if (listaAnos.isEmpty()) {
-                listModel.addElement("Nenhum ano cadastrado.");
+                listModel.addElement("Nenhum ano cadastrado");
+                listDados.setEnabled(false);
             }
 
             for(int i = listaAnos.size() - 1; i >= 0; i--) {
                 listModel.addElement(Cast.toString(listaAnos.get(i).getAno()));
             }
-            
-            removerAnoRotaBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/visao/images/edit.png")));
-            
+                        
         } else {
             
             super.setTitle("SGPL - Gerenciar Rotas");
@@ -326,12 +448,15 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
             List<Rota> listaRotas = dao.retrieveAll();
             
             if (listaRotas.isEmpty()) {
-                listModel.addElement("Nenhuma rota cadastrado.");
+                listModel.addElement("Nenhuma rota cadastrada");
+                listDados.setEnabled(false);
             }
 
             for(int i = 0; i < listaRotas.size(); i++) {
                 listModel.addElement(listaRotas.get(i).getRota());
             }
+            
+            editAnoRotaBT.setVisible(false);
         }
         
         listDados.setModel(listModel);
@@ -341,7 +466,13 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
     public boolean anoJaCadastrado(int novoAno){
         DefaultListModel listModel = (DefaultListModel) listDados.getModel();
         
+        
+        
         for(int i = 0; i < listModel.size(); i++){
+            if(listModel.getElementAt(0).equals("Nenhum ano cadastrado")){
+                continue;
+            }
+            
             if(novoAno == Integer.parseInt(listModel.getElementAt(i).toString())){
                 JOptionPane.showMessageDialog(null, "Esse ano já está cadastrado no sistema!");
                 return true;
@@ -355,6 +486,7 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addAnoRotaBT;
     private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton editAnoRotaBT;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JList<String> listDados;
     private javax.swing.JButton removerAnoRotaBT;

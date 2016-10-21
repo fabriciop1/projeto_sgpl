@@ -33,7 +33,7 @@ public class SingleYearSelector extends JDialog {
         super.setLocationRelativeTo(null);
         super.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         super.setResizable(false);
-        super.getRootPane().setDefaultButton(cancelaBT);
+        super.getRootPane().setDefaultButton(confirmaBT);
         
     }
 

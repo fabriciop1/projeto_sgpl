@@ -506,9 +506,7 @@ public class GerenciarUsuarios extends javax.swing.JFrame {
     private void jComboBoxUsuarioItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxUsuarioItemStateChanged
         
         if(evt.getStateChange() == ItemEvent.SELECTED) { 
-            if(jComboBoxUsuario.getSelectedIndex() != 0){
-                System.out.println("Entrou no item " + jComboBoxUsuario.getSelectedIndex());
-                
+            if(jComboBoxUsuario.getSelectedIndex() != 0){                
                 preencherListas((Usuario) jComboBoxUsuario.getSelectedItem());
             } else {
                 ativarComponentes(false);

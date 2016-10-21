@@ -75,12 +75,25 @@ public class VisualizarPerfil extends javax.swing.JFrame {
         
         usuario = ControleLogin.getInstance().getUsuario();
         
-        if(usuario.getTipoUsuario() == 1){
-            btnGereUsuarios.setVisible(true);
-            btnBackup.setVisible(true);
-        } else {
-            btnGereUsuarios.setVisible(false);
-            btnBackup.setVisible(false);
+        switch (usuario.getTipoUsuario()) {
+            case 1:
+                btnGereUsuarios.setVisible(true);
+                btnBackup.setVisible(true);
+                btnGereAnos.setVisible(true);
+                btnGereRota.setVisible(true);
+                break;
+            case 2:
+                btnGereUsuarios.setVisible(false);
+                btnBackup.setVisible(false);
+                btnGereAnos.setVisible(true);
+                btnGereRota.setVisible(true);
+                break;
+            default:
+                btnGereUsuarios.setVisible(false);
+                btnBackup.setVisible(false);
+                btnGereAnos.setVisible(false);
+                btnGereRota.setVisible(false);
+                break;
         }
         
         idPerfis = new ArrayList<>();
@@ -534,6 +547,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
                 addPerfilBT.setEnabled(true);
                 removerPerfilBT.setEnabled(false);
                 editPerfilBT.setEnabled(false);
+                btnGereAnos.setEnabled(false);
             } else {
                 addPerfilBT.setEnabled(false);
                 removerPerfilBT.setEnabled(false);
@@ -545,6 +559,7 @@ public class VisualizarPerfil extends javax.swing.JFrame {
                     addPerfilBT.setEnabled(true);
                     removerPerfilBT.setEnabled(true);
                     editPerfilBT.setEnabled(true);
+                    btnGereAnos.setEnabled(true);
                     break;
                 case 2: //Comum
                     addPerfilBT.setEnabled(false);

@@ -118,7 +118,7 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
         modelIndicadores.addColumn("Indicador", cia.getIndEconomAnuais());
         modelIndicadores.addColumn("Unidade", cia.getUnidadesEconAnuais());
         
-        for(int i = cia.getAnosSelecionados().size() - 1; i >= 0;  i--) {           
+        for(int i = 0 ; i < cia.getAnosSelecionados().size();  i++) {           
             modelIndicadores.addColumn(cia.getAnosSelecionados().get(i), cia.getConteudoEconomico(dems, dtms, cia.getAnosSelecionados().get(i)));
         }
         
@@ -142,7 +142,7 @@ public class VisualizarIndicadoresAnuais extends javax.swing.JFrame {
         modelIndicadores.addColumn("Indicador", cia.getIndTecnAnuais());
         modelIndicadores.addColumn("Unidade", cia.getUnidadesTecAnuais());
         
-        for(int i = cia.getAnosSelecionados().size() - 1; i >= 0;  i--) {
+        for(int i = 0; i < cia.getAnosSelecionados().size();  i++) {
             modelIndicadores.addColumn(cia.getAnosSelecionados().get(i), cia.getConteudoTecnico(dtms, dems, cia.getAnosSelecionados().get(i))); 
         }
         tabelaIndicadoresAnuais.getColumnModel().getColumn(0).setPreferredWidth(380);
