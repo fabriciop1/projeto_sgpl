@@ -94,7 +94,12 @@ public class VisualizarInventario extends javax.swing.JFrame {
         List<InventarioAnimais> animais = iadao.retrieveByColumns(new String[] {"idPerfilFK", "ano"}, new Object[] {perfilAtual.getId(), ano});
         List<InventarioBenfeitorias> benfeitorias = ibdao.retrieveByColumns(new String[]{"idPerfilFK", "ano"}, new Object[] { perfilAtual.getId(), ano});
         List<InventarioMaquinas> maquinas = imdao.retrieveByColumns(new String[] {"idPerfilFK", "ano"}, new Object[] { perfilAtual.getId(), ano});
-
+        List<InventarioResumo> resumos = irdao.retrieveByColumns(new String[] {"idPerfilFK", "ano"}, new Object[] { perfilAtual.getId(), ano});
+        
+        if (!resumos.isEmpty()) {
+            resumo = resumos.get(0);
+        }
+        
         inicializarGTRE();
         
 
@@ -2847,15 +2852,15 @@ public class VisualizarInventario extends javax.swing.JFrame {
         
         if (temp >= 0.0) {
 
-            if (resumo != null) {
+            if (resumo != null) {     
                 resumo.setAtividadeLeiteira(temp);
                 irdao.update(resumo);
             }
 
             atividadeLeite.setText(Cast.toBRLocaleValue(temp));
             
-            total50.setText(String.format("R$ ", Cast.toBRLocaleValue(Double.parseDouble(total49.getText().substring(2)) * (temp / 100)) ));
-            total57.setText(String.format("R$ ", Cast.toBRLocaleValue(Double.parseDouble(total56.getText().substring(2)) * (temp / 100)) ));
+            total50.setText(String.format("R$ " + Cast.toBRLocaleValue(Double.parseDouble(total49.getText().substring(2)) * (temp / 100.0)) ));
+            total57.setText(String.format("R$ " + Cast.toBRLocaleValue(Double.parseDouble(total56.getText().substring(2)) * (temp / 100.0)) ));
 
         } else {
             JOptionPane.showMessageDialog(null, "Insira um valor válido.", "Valor Inválido", JOptionPane.ERROR_MESSAGE);

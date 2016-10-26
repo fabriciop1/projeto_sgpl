@@ -5,7 +5,6 @@
  */
 package visao.windows;
 
-import controle.ControleLogin;
 import controle.ControlePerfil;
 import flex.db.GenericDAO;
 import java.awt.Cursor;
@@ -15,10 +14,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
 import modelo.negocio.InventarioResumo;
 import modelo.negocio.Perfil;
-import modelo.negocio.Usuario;
 import util.Cast;
 
 /**
@@ -350,6 +347,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         if (listaAnos.isEmpty()) {
             Calendar cal = GregorianCalendar.getInstance();
             anoCombo.addItem(Cast.toString(cal.get(Calendar.YEAR)));
+            InventarioResumo resumo = new InventarioResumo();
+            resumo.setIdPerfil(ControlePerfil.getInstance().getPerfilSelecionado().getId());
+            resumo.setAno(ControlePerfil.getInstance().getAno());                               
+            GenericDAO<InventarioResumo> irdao = new GenericDAO<>(InventarioResumo.class);
+            irdao.insert(resumo);
         }
         
         for(int i = listaAnos.size() - 1; i >= 0; i--) {

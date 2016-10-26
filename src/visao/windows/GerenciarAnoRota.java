@@ -6,6 +6,7 @@
 package visao.windows;
 
 import controle.ControleLogin;
+import controle.ControlePerfil;
 import flex.db.GenericDAO;
 import java.awt.Image;
 import java.util.List;
@@ -169,7 +170,7 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
 
                 for(int i = 0; i < perfis.size(); i++){
                     InventarioResumo resumo = new InventarioResumo();
-                    resumo.setIdPerfil(perfis.get(0).getId());
+                    resumo.setIdPerfil(perfis.get(i).getId());
                     resumo.setAno(novoAno);                               
                     irdao.insert(resumo);
                 }
@@ -238,6 +239,10 @@ public class GerenciarAnoRota extends javax.swing.JDialog {
                         irdao.executeSQL("DELETE FROM inventario_resumo WHERE ano = " + anoSelecionado);
 
                         listModel.removeElement("" + anoSelecionado);
+                        
+                        if (ControlePerfil.getInstance().getAno() == anoSelecionado) {
+                            ControlePerfil.getInstance().setAno(0);
+                        }
 
                         if(listModel.isEmpty()){
                             listModel.addElement("Nenhum ano cadastrado");
